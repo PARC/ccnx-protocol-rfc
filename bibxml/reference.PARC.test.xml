@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<reference anchor="PARCtest" target="http://ccnx.org/actual/url/to/document">
+   <front>
+      <title abbrev="PARCTest">PARC Test Document</title>
+      
+      <author initials="M." surname="Mosko" fullname="Marc Mosko">
+         <organization>PARC, Inc.</organization>
+      
+         <address>
+            <postal>
+               <street>3333 Coyote Hill Road</street>
+               <street>Palo Alto</street>
+               <street>CA 94304</street>
+            </postal>
+            
+            <phone>- +1 650 812 4000</phone>
+            <email>marc.mosko@parc.com</email>
+         </address>
+      </author>
+         
+      <date year="2014" month="June"/>
+   </front>
+</reference>

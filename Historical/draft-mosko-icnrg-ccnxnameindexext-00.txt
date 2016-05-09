@@ -1,0 +1,560 @@
+
+
+
+ICNRG                                                           M. Mosko
+Internet-Draft                                                      PARC
+Intended status: Experimental                                   M. Gallo
+Expires: September 18, 2015                               ALcatel-Lucent
+                                                          March 17, 2015
+
+
+                       CCNx Name Index Extensions
+                   draft-mosko-icnrg-nameindexext-00
+
+Abstract
+
+   A CCNx Name is a TLV encoded sequence of segments.  This document
+   specifies two optional mechanisms to enable rapid access to segments
+   of a CCNx Name: one provides a set of indices mapped to each Name
+   segment; the other provides a single index to the chunk number
+   segment of a CCNx Name.
+
+Status of this Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on September 18, 2015.
+
+Copyright Notice
+
+   Copyright (c) 2015 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+
+
+
+Mosko & Gallo          Expires September 18, 2015               [Page 1]
+
+Internet-Draft                  CCNx TLV                      March 2015
+
+
+   described in the Simplified BSD License.
+
+
+Table of Contents
+
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     1.1.  Requirements Language  . . . . . . . . . . . . . . . . . .  3
+   2.  Protocol Description . . . . . . . . . . . . . . . . . . . . .  4
+     2.1.  Name Segment Offsets . . . . . . . . . . . . . . . . . . .  4
+     2.2.  Chunk Name Segment Offset  . . . . . . . . . . . . . . . .  5
+   3.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . .  6
+   4.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . .  7
+   5.  Security Considerations  . . . . . . . . . . . . . . . . . . .  8
+   6.  References . . . . . . . . . . . . . . . . . . . . . . . . . .  9
+     6.1.  Normative References . . . . . . . . . . . . . . . . . . .  9
+     6.2.  Informative References . . . . . . . . . . . . . . . . . .  9
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 10
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Gallo          Expires September 18, 2015               [Page 2]
+
+Internet-Draft                  CCNx TLV                      March 2015
+
+
+1.  Introduction
+
+   A CCNx Name is a TLV encoded sequence of segments.  This document
+   specifies two optional mechanisms to enable rapid access to segments
+   of a CCNx Name: one provides a set of indices mapped to each Name
+   segment; the other provides a single index to the chunk number
+   segment of a CCNx Name.
+
+   Packets are represented as 32-bit wide words using ASCII art.
+   Because of the TLV encoding and optional fields or sizes, there is no
+   concise way to represent all possibilities.  We use the convention
+   that ASCII art fields enclosed by vertical bars "|" represent exact
+   bit widths.  Fields with a forward slash "/" are variable bitwidths,
+   which we typically pad out to word alignment for picture readability.
+
+   TODO -- we have not adopted the Requirements Language yet.
+
+1.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Gallo          Expires September 18, 2015               [Page 3]
+
+Internet-Draft                  CCNx TLV                      March 2015
+
+
+2.  Protocol Description
+
+   There are two additional CCNx Message Types covered in this document:
+
+   +--------+----------------+-----------------+-----------------------+
+   |  Type  |     Abbrev     |       Name      | Description           |
+   +--------+----------------+-----------------+-----------------------+
+   | %x0009 |  T_NAMEOFFSETS |   Name Segment  | The offsets into the  |
+   |        |                |     Offsets     | Name TLV for each     |
+   |        |                |  (Section 2.1)  | Name segment.         |
+   |        |                |                 |                       |
+   | %x000A | T_CHUNKOFFSETS |    Chunk Name   | The offset into the   |
+   |        |                |  Segment Offset | Name TLV for the      |
+   |        |                |  (Section 2.2)  | Chunk number segment. |
+   +--------+----------------+-----------------+-----------------------+
+
+                  Table 1: Additional CCNx Message Types
+
+   These message TLVs SHOULD directly follow the Name TLV in the CCNx
+   Message.
+
+2.1.  Name Segment Offsets
+
+   A CCNx Name is a TLV encoded sequence of segments.  The Name Segment
+   Offsets TLV comprises a set of 2 byte offsets into the Name TLV, each
+   jumping directly to a Name segment.  The first segment (offset 0) is
+   assumed and NOT included.
+
+   For example, given the CCNx Name TLV:
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            (T_NAME)           |           %x14 (20)           |
+   +---------------+---------------+---------------+---------------+
+   |        (T_NAME_SEGMENT)       |           %x03 (3)            |
+   +---------------+---------------+---------------+---------------+
+   |       f                o               o      |(T_NAME_SEGMENT)
+   +---------------+---------------+---------------+---------------+
+   |               |            %x03 (3)           |       b       |
+   +---------------+---------------+---------------+---------------+
+   |      a                r       |           (T_NAME_SEMGMENT)   |
+   +---------------+---------------+---------------+---------------+
+   |           %x02 (2)            |        y      |       o       |
+   +---------------+---------------+---------------+---------------+
+   |           (T_CHUNK)           |           %x02 (2)            |
+   +---------------+---------------+---------------+---------------+
+   |              29               /
+
+
+
+Mosko & Gallo          Expires September 18, 2015               [Page 4]
+
+Internet-Draft                  CCNx TLV                      March 2015
+
+
+   +---------------+---------------+
+
+   the Name Segment Offset TLV would look be:
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |         (T_NAME_OFFSETS)      |           %x06 (6)            |
+   +---------------+---------------+---------------+---------------+
+   |               7               |              14               |
+   +---------------+---------------+---------------+---------------+
+   |              20               |
+   +---------------+---------------+
+
+   The first segment starts at offset 0 and is not included; the second
+   T_NAME_SEGMENT with value "bar" starts at offset 7; the third
+   T_NAME_SEGMENT with value "yo" starts at offset 14; and the last
+   segment - a T_CHUNK segment - starts at offset 20.
+
+2.2.  Chunk Name Segment Offset
+
+   The Chunk Name Segment Offset provides the index to the T_CHUNK
+   segment of a CCNx Name.  In the above example, this TLV would look
+   like:
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |         (T_CHUNK_OFFSET)      |           %x02 (2)            |
+   +---------------+---------------+---------------+---------------+
+   |               20              |
+   +---------------+---------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Gallo          Expires September 18, 2015               [Page 5]
+
+Internet-Draft                  CCNx TLV                      March 2015
+
+
+3.  Acknowledgements
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Gallo          Expires September 18, 2015               [Page 6]
+
+Internet-Draft                  CCNx TLV                      March 2015
+
+
+4.  IANA Considerations
+
+   TODO: Work with IANA to define the type space for CCNx messages
+   types.
+
+   All drafts are required to have an IANA considerations section (see
+   Guidelines for Writing an IANA Considerations Section in RFCs
+   [RFC5226] for a guide).  If the draft does not require IANA to do
+   anything, the section contains an explicit statement that this is the
+   case (as above).  If there are no requirements for IANA, the section
+   will be removed during conversion into an RFC by the RFC Editor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Gallo          Expires September 18, 2015               [Page 7]
+
+Internet-Draft                  CCNx TLV                      March 2015
+
+
+5.  Security Considerations
+
+   All drafts are required to have a security considerations section.
+   See RFC 3552 [RFC3552] for a guide.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Gallo          Expires September 18, 2015               [Page 8]
+
+Internet-Draft                  CCNx TLV                      March 2015
+
+
+6.  References
+
+6.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+6.2.  Informative References
+
+   [CCNx]     PARC, Inc., "CCNx Open Source", 2007,
+              <http://www.ccnx.org>.
+
+   [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
+              Text on Security Considerations", BCP 72, RFC 3552,
+              July 2003.
+
+   [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
+              IANA Considerations Section in RFCs", BCP 26, RFC 5226,
+              May 2008.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Gallo          Expires September 18, 2015               [Page 9]
+
+Internet-Draft                  CCNx TLV                      March 2015
+
+
+Authors' Addresses
+
+   Marc Mosko
+   PARC
+   Palo Alto, California  94304
+   USA
+
+   Phone: +01 650-812-4405
+   Email: marc.mosko@parc.com
+
+
+   Massimo Gallo
+   ALcatel-Lucent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Gallo          Expires September 18, 2015              [Page 10]
+

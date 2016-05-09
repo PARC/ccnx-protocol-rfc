@@ -1,0 +1,566 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en"><head><title>CCNx End-To-End Fragmentation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="CCNx End-To-End Fragmentation">
+<meta name="keywords" content="Content Centric Networking">
+<meta name="generator" content="xml2rfc v1.35dev (http://xml.resource.org/)">
+<style type='text/css'><!--
+        body {
+                font-family: verdana, charcoal, helvetica, arial, sans-serif;
+                font-size: small; color: #000; background-color: #FFF;
+                margin: 2em;
+        }
+        h1, h2, h3, h4, h5, h6 {
+                font-family: helvetica, monaco, "MS Sans Serif", arial, sans-serif;
+                font-weight: bold; font-style: normal;
+        }
+        h1 { color: #900; background-color: transparent; text-align: right; }
+        h3 { color: #333; background-color: transparent; }
+
+        td.RFCbug {
+                font-size: x-small; text-decoration: none;
+                width: 30px; height: 30px; padding-top: 2px;
+                text-align: justify; vertical-align: middle;
+                background-color: #000;
+        }
+        td.RFCbug span.RFC {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: bold; color: #666;
+        }
+        td.RFCbug span.hotText {
+                font-family: charcoal, monaco, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: normal; text-align: center; color: #FFF;
+        }
+
+        table.TOCbug { width: 30px; height: 15px; }
+        td.TOCbug {
+                text-align: center; width: 30px; height: 15px;
+                color: #FFF; background-color: #900;
+        }
+        td.TOCbug a {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, sans-serif;
+                font-weight: bold; font-size: x-small; text-decoration: none;
+                color: #FFF; background-color: transparent;
+        }
+
+        td.header {
+                font-family: arial, helvetica, sans-serif; font-size: x-small;
+                vertical-align: top; width: 33%;
+                color: #FFF; background-color: #666;
+        }
+        td.author { font-weight: bold; font-size: x-small; margin-left: 4em; }
+        td.author-text { font-size: x-small; }
+
+        /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+        a.info {
+                /* This is the key. */
+                position: relative;
+                z-index: 24;
+                text-decoration: none;
+        }
+        a.info:hover {
+                z-index: 25;
+                color: #FFF; background-color: #900;
+        }
+        a.info span { display: none; }
+        a.info:hover span.info {
+                /* The span will display just on :hover state. */
+                display: block;
+                position: absolute;
+                font-size: smaller;
+                top: 2em; left: -5em; width: 15em;
+                padding: 2px; border: 1px solid #333;
+                color: #900; background-color: #EEE;
+                text-align: left;
+        }
+
+        a { font-weight: bold; }
+        a:link    { color: #900; background-color: transparent; }
+        a:visited { color: #633; background-color: transparent; }
+        a:active  { color: #633; background-color: transparent; }
+
+        p { margin-left: 2em; margin-right: 2em; }
+        p.copyright { font-size: x-small; }
+        p.toc { font-size: small; font-weight: bold; margin-left: 3em; }
+        table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
+        td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
+
+        ol.text { margin-left: 2em; margin-right: 2em; }
+        ul.text { margin-left: 2em; margin-right: 2em; }
+        li      { margin-left: 3em; }
+
+        /* RFC-2629 <spanx>s and <artwork>s. */
+        em     { font-style: italic; }
+        strong { font-weight: bold; }
+        dfn    { font-weight: bold; font-style: normal; }
+        cite   { font-weight: normal; font-style: normal; }
+        tt     { color: #036; }
+        tt, pre, pre dfn, pre em, pre cite, pre span {
+                font-family: "Courier New", Courier, monospace; font-size: small;
+        }
+        pre {
+                text-align: left; padding: 4px;
+                color: #000; background-color: #CCC;
+        }
+        pre dfn  { color: #900; }
+        pre em   { color: #66F; background-color: #FFC; font-weight: normal; }
+        pre .key { color: #33C; font-weight: bold; }
+        pre .id  { color: #900; }
+        pre .str { color: #000; background-color: #CFF; }
+        pre .val { color: #066; }
+        pre .rep { color: #909; }
+        pre .oth { color: #000; background-color: #FCF; }
+        pre .err { background-color: #FCC; }
+
+        /* RFC-2629 <texttable>s. */
+        table.all, table.full, table.headers, table.none {
+                font-size: small; text-align: center; border-width: 2px;
+                vertical-align: top; border-collapse: collapse;
+        }
+        table.all, table.full { border-style: solid; border-color: black; }
+        table.headers, table.none { border-style: none; }
+        th {
+                font-weight: bold; border-color: black;
+                border-width: 2px 2px 3px 2px;
+        }
+        table.all th, table.full th { border-style: solid; }
+        table.headers th { border-style: none none solid none; }
+        table.none th { border-style: none; }
+        table.all td {
+                border-style: solid; border-color: #333;
+                border-width: 1px 2px;
+        }
+        table.full td, table.headers td, table.none td { border-style: none; }
+
+        hr { height: 1px; }
+        hr.insert {
+                width: 80%; border-style: none; border-width: 0;
+                color: #CCC; background-color: #CCC;
+        }
+--></style>
+</head>
+<body>
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tr><td class="header">ICNRG</td><td class="header">M. Mosko, Ed.</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">PARC, Inc.</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">January 9, 2015</td></tr>
+<tr><td class="header">Expires: July 13, 2015</td><td class="header">&nbsp;</td></tr>
+</table></td></tr></table>
+<h1><br />CCNx End-To-End Fragmentation<br />draft-mosko-icnrg-fragmentation-00</h1>
+
+<h3>Abstract</h3>
+
+<p>This document specifies an end to-end fragmentation protocol for
+      breaking a Content Object into several smaller pieces in order to fit within
+      a network MTU.  The fragmentation protocol does not provide a secure
+      binding of the fragments to the original object. This is left to
+      the receiving endpoint.  Midpoints may only serve fragments from their
+      cache if they have assembled and verified the complete Content Object.
+</p>
+<h3>Status of this Memo</h3>
+<p>
+This Internet-Draft is submitted  in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.</p>
+<p>
+Internet-Drafts are working documents of the Internet Engineering
+Task Force (IETF).  Note that other groups may also distribute
+working documents as Internet-Drafts.  The list of current
+Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>
+Internet-Drafts are draft documents valid for a maximum of six months
+and may be updated, replaced, or obsoleted by other documents at any time.
+It is inappropriate to use Internet-Drafts as reference material or to cite
+them other than as &ldquo;work in progress.&rdquo;</p>
+<p>
+This Internet-Draft will expire on July 13, 2015.</p>
+
+<h3>Copyright Notice</h3>
+<p>
+Copyright (c) 2015 IETF Trust and the persons identified as the
+document authors.  All rights reserved.</p>
+<p>
+This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents
+(http://trustee.ietf.org/license-info) in effect on the date of
+publication of this document.  Please review these documents
+carefully, as they describe your rights and restrictions with respect
+to this document. Code Components extracted from this document must
+include Simplified BSD License text as described in Section 4.e of
+the Trust Legal Provisions and are provided without warranty as
+described in the Simplified BSD License.</p>
+<a name="toc"></a><br /><hr />
+<h3>Table of Contents</h3>
+<p class="toc">
+<a href="#anchor1">1.</a>&nbsp;
+Introduction<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor2">1.1.</a>&nbsp;
+Requirements Language<br />
+<a href="#protocol">2.</a>&nbsp;
+Protocol Description<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#interest">2.1.</a>&nbsp;
+Interest Fragmentation<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#objects">2.2.</a>&nbsp;
+Content Object Fragmentation<br />
+<a href="#packets">3.</a>&nbsp;
+Packet Formats<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#interest_header">3.1.</a>&nbsp;
+Interest Header<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#object_header">3.2.</a>&nbsp;
+Content Object Header<br />
+<a href="#cache">4.</a>&nbsp;
+Cache Considerations<br />
+<a href="#Acknowledgements">5.</a>&nbsp;
+Acknowledgements<br />
+<a href="#IANA">6.</a>&nbsp;
+IANA Considerations<br />
+<a href="#Security">7.</a>&nbsp;
+Security Considerations<br />
+<a href="#rfc.references1">8.</a>&nbsp;
+References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">8.1.</a>&nbsp;
+Normative References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">8.2.</a>&nbsp;
+Informative References<br />
+<a href="#rfc.authors">&#167;</a>&nbsp;
+Author's Address<br />
+</p>
+<br clear="all" />
+
+<a name="anchor1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1"></a><h3>1.&nbsp;
+Introduction</h3>
+
+<p>This document specifies an end-to-end fragmentation protocol for
+         breaking a Content Object into several smaller pieces in order to fit within
+         a network MTU.  The fragmentation protocol does not provide a secure
+         binding of the fragments to the original object. This is left to
+         the receiving endpoint.  Midpoints may only serve fragments from
+         cache if they have assembled and verified the complete Content Object.
+</p>
+<p>Packets are represented as 32-bit wide words using ASCII art.  Because
+      of the TLV encoding and optional fields or sizes, there is no concise
+      way to represent all possibilities.  We use the convention that ASCII art
+      fields enclosed by vertical bars "|" represent exact bit widths.  Fields
+      with a forward slash "/" are variable bitwidths, which we typically pad
+      out to word alignment for picture readability.
+</p>
+<p>TODO -- we have not adopted the Requirements Language yet.
+</p>
+<a name="anchor2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1.1"></a><h3>1.1.&nbsp;
+Requirements Language</h3>
+
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+          NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in <a class='info' href='#RFC2119'>RFC 2119<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a> [RFC2119].
+</p>
+<a name="protocol"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2"></a><h3>2.&nbsp;
+Protocol Description</h3>
+
+<p>
+      The principle of operation for fragmentation in CCNx 1.0 is that
+      intermediate systems should not have to fragment packets.  An Interest message is 
+      always fragmented to the minimum MTU size and 
+      the forward path's MTU size is recorded in the Interest message
+      so that a system sending back a Content
+      Object can fragment it to the the correct size for the path.  An
+      intermediate system's Content Store may store only pre-fragmented
+      objects and respond only if those fragments satisfy the requirements of an Interest's
+      MTU, otherwise it will be considered a cache miss.
+      
+</p>
+<p>Because the Interest is the path discovery mechanism for Content 
+      Objects, all Interests MUST carry an InterestFragmentationHeader that 
+      includes information about the forward path's MTU 
+      so the reverse path MTU may be known at the node responding with a
+      Content Object.
+</p>
+<p>
+      The minimum MTU required is 1280 octets.  Any system
+      implementing a physical layer with a smaller MTU must implement link
+      fragmentation, for example using a PPP layer over the small MTU
+      network.
+      
+</p>
+<p>Systems MUST create fragment streams in the most compressed
+        packing.  That is, all fragments except the last MUST be fragmented
+        to the same size.  This means that all Interests are fragmented
+      to 1280 bytes except the last fragment. A Content Object may be fragmented
+      to any size no more than the path MTU discovered, but all fragments
+      except the last MUST be the same size.  This ensures that any
+      two fragment streams of the same Content Object with the same
+      MTU have the same representation.
+</p>
+<p>
+      When an end system creates a fragment stream, it generates a
+      64-bit number for the FragmentStreamID.  This number identifies a
+      contiguous stream of fragments and allows an end system to use the FragmentStreamID 
+      for reassembly.  An intermediate system uses the FragmentStreamID
+      of a Content Object to ensure that only one stream of
+      Content Object fragments follow a reverse PIT entry.
+      
+</p>
+<p>A system SHOULD use a random number for an Interest's
+       FragmentStreamID.  This avoids easy denial-of-service attacks
+       by replying with junk for known fragment stream IDs.
+       A fragmented Content Object carries
+      both its own FragmentStreamID, which SHOULD be based
+      on the ContentObjectHash, and the corresponding Interest
+      FragmentStreamID to facilitate matching on the reverse
+      PIT path.
+</p>
+<p>
+      If the Maximum Path MTU of a Content Object fragment is larger than the supported
+      MTU on an egress interface, the fragment stream should
+      be dropped on that interface, even if some of the fragments fit within the
+      MTU.
+      
+</p>
+<p>
+      Fragments are identified by a serial counter FragNum, which ranges
+      from 0 - 63.  Forwarders and end systems should drop duplicate
+      fragments, identified by the tuple {FragmentID, FragNum}.
+      
+</p>
+<p>
+      If
+      all fragments are not received within a system-dependent timeout, 
+      a system re-assembling fragments should timeout.  If
+      the re-assembly of an Interest times out before the PIT entry, the
+      PIT entry on the local system should be removed to allow a new
+      fragment stream to arrive.  If the re-assembly of a Content Object
+      times out, the received fragments bitmask of the PIT should be
+      cleared to allow a new stream of Content Objects to arrive.
+      
+</p>
+<a name="interest"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2.1"></a><h3>2.1.&nbsp;
+Interest Fragmentation</h3>
+
+<p>
+      If an Interest does not fit with 1280 bytes, then it must be 
+      fragmented to fit within 1280 bytes.  There
+      is no path MTU discovery for Interests.
+      
+</p>
+<p>
+      As an Interest goes through the FIBs, it records the minimum path MTU
+      based on the egress interface's MTU.  A Content Object sent in
+      response must be fragmented to less than or equal to the minimum path
+      MTU.  A forwarder may choose to put 1280 in the Minimum Path MTU
+      field even if it supports larger MTUs.
+      
+</p>
+<p>
+      Interests follow the FIB and all fragments of an Interest (i.e. the
+      same fragment id) should follow the same FIB choices.  If at a later
+      time a similar interest arrives with a smaller minimum path MTU, it
+      should be forwarded even though it is similar, to ensure that a
+      returned Content Object is fragmented to a size that satisfies the
+      Interest's path.
+      
+</p>
+<p>
+      A forwarding node must examine the Interest name to determine
+      its forwarding.  This requires that the forwarding node re-assemble
+      the front of the Interest to examine the name.  In a typical case,
+      this means that the node must receive fragment 0 to have enough
+      prefix name components to compute the route.  A system MAY discard
+      out-of-order fragments after fragment 0 during this re-assembly, 
+      and once fragment 0 arrives and the
+      system constructs a PIT entry with the routing, it should send a
+      control message along the Fragment Stream ID's reverse path to
+      cause the source to resend the interest stream, which can now be
+      forwarded out of order. Or, it may buffer out-of-order fragments.
+      
+</p>
+<p>
+      A system that receives an Interest encapsulated in a packet larger
+      than 1280 octets must discard it.
+      
+</p>
+<a name="objects"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2.2"></a><h3>2.2.&nbsp;
+Content Object Fragmentation</h3>
+
+<p>
+      When forwarding a Content Object along the reverse path of the PIT, a
+      fragment stream may only be forwarded along reverse PIT entries for
+      which it satisfies the reverse path minimum MTU.
+      
+</p>
+<p>
+      A PIT entry should only be removed once all fragments of a fragment
+      stream pass through, or it times out.  Because the FragCnt is limited
+      to 63, a system may match a first stream's Fragment ID and use a
+      single 64-bit mask.
+        
+</p>
+<p>
+      A Content Object is fragmented based on the Interest minimum path
+      MTU.  It carries an "Maximum Fragment MTU" field set to the maximum
+      fragment size, which must be no more than an Interest's
+      minimum path MTU.  Because a fragment stream may only satisfy PIT
+      entries with larger or equal minimum path MTU, all fragments must
+      carry the Object's fragmentation size.  An intermediate node may, for
+      example, receive the last fragment first, so even if fragments were
+      packed to maximum size, the forwarder could not infer which PIT
+      entries the object satisfies without know the fragment stream's
+      fragmentation size
+        
+</p>
+<a name="packets"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3"></a><h3>3.&nbsp;
+Packet Formats</h3>
+
+<p>End-to-end fragmentation uses a network-level TLV header for
+      fragmentation.  There is one header for Interests and one
+      header for Content Objects.
+</p>
+<p>Both fragmented Interests and Content Objects use the fields
+      FragCnt and FragNum.  The count is the number of fragments
+      in the message, which has a minimum of 1.  FragNum is the 0-based
+      fragment number.  Sequential fragment numbers represent sequential
+      byte boundaries of the original object.
+</p>
+<a name="interest_header"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
+Interest Header</h3>
+
+<p>The field FragmentStreamID identifies a contiguous stream
+      of fragments.  It SHOULD be a random number.
+</p>
+<p>The field PathMinimumMTU is updated per-hop to measure
+        the minimum path MTU of the interest's reverse path.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                    1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|         T_INTFRAG             |             LENGTH            |
++---------------+---------------+---------------+---------------+
+|                       FragmentStreamID                        |
+|                                                               |
++---------------+---------------+---------------+---------------+
+|       PathMinimumMTU          | X X | FragCnt | X X | FragNum |
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="object_header"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
+Content Object Header</h3>
+
+<p>The field FragmentStreamID identifies a contiguous stream
+          of fragments for the Content Object.  It SHOULD be derived from
+        the Content Object's hash, so two objects with the same Fragment Stream ID
+        represent the same fragmented object.
+</p>
+<p>The field InterestStreamID is the Fragment ID of the corresponding
+        Interest that the object is answering.  This allows PIT matching without
+        having to reconstruct the Content Object.  It makes Content Objects
+        specific to a given Interest similarity hash.
+</p>
+<p>The field ObjectMaximumMTU is the maximum size of any fragment
+        in the fragment stream.  This allows a forwarder to match a content
+        object fragment stream against a reverse path MTU size and not send
+        a fragment stream that will not fit down a path.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                    1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|         T_OBJFRAG             |             LENGTH            |
++---------------+---------------+---------------+---------------+
+|                       FragmentStreamID                        |
+|                                                               |
++---------------+---------------+---------------+---------------+
+|       ObjectMaximumMTU        | X X | FragCnt | X X | FragNum |
++---------------+---------------+---------------+---------------+
+|                       InterestStreamID                        |
+|                                                               |
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="cache"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4"></a><h3>4.&nbsp;
+Cache Considerations</h3>
+
+<p>Objects should be reassembled before sending from cache, to ensure all fragments exist at the cache.
+</p>
+<p>Single fragment Interests may be satisfied from cache.  A system may choose to reassemble Interests
+      to try and answer from cache.  If a cache miss, the original fragment stream should be forwarded.
+</p>
+<a name="Acknowledgements"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5.&nbsp;
+Acknowledgements</h3>
+
+<a name="IANA"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6"></a><h3>6.&nbsp;
+IANA Considerations</h3>
+
+<p>This memo includes no request to IANA.
+</p>
+<p>All drafts are required to have an IANA considerations section (see <a class='info' href='#RFC5226'>Guidelines for Writing an IANA Considerations Section in RFCs<span> (</span><span class='info'>Narten, T. and H. Alvestrand, &ldquo;Guidelines for Writing an IANA Considerations Section in RFCs,&rdquo; May&nbsp;2008.</span><span>)</span></a> [RFC5226] for a guide). If the
+        draft does not require IANA to do anything, the section contains an explicit statement that
+        this is the case (as above). If there are no requirements for IANA, the section will be
+        removed during conversion into an RFC by the RFC Editor.
+</p>
+<a name="Security"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7"></a><h3>7.&nbsp;
+Security Considerations</h3>
+
+<p>All drafts are required to have a security considerations section. See <a class='info' href='#RFC3552'>RFC 3552<span> (</span><span class='info'>Rescorla, E. and B. Korver, &ldquo;Guidelines for Writing RFC Text on Security Considerations,&rdquo; July&nbsp;2003.</span><span>)</span></a> [RFC3552] for a guide.
+</p>
+<a name="rfc.references"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8"></a><h3>8.&nbsp;
+References</h3>
+
+<a name="rfc.references1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>8.1.&nbsp;Normative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
+<td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997 (<a href="http://www.rfc-editor.org/rfc/rfc2119.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2119.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2119.xml">XML</a>).</td></tr>
+</table>
+
+<a name="rfc.references2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>8.2.&nbsp;Informative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="CCN">[CCN]</a></td>
+<td class="author-text">PARC, Inc., &ldquo;<a href="http://www.CCNx.org">CCNx Open Source</a>,&rdquo; 2007.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3552">[RFC3552]</a></td>
+<td class="author-text">Rescorla, E. and B. Korver, &ldquo;<a href="http://tools.ietf.org/html/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>,&rdquo; BCP&nbsp;72, RFC&nbsp;3552, July&nbsp;2003 (<a href="http://www.rfc-editor.org/rfc/rfc3552.txt">TXT</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5226">[RFC5226]</a></td>
+<td class="author-text">Narten, T. and H. Alvestrand, &ldquo;<a href="http://tools.ietf.org/html/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>,&rdquo; BCP&nbsp;26, RFC&nbsp;5226, May&nbsp;2008 (<a href="http://www.rfc-editor.org/rfc/rfc5226.txt">TXT</a>).</td></tr>
+</table>
+
+<a name="rfc.authors"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>Author's Address</h3>
+<table width="99%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Marc Mosko (editor)</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">PARC, Inc.</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Palo Alto, California  94304</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">USA</td></tr>
+<tr><td class="author" align="right">Phone:&nbsp;</td>
+<td class="author-text">+01 650-812-4405</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:marc.mosko@parc.com">marc.mosko@parc.com</a></td></tr>
+</table>
+</body></html>

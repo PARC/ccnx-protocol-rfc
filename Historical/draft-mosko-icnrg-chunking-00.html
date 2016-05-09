@@ -1,0 +1,579 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en"><head><title>CCNx Content Object Chunking</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="CCNx Content Object Chunking">
+<meta name="keywords" content="Content Centric Networking">
+<meta name="generator" content="xml2rfc v1.35dev (http://xml.resource.org/)">
+<style type='text/css'><!--
+        body {
+                font-family: verdana, charcoal, helvetica, arial, sans-serif;
+                font-size: small; color: #000; background-color: #FFF;
+                margin: 2em;
+        }
+        h1, h2, h3, h4, h5, h6 {
+                font-family: helvetica, monaco, "MS Sans Serif", arial, sans-serif;
+                font-weight: bold; font-style: normal;
+        }
+        h1 { color: #900; background-color: transparent; text-align: right; }
+        h3 { color: #333; background-color: transparent; }
+
+        td.RFCbug {
+                font-size: x-small; text-decoration: none;
+                width: 30px; height: 30px; padding-top: 2px;
+                text-align: justify; vertical-align: middle;
+                background-color: #000;
+        }
+        td.RFCbug span.RFC {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: bold; color: #666;
+        }
+        td.RFCbug span.hotText {
+                font-family: charcoal, monaco, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: normal; text-align: center; color: #FFF;
+        }
+
+        table.TOCbug { width: 30px; height: 15px; }
+        td.TOCbug {
+                text-align: center; width: 30px; height: 15px;
+                color: #FFF; background-color: #900;
+        }
+        td.TOCbug a {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, sans-serif;
+                font-weight: bold; font-size: x-small; text-decoration: none;
+                color: #FFF; background-color: transparent;
+        }
+
+        td.header {
+                font-family: arial, helvetica, sans-serif; font-size: x-small;
+                vertical-align: top; width: 33%;
+                color: #FFF; background-color: #666;
+        }
+        td.author { font-weight: bold; font-size: x-small; margin-left: 4em; }
+        td.author-text { font-size: x-small; }
+
+        /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+        a.info {
+                /* This is the key. */
+                position: relative;
+                z-index: 24;
+                text-decoration: none;
+        }
+        a.info:hover {
+                z-index: 25;
+                color: #FFF; background-color: #900;
+        }
+        a.info span { display: none; }
+        a.info:hover span.info {
+                /* The span will display just on :hover state. */
+                display: block;
+                position: absolute;
+                font-size: smaller;
+                top: 2em; left: -5em; width: 15em;
+                padding: 2px; border: 1px solid #333;
+                color: #900; background-color: #EEE;
+                text-align: left;
+        }
+
+        a { font-weight: bold; }
+        a:link    { color: #900; background-color: transparent; }
+        a:visited { color: #633; background-color: transparent; }
+        a:active  { color: #633; background-color: transparent; }
+
+        p { margin-left: 2em; margin-right: 2em; }
+        p.copyright { font-size: x-small; }
+        p.toc { font-size: small; font-weight: bold; margin-left: 3em; }
+        table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
+        td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
+
+        ol.text { margin-left: 2em; margin-right: 2em; }
+        ul.text { margin-left: 2em; margin-right: 2em; }
+        li      { margin-left: 3em; }
+
+        /* RFC-2629 <spanx>s and <artwork>s. */
+        em     { font-style: italic; }
+        strong { font-weight: bold; }
+        dfn    { font-weight: bold; font-style: normal; }
+        cite   { font-weight: normal; font-style: normal; }
+        tt     { color: #036; }
+        tt, pre, pre dfn, pre em, pre cite, pre span {
+                font-family: "Courier New", Courier, monospace; font-size: small;
+        }
+        pre {
+                text-align: left; padding: 4px;
+                color: #000; background-color: #CCC;
+        }
+        pre dfn  { color: #900; }
+        pre em   { color: #66F; background-color: #FFC; font-weight: normal; }
+        pre .key { color: #33C; font-weight: bold; }
+        pre .id  { color: #900; }
+        pre .str { color: #000; background-color: #CFF; }
+        pre .val { color: #066; }
+        pre .rep { color: #909; }
+        pre .oth { color: #000; background-color: #FCF; }
+        pre .err { background-color: #FCC; }
+
+        /* RFC-2629 <texttable>s. */
+        table.all, table.full, table.headers, table.none {
+                font-size: small; text-align: center; border-width: 2px;
+                vertical-align: top; border-collapse: collapse;
+        }
+        table.all, table.full { border-style: solid; border-color: black; }
+        table.headers, table.none { border-style: none; }
+        th {
+                font-weight: bold; border-color: black;
+                border-width: 2px 2px 3px 2px;
+        }
+        table.all th, table.full th { border-style: solid; }
+        table.headers th { border-style: none none solid none; }
+        table.none th { border-style: none; }
+        table.all td {
+                border-style: solid; border-color: #333;
+                border-width: 1px 2px;
+        }
+        table.full td, table.headers td, table.none td { border-style: none; }
+
+        hr { height: 1px; }
+        hr.insert {
+                width: 80%; border-style: none; border-width: 0;
+                color: #CCC; background-color: #CCC;
+        }
+--></style>
+</head>
+<body>
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tr><td class="header">ICNRG</td><td class="header">M. Mosko, Ed.</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">PARC, Inc.</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">January 9, 2015</td></tr>
+<tr><td class="header">Expires: July 13, 2015</td><td class="header">&nbsp;</td></tr>
+</table></td></tr></table>
+<h1><br />CCNx Content Object Chunking<br />draft-mosko-icnrg-chunking-00</h1>
+
+<h3>Abstract</h3>
+
+<p>This document specifies a chunking protocol for dividing a user payload 
+      into CCNx Content Objects. This includes specification for the naming convention to use for
+      the chunked payload, the metadata convention used to store information about the chunked object,
+      add the field added to a Content Object to
+      represent the last chunk of an object.  
+</p>
+<h3>Status of this Memo</h3>
+<p>
+This Internet-Draft is submitted  in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.</p>
+<p>
+Internet-Drafts are working documents of the Internet Engineering
+Task Force (IETF).  Note that other groups may also distribute
+working documents as Internet-Drafts.  The list of current
+Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>
+Internet-Drafts are draft documents valid for a maximum of six months
+and may be updated, replaced, or obsoleted by other documents at any time.
+It is inappropriate to use Internet-Drafts as reference material or to cite
+them other than as &ldquo;work in progress.&rdquo;</p>
+<p>
+This Internet-Draft will expire on July 13, 2015.</p>
+
+<h3>Copyright Notice</h3>
+<p>
+Copyright (c) 2015 IETF Trust and the persons identified as the
+document authors.  All rights reserved.</p>
+<p>
+This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents
+(http://trustee.ietf.org/license-info) in effect on the date of
+publication of this document.  Please review these documents
+carefully, as they describe your rights and restrictions with respect
+to this document. Code Components extracted from this document must
+include Simplified BSD License text as described in Section 4.e of
+the Trust Legal Provisions and are provided without warranty as
+described in the Simplified BSD License.</p>
+<a name="toc"></a><br /><hr />
+<h3>Table of Contents</h3>
+<p class="toc">
+<a href="#anchor1">1.</a>&nbsp;
+Introduction<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor2">1.1.</a>&nbsp;
+Requirements Language<br />
+<a href="#protocol">2.</a>&nbsp;
+Chunking<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#examples">2.1.</a>&nbsp;
+Examples<br />
+<a href="#metadata">3.</a>&nbsp;
+Chunking Metadata<br />
+<a href="#types">4.</a>&nbsp;
+TLV Types<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#names">4.1.</a>&nbsp;
+Name Types<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#seg">4.1.1.</a>&nbsp;
+Chunk Number<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#metaname">4.1.2.</a>&nbsp;
+Chunk Metadata Name Component<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#signed_info">4.2.</a>&nbsp;
+Protocol Information<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#end_seg">4.2.1.</a>&nbsp;
+EndChunkNumber<br />
+<a href="#Acknowledgements">5.</a>&nbsp;
+Acknowledgements<br />
+<a href="#IANA">6.</a>&nbsp;
+IANA Considerations<br />
+<a href="#Security">7.</a>&nbsp;
+Security Considerations<br />
+<a href="#rfc.references1">8.</a>&nbsp;
+References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">8.1.</a>&nbsp;
+Normative References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">8.2.</a>&nbsp;
+Informative References<br />
+<a href="#rfc.authors">&#167;</a>&nbsp;
+Author's Address<br />
+</p>
+<br clear="all" />
+
+<a name="anchor1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1"></a><h3>1.&nbsp;
+Introduction</h3>
+
+<p>CCNx Content Objects are sized to amortize cryptographic operations over
+       user data while simultaneously staying a reasonable size for transport over today's networks.
+       This means a Content Object is usually within common UDP or jumbo Ethernet size.
+       If a publisher has a larger amount of data to associate with a single Name, the data should be
+       chunked with this chunking protocol.  This protocol leverages state in 
+       the Name and in an optional field within the Content Object.  A chunked object may also have
+       a metadata object that describes the original pre-chunked object.
+</p>
+<p>CCNx uses two types of messages: Interests and Content Objects. An Interest carries the
+        hierarchically structured variable-length identifier (HSVLI), or Name, of a
+        Content Object and serves as a request for that object. If a network element sees multiple
+        Interests for the same name, it may aggregate those Interests. A network element along the
+        path of the Interest with a matching Content Object may return that object, satisfying the
+        Interest. The Content Object follows the reverse path of the Interest to the origin(s) of
+        the Interest. A Content Object contains the Name, the object's Payload, and the cryptographic
+        information used to bind the Name to the payload. 
+</p>
+<p>This specification adds a new segment to the Name TLV and a new field to the Metadata TLV. 
+       It updates [ietf-draft-ccnxmessages].
+       It also provides guidelines for the usage of the Key Locator in chunked objects.
+</p>
+<p>Packets are represented as 32-bit wide words using ASCII art.  Because
+      of the TLV encoding and optional fields or sizes, there is no concise
+      way to represent all possibilities.  We use the convention that ASCII art
+      fields enclosed by vertical bars "|" represent exact bit widths.  Fields
+      with a forward slash "/" are variable bitwidths, which we typically pad
+      out to word alignment for picture readability.
+</p>
+<p>TODO -- we have not adopted the Requirements Language yet.
+</p>
+<a name="anchor2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1.1"></a><h3>1.1.&nbsp;
+Requirements Language</h3>
+
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+          NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in <a class='info' href='#RFC2119'>RFC 2119<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a> [RFC2119].
+</p>
+<a name="protocol"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2"></a><h3>2.&nbsp;
+Chunking</h3>
+
+<p>Chunking, as used in this specification, means serializing user data
+      into one or more chunks, each encapsulated in a CCNx Content Object.  One
+      segment in the Name of that Content Object represents the current chunk number.  A field in the
+      Content Object's Metadata - only mandatory in the final chunk - represents the end of
+      the stream.  Chunks are denoted
+      by a serial counter, beginning at 0 and incrementing by 1 for each 
+      contiguous chunk.  The chunking ends at the final chunk.  No valid
+      user data exists beyond the final chunk, and reading beyond the final
+      chunk MUST NOT return any user data.
+</p>
+<p>Chunking uses a block size for chunks.  The block size may be
+      inferred by the Content size of each Content Object.  It is not explicit in
+      the chunking name protocol.  It may also be represented in a chunking
+      Metadata object related to the Content Object.  Using a consistent block size
+      allows a reader to predict byte offsets.
+</p>
+<p>The new name segment is the ChunkNumber.  It
+      is a serial counter beginning at 0 and incrementing by 1 for each chunk of
+      the user data.  Given the base name of an object and the data to chunk, the
+      ChunkNumber is appended to the base name.
+</p>
+<p>The new Metadata field is the EndChunkNumber.
+      It MUST be included in the Content Object which is the last chunk of an object, but SHOULD be 
+      present at the earliest time it is known.  The value of the EndChunkNumber
+      should be the network byte order value of the last ChunkNumber
+</p>
+<p>The EndChunkNumber may be updated in later Chunks to a larger value,
+        as long as it has not yet reached the end.
+      The EndChunkNumber SHOULD NOT decrease.  If a publisher wishes to close
+      a stream before reaching the End Chunk, it should publish empty Content
+      Objects to fill out to the maximum EndChunkNumber ever published.
+      These padding chunks MUST contain the true EndChunkNumber.
+</p>
+<a name="examples"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2.1"></a><h3>2.1.&nbsp;
+Examples</h3>
+
+<p>Here are some examples of chunked Names using the Labeled Content
+      Identifier URI scheme in human readable form (lci:).  
+</p>
+<p>In this example,
+      the content producer publishes a JPG that takes 4 Chunks.  Inside the
+      Metadata, the  EndChunkNumber is missing in the first (Chunk 0)
+      object, but is known when Chunk 1 is published so is included in Chunk 1.
+      It is omitted in Chunk 2, then appears in Chunk 3, where it is mandatory.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+lci:/Name=parc/Name=csl/Name=picture.jpg/Chunk=0
+  Protocol Info: No EndChunk
+lci:/Name=parc/Name=csl/Name=picture.jpg/Chunk=1
+  Protocol Info: EndChunk="3"
+lci:/Name=parc/Name=csl/Name=picture.jpg/Chunk=2
+  Protocol Info: No EndChunk
+lci:/Name=parc/Name=csl/Name=picture.jpg/Chunk=3
+  Protocol Info: EndChunk="3"
+</pre></div>
+<p>In this example, the publisher is writing an audio stream that
+      ends before expected so the publisher fills empty Content Objects
+      out to the maximum
+      ChunkNumber, stating the correct EndChunk.  Chunks 4, 5, and
+      6 do not contain any new user data.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=0
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=1
+   Protocol Info: EndChunk="6"
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=2
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=3
+   Protocol Info: EndChunk="3"
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=4
+   Protocol Info: EndChunk="3"
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=5
+   Protocol Info: EndChunk="3"
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=6
+   Protocol Info: EndChunk="3"
+</pre></div>
+<a name="metadata"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3"></a><h3>3.&nbsp;
+Chunking Metadata</h3>
+
+<p>Chunking metadata MAY be saved along with a chunked object. If
+	Chunking metadata is saved it SHOULD be saved using a Meta labeled
+	path chunk with the value of chunking.
+</p>
+<p>An example name using SerialNumber versioning is 
+        "lci:/Name=parc/Name=picture.jpg/SerialNumber=1/Meta=chunking/SerialNumber=0".
+        This name means there is an object named "lci:/Name=parc/Name=picture.jpg/SerialNumber=1" that conforms
+        to the Chunking protocol.  The chunking metadata is stored in a separate Content Object with
+        the example name.
+      
+</p>
+<p>The Chunking Metadata is a JSON Content Object whose content adheres to
+	the following schema.
+        The BlockSize is used for all Chunks except the last.  The EndChunk is optional
+        at the time the header is written, if it is not known.  Once a chunking is finished a new header could
+	be written with the correct EndChunk.
+</p>
+<p>The optional DIGEST key is over the entire user contents.  It must specify the
+        algorithm used for the digest in OID form and express the digest in Hexadecimal.
+</p>
+<p>The TOTALBYTES field is the total user bytes, if known.  If it is only known at a later
+        time, the metadata object may be updated with a new SerialNumber when the value is known.
+</p>
+<p>The header MUST have the same KeyId -- and be signed by the same key -- as the Content Object 
+        to which it refers.  If the Content Object is encrypted, the header MUST use
+        the same encryption.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+{ "chunking" :
+  { "BLOCKSIZE"  : &lt;blocksize&gt;
+    [, "FILENAME"   : &lt;original file name, if known&gt;]
+    [, "ENDChunk" : &lt;end Chunk, if known&gt;]
+    [, "TOTALBYTES" : &lt;total bytes of all Chunks, if known&gt;]
+    [, "DIGEST"   : { "ALGORITHM"=&lt;OID&gt;, "DIGEST"=&lt;hexadecimal value&gt; }]
+  }
+}
+</pre></div>
+<a name="types"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4"></a><h3>4.&nbsp;
+TLV Types</h3>
+
+<p>This section specifies the TLV types used by CCNx chunking.
+</p>
+<a name="names"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
+Name Types</h3>
+
+<p>CCNx chunking uses one new Name type, for Chunk Number.
+</p><br /><hr class="insert" />
+<a name="name_tlvs"></a>
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Abbrev</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0010</td>
+<td align="center">T_Chunk</td>
+<td align="center"><a class='info' href='#seg'>Chunk Number<span> (</span><span class='info'>Chunk Number</span><span>)</span></a></td>
+<td align="left">The current Chunk Number, is an unsigned integer
+          in network byte order without leading zeros.  The value
+          of zero is represented as the single byte %x00.</td>
+</tr>
+<tr>
+<td align="center">%x0011</td>
+<td align="center">T_Meta</td>
+<td align="center"><a class='info' href='#seg'>Chunk Metadata<span> (</span><span class='info'>Chunk Number</span><span>)</span></a></td>
+<td align="left">Identifies the Content Object on metadata for the prior Name.</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Table 1: Name Types&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+
+<a name="seg"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.1.1"></a><h3>4.1.1.&nbsp;
+Chunk Number</h3>
+
+<p>The current chunk number, as an unsigned integer
+            in network byte order without leading zeros.    The value
+            of zero is represented as the single byte %x00.
+</p>
+<p>In lci: URI form, it is denoted as "Chunk".
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+--------------+
+|           T_Chunk           |             Length           |
++---------------+---------------+---------------+--------------+
+|     variable length integer   /
++---------------+---------------+
+</pre></div>
+<a name="metaname"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.1.2"></a><h3>4.1.2.&nbsp;
+Chunk Metadata Name Component</h3>
+
+<p>A name component that identifies the content object provides chunk metadata about
+            the left-encapsulated name prefix, as described in <a class='info' href='#metadata'>Section&nbsp;3<span> (</span><span class='info'>Chunking Metadata</span><span>)</span></a>.
+          
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+--------------+
+|            T_Meta             |               5              |
++---------------+---------------+---------------+--------------+
+/   "chunk"     /
++---------------+
+</pre></div>
+<a name="signed_info"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
+Protocol Information</h3>
+
+<p>CCNx chunking uses one new field in the Metadata for
+        the EndChunkNumber.
+</p><br /><hr class="insert" />
+<a name="si_tlvs"></a>
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Abbrev</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0019</td>
+<td align="center">T_ENDChunk</td>
+<td align="center"><a class='info' href='#seg'>EndChunkNumber<span> (</span><span class='info'>Chunk Number</span><span>)</span></a></td>
+<td align="left">The last Chunk number, as an unsigned integer
+            in network byte order without leading zeros.  The value
+            of zero is represented as the single byte %x00.</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Table 2: Protocol Information Types&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+
+<a name="end_seg"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2.1"></a><h3>4.2.1.&nbsp;
+EndChunkNumber</h3>
+
+<p>The ending chunk number, as an unsigned integer
+            in network byte order without leading zeros.    The value
+            of zero is represented as the single byte %x00.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+--------------+
+|         T_ENDChunk          |             Length           |
++---------------+---------------+---------------+--------------+
+|     variable length integer   /
++---------------+---------------+
+</pre></div>
+<a name="Acknowledgements"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5.&nbsp;
+Acknowledgements</h3>
+
+<a name="IANA"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6"></a><h3>6.&nbsp;
+IANA Considerations</h3>
+
+<p>This memo includes no request to IANA.
+</p>
+<p>All drafts are required to have an IANA considerations section (see <a class='info' href='#RFC5226'>Guidelines for Writing an IANA Considerations Section in RFCs<span> (</span><span class='info'>Narten, T. and H. Alvestrand, &ldquo;Guidelines for Writing an IANA Considerations Section in RFCs,&rdquo; May&nbsp;2008.</span><span>)</span></a> [RFC5226] for a guide). If the
+        draft does not require IANA to do anything, the section contains an explicit statement that
+        this is the case (as above). If there are no requirements for IANA, the section will be
+        removed during conversion into an RFC by the RFC Editor.
+</p>
+<a name="Security"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7"></a><h3>7.&nbsp;
+Security Considerations</h3>
+
+<p>All drafts are required to have a security considerations section. See <a class='info' href='#RFC3552'>RFC 3552<span> (</span><span class='info'>Rescorla, E. and B. Korver, &ldquo;Guidelines for Writing RFC Text on Security Considerations,&rdquo; July&nbsp;2003.</span><span>)</span></a> [RFC3552] for a guide.
+</p>
+<a name="rfc.references"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8"></a><h3>8.&nbsp;
+References</h3>
+
+<a name="rfc.references1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>8.1.&nbsp;Normative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
+<td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997 (<a href="http://www.rfc-editor.org/rfc/rfc2119.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2119.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2119.xml">XML</a>).</td></tr>
+</table>
+
+<a name="rfc.references2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>8.2.&nbsp;Informative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="CCNx">[CCNx]</a></td>
+<td class="author-text">PARC, Inc., &ldquo;<a href="http://www.ccnx.org">CCNx Open Source</a>,&rdquo; 2007.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2616">[RFC2616]</a></td>
+<td class="author-text"><a href="mailto:fielding@ics.uci.edu">Fielding, R.</a>, <a href="mailto:jg@w3.org">Gettys, J.</a>, <a href="mailto:mogul@wrl.dec.com">Mogul, J.</a>, <a href="mailto:frystyk@w3.org">Frystyk, H.</a>, <a href="mailto:masinter@parc.xerox.com">Masinter, L.</a>, <a href="mailto:paulle@microsoft.com">Leach, P.</a>, and <a href="mailto:timbl@w3.org">T. Berners-Lee</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a>,&rdquo; RFC&nbsp;2616, June&nbsp;1999 (<a href="http://www.rfc-editor.org/rfc/rfc2616.txt">TXT</a>, <a href="http://www.rfc-editor.org/rfc/rfc2616.ps">PS</a>, <a href="http://www.rfc-editor.org/rfc/rfc2616.pdf">PDF</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2616.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2616.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3552">[RFC3552]</a></td>
+<td class="author-text">Rescorla, E. and B. Korver, &ldquo;<a href="http://tools.ietf.org/html/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>,&rdquo; BCP&nbsp;72, RFC&nbsp;3552, July&nbsp;2003 (<a href="http://www.rfc-editor.org/rfc/rfc3552.txt">TXT</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5226">[RFC5226]</a></td>
+<td class="author-text">Narten, T. and H. Alvestrand, &ldquo;<a href="http://tools.ietf.org/html/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>,&rdquo; BCP&nbsp;26, RFC&nbsp;5226, May&nbsp;2008 (<a href="http://www.rfc-editor.org/rfc/rfc5226.txt">TXT</a>).</td></tr>
+</table>
+
+<a name="rfc.authors"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>Author's Address</h3>
+<table width="99%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Marc Mosko (editor)</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">PARC, Inc.</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Palo Alto, California  94304</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">USA</td></tr>
+<tr><td class="author" align="right">Phone:&nbsp;</td>
+<td class="author-text">+01 650-812-4405</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:marc.mosko@parc.com">marc.mosko@parc.com</a></td></tr>
+</table>
+</body></html>

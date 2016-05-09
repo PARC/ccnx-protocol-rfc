@@ -1,0 +1,903 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+    which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+    There has to be one entity for each item to be referenced. 
+    An alternate method (rfc include) is described in the references. -->
+
+<!ENTITY RFC2119 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2629 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml">
+<!ENTITY RFC3552 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3552.xml">
+<!ENTITY RFC5226 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5226.xml">
+<!ENTITY RFC5234 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml">
+
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+    please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+    (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space 
+    (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="no" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+
+<?rfc private="" ?>
+
+<rfc category="exp" docName="draft-wood-icnrg-ccnxmanifests-00" ipr="trust200902">
+  <!-- category values: std, bcp, info, exp, and historic
+    ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
+       or pre5378Trust200902
+    you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+    they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the 
+        full title is longer than 39 characters -->
+
+    <title abbrev="CCNx Manifests">CCNx Manifest Specification</title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+    <!-- Another author who claims to be an editor -->
+
+    <author fullname="Marc Mosko" initials="M.E." surname="Mosko">
+      <organization>PARC, Inc.</organization>
+
+      <address>
+       <postal>
+         <street/>
+
+         <city>Palo Alto</city>
+
+         <region>California</region>
+
+         <code>94304</code>
+
+         <country>USA</country>
+       </postal>
+
+       <phone>+01 650-812-4405</phone>
+
+       <email>marc.mosko@parc.com</email>
+
+       <!-- uri and facsimile elements may also be added -->
+     </address>
+    </author>
+
+    <author fullname="Glenn Scott" initials="G.S." surname="Scott">
+      <organization>PARC, Inc.</organization>
+
+      <address>
+       <postal>
+         <street/>
+
+         <city>Palo Alto</city>
+
+         <region>California</region>
+
+         <code>94304</code>
+
+         <country>USA</country>
+       </postal>
+
+       <phone>+01 650-812-4422</phone>
+
+       <email>glenn.scott@parc.com</email>
+     </address>
+    </author>
+
+    <author fullname="Ignacio Solis" initials="I.S." surname="Solis">
+      <organization>PARC, Inc.</organization>
+
+      <address>
+       <postal>
+         <street/>
+
+         <city>Palo Alto</city>
+
+         <region>California</region>
+
+         <code>94304</code>
+
+         <country>USA</country>
+       </postal>
+
+       <phone>+01 650-812-ZZZZ</phone>
+
+       <email>ignacio.solis@parc.com</email>
+     </address>
+    </author>
+
+    <author fullname="Christopher A. Wood" initials="C.A.W." surname="Wood">
+      <organization>PARC, Inc.</organization>
+
+      <address>
+       <postal>
+         <street/>
+
+         <city>Palo Alto</city>
+
+         <region>California</region>
+
+         <code>94304</code>
+
+         <country>USA</country>
+       </postal>
+
+       <phone>+01 650-812-ZZZZ</phone>
+
+       <email>christopher.wood@parc.com</email>
+
+       <!-- uri and facsimile elements may also be added -->
+     </address>
+    </author>
+
+    <date year="2016"/>
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
+        in the current day for you. If only the current year is specified, xml2rfc will fill 
+	 in the current day and month for you. If the year is not the current one, it is 
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
+	 purpose of calculating the expiry date). With drafts it is normally sufficient to 
+	 specify just the year. -->
+
+    <!-- Meta-data Declarations -->
+
+    <area>General</area>
+
+    <workgroup>ICNRG</workgroup>
+
+    <!-- WG name at the upperleft corner of the doc,
+        IETF is fine for individual submissions. 
+	 If this element is not present, the default is "Network Working Group",
+        which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+    <keyword>Content Centric Networking</keyword>
+
+    <!-- Keywords will be incorporated into HTML output
+        files in a meta tag but they have no effect on text or nroff
+        output. If you submit your draft to the RFC Editor, the
+        keywords will be used for the search engine. -->
+
+    <abstract>
+      <t>
+        This document specifies the usage, format, and wire format encoding of CCNx Manifests.
+        The current Manifest structure is intended to be used as a low-level index for large content
+        objects that can be parsed and interpreted by network entities, e.g., forwarders. An in-order
+        traversal of the index will yield the original large Content Object encoded with the Manifest.
+        This simple data structure is not designed to provide other higher-order features or 
+        information for protocols and applications. A future document (to be written) will specify a 
+        more flexible and modular Manifest design to enable such usage. 
+      </t>
+
+    </abstract>
+  </front>
+
+  <middle>    
+     <section title="Introduction">
+      <t>
+        This document specifies the semantics and usage, format, and wire format representation of CCNx Manifests. 
+        Manifests are special types of messages that are used to provide structure to 
+        otherwise large and flat Content Objects. Manifests are useful for representing 
+        large Content Objects with relevant information such as access control specifications.
+      </t>
+
+      <t>  
+        Structurally, they can be viewed as an ordered collection of embedded or linked Content Objects and 
+        corresponding hash digests. The union of the bits in all of these Content Objects contained within
+        a Manifest are used to reconstruct the original, large Content Object. Manifests are themselves Content 
+        Objects; their encoding is specified later in this document. Manifests can be constructed 
+        hierarchically, e.g., where elements of Manifests point to other Manifests. Thus, an in-order 
+        traversal of the hash indexes in a Manifest tree will yield the original large Content Object 
+        encoded with the Manifest. Examples of a Manifest tree of height 1 and 2 are shown below.
+      </t>
+      
+      <!-- flat manifest -->
+      <figure>
+        <artwork align="left"><![CDATA[
+-----------------
+| TYPE=MANIFEST |
+|     Link 1    | ==> ----------------
+|               |     | TYPE=CONTENT |
+|               |     |   <payload>  |
+|               |     ----------------
+|     Link 2    | ==> ----------------
+|               |     | TYPE=CONTENT |
+|               |     |   <payload>  |
+|               |     ----------------
+|     Link 3    | ==> ----------------
+|               |     | TYPE=CONTENT |
+|               |     |   <payload>  |
+|               |     ----------------
+-----------------
+        ]]></artwork>
+       </figure> 
+      
+      <!-- partially hierarchical manifest-->
+      <figure>
+        <artwork align="left"><![CDATA[
+-----------------
+| TYPE=MANIFEST |
+|     Link 1    | ==> ----------------
+|               |     | TYPE=CONTENT |
+|               |     |   <payload>  |
+|               |     ----------------
+|     Link 2    | ==> ----------------
+|               |     | TYPE=CONTENT |
+|               |     |   <payload>  |
+|               |     ----------------
+|     Link 3    | ==> -----------------
+|               |     | TYPE=MANIFEST |
+|               |     |     Link 1    | ==> ----------------
+|               |     |               |     | TYPE=CONTENT |
+|               |     |               |     |   <payload>  |
+|               |     |               |     ---------------- 
+|               |     -----------------
+-----------------
+        ]]></artwork>
+       </figure> 
+
+      <t>
+        Manifests can also be embedded within one another, rather than linked. 
+        This enables child Manifests to be referenced and accessed via hash (without a 
+        name) without having to resolve any external references. An example of this 
+        embedding is shown below.
+      </t>
+
+       <!-- Embedded Manifest -->
+      <figure>
+        <artwork align="left"><![CDATA[
+-----------------
+| TYPE=MANIFEST |
+|     Link 1    | ==> ----------------
+|               |     | TYPE=CONTENT |
+|               |     |   <payload>  |
+|               |     ----------------
+|ContentObject 2|  
+|---------------|
+||TYPE=MANIFEST||
+||     Link 1  || ==> ---------------- 
+||             ||     | TYPE=CONTENT | 
+||             ||     |   <payload>  | 
+|---------------|     ----------------
+-----------------
+        ]]></artwork>
+       </figure> 
+
+       <t>
+        As a simple index for large Content Objects, Manifests can be parsed and interpreted
+        within the network by entities such as forwarders. One possible use case for this is to
+        enable more intelligent caching, content retrieval, or forwarding strategies. Information
+        extracted from Manifests has the potential to be as or more useful than that provided from
+        IP deep-packet inspection.
+       </t>
+
+       <!-- TODO -->
+       <!-- FROM MARC: We need to describe embedding one Manifest in another Manifest without using an external reference. This will be important for Nameless Objects, so we might as well get it done. -->
+
+       <t>We have not adopted the Requirements Language yet.</t>
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+          NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in <xref target="RFC2119">RFC 2119</xref>.</t>
+      </section>
+    </section>
+
+    <section anchor="format" title="Manifest Format">
+      <t>
+        This section describes the formal grammar for Manifests 
+        using <xref target="RFC5234">ABNF</xref> notation. To begin, we review
+        the grammar for defining generic CCN Content Object messages (CITE).</t>
+
+      <figure>
+          <artwork align="left"><![CDATA[
+ContentObject     = ContentObjectBody [ValidationAlg] [ValidationPayload]
+ValidationAlg     = <parameters used to generate validation payload>
+ValidationPayload = <Output of the validation algorithm, e.g. a signature>
+]]></artwork>
+      </figure>
+
+      <t>
+        Content Objects may be signed or unsigned. Hence, validation information is optional.
+        Furthermore, Content Objects may be traditional, i.e., of type DATA, or Manifests, i.e., 
+        of type MANIFEST; the exact type of a ContentObject message is determined by a flag, as 
+        shown below.</t>
+
+      <figure>
+          <artwork align="left"><![CDATA[
+ContentObjectBody =  Name [ExpiryTime] ContentType [Payload | ManifestPayload]
+Name              = <LCI Name of the Content Object>
+ExpiryTime        = <UTC time the Manifest expires>
+ContentType       = DATA_TYPE | MANIFEST_TYPE | <others>
+Payload           = *OCTETS
+]]></artwork>
+      </figure>
+
+      <t>
+        To be concrete, DATA_TYPE=0 and MANIFEST_TYPE=3, but these values should
+        be as specified in <xref target="CCNTlv"></xref>. 
+      </t>
+
+      <t>
+        Content Object messages of type MANIFEST may contain a ManifestPayload, which is a 
+        (potentially empty) sequence of SECTIONs. Recall that one intention of
+        a Manifest is as a catalog for wrapping an arbitrary set of Content Objects. 
+        This catalog information is stored inside these SECTION instances, each
+        with its own set of associated information, e.g., access control specifications.
+      </t>
+
+      <figure>
+          <artwork align="left"><![CDATA[
+ManifestPayload = *[ManifestSection]
+ManifestSection = SECTION | LINK
+]]></artwork>
+      </figure>
+
+      <t>
+        LINK elements are as defined in <xref target="CCNTlv"></xref>.
+      </t>
+
+      <t>
+        A ManifestSection may be directly embedded in a Manifest or referenced via a LINK. This 
+        enables arbitrary composition of Manifests and Manifest hierarchies. </t>
+
+      <t>
+        A ManifestSection contains a set of links to ContentObjects that are part of the large Content Object. If one concatenates the PayloadSection links in order, one reconstructs the published ContentObject. Note that some forms of payload are published in-order and simply concatenated, but other forms of payload (e.g., a timestamped stream) may have their own indexing in the leaf elements and reconstruction must obey that ordering; this issue is beyond the scope of the present document.</t>
+
+      <t>
+        The default behavior for Manifests is that an in-order depth-first tree traversal that concatenates all PayloadSection DATA ContentObjects reconstructs the original payload. One excludes all ContentObjects of type MANIFEST (as those are interior tree nodes) in this process.</t>
+
+      <t>
+        It is expected that the root manifest is chunked and versioned, and therefore the name should
+        reflect these properties. However, it is not required that links to this root manifest 
+        indicate either property.
+      </t>
+      </section>
+
+      <section anchor="sections" title="Manifest SECTIONs">
+
+      <t>A Manifest SECTION is a self-contained collection of Content Objects with its own 
+        set of information,
+        e.g., access control information, distinct from other sections in the same Manifest. Internally,
+        a SECTION is a list of (chunked) Content Object 
+        name prefixes and corresponding hashes that enable a consumer
+        to retrieve Content Objects within the Manifest catalog. Specifically, a consumer can traverse the list
+        of names in a SECTION, extract the name and chunk number, as well as the corresponding ContentObjectHash,
+        and construct an Interest for that specific Content Object. Recall that, due to the hierarchical nature
+        of Manifests, this Interest may itself be for another Manifest. </t>
+
+        <t>The information contained within a SECTION is specific to all Content Objects 
+        contained within the SECTION list. For example, a SECTION may contain a 
+        link to an AccessControlSpecification (ACS) (to be described in a future document) 
+        that contains relevant information about access control restrictions imposed upon 
+        all Content Object references contained in the SECTION. Note that if no ACS is specified
+        in a SECTION, then this information is inherited from its parent Manifest (if one exists).</t>
+
+      <figure>
+          <artwork align="left"><![CDATA[
+SECTION      = [ACS] [ListOfPrefixes] ListOfHashes
+ACS          = LINK
+ListOfPrefixes  = *(PrefixEntry)
+PrefixEntry    = [StartChunk] ContentNamePrefix  
+ListOfHashes = PrefixIndex HASH
+PrefixIndex    = OCTET
+HASH         = 32(OCTET)
+]]></artwork>
+      </figure>
+
+      <t>
+        As shown above, a SECTION contains an ordered list of references. The references could be based 
+        on the Manifest's Name or may be based on external name prefixes. For efficient encoding, 
+        we create a table of content name prefixes, where the Manifest's own name is always index 0. 
+        If all the media chunks are based on the Manifest's own name, then no ListOfPrefixes is 
+        required.      
+      </t>
+
+      <t>
+        Name prefixes may or may not include chunk and version information. 
+        If the Manifest's name includes chunked information and a hash refers 
+        to PrefixIndex 0, then the request for that hash will use a chunked name. If a hash refers 
+        to a name prefix in the ListOfPrefixes, the requested name will only be chunked if the 
+        PrefixEntry has a StartChunk number. That is, if
+        a chunk number is specified, then the content pointed to by the name will be retrieved
+        via the chunking protocol. For chunked names, the implicit chunk number added to 
+        the name prefix is computed from the prefix's starting chunk number plus the ordinal 
+        position of the hash for that name prefix. For example, if the ListOfHashes points to name prefix
+        indices 1,2,1, then the first request for ContentNamePrefix 1 will have chunk of StartChunk + 0, 
+        and the second request for ContentNamePrefix 1 will have StartChunk + 1.
+      </t>
+
+<!-- LINK         = TargetName [TargetKeyId] [TargetHash]
+TargetName   = <CCNx name of link target>
+TargetKeyId  = <KeyId restriction to use fetching TargetName>
+TargetHash   = <ContentObjectHash restriction to use fetching TargetName>
+ -->
+      <t>Each entry in ListOfHashes indicates its root ContentNamePrefix. The list of name prefixes may 
+        be empty if all hashes are based off the Content Object's Name. The Content Object 
+        name is always PrefixIndex 0, so the ListOfPrefixes will always begin with PrefixIndex 1. 
+        If the ContentObjectName has a ChunkNumber, then that number plus 1 is the implied 
+        StartChunk of PrefixIndex 0.</t>
+
+      <t>Each ContentNamePrefix has an optional StartChunk number. If no StartChunk is present, the name 
+        is not chunked (i.e., does not have a "Chunk=" name segment). If StartChunk is present, 
+        then each ListOfHashes entry that refers to that name will get a sequential Chunk 
+        number in its constructed name.</t>      
+    </section>
+    
+    <section anchor="examples" title="Manifest Format Examples">
+      <t>In this section we give several examples of encoded Manifests when represented in JSON 
+        format, which is a non-normative format used for readability. To begin, consider the 
+        following example which encodes the payload SECTION of a manifest representing an example 
+        piece of data.</t> 
+
+      <figure>
+          <artwork align="left"><![CDATA[
+ManifestSection = { 
+  .ListOfPrefixes = [ 
+    {.StartChunk=0, .ContentNamePrefix = /parc/cdn/fileA/part1},
+    {.StartChunk=0, .ContentNamePrefix = /parc/cnd/fileA/part2},
+    {.ContentNamePrefix = /parc/cnd/fileA/part3} 
+  ],
+  .ListOfHashes = [ 
+    {.PrefixIndex = 1, .Hash= 0x123},
+    {.PrefixIndex = 2, .Hash= 0x456},
+    {.PrefixIndex = 3, .Hash= 0x789}
+  ] 
+}]]></artwork>
+      </figure>
+
+      <t>
+        In this example, the set of generated Interest messages would be:
+
+        <list style="symbols">
+          <t>Interest 1 = { Name = /parc/cdn/fileA/part1/chunk=0, Hash=0x123 }</t>
+          <t>Interest 2 = { Name = /parc/cdn/fileA/part2/chunk=0, Hash=0x456 }</t>
+          <t>Interest 3 = { Name = /parc/cdn/fileA/part3, Hash=0x789 }</t>
+        </list>
+
+        Each Interest is for a flat DATA object with ContentObjectHash restriction 0x123, 0x456, and 0x789.
+        Notice that the StartChunk is absent from the third PrefixEntry.
+      </t>
+
+      <t>
+        Now consider an alternative example which encodes a different file.
+      </t>
+
+      <figure>
+          <artwork align="left"><![CDATA[
+ManifestSection = { 
+  .ListOfPrefixes = [ 
+    {.StartChunk=1, .ContentNamePrefix = /parc/cdn/fileB/part1Manifest},
+    {.StartChunk=0, .ContentNamePrefix = /parc/cnd/fileB/part2} 
+  ],
+  .ListOfHashes = [
+    {.PrefixIndex = 2, .Hash = 0x123},
+    {.PrefixIndex = 1, .Hash = 0xAAA},
+    {.PrefixIndex = 2, .Hash = 0x456},
+    {.PrefixIndex = 1, .Hash = 0xBBB}
+  ]
+}]]></artwork>
+      </figure>
+
+      <t>
+        In this example, the set of generated Interest messages would be:
+
+        <list style="symbols">
+          <t>Interest 1 = { Name = /parc/cdn/fileB/part2/chunk=0, Hash=0x123 }</t>
+          <t>Interest 2 = { Name = /parc/cdn/fileB/part1Manifest/chunk=1, Hash=0xAAA }</t>
+          <t>Interest 3 = { Name = /parc/cdn/fileB/part2/chunk=1, Hash=0x456 }</t>
+          <t>Interest 4 = { Name = /parc/cdn/fileB/part1Manifest/chunk=2, Hash=0xBBB }</t>
+        </list>
+
+        This allows the Manifest to indicate an arbitrary sequence of Content Objects with different
+        content name prefixes and different chunk number sequences. Moreover, in this example, 
+        one set of Interests corresponds to the separate chunks of a flat DATA object, whereas the 
+        other Interest corresponds to a hierarchical manifest. 
+      </t>
+
+      <t>
+        In the following example, we show how a SECTION of an ACS-protected Manifest might be encoded.
+      </t>
+
+      <figure>
+          <artwork align="left"><![CDATA[
+ManifestSection = {
+  .ACS = {.ContentNamePrefix = /parc/cdn/fileC/ACS, .Hash = 0xAAA},
+  .ListOfPrefixes = [ 
+    {.StartChunk=0, .ContentNamePrefix = /parc/cdn/fileC/part1}
+  ],
+  .ListOfHashes = [
+    {.PrefixIndex = 1, .Hash = 0x123},
+    {.PrefixIndex = 1, .Hash = 0x456},
+    {.PrefixIndex = 1, .Hash = 0x789}
+  ]
+}]]></artwork>
+      </figure>
+
+      <t>
+        In this example, the set of generated Interest messages would be:
+
+        <list style="symbols">
+          <t>Interest 1 = { Name = /parc/cdn/fileC/ACS/chunk=0, Hash=0xAAA }</t>
+          <t>Interest 2 = { Name = /parc/cdn/fileC/part1/chunk=0, Hash=0x123 }</t>
+          <t>Interest 3 = { Name = /parc/cdn/fileC/part1/chunk=1, Hash=0x456 }</t>
+          <t>Interest 4 = { Name = /parc/cdn/fileC/part1/chunk=2, Hash=0x789 }</t>
+        </list>
+
+        Usage of the ACS is outside the scope of this document. 
+      </t>
+
+    </section> 
+
+    <section anchor="WireFormat" title="Wire Format">
+      <t>
+        A Manifest is a Content Object with the payload type T_MANIFEST. So, in the encoding below,
+        the PayloadType is T_MANIFEST for a Manifest Content Object.
+      </t>
+              
+              <figure>
+                <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            T_PAYLDTYPE        |            Length             |
++---------------+---------------+---------------+---------------+
+|  T_MANIFEST   /
++---------------+
+]]></artwork>
+</figure>
+
+        <t>
+          The payload of a Manifest Content Object (ManifestPayload) contains the body of the Manifest. The 
+          length of the payload (see below) includes all information contained in each of the encapsulated
+          ManifestPayload entries. 
+       </t>
+
+      <figure><artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|           T_PAYLOAD           |            Length             |
++---------------+---------------+---------------+---------------+
+/                        Payload Contents                       /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+            </figure>
+
+          <t>
+            Since the ManifestPayload contains a list of ManifestSection elements, it is encoded as follows:
+          </t>
+
+          <figure><artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|         T_SECTIONLIST         |            Length             |
++---------------+---------------+---------------+---------------+
+/               Number of ManifestSection elements              /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+            </figure>
+
+          <t>
+            If a SECTION is a LINK, then it uses the standard LINK encoding specified in <xref target="CCNTlv"></xref>.
+            If not, a SECTION has the following outer encoding.
+          </t>
+
+          <figure><artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|           T_SECTION           |            Length             |
++---------------+---------------+---------------+---------------+
+/                        SECTION Contents                       /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+            </figure>
+
+            <texttable anchor="manifestpayload_types" title="ManifestPayload_Types">
+                <ttcol align="center">Type</ttcol>
+                <ttcol align="center">Symbolic Name</ttcol>
+                <ttcol align="center">Name</ttcol>
+                <ttcol align="left">Description</ttcol>
+                
+                <c>%x0010</c>
+                <c>T_SECTIONLIST</c>
+                <c>ManifestSection list</c>
+                <c>The list of ManifestSection elements</c>
+
+                <c>%x0011</c>
+                <c>T_SECTION</c>
+                <c>SECTION</c>
+                <c>An embedded Manifest SECTION</c>
+              </texttable>
+
+          <t> 
+            The internals of a SECTION are encoded as follows. Note that the ACS is optional and may 
+            be excluded if not necessary. Also, recall that an ACS is a LINK, and so its encoding
+            is that of a LINK; see <xref target="CCNTlv"></xref> for the up-to-date encoding of LINK
+            elements. Its duplication here is merely for illustration purposes.
+          </t>
+
+      <figure><artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|             T_ACS             |            Length             |
++---------------+---------------+-------------------------------+
+| Mandatory CCNx Name                                           |
++---------------+---------------+-------------------------------+
+/ Optional KeyId                                                /
++---------------------------------------------------------------+
+/ Optional ContentObjectHash                                    /
++---------------------------------------------------------------+
+|         T_ListOfPrefixes      |        Length (may be 0)      |
++---------------+---------------+-------------------------------+
+/ Number of content name prefixes                               /
++---------------+---------------+-------------------------------+
+/                                                               /
+/                          Name Entry List                      /
+/                                                               /   
++---------------+---------------+-------------------------------+ 
+|        T_ListOfHashes         |            Length             |
++---------------+---------------+-------------------------------+
+| Number of hash entries        |                               |          
++---------------+---------------+-------------------------------+ 
+/                                                               /
+/                          Hash Entry List                      /
+/                                                               /   
++---------------+---------------+-------------------------------+                           
+]]></artwork>
+            </figure>
+
+            <texttable anchor="section_types" title="SECTION_Types">
+                <ttcol align="center">Type</ttcol>
+                <ttcol align="center">Symbolic Name</ttcol>
+                <ttcol align="center">Name</ttcol>
+                <ttcol align="left">Description</ttcol>
+                
+                <c>%x0012</c>
+                <c>T_ACS</c>
+                <c>Access Control Specification</c>
+                <c>A full-fledged CCNx Name that refers to an Access Control Specification (ACS),
+                  whose format is TBD.</c>
+
+                <c>%x0013</c>
+                <c>T_ListOfPrefixes</c>
+                <c>List of Manifest Name Entries</c>
+                <c>An arbitrarily long list of PrefixEntry TLVs.</c>
+                
+                <c>%x0014</c>
+                <c>T_ListOfHashes</c>
+                <c>List of Manifest Hash Entries</c>
+                <c>An arbitrarily long list of HashEntry TLVs.</c>       
+              </texttable>
+
+            <t>
+              Each PrefixEntry is a tuple of an optional start chunk and a name prefix. 
+              The ContentNamePrefix uses the standard CCNxName encoding specified in 
+              <xref target="CCNTlv"></xref>. Thus, a PrefixEntry is encoded as follows.
+            </t>
+
+      <figure><artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|          T_PrefixEntry        |            Length             |
++---------------+---------------+-------------------------------+
+|          T_StartChunk         |             Length            |
++---------------+---------------+-------------------------------+
+/                       Start Chunk (optional)                  /
++---------------+---------------+-------------------------------+
+|                             Name                              |
++---------------+---------------+-------------------------------+
+]]></artwork>
+            </figure>
+
+            <texttable anchor="name_types" title="PrefixEntry_Types">
+                <ttcol align="center">Type</ttcol>
+                <ttcol align="center">Symbolic Name</ttcol>
+                <ttcol align="center">Name</ttcol>
+                <ttcol align="left">Description</ttcol>
+                
+                <c>%x0015</c>
+                <c>T_PrefixEntry</c>
+                <c>A Manifest Name Entry</c>
+                <c>A container for a PrefixEntry tuple according to the above specification.</c>
+
+                <c>%x0016</c>
+                <c>T_StartChunk</c>
+                <c>Start chunk</c>
+                <c>A non-negative chunk number (integer).</c>
+              </texttable>
+
+            <t>
+              Hash entries are encoded in a similar fashion, as shown below.
+            </t>
+
+      <figure><artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|         T_HashEntry           |             Length            |
++---------------+---------------+-------------------------------+
+|          T_PrefixIndex        |             Length            |
++---------------+---------------+-------------------------------+
+/                          Name Index                           /
++---------------+---------------+-------------------------------+
+|           T_OBJHASHREST       |             Length            |
++---------------+---------------+-------------------------------+
+/                          Hash Digest                          /
++---------------+---------------+-------------------------------+
+]]></artwork>
+            </figure>
+
+            <texttable anchor="hash_types" title="HashEntry_Types">
+                <ttcol align="center">Type</ttcol>
+                <ttcol align="center">Symbolic Name</ttcol>
+                <ttcol align="center">Name</ttcol>
+                <ttcol align="left">Description</ttcol>
+                
+                <c>%x0017</c>
+                <c>T_HashEntry</c>
+                <c>A Manifest Hash Entry</c>
+                <c>A container for a HashEntry tuple according to the above specification.</c>
+
+                <c>%x0018</c>
+                <c>T_PrefixIndex</c>
+                <c>A prefix entry index</c>
+                <c>A non-negative number (integer) that is used to index into the SECTION's PrefixEntry list.</c>
+
+                <c>%x0003</c>
+                <c>T_OBJHASHREST</c>
+                <c>ContentObjectHashRestriction</c>
+                <c>See <xref target="CCNTlv"></xref>.</c>
+              </texttable>
+
+<!--             <t>
+              The following encoding shows an example of a complete Manifest within the payload of 
+              a Content Object. The ManifestPayload contains a single ManifestSection, which
+              is a SECTION (not a LINK), and that SECTION has no ACS.
+            </t>-->
+
+
+    </section>
+
+    <section anchor="DesignQuestions" title="Design Questions"> 
+      <t>
+        In this section we raise several questions about the current manifest design.
+      </t>
+
+      <t>
+        1. Currently, a single NameEntry can only point to a single PrefixEntry. Should this be generalized
+        to a n-to-n relationship? One way to do this is to add support for a set of prefixes -- a PrefixGroupEntry --
+        that contains the indexes of prefixes in the set. If needed, a HashEntry could then point to one of these
+        PrefixGroupEntry elements to refer to more than one prefix.
+      </t>
+
+      <t>
+        2. Currently, a ContentNamePrefix in a PrefixEntry does not indicate the type of ContentObject to which is 
+        referred. It might be advantageous to have this type information to make intelligent decisions about traversing
+        Manifests. With the existing design, this type information is only available after issuing an interest for the specified
+        name prefix and examining the returned ContentObject payload type. One (not ideal) way to solve this problem would be 
+        to encode the type of a ContentObject in the name. For example, a link to a Manifest with the prefix
+        /parc/csl/file/ might have the prefix /manifest. A better alternative is to add an additional field to
+        each HashEntry that indicates the type of ContentObject that will be returned by dereferencing this link.
+      </t>
+
+      <t>
+        3. Should the Manifest support traversals strategies other than in-order? And, if so, what is the best way
+        to encode or represent this (potentially application-specific) traversal information?
+      </t>
+
+      <t>
+        4. Should each Manifest SECTION have a default field that specifies the length of its subtree payload? 
+      </t>
+
+      <t>
+        5. How should metadata be treated? One option is to include support for an enumerated set of
+        metadata types in each SECTION, e.g., the subtree length (see the above point). This metadata
+        might be stored in a (possibly empty) MetadataList within each SECTION. For example, if a 
+        producer wishes to convey the overall length metadata information in a Manifest, s/he might include 
+        a TLV field with T=T_MANIFESTLENGTH and V=(number of bytes) in the MetadataList element of a SECTION.
+        Another option is to generalize this approach by appropriating a set of vendor-specific TLV types to 
+        store metadata that might be generated by different producers. </t>
+    </section>
+    
+    <section anchor="Acknowledgements" title="Acknowledgements"> 
+      <!-- empty -->
+    </section>
+
+    <!-- Possibly a 'Contributors' section ... -->
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>This memo includes no request to IANA.</t>
+
+      <t>All drafts are required to have an IANA considerations section (see <xref target="RFC5226"
+          >Guidelines for Writing an IANA Considerations Section in RFCs</xref> for a guide). If the
+        draft does not require IANA to do anything, the section contains an explicit statement that
+        this is the case (as above). If there are no requirements for IANA, the section will be
+        removed during conversion into an RFC by the RFC Editor.</t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>All drafts are required to have a security considerations section. See <xref
+          target="RFC3552">RFC 3552</xref> for a guide.</t>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+    1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+    2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+       (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+    Both are cited textually in the same manner: by using xref elements.
+    If you use the PI option, xml2rfc will, by default, try to find included files in the same
+    directory as the including file. You can also define the XML_LIBRARY environment variable
+    with a value containing a set of directories to search. These can be either in the local
+    filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Normative References">
+      <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+      &RFC2119; 
+      &RFC5234;
+      <reference anchor="CCNTlv" target="http://tools.ietf.org/html/draft-mosko-icnrg-ccnxmessages-01">
+        <front>
+          <title>CCNx Messages in TLV Format (Internet draft)</title>
+          
+          <author initials='M.' surname='Mosko' fullname='Marc Mosko'>
+            <organization>PARC, Inc.</organization>
+          </author>
+          <author initials='I.' surname='Solis' fullname='Ignacio Solis'>
+            <organization>PARC, Inc.</organization>
+          </author>
+          <date year="2015"/>
+        </front>
+      </reference>
+    </references>
+      
+
+    <references title="Informative References">
+      <!-- Here we use entities that we defined at the beginning. --> &RFC3552; &RFC5226;
+      <!-- A reference written by by an organization not a person. -->
+
+      <reference anchor="CCN" target="http://www.CCNx.org">
+        <front>
+          <title>CCNx Open Source</title>
+
+          <author>
+            <organization>PARC, Inc.</organization>
+          </author>
+
+          <date year="2015"/>
+        </front>
+      </reference>
+    </references>
+
+  </back>
+</rfc>

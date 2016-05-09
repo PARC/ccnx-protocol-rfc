@@ -1,0 +1,504 @@
+
+
+
+
+ICNRG                                                           M. Mosko
+Internet-Draft                                                  I. Solis
+Intended status: Experimental                                    C. Wood
+Expires: February 15, 2016                                    PARC, Inc.
+                                                         August 14, 2015
+
+
+                             CCNx over UDP
+                    draft-wood-icnrg-ccnxoverudp-00
+
+Abstract
+
+   This document describes a preliminary set of information about how to
+   run the CCNx protocol over UDP for interoperability between different
+   systems and implementations.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on February 15, 2016.
+
+Copyright Notice
+
+   Copyright (c) 2015 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+
+Mosko, et al.           Expires February 15, 2016               [Page 1]
+
+Internet-Draft                CCNx over UDP                  August 2015
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+     1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   2
+   2.  Minimal Requirements for CCNx Over UDP  . . . . . . . . . . .   3
+     2.1.  UDP Assumptions . . . . . . . . . . . . . . . . . . . . .   4
+   3.  Specification . . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.1.  Supported Messages  . . . . . . . . . . . . . . . . . . .   5
+     3.2.  Message Encoding  . . . . . . . . . . . . . . . . . . . .   5
+     3.3.  Options . . . . . . . . . . . . . . . . . . . . . . . . .   5
+     3.4.  Link Initialization . . . . . . . . . . . . . . . . . . .   5
+     3.5.  Link Maintenance  . . . . . . . . . . . . . . . . . . . .   5
+     3.6.  Link Teardown . . . . . . . . . . . . . . . . . . . . . .   5
+   4.  Current Implementation of CCNx Over UDP . . . . . . . . . . .   5
+     4.1.  CCNx 1.0 Implementation . . . . . . . . . . . . . . . . .   5
+     4.2.  ccn-lite Implementation . . . . . . . . . . . . . . . . .   6
+   5.  Open Questions and Design Decisions . . . . . . . . . . . . .   6
+   6.  Out of Scope Items and Issues . . . . . . . . . . . . . . . .   7
+   7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   7
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+   9.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .   7
+     10.2.  Informative References . . . . . . . . . . . . . . . . .   8
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
+
+1.  Introduction
+
+   CCNx is intended to run as a layer-2 protocol directly over ethernet.
+   However, while hardware and software systems are developed to support
+   this technology, it is necessary to support CCNx at higher layers in
+   the network stack to perform experimentation, tests, and
+   interoperability checks.  Specifically, we need to run over layer-3
+   IP.  Possible options include running directly over UDP [UDP] or TCP
+   [TCP].
+
+   The intention of this document is to describe how to run the CCNx
+   protocol over UDP.  There are many ways this can be done, ranging
+   from a trivial universal encapsulation approach to more complex
+   configurations wherein UDP links require negotiation, maintenance,
+   and security extensions.  The design space is large, so we begin with
+   simple techniques and leave more complex issues up for discussion.
+
+1.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+
+
+Mosko, et al.           Expires February 15, 2016               [Page 2]
+
+Internet-Draft                CCNx over UDP                  August 2015
+
+
+2.  Minimal Requirements for CCNx Over UDP
+
+   To enable interoperability between CCNx implementations over UDP, one
+   can create virtual links between endpoints to exchange CCNx messages
+   (see below).  The goal of this document is to prescribe exactly how
+   to initialize, maintain, and teardown such links for the purpose of
+   transmitting CCNx messages over UDP [UDP] instead of directly over
+   layer-2 Ethernet.
+
+   +----+  (Virtual link)   +----+
+   | H1 +-------------------+ H2 |
+   +----+                   +----+
+
+   These links are general, or virtual, in the sense that they connect
+   any two CCN-compliant endpoints.  Endpoints may be end-hosts,
+   forwarders, routers, or any other network entity that needs to run
+   the CCNx protocol.  Therefore, these virtual links may traverse
+   multiple IP routers, switches, and hubs between two endpoints (H1 and
+   H2 in the example below, which are connected over multiple IP-
+   compliant network elements).
+
+                          +----+    +----+
+                      +---> N2 +----+ N3 +-+
+                      |   +----+    +----+ |
+               +----+ |                    | +----+
+   +------+    |    +-+                    +-+    |    +----+   +------+
+   |  H1  +----+ N1 |                        | N5 +----+ N6 +---+  H2  |
+   +------+    |    +---+              +-----+    |    +----+   +------+
+               +----+   |    +----+    |     +----+
+                        +----+ N4 +----+
+                             +----+
+
+
+   All CCNx messages are encapsulated in UDP packets to traverse virtual
+   links, as shown below.
+
+   +----+-----+--------------------------------+
+   | IP | UDP |       CCNx Packet              |
+   +----+--------------------------------------+
+               \_____________||________________/
+                             \/
+              +--------------------------------+
+              | Headers |  Message | Validation|
+              +--------------------------------+
+
+   Although simple, there are several details that must be solved to run
+   CCNx over UDP.  Below is a list of the basic requirements that are
+   needed by any viable solution to realize interoperability.
+
+
+
+Mosko, et al.           Expires February 15, 2016               [Page 3]
+
+Internet-Draft                CCNx over UDP                  August 2015
+
+
+   o  Link negotiation (used for some items below) to create a link
+
+   o  Configurable endpoint authentication (via DTLS or something
+      similar)
+
+   o  Address and port discovery (this may be out of scope)
+
+   o  Identification of a single UDP link as an ID for th peer
+
+   o  Bidirectional NAT/firewall traversal
+
+   o  Flexible MTU size (or discovery?)
+
+   o  In-order message delivery (??)
+
+   o  Reliance on IP-layer fragmentation
+
+   o  UDP encapsulation and decapsulation logic
+
+2.1.  UDP Assumptions
+
+   We make several assumptions about the UDP [UDP] protocol in this
+   document.  For brevity, we list them here.
+
+   o  UDP is an unreliable datagram service (i.e., best-effort datagram
+      delivery).
+
+   o  Maximum MTU size of 4KB
+
+   o  ... what else?
+
+3.  Specification
+
+   We now describe the main specifications for running CCNx over UDP.
+   For clarity, this specification is divided into the following parts:
+   supported messages, message encoding, options, link initialization,
+   link maintenance, and link teardown.
+
+   Recall that the general way in which CCNx is run over UDP is via
+   encapsulation.  Links between two CCNx endpoints are created (as
+   described below) and then used to transport CCNx messages between
+   both endpoints.  Each link is virtual and may traverse multiple IP
+   hops (e.g., routers, switches, etc.) before reaching the endpoint.
+   Moreover, each endhost of a given link is authenticated before it is
+   used for transmission purposes (this may become an optional
+   requirement).  Per-link options such as the MTU, encryption
+   requirements, etc. will be specified here or provided as options that
+   are agreed upon during link initialization.
+
+
+
+Mosko, et al.           Expires February 15, 2016               [Page 4]
+
+Internet-Draft                CCNx over UDP                  August 2015
+
+
+3.1.  Supported Messages
+
+   TODO: Interest, Content Objects, Interest Returns,...
+
+3.2.  Message Encoding
+
+   TODO
+
+3.3.  Options
+
+   TODO
+
+3.4.  Link Initialization
+
+   TODO
+
+3.5.  Link Maintenance
+
+   TODO
+
+3.6.  Link Teardown
+
+   TODO
+
+4.  Current Implementation of CCNx Over UDP
+
+   This section describes different implementations of CCNx over UDP.
+   Deviations from the above specification requirements are noted where
+   appropriate.
+
+4.1.  CCNx 1.0 Implementation
+
+   Currently, CCNx is run directly over UDP with no dynamic
+   configuration.  That is, UDP is used to create a (virtual) link
+   between two endpoints so that CCNx messages can be exchanged.  We
+   make the following assumptions about UDP:
+
+   A list of details pertaining to the setup and transportation of these
+   packets between endpoints is below.
+
+   o  The MTU size is fixed at 4K.
+
+   o  Fragmentation happens at the IP layer (i.e., using IPv4
+      fragmentation or path MTU discovery for IPv6).
+
+   o  Links are identified by source/destination IP addresses and ports.
+
+
+
+
+
+Mosko, et al.           Expires February 15, 2016               [Page 5]
+
+Internet-Draft                CCNx over UDP                  August 2015
+
+
+   o  UDP socket connections are used to communicate between endpoints
+      in the forwarder.
+
+   o  Endpoints are not authenticated.
+
+   The current implementation does not provide solutions to or deal with
+   the following problems:
+
+   o  Reverse-path forwarding is not guaranteed with the presence of
+      network firewalls.
+
+   o  End-point authentication is not provided without a higher-level
+      protocol.
+
+4.2.  ccn-lite Implementation
+
+   TODO
+
+5.  Open Questions and Design Decisions
+
+   In this section we describe open questions and design decisions that
+   should be addressed for a more robust way to run CCNx over UDP, i.e.,
+   not one that that is static.
+
+   Question 1: How should endpoints be authenticated?
+
+   o  One answer: Use DTLS (datagram-based TLS)
+
+   Question 2: Should the link be encrypted?  If so, with what kind of
+   encryption?  What other security guarantees are needed?
+
+   o  TBD
+
+   Question 3: Is there a better approach to handle link fragmentation
+   and MTU configuration or discovery when using encapsulation?
+
+   o  TBD
+
+   Question 4: How should links be established?  What kind of
+   negotiation should take place?
+
+   o  TBD
+
+   Question 5: How can we support multiple protocols (e.g., multiplexing
+   CCNx and NDN) via this same encapsulation technique?
+
+   o  TBD
+
+
+
+
+Mosko, et al.           Expires February 15, 2016               [Page 6]
+
+Internet-Draft                CCNx over UDP                  August 2015
+
+
+   Question 6: Do we require in-order delivery assurance of CCNx
+   messages?
+
+   o  TBD
+
+   Question 7: How should retransmissions be handled over UDP?
+
+   o  TBD
+
+   Question 8: How can we support reverse-path forwarding in the
+   presence of network firewalls?  Should we rely on intelligent
+   firewall algorithms to allow reverse path messages to traverse the
+   barrier?
+
+   o  TBD
+
+6.  Out of Scope Items and Issues
+
+7.  Acknowledgements
+
+8.  IANA Considerations
+
+   This memo includes no request to IANA.
+
+   All drafts are required to have an IANA considerations section (see
+   Guidelines for Writing an IANA Considerations Section in RFCs
+   [RFC5226] for a guide).  If the draft does not require IANA to do
+   anything, the section contains an explicit statement that this is the
+   case (as above).  If there are no requirements for IANA, the section
+   will be removed during conversion into an RFC by the RFC Editor.
+
+9.  Security Considerations
+
+   All drafts are required to have a security considerations section.
+   See RFC 3552 [RFC3552] for a guide.
+
+10.  References
+
+10.1.  Normative References
+
+   [CCNTlv]   Mosko, M. and I. Solis, "CCNx Messages in TLV Format
+              (Internet draft)", 2015, <http://tools.ietf.org/html/
+              draft-mosko-icnrg-ccnxmessages-01>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
+              RFC2119, March 1997,
+              <http://www.rfc-editor.org/info/rfc2119>.
+
+
+
+Mosko, et al.           Expires February 15, 2016               [Page 7]
+
+Internet-Draft                CCNx over UDP                  August 2015
+
+
+   [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
+              Specifications: ABNF", STD 68, RFC 5234, DOI 10.17487/
+              RFC5234, January 2008,
+              <http://www.rfc-editor.org/info/rfc5234>.
+
+   [TCP]      Postel, J., "Transmission Control Protocol", 1981,
+              <https://www.ietf.org/rfc/rfc793.txt>.
+
+   [UDP]      Postel, J., "User Datagram Protocol", 1980,
+              <https://www.ietf.org/rfc/rfc768.txt>.
+
+10.2.  Informative References
+
+   [CCN]      PARC, Inc., "CCNx Open Source", 2015,
+              <http://www.CCNx.org>.
+
+   [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
+              Text on Security Considerations", BCP 72, RFC 3552, DOI
+              10.17487/RFC3552, July 2003,
+              <http://www.rfc-editor.org/info/rfc3552>.
+
+   [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
+              IANA Considerations Section in RFCs", BCP 26, RFC 5226,
+              DOI 10.17487/RFC5226, May 2008,
+              <http://www.rfc-editor.org/info/rfc5226>.
+
+Authors' Addresses
+
+   Marc Mosko
+   PARC, Inc.
+   Palo Alto, California  94304
+   USA
+
+   Phone: +01 650-812-4405
+   Email: marc.mosko@parc.com
+
+
+   Ignacio Solis
+   PARC, Inc.
+   Palo Alto, California  94304
+   USA
+
+   Phone: +01 650-812-ZZZZ
+   Email: ignacio.solis@parc.com
+
+
+
+
+
+
+
+Mosko, et al.           Expires February 15, 2016               [Page 8]
+
+Internet-Draft                CCNx over UDP                  August 2015
+
+
+   Christopher A. Wood
+   PARC, Inc.
+   Palo Alto, California  94304
+   USA
+
+   Phone: +01 XXX-YYY-ZZZZ
+   Email: christopher.wood@parc.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.           Expires February 15, 2016               [Page 9]

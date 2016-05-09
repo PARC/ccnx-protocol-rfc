@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+    which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+    There has to be one entity for each item to be referenced. 
+    An alternate method (rfc include) is described in the references. -->
+
+<!ENTITY RFC2119 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2629 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml">
+<!ENTITY RFC3552 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3552.xml">
+<!ENTITY RFC5226 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5226.xml">
+<!ENTITY RFC2616 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2616.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+    please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+    (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space 
+    (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="no" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+
+<?rfc private="" ?>
+
+<rfc category="exp" docName="draft-mosko-icnrg-ccnxchunking-01" ipr="trust200902">
+  <!-- category values: std, bcp, info, exp, and historic
+    ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
+       or pre5378Trust200902
+    you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+    they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the 
+        full title is longer than 39 characters -->
+
+    <title abbrev="CCNx chunking">CCNx Content Object Chunking</title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+    <!-- Another author who claims to be an editor -->
+
+    <author fullname="Marc Mosko" initials="M.E." surname="Mosko">
+      <organization>PARC, Inc.</organization>
+
+      <address>
+       <postal>
+         <street/>
+
+         <!-- Reorder these if your country does things differently -->
+
+         <city>Palo Alto</city>
+
+         <region>California</region>
+
+         <code>94304</code>
+
+         <country>USA</country>
+       </postal>
+
+       <phone>+01 650-812-4405</phone>
+
+       <email>marc.mosko@parc.com</email>
+
+       <!-- uri and facsimile elements may also be added -->
+     </address>
+    </author>
+
+    <date year="2015"/>
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
+        in the current day for you. If only the current year is specified, xml2rfc will fill 
+	 in the current day and month for you. If the year is not the current one, it is 
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
+	 specify just the year. -->
+
+    <!-- Meta-data Declarations -->
+
+    <area>General</area>
+
+    <workgroup>ICNRG</workgroup>
+
+    <!-- WG name at the upperleft corner of the doc,
+        IETF is fine for individual submissions.  
+	 If this element is not present, the default is "Network Working Group",
+        which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+    <keyword>Content Centric Networking</keyword>   
+
+    <!-- Keywords will be incorporated into HTML output
+        files in a meta tag but they have no effect on text or nroff
+        output. If you submit your draft to the RFC Editor, the
+        keywords will be used for the search engine. -->
+
+    <abstract>
+      <t>This document specifies a chunking protocol for dividing a user payload 
+      into CCNx Content Objects. This includes specification for the naming convention to use for
+      the chunked payload, the metadata convention used to store information about the chunked object,
+      add the field added to a Content Object to
+      represent the last chunk of an object.  </t>
+
+    </abstract>
+  </front>
+
+  <middle>    
+     <section title="Introduction">
+       <t>CCNx Content Objects are sized to amortize cryptographic operations over
+       user data while simultaneously staying a reasonable size for transport over today's networks.
+       This means a Content Object is usually within common UDP or jumbo Ethernet size.
+       If a publisher has a larger amount of data to associate with a single Name, the data should be
+       chunked with this chunking protocol.  This protocol leverages state in 
+       the Name and in an optional field within the Content Object.  A chunked object may also have
+       a metadata object that describes the original pre-chunked object.</t>
+       
+      <t>CCNx uses two types of messages: Interests and Content Objects. An Interest carries the
+        hierarchically structured variable-length identifier (HSVLI), or Name, of a
+        Content Object and serves as a request for that object. If a network element sees multiple
+        Interests for the same name, it may aggregate those Interests. A network element along the
+        path of the Interest with a matching Content Object may return that object, satisfying the
+        Interest. The Content Object follows the reverse path of the Interest to the origin(s) of
+        the Interest. A Content Object contains the Name, the object's Payload, and the cryptographic
+        information used to bind the Name to the payload. </t>
+       
+      <t>This specification adds a new segment to the Name TLV and a new field to the Metadata TLV. 
+       It updates [ietf-draft-ccnxmessages].
+       It also provides guidelines for the usage of the Key Locator in chunked objects.</t>
+
+       <t>Packets are represented as 32-bit wide words using ASCII art.  Because
+      of the TLV encoding and optional fields or sizes, there is no concise
+      way to represent all possibilities.  We use the convention that ASCII art
+      fields enclosed by vertical bars "|" represent exact bit widths.  Fields
+      with a forward slash "/" are variable bitwidths, which we typically pad
+      out to word alignment for picture readability.</t>
+       <t>TODO -- we have not adopted the Requirements Language yet.</t>
+       
+
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+          NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in <xref target="RFC2119">RFC 2119</xref>.</t>
+      </section>
+    </section>
+
+    <section anchor="protocol" title="Chunking">
+      <t>Chunking, as used in this specification, means serializing user data
+      into one or more chunks, each encapsulated in a CCNx Content Object.  One
+      segment in the Name of that Content Object represents the current chunk number.  A field in the
+      Content Object's Metadata - only mandatory in the final chunk - represents the end of
+      the stream.  Chunks are denoted
+      by a serial counter, beginning at 0 and incrementing by 1 for each 
+      contiguous chunk.  The chunking ends at the final chunk.  No valid
+      user data exists beyond the final chunk, and reading beyond the final
+      chunk MUST NOT return any user data.</t>
+<!-- Marc - I don't understand the next paragraph -->
+      <t>Chunking uses a block size for chunks.  The block size may be
+      inferred by the Content size of each Content Object.  It is not explicit in
+      the chunking name protocol.  It may also be represented in a chunking
+      Metadata object related to the Content Object.  Using a consistent block size
+      allows a reader to predict byte offsets.</t>
+      
+      <t>The new name segment is the ChunkNumber.  It
+      is a serial counter beginning at 0 and incrementing by 1 for each chunk of
+      the user data.  Given the base name of an object and the data to chunk, the
+      ChunkNumber is appended to the base name.</t>
+      
+      <t>The new Metadata field is the EndChunkNumber.
+      It MUST be included in the Content Object which is the last chunk of an object, but SHOULD be 
+      present at the earliest time it is known.  The value of the EndChunkNumber
+      should be the network byte order value of the last ChunkNumber</t>
+      
+      <t>The EndChunkNumber may be updated in later Chunks to a larger value,
+        as long as it has not yet reached the end.
+      The EndChunkNumber SHOULD NOT decrease.  If a publisher wishes to close
+      a stream before reaching the End Chunk, it should publish empty Content
+      Objects to fill out to the maximum EndChunkNumber ever published.
+      These padding chunks MUST contain the true EndChunkNumber.</t>
+      
+       <section anchor="examples" title="Examples">
+      <t>Here are some examples of chunked Names using the Labeled Content
+      Identifier URI scheme in human readable form (lci:).  </t>
+      
+      <t>In this example,
+      the content producer publishes a JPG that takes 4 Chunks.  Inside the
+      Metadata, the  EndChunkNumber is missing in the first (Chunk 0)
+      object, but is known when Chunk 1 is published so is included in Chunk 1.
+      It is omitted in Chunk 2, then appears in Chunk 3, where it is mandatory.</t>
+      <figure>
+        <artwork align="left"><![CDATA[
+lci:/Name=parc/Name=csl/Name=picture.jpg/Chunk=0 
+  Protocol Info: No EndChunk
+lci:/Name=parc/Name=csl/Name=picture.jpg/Chunk=1
+  Protocol Info: EndChunk="3"
+lci:/Name=parc/Name=csl/Name=picture.jpg/Chunk=2
+  Protocol Info: No EndChunk
+lci:/Name=parc/Name=csl/Name=picture.jpg/Chunk=3
+  Protocol Info: EndChunk="3"
+]]></artwork>
+      </figure>
+
+      <t>In this example, the publisher is writing an audio stream that
+      ends before expected so the publisher fills empty Content Objects
+      out to the maximum
+      ChunkNumber, stating the correct EndChunk.  Chunks 4, 5, and
+      6 do not contain any new user data.</t>
+      <figure>
+        <artwork align="left"><![CDATA[
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=0
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=1
+   Protocol Info: EndChunk="6"
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=2
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=3
+   Protocol Info: EndChunk="3"
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=4
+   Protocol Info: EndChunk="3"
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=5
+   Protocol Info: EndChunk="3"
+lci:/Name=parc/Name=csl/Name=talk.wav/Chunk=6
+   Protocol Info: EndChunk="3"
+]]></artwork>
+      </figure>
+      </section>
+    </section>
+    
+    <section anchor="metadata" title="Chunking Metadata">
+      <t>Chunking metadata MAY be saved along with a chunked object. If
+	Chunking metadata is saved it SHOULD be saved using a Meta labeled
+	path chunk with the value of chunking.</t>
+      
+      <t>An example name using SerialNumber versioning is 
+        "lci:/Name=parc/Name=picture.jpg/SerialNumber=1/Meta=chunking/SerialNumber=0".
+        This name means there is an object named "lci:/Name=parc/Name=picture.jpg/SerialNumber=1" that conforms
+        to the Chunking protocol.  The chunking metadata is stored in a separate Content Object with
+        the example name.
+      </t> 
+      
+      <t>The Chunking Metadata is a JSON Content Object whose content adheres to
+	the following schema.
+        The BlockSize is used for all Chunks except the last.  The EndChunk is optional
+        at the time the header is written, if it is not known.  Once a chunking is finished a new header could
+	be written with the correct EndChunk.</t>
+      
+      <t>The optional DIGEST key is over the entire user contents.  It must specify the
+        algorithm used for the digest in OID form and express the digest in Hexadecimal.</t>
+      
+      <t>The TOTALBYTES field is the total user bytes, if known.  If it is only known at a later
+        time, the metadata object may be updated with a new SerialNumber when the value is known.</t>
+      
+      <t>The header MUST have the same KeyId -- and be signed by the same key -- as the Content Object 
+        to which it refers.  If the Content Object is encrypted, the header MUST use
+        the same encryption.</t>
+      
+        <figure>
+          <artwork align="left"><![CDATA[
+{ "chunking" : 
+  { "BLOCKSIZE"  : <blocksize>
+    [, "FILENAME"   : <original file name, if known>]
+    [, "ENDChunk" : <end Chunk, if known>]
+    [, "TOTALBYTES" : <total bytes of all Chunks, if known>]
+    [, "DIGEST"   : { "ALGORITHM"=<OID>, "DIGEST"=<hexadecimal value> }]
+  }
+}
+]]></artwork>
+        </figure>
+    </section>
+    
+    <section anchor="types" title="TLV Types">
+      <t>This section specifies the TLV types used by CCNx chunking.</t>
+           
+      <section anchor="names" title="Name Types">
+        <t>CCNx chunking uses two new Name types:  Chunk Number and Chunk Metadata.</t>
+        
+        <texttable anchor="name_tlvs" title="Name Types">
+          <ttcol align="center">Type</ttcol>
+          <ttcol align="center">Abbrev</ttcol>
+          <ttcol align="center">Name</ttcol>
+          <ttcol align="left">Description</ttcol>
+          <c>%x0010</c>
+          <c>T_CHUNK</c>
+          <c><xref target="seg">Chunk Number</xref></c>
+          <c>The current Chunk Number, is an unsigned integer
+          in network byte order without leading zeros.  The value
+          of zero is represented as the single byte %x00.</c>
+          
+          <c>%x0011</c>
+          <c>T_CHUNKMETA</c>
+          <c><xref target="seg">Chunk Metadata</xref></c>
+          <c>Identifies the Content Object on metadata for the prior Name.</c>
+          
+         </texttable>
+  
+        <section anchor="seg" title="Chunk Number">
+          <t>The current chunk number, as an unsigned integer
+            in network byte order without leading zeros.    The value
+            of zero is represented as the single byte %x00.</t>
+          <t>In lci: URI form, it is denoted as "Chunk".</t>
+          
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+--------------+
+|           T_CHUNK             |             Length           | 
++---------------+---------------+---------------+--------------+
+|     variable length integer   / 
++---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>        
+     
+        <section anchor="metaname" title="Chunk Metadata Name Component">
+          <t>A name component that identifies the content object provides chunk metadata about
+            the left-encapsulated name prefix, as described in <xref target="metadata"/>.
+          </t>
+          
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+--------------+
+|        T_CHUNKMETA            |               5              | 
++---------------+---------------+---------------+--------------+
+/   "chunk"     /   
++---------------+
+]]></artwork>
+          </figure>
+        </section>
+        
+      </section>
+      
+      <section anchor="signed_info" title="Protocol Information">
+        <t>CCNx chunking introduces one new TLV for
+        the EndChunkNumber.</t>
+        
+        <texttable anchor="si_tlvs" title="Protocol Information Types">
+          <ttcol align="center">Type</ttcol>
+          <ttcol align="center">Abbrev</ttcol>
+          <ttcol align="center">Name</ttcol>
+          <ttcol align="left">Description</ttcol>
+          <c>%x000C</c>
+          <c>T_ENDCHUNK</c>
+          <c><xref target="seg">EndChunkNumber</xref></c>
+          <c>The last Chunk number, as an unsigned integer
+            in network byte order without leading zeros.  The value
+            of zero is represented as the single byte %x00.</c>
+          
+        </texttable>
+        
+        <section anchor="end_seg" title="EndChunkNumber">
+          <t>The ending chunk number, as an unsigned integer
+            in network byte order without leading zeros.    The value
+            of zero is represented as the single byte %x00.</t>
+          
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+--------------+
+|         T_ENDCHUNK            |             Length           | 
++---------------+---------------+---------------+--------------+
+|     variable length integer   / 
++---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>        
+      </section>
+      
+    </section>      
+     
+
+    <!-- This PI places the pagebreak correctly (before the section title) in the text output. -->
+
+    <?rfc needLines="8" ?>
+
+
+    <section anchor="Acknowledgements" title="Acknowledgements"> </section>
+
+    <!-- Possibly a 'Contributors' section ... -->
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>TODO: Work with IANA to define the type space for: Name segment
+        types and  Contnt Object TLV message types,</t>
+
+      <t>All drafts are required to have an IANA considerations section (see <xref target="RFC5226"
+          >Guidelines for Writing an IANA Considerations Section in RFCs</xref> for a guide). If the
+        draft does not require IANA to do anything, the section contains an explicit statement that
+        this is the case (as above). If there are no requirements for IANA, the section will be
+        removed during conversion into an RFC by the RFC Editor.</t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>All drafts are required to have a security considerations section. See <xref
+          target="RFC3552">RFC 3552</xref> for a guide.</t>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+    1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+    2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+       (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+    Both are cited textually in the same manner: by using xref elements.
+    If you use the PI option, xml2rfc will, by default, try to find included files in the same
+    directory as the including file. You can also define the XML_LIBRARY environment variable
+    with a value containing a set of directories to search.  These can be either in the local
+    filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Normative References">
+      <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+      &RFC2119; </references>
+
+    <references title="Informative References">
+      <!-- Here we use entities that we defined at the beginning. --> 
+      &RFC2616; 
+      &RFC3552; 
+      &RFC5226;
+      <!-- A reference written by by an organization not a person. -->
+
+      <reference anchor="CCNx" target="http://www.ccnx.org">
+        <front>
+          <title>CCNx Open Source</title>
+
+          <author>
+            <organization>PARC, Inc.</organization>
+          </author>
+
+          <date year="2007"/>
+        </front>
+      </reference>
+    </references>
+
+  </back>
+</rfc>
