@@ -1,0 +1,616 @@
+
+
+
+ICNRG                                                           M. Mosko
+Internet-Draft                                                      PARC
+Intended status: Experimental                               June 6, 2016
+Expires: December 8, 2016
+
+
+                  CCNx Publisher Clock Time Versioning
+                  draft-mosko-icnrg-ccnxtimeversion-02
+
+Abstract
+
+   This document specifies the use of a timestamp as a name segment in a
+   CCNx Name as a versioning specifier.  It defines the name segment
+   label, encoding, and semantics.
+
+Status of this Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on December 8, 2016.
+
+Copyright Notice
+
+   Copyright (c) 2016 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+
+
+Mosko                   Expires December 8, 2016                [Page 1]
+
+Internet-Draft                  CCNx TLV                       June 2016
+
+
+Table of Contents
+
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     1.1.  Requirements Language  . . . . . . . . . . . . . . . . . .  3
+   2.  Protocol Description . . . . . . . . . . . . . . . . . . . . .  4
+   3.  Comparing timestamps . . . . . . . . . . . . . . . . . . . . .  6
+   4.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . .  7
+   5.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . .  8
+   6.  Security Considerations  . . . . . . . . . . . . . . . . . . .  9
+   7.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+     7.1.  Normative References . . . . . . . . . . . . . . . . . . . 10
+     7.2.  Informative References . . . . . . . . . . . . . . . . . . 10
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 11
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                   Expires December 8, 2016                [Page 2]
+
+Internet-Draft                  CCNx TLV                       June 2016
+
+
+1.  Introduction
+
+   This document specifies the use of a subset of RFC 3339 [RFC3339] UTC
+   timestamp in a CCNx Name as a version identifier.  We restrict the
+   use of RFC 3339 to only using UTC time with the 'Z' notation, not
+   relative offsets from UTC.
+
+   This document updates CCNx Messages in TLV Format [CCNMessages].  It
+   introduces a new CCNx Name Segment TLV type.
+
+1.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                   Expires December 8, 2016                [Page 3]
+
+Internet-Draft                  CCNx TLV                       June 2016
+
+
+2.  Protocol Description
+
+   A timestamp in a CCNx Name name segment indicates an ordering on
+   names based on the UTC timestamp.  The timestamp is encoded as an
+   RFC3339 UTC string in the 'date-time' format, for example "1985-04-
+   12T23:20:50.52Z".  This format allows a memcmp() of two strings to
+   determine their time ordering (see Section 3).
+
+   The timestamp MUST use the format of RFC 3339 Sections 5.6-5.7 with
+   the restriction that it MUST use the 'Z' UTC signifier and MUST NOT
+   use the 'time-numoffset' format.
+
+   The timestamp MAY have fractions of a second, as per RFC3339.  The
+   fractions MUST use the '.' separator, as specified in RFC 3339
+   Section 5.6.  This restriction is to ensure that memcmp() ordering is
+   maintained.
+
+   The use of a timestamp in a Name to denote a version SHOULD NOT
+   assume global time coordination and SHOULD NOT be used to denote
+   ordering or causation between multiple publishers.
+
+   If multiple publishers -- with different clocks -- write to the same
+   namespace, the name SHOULD include a name segment prior to the
+   timestamp that indicates the publisher.  For example, one could
+   include the publisher's KeyId, or any globally unique string between
+   the publishers.
+
+   A name segment timestamp MUST use the UTC 'Z' notation, not a '+' or
+   '-' offset (the 'time-numoffset' token in RFC 3339).  This
+   restriction is to ensure that timestamps may be ordered simply by a
+   direct comparison (see Section 3).
+
+   An example Name using this format is "ccnx:/Name=parc/Name=file.pdf/
+   Time=1985-04-12T23:20:50.52Z".
+
+   A publisher assigns a timestamp to indicate the time ordering of the
+   prior Name name segments.  It does not imply any specific temporal
+   meaning such as the time of content creation or the time of Content
+   Object signature.  It is simply used to order a set of objects.  An
+   application MAY adopt such a semantic to the timestamp as an
+   application-specific specification.
+
+      +--------+---------------------------------------------------+
+      |  Type  |                        Name                       |
+      +--------+---------------------------------------------------+
+      | 'Time' | UTC Timestamp, in RFC 3339 human-readable format. |
+      +--------+---------------------------------------------------+
+
+
+
+
+Mosko                   Expires December 8, 2016                [Page 4]
+
+Internet-Draft                  CCNx TLV                       June 2016
+
+
+                        Table 1: Name Segment Label
+
+   +--------+--------+---------------+---------------------------------+
+   |  Type  | Symbol |      Name     | Description                     |
+   +--------+--------+---------------+---------------------------------+
+   | %x0012 | T_TIME | UTC Timestamp | UTC timestamp RFC 3339 'Z'      |
+   |        |        |               | format.                         |
+   +--------+--------+---------------+---------------------------------+
+
+                         Table 2: CCNx Name Types
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                   Expires December 8, 2016                [Page 5]
+
+Internet-Draft                  CCNx TLV                       June 2016
+
+
+3.  Comparing timestamps
+
+   The TLV length of the timestamp MUST be at least 20 octets to be
+   compliant with RFC 3339, and thus with this specification.
+
+   As per RFC 3339, the string format for two timestamps MAY be compared
+   via memcmp() up to the minimum string length minus 1 (to trim the
+   terminal 'Z').  If the two timestamps are equal, up to the minimum
+   length, then the shorter string is less than the longer string.
+   Because we require UTC time zone with the 'Z' notation, the only time
+   two strings may be of different lengths is when one includes
+   milliseconds, so the rule here is correct.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                   Expires December 8, 2016                [Page 6]
+
+Internet-Draft                  CCNx TLV                       June 2016
+
+
+4.  Acknowledgements
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                   Expires December 8, 2016                [Page 7]
+
+Internet-Draft                  CCNx TLV                       June 2016
+
+
+5.  IANA Considerations
+
+   This memo includes no request to IANA.
+
+   This draft introduces a new value in the CCNx Name Segment type
+   registry.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                   Expires December 8, 2016                [Page 8]
+
+Internet-Draft                  CCNx TLV                       June 2016
+
+
+6.  Security Considerations
+
+   An entity parsing a T_TIME name segment is not required to parse the
+   segment for validity in formatting to only compute ordering.  Because
+   the format allows a direct memcmp() and the length of the string is
+   available via the TLV length, there should be no vulnerability to
+   mis-formatted values.  Other uses of the timestamp should ensure the
+   format conforms to RFC 3339 'Z' format.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                   Expires December 8, 2016                [Page 9]
+
+Internet-Draft                  CCNx TLV                       June 2016
+
+
+7.  References
+
+7.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
+              RFC2119, March 1997,
+              <http://www.rfc-editor.org/info/rfc2119>.
+
+7.2.  Informative References
+
+   [CCNMessages]
+              Mosko, M., Solis, I., and C. Wood, "CCNx Messages in TLV
+              Format (Internet draft)", 2016, <http://tools.ietf.org/
+              html/draft-irtf-icnrg-ccnxmessages-03>.
+
+   [CCNx]     PARC, Inc., "CCNx Open Source", 2007,
+              <http://www.ccnx.org>.
+
+   [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
+              Timestamps", RFC 3339, DOI 10.17487/RFC3339, July 2002,
+              <http://www.rfc-editor.org/info/rfc3339>.
+
+   [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
+              Text on Security Considerations", BCP 72, RFC 3552,
+              DOI 10.17487/RFC3552, July 2003,
+              <http://www.rfc-editor.org/info/rfc3552>.
+
+   [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
+              IANA Considerations Section in RFCs", BCP 26, RFC 5226,
+              DOI 10.17487/RFC5226, May 2008,
+              <http://www.rfc-editor.org/info/rfc5226>.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                   Expires December 8, 2016               [Page 10]
+
+Internet-Draft                  CCNx TLV                       June 2016
+
+
+Author's Address
+
+   Marc Mosko
+   PARC
+   Palo Alto, California  94304
+   USA
+
+   Phone: +01 650-812-4405
+   Email: marc.mosko@parc.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                   Expires December 8, 2016               [Page 11]
+

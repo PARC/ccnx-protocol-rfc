@@ -1,0 +1,394 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en"><head><title>CCNx Publisher Clock Time Versioning</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="CCNx Publisher Clock Time Versioning">
+<meta name="keywords" content="Content Centric Networking">
+<meta name="generator" content="xml2rfc v1.35dev (http://xml.resource.org/)">
+<style type='text/css'><!--
+        body {
+                font-family: verdana, charcoal, helvetica, arial, sans-serif;
+                font-size: small; color: #000; background-color: #FFF;
+                margin: 2em;
+        }
+        h1, h2, h3, h4, h5, h6 {
+                font-family: helvetica, monaco, "MS Sans Serif", arial, sans-serif;
+                font-weight: bold; font-style: normal;
+        }
+        h1 { color: #900; background-color: transparent; text-align: right; }
+        h3 { color: #333; background-color: transparent; }
+
+        td.RFCbug {
+                font-size: x-small; text-decoration: none;
+                width: 30px; height: 30px; padding-top: 2px;
+                text-align: justify; vertical-align: middle;
+                background-color: #000;
+        }
+        td.RFCbug span.RFC {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: bold; color: #666;
+        }
+        td.RFCbug span.hotText {
+                font-family: charcoal, monaco, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: normal; text-align: center; color: #FFF;
+        }
+
+        table.TOCbug { width: 30px; height: 15px; }
+        td.TOCbug {
+                text-align: center; width: 30px; height: 15px;
+                color: #FFF; background-color: #900;
+        }
+        td.TOCbug a {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, sans-serif;
+                font-weight: bold; font-size: x-small; text-decoration: none;
+                color: #FFF; background-color: transparent;
+        }
+
+        td.header {
+                font-family: arial, helvetica, sans-serif; font-size: x-small;
+                vertical-align: top; width: 33%;
+                color: #FFF; background-color: #666;
+        }
+        td.author { font-weight: bold; font-size: x-small; margin-left: 4em; }
+        td.author-text { font-size: x-small; }
+
+        /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+        a.info {
+                /* This is the key. */
+                position: relative;
+                z-index: 24;
+                text-decoration: none;
+        }
+        a.info:hover {
+                z-index: 25;
+                color: #FFF; background-color: #900;
+        }
+        a.info span { display: none; }
+        a.info:hover span.info {
+                /* The span will display just on :hover state. */
+                display: block;
+                position: absolute;
+                font-size: smaller;
+                top: 2em; left: -5em; width: 15em;
+                padding: 2px; border: 1px solid #333;
+                color: #900; background-color: #EEE;
+                text-align: left;
+        }
+
+        a { font-weight: bold; }
+        a:link    { color: #900; background-color: transparent; }
+        a:visited { color: #633; background-color: transparent; }
+        a:active  { color: #633; background-color: transparent; }
+
+        p { margin-left: 2em; margin-right: 2em; }
+        p.copyright { font-size: x-small; }
+        p.toc { font-size: small; font-weight: bold; margin-left: 3em; }
+        table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
+        td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
+
+        ol.text { margin-left: 2em; margin-right: 2em; }
+        ul.text { margin-left: 2em; margin-right: 2em; }
+        li      { margin-left: 3em; }
+
+        /* RFC-2629 <spanx>s and <artwork>s. */
+        em     { font-style: italic; }
+        strong { font-weight: bold; }
+        dfn    { font-weight: bold; font-style: normal; }
+        cite   { font-weight: normal; font-style: normal; }
+        tt     { color: #036; }
+        tt, pre, pre dfn, pre em, pre cite, pre span {
+                font-family: "Courier New", Courier, monospace; font-size: small;
+        }
+        pre {
+                text-align: left; padding: 4px;
+                color: #000; background-color: #CCC;
+        }
+        pre dfn  { color: #900; }
+        pre em   { color: #66F; background-color: #FFC; font-weight: normal; }
+        pre .key { color: #33C; font-weight: bold; }
+        pre .id  { color: #900; }
+        pre .str { color: #000; background-color: #CFF; }
+        pre .val { color: #066; }
+        pre .rep { color: #909; }
+        pre .oth { color: #000; background-color: #FCF; }
+        pre .err { background-color: #FCC; }
+
+        /* RFC-2629 <texttable>s. */
+        table.all, table.full, table.headers, table.none {
+                font-size: small; text-align: center; border-width: 2px;
+                vertical-align: top; border-collapse: collapse;
+        }
+        table.all, table.full { border-style: solid; border-color: black; }
+        table.headers, table.none { border-style: none; }
+        th {
+                font-weight: bold; border-color: black;
+                border-width: 2px 2px 3px 2px;
+        }
+        table.all th, table.full th { border-style: solid; }
+        table.headers th { border-style: none none solid none; }
+        table.none th { border-style: none; }
+        table.all td {
+                border-style: solid; border-color: #333;
+                border-width: 1px 2px;
+        }
+        table.full td, table.headers td, table.none td { border-style: none; }
+
+        hr { height: 1px; }
+        hr.insert {
+                width: 80%; border-style: none; border-width: 0;
+                color: #CCC; background-color: #CCC;
+        }
+--></style>
+</head>
+<body>
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tr><td class="header">ICNRG</td><td class="header">M. Mosko</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">PARC</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">June 6, 2016</td></tr>
+<tr><td class="header">Expires: December 8, 2016</td><td class="header">&nbsp;</td></tr>
+</table></td></tr></table>
+<h1><br />CCNx Publisher Clock Time Versioning<br />draft-mosko-icnrg-ccnxtimeversion-02</h1>
+
+<h3>Abstract</h3>
+
+<p>This document specifies the use of a timestamp as a name segment
+      in a CCNx Name as a versioning specifier.  It defines the name segment
+      label, encoding, and semantics.   
+</p>
+<h3>Status of this Memo</h3>
+<p>
+This Internet-Draft is submitted  in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.</p>
+<p>
+Internet-Drafts are working documents of the Internet Engineering
+Task Force (IETF).  Note that other groups may also distribute
+working documents as Internet-Drafts.  The list of current
+Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>
+Internet-Drafts are draft documents valid for a maximum of six months
+and may be updated, replaced, or obsoleted by other documents at any time.
+It is inappropriate to use Internet-Drafts as reference material or to cite
+them other than as &ldquo;work in progress.&rdquo;</p>
+<p>
+This Internet-Draft will expire on December 8, 2016.</p>
+
+<h3>Copyright Notice</h3>
+<p>
+Copyright (c) 2016 IETF Trust and the persons identified as the
+document authors.  All rights reserved.</p>
+<p>
+This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents
+(http://trustee.ietf.org/license-info) in effect on the date of
+publication of this document.  Please review these documents
+carefully, as they describe your rights and restrictions with respect
+to this document. Code Components extracted from this document must
+include Simplified BSD License text as described in Section 4.e of
+the Trust Legal Provisions and are provided without warranty as
+described in the Simplified BSD License.</p>
+<a name="toc"></a><br /><hr />
+<h3>Table of Contents</h3>
+<p class="toc">
+<a href="#anchor1">1.</a>&nbsp;
+Introduction<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor2">1.1.</a>&nbsp;
+Requirements Language<br />
+<a href="#protocol">2.</a>&nbsp;
+Protocol Description<br />
+<a href="#Comparing">3.</a>&nbsp;
+Comparing timestamps<br />
+<a href="#Acknowledgements">4.</a>&nbsp;
+Acknowledgements<br />
+<a href="#IANA">5.</a>&nbsp;
+IANA Considerations<br />
+<a href="#Security">6.</a>&nbsp;
+Security Considerations<br />
+<a href="#rfc.references1">7.</a>&nbsp;
+References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">7.1.</a>&nbsp;
+Normative References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">7.2.</a>&nbsp;
+Informative References<br />
+<a href="#rfc.authors">&#167;</a>&nbsp;
+Author's Address<br />
+</p>
+<br clear="all" />
+
+<a name="anchor1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1"></a><h3>1.&nbsp;
+Introduction</h3>
+
+<p>This document specifies the use of a subset of <a class='info' href='#RFC3339'>RFC 3339<span> (</span><span class='info'>Klyne, G. and C. Newman, &ldquo;Date and Time on the Internet: Timestamps,&rdquo; July&nbsp;2002.</span><span>)</span></a> [RFC3339] UTC timestamp 
+        in a CCNx Name as a version identifier.  We restrict the use of RFC 3339 to only using
+        UTC time with the 'Z' notation, not relative offsets from UTC.
+</p>
+<p>This document updates <a class='info' href='#CCNMessages'>CCNx Messages in TLV Format<span> (</span><span class='info'>Mosko, M., Solis, I., and C. Wood, &ldquo;CCNx Messages in TLV Format (Internet draft),&rdquo; 2016.</span><span>)</span></a> [CCNMessages].  It introduces
+      a new CCNx Name Segment TLV type.
+</p>
+<a name="anchor2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1.1"></a><h3>1.1.&nbsp;
+Requirements Language</h3>
+
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+          NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in <a class='info' href='#RFC2119'>RFC 2119<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a> [RFC2119].
+</p>
+<a name="protocol"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2"></a><h3>2.&nbsp;
+Protocol Description</h3>
+
+<p>A timestamp in a CCNx Name name segment indicates an ordering on names based
+        on the UTC timestamp.  The timestamp is encoded as an RFC3339 UTC 
+        string in the 'date-time' format, for example
+        "1985-04-12T23:20:50.52Z". This format allows a memcmp() of two strings to 
+        determine their time ordering (see <a class='info' href='#Comparing'>Section&nbsp;3<span> (</span><span class='info'>Comparing timestamps</span><span>)</span></a>). 
+</p>
+<p>The timestamp MUST use the format of RFC 3339 Sections 5.6-5.7 with the restriction
+        that it MUST use the 'Z' UTC signifier and MUST NOT use the 'time-numoffset' format.
+</p>
+<p>The timestamp MAY have fractions of a second, as per RFC3339.  The fractions
+        MUST use the '.' separator, as specified in RFC 3339 Section 5.6.  This restriction
+        is to ensure that memcmp() ordering is maintained.
+</p>
+<p>The use of a timestamp in a Name to denote
+        a version SHOULD NOT assume global time coordination and
+        SHOULD NOT be used to denote ordering or causation between multiple
+        publishers.
+</p>
+<p>If multiple publishers -- with different clocks -- write to the same
+        namespace, the name SHOULD include a name segment prior to the timestamp
+        that indicates the publisher.  For example, one could include the publisher's
+        KeyId, or any globally unique string between the publishers.
+</p>
+<p>A name segment timestamp MUST use the UTC 'Z' notation, not a '+' or '-' offset
+        (the 'time-numoffset' token in RFC 3339).
+        This restriction is to ensure that timestamps may be ordered simply by a direct comparison
+        (see <a class='info' href='#Comparing'>Section&nbsp;3<span> (</span><span class='info'>Comparing timestamps</span><span>)</span></a>).
+</p>
+<p>An example Name using this format is 
+        "ccnx:/Name=parc/Name=file.pdf/Time=1985-04-12T23:20:50.52Z".
+</p>
+<p>A publisher assigns a timestamp to indicate the time ordering of the prior Name
+      name segments.  It does not imply any specific temporal meaning such as the time of content creation
+        or the time of Content Object signature.  It is simply used to order a set of objects. 
+        An application MAY adopt such a semantic to the timestamp as an
+      application-specific specification.
+</p><br /><hr class="insert" />
+<a name="message_type"></a>
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="center"><col align="center">
+<tr><th align="center">Type</th><th align="center">Name</th></tr>
+<tr>
+<td align="center">'Time'</td>
+<td align="center">UTC Timestamp, in RFC 3339 human-readable format.</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Table 1: Name Segment Label&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+<br /><hr class="insert" />
+<a name="name_types"></a>
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Symbol</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0012</td>
+<td align="center">T_TIME</td>
+<td align="center">UTC Timestamp</td>
+<td align="left">UTC timestamp RFC 3339 'Z' format.</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Table 2: CCNx Name Types&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+
+<a name="Comparing"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3"></a><h3>3.&nbsp;
+Comparing timestamps</h3>
+
+<p>The TLV length of the timestamp MUST be at least 20 octets to be compliant
+         with RFC 3339, and thus with this specification.
+</p>
+<p>As per RFC 3339, the string format for two timestamps MAY be compared via
+        memcmp() up to the minimum string length minus 1 (to trim the terminal 'Z').
+        If the two timestamps are equal, up to
+        the minimum length, then the shorter string is less than the longer string.
+        Because we require UTC time zone with the 'Z' notation, the only time two strings
+        may be of different lengths is when one includes milliseconds, so the
+        rule here is correct.
+</p>
+<a name="Acknowledgements"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4"></a><h3>4.&nbsp;
+Acknowledgements</h3>
+
+<a name="IANA"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5.&nbsp;
+IANA Considerations</h3>
+
+<p>This memo includes no request to IANA.
+</p>
+<p>This draft introduces a new value in the CCNx Name Segment type registry.
+</p>
+<a name="Security"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6"></a><h3>6.&nbsp;
+Security Considerations</h3>
+
+<p>An entity parsing a T_TIME name segment is not required to parse the segment
+        for validity in formatting to only compute ordering.  Because the format allows
+        a direct memcmp() and
+        the length of the string is available via the TLV length, there should be no
+        vulnerability to mis-formatted values.  Other uses of the timestamp should
+        ensure the format conforms to RFC 3339 'Z' format.
+</p>
+<a name="rfc.references"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7"></a><h3>7.&nbsp;
+References</h3>
+
+<a name="rfc.references1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>7.1.&nbsp;Normative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
+<td class="author-text">Bradner, S., &ldquo;<a href="http://www.rfc-editor.org/info/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, DOI&nbsp;10.17487/RFC2119, March&nbsp;1997.</td></tr>
+</table>
+
+<a name="rfc.references2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>7.2.&nbsp;Informative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="CCNMessages">[CCNMessages]</a></td>
+<td class="author-text">Mosko, M., Solis, I., and C. Wood, &ldquo;<a href="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-03">CCNx Messages in TLV Format (Internet draft)</a>,&rdquo; 2016.</td></tr>
+<tr><td class="author-text" valign="top"><a name="CCNx">[CCNx]</a></td>
+<td class="author-text">PARC, Inc., &ldquo;<a href="http://www.ccnx.org">CCNx Open Source</a>,&rdquo; 2007.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3339">[RFC3339]</a></td>
+<td class="author-text">Klyne, G. and C. Newman, &ldquo;<a href="http://www.rfc-editor.org/info/rfc3339">Date and Time on the Internet: Timestamps</a>,&rdquo; RFC&nbsp;3339, DOI&nbsp;10.17487/RFC3339, July&nbsp;2002.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3552">[RFC3552]</a></td>
+<td class="author-text">Rescorla, E. and B. Korver, &ldquo;<a href="http://www.rfc-editor.org/info/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>,&rdquo; BCP&nbsp;72, RFC&nbsp;3552, DOI&nbsp;10.17487/RFC3552, July&nbsp;2003.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5226">[RFC5226]</a></td>
+<td class="author-text">Narten, T. and H. Alvestrand, &ldquo;<a href="http://www.rfc-editor.org/info/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>,&rdquo; BCP&nbsp;26, RFC&nbsp;5226, DOI&nbsp;10.17487/RFC5226, May&nbsp;2008.</td></tr>
+</table>
+
+<a name="rfc.authors"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>Author's Address</h3>
+<table width="99%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Marc Mosko</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">PARC</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Palo Alto, California  94304</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">USA</td></tr>
+<tr><td class="author" align="right">Phone:&nbsp;</td>
+<td class="author-text">+01 650-812-4405</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:marc.mosko@parc.com">marc.mosko@parc.com</a></td></tr>
+</table>
+</body></html>

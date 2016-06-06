@@ -115,8 +115,8 @@
     <abstract>
       <t>This document specifies a chunking protocol for dividing a user payload 
       into CCNx Content Objects. This includes specification for the naming convention to use for
-      the chunked payload, the metadata convention used to store information about the chunked object,
-      and the field added to a Content Object to represent the last chunk of an object.  </t>
+      the chunked payload
+      and a field added to a Content Object to represent the last chunk of an object.  </t>
 
     </abstract>
   </front>
