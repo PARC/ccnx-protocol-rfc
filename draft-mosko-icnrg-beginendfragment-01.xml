@@ -42,7 +42,7 @@
 <?rfc private="" ?>   
 
 <!-- draft-mosko-icnrg-beginendfragment-00 -->
-<rfc category="exp" docName="draft-mosko-icnrg-beginendfragment-00" ipr="trust200902">
+<rfc category="exp" docName="draft-mosko-icnrg-beginendfragment-01" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
        or pre5378Trust200902
@@ -157,8 +157,8 @@
          using the old ccnb encoding. In a first part, this
          document describes a third,  hop-by-hop fragmentation
          protocol in an encoding-neutral way. In a second part, we show mappings of this "begin-end fragmentation scheme" to
-         the CCNx 1.0
-         [draft-mosko-icnrg-ccnxmessages-01] and the NDN TLV [NDN] encoding.
+         the
+         <xref target="CCNMessages">CCNx Messages in TLV Format</xref> and the NDN TLV [NDN] encoding.
          Thirdly, possible extensions and their encodings are discussed, for example
          reporting link reliability or link ARQ schemes such as windowing
          protocols.</t>
@@ -207,7 +207,7 @@
       optional fields or sizes, there is no concise way to represent
       all possibilities.  We use the convention that ASCII art fields
       enclosed by vertical bars "|" represent exact bit widths.
-      Fields with a forward slash "/" are variable bitwidths, which we
+      Fields with a forward slash "/" are variable bit widths, which we
       typically pad out to word alignment for picture readability.</t>
 
        <t>TODO -- we have not adopted the Requirements Language yet.</t>
@@ -223,7 +223,7 @@
     <section anchor="protocol" title="Abstract Description of the Begin-End-Fragment Protocol">
 
       <t>A Fragment is defined as the following fields (plus any
-        additional fields required by the wire formating in which
+        additional fields required by the wire formatting in which
         fragments are encoded):
         <figure>
           <artwork align="left"><![CDATA[
@@ -244,8 +244,15 @@ FragData       = <Continuous octets (portion of Packet)>
       </t>
       
        <t>The fragmentation protocol is run between a sender and a "peer",
-         which can be one or more, potentially passive, receivers.
-       </t>
+        which can be one or more, potentially passive, receivers.
+        They execute first an <xref target="init">Initialization Protocol</xref>,
+        then use a <xref target="sender">Sender Protocol</xref> and
+        <xref target="receiver">Receiver Protocol</xref> to exchange frames.
+      </t>
+      
+      <t>The initialization protocol uses a reliable messages exchange
+        to reset the the FragSeqNo to 0 on both peers.  This ensures that
+        when one or another peer restarts both peers will reset their state.</t>
 
         <t>The sender breaks a packet P (typically an Interest- or
           Content packet in the embedding wire encoding) into one or
@@ -277,7 +284,143 @@ FragData       = <Continuous octets (portion of Packet)>
            measuring for example
            link quality when there is no other traffic to send.
         </t>
-
+      
+      <section anchor="init" title="Initialization">
+        <t>Whenever a peer begins operation, it must reliably reset the
+          sequence number space.  If the underlying link already ensures
+          a complete reset of both peers, that method MAY be used.  Otherwise,
+          the method presented here SHOULD be used.</t>
+        
+        <t>
+          <list style="numbers">
+            <t>For each peer, a node tracks its local state, S_LOCAL[peer], and its peer's state S_REMOTE[peer].  A
+              state may be INIT or OK.</t>
+            
+            <t>RESET messages carry a sequence number denoted as N_LOCAL[peer] and N_REMOTE[peer], for
+              the messages in each direction.  The sequence number MAY be a positive random number.</t>
+            
+            <t>A node tracks its FragSeqNo as FSN_LOCAL[peer] and the next expected FragSeqno
+              from its peer as FSN_REMOTE[peer].</t>
+            
+            <t>We will drop the [peer] subscript from the state variables in the following with the
+               understanding that this protocol executes per pair of peers.</t>
+            
+            <t>If S_LOCAL or S_REMOTE is in INIT state, the node MUST only send RESET or RESET_ACK
+              messages. Note that two sides need to both be in the same set of states.  One side
+              could be in OK/OK and another in INIT/OK.  In that case the side in OK/OK may begin
+              sending data to the peer, though the peer cannot reply with data until it progresses
+              to OK/OK.</t>
+            
+            <t>Upon initialization, a peer sets its FSN_LOCAL and FSN_REMOTE to 0, and both S_LOCAL and
+              S_REMOTE to INIT.  It sets N_LOCAL to a new sequence number (i.e. a positive random number)
+              and N_REMOTE to 0.</t>
+            
+            <t>A first peer, called A, sends {RESET, N_LOCAL} to its peer, called B.</t>
+            
+            <t>Upon receiving a message {RESET, N}:
+              <list style="numbers">
+                <t>If N does not equal N_REMOTE, set N_REMOTE to N, set both FSN_LOCAL and FSN_REMOTE to 0.
+                  If S_REMOTE is not INIT, set S_LOCAL to INIT.
+                  Set S_REMOTE to OK.
+                  The node
+                  MUST discard any partially received packet, and MUST clear its current
+                  partially transmitted packet (if any), though it MAY re-queue it.</t>
+                <t>Send {RESET_ACK, N} to the peer</t>
+              </list>
+            </t>
+            
+            <t>Upon receiving a message {RESET_ACK, N}:
+              <list style="numbers">
+                <t>If N does not equal N_LOCAL, discard the message.</t>
+                <t>Else, set N_LOCAL to OK.  If this sets both N_LOCAL and N_REMOTE to OK, this
+                node may begin sending data.  It cancels any pending RESET timer.</t>
+              </list>
+            </t>
+            
+            <t>Upon sending a first RESET message, the sending node starts a retransmit timer for
+              the peer.  It begins at RESET_TIMOUT (50 msec).</t>
+            
+            <t>At each RESET timeout, a node sets a new timeout as twice the previous timeout.
+              If it is less than MAX_TIMEOUT (4 seconds), it sends {RESET, N_LOCAL} again and starts
+              a reset timer with the new timeout.  If it is not less than MAX_TIMEOUT, it reports an
+              error for the peer.</t>
+          </list>
+        </t>
+        
+        <section anchor="init_examples" title="Examples">
+          
+          <t>The first example, <xref target="example1"/> shows an example message
+            sequence diagram of the initialization process.  The "T" column is Time, The "S"
+            column is for S_LOCAL and S_REMOTE, the N column is for N_LOCAL and N_REMOTE,
+            and the FSN column is for FSN_LOCAL and FSN_REMOTE.  We show both peers, one on the
+            left side of the figure and one on the right side; call them nodes "A" and "B".
+            We only show an entry in the table when state changes.
+            <list style="symbols">
+              <t>T=0: A initializes and sets its state values as shown, picking
+                the message sequence number 5.  It sends the message
+                {RESET, 5} to B.  It starts a RESET timer.
+              </t>   
+              <t>
+                T=2: Node B initializes, picking message sequence number 7.  It sends
+                {RESET, 7} to A.  It starts a RESET timer.
+              </t>
+              <t>T=3: Node A receives {RESET, 7}.  It sets S_REMOTE to OK and records
+                N_REMOTE as 7.  It sets FSN_LOCAL and FSN_REMOTE to 0.
+              </t>
+              <t>
+                T=4: Node A sends {RESET_ACK, 7} to node B.
+              </t>
+              <t>
+                T=5: Node B reeives {RESET_ACK, 7}, so it sets S_LOCAL to OK.
+                It cancels its RESET timer.
+              </t>
+              <t>
+                T=6: Node A's RESET timer expires and it re-sends {RESET, 5} to B.
+              </t>
+              <t>
+                T=7: Node B receives {RESET, 5}.  It records N_REMOTE as 5 and sets
+                S_REMOTE to OK.  At this point, Node B is in OK/OK state and may begin
+                sending data.
+              </t>
+              <t>
+                T=8: Node B sends {RESET_ACK, 5}.
+              </t>
+              <t>
+                T=9: Node B begins sending data to A.
+              </t>
+              <t>
+                T=9: Node A reveives {RESET_ACK, 5} and sets S_LOCAL to OK.  It is now
+                in OK/OK state and may begin sending data to B.
+              </t>
+              <t>
+                T=10: Node A begins sending data to B.
+              </t>
+            </list>
+          </t>
+          <figure anchor="example1">
+            <artwork align="left"><![CDATA[
+|---|-----|-----|-----|                        |-----|-----|-----|
+| T |  S  |  N  | FSN |                        |  S  |  N  | FSN |
+|   | L R | L R | L R |                        | L R | L R | L R |
+|---|-----|-----|-----|                        |-----|-----|-----|
+| 0 | I I | 5 0 | 0 0 | >-{RESET, 5}--------->X|    not ready    |
+|   |     |     |     |                        |     |     |     |
+| 2 |     |     |     | <---------{RESET, 7}-< | I I | 7 0 | 0 0 |
+| 3 |   OK| 5 7 | 0 0 |                        |     |     |     |
+| 4 |     |     |     | >-{RESET_ACK, 7}-----> |     |     |     |
+| 5 |     |     |     |                        |OK   | 7 0 | 0 0 |
+| 6 |     |     |     | >-{RESET, 5}---------> |     |     |     |
+| 7 |     |     |     |                        |   OK|   5 | 0 0 | 
+| 8 |     |     |     | <-----{RESET_ACK, 5}-< |     |     |     |
+| 9 |OK   |     |     | <-------------{data}-< |     |     |     |
+| 10|     |     |     | >-{data}-------------> |     |     |     |
+|---|-----|-----|-----|                        |-----|-----|-----|
+]]></artwork>
+      </figure>          
+          
+        </section>
+      </section>
+      
       <section anchor="sender" title="Sender Protocol">
 
         <t>
@@ -375,7 +518,7 @@ FragData       = <Continuous octets (portion of Packet)>
 
       <t>The "hop-by-hop fixed header" follows the normal conventions:
         The Version, PacketLength, and HeaderLength fields are as per
-        [draft-mosko-icnrg-ccnxmessages-01].  The PacketType is set to
+        <xref target="CCNMessages">CCNx Messages in TLV Format</xref>.  The PacketType is set to
         PT_FRAG. However, in the packet-type dependent fields, we
         reserve 4 bits for flags and 20 bits for a sequence
         number.</t>
@@ -459,7 +602,7 @@ FragData       = <Continuous octets (portion of Packet)>
       protocols to co-exist by changing the opening TLV type from 
       T_FRAG_HEADER to a new type (specified in an external document).</t>
       
-      <t>The frist 8 bytes of the first fragment are the FixedHeader
+      <t>The first 8 bytes of the first fragment are the FixedHeader
       of the encapsulated Packet, so one may learn the overall length
       of the Packet from that FixedHeader.</t>
  
@@ -496,7 +639,7 @@ FragData       = <Continuous octets (portion of Packet)>
         used for integrity checking as the receiver may not have the
         appropriate key and it is an expensive operation. We therefore
         chose to use a CRC32C validator on each fragment.  The Content
-        Object has the name lci:/abcd.  First, the original 2000 byte
+        Object has the name ccnx:/abcd.  First, the original 2000 byte
         packet is shown in entirety.
       </t>
       
@@ -700,7 +843,7 @@ content2(500B)
        <t>NDNLPv2 packets have a start type NDNLP-TYPE which
          distinguishes them from the classic Interest and Data
          packets. Inside the NDNLPv2 TLV structure, a sequence of
-         NDNLPv2 header fields preceed the payload (fragment data)
+         NDNLPv2 header fields precede the payload (fragment data)
          which is introduced by the type value NND-FRAGMENT-TYPE.
         <figure><artwork align="left"><![CDATA[
          NDNpacket      ::= Interest | Data | NDNLP
@@ -900,6 +1043,24 @@ content2(500B)
         </front>
         <seriesInfo name="NDN Technical Report" value="NDN-0006"/>
       </reference>
+      
+      <reference anchor="CCNMessages" target="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-03">
+        <front>
+          <title>CCNx Messages in TLV Format (Internet draft)</title>
+
+          <author initials='M.' surname='Mosko' fullname='Marc Mosko'>
+            <organization>PARC, Inc.</organization>
+          </author>
+          <author initials='I.' surname='Solis' fullname='Ignacio Solis'>
+            <organization>PARC, Inc.</organization>
+          </author>
+          <author initials='C.' surname='Wood' fullname='Christopher Wood'>
+            <organization>PARC, Inc.</organization>
+          </author>
+          <date year="2016"/>
+        </front>
+      </reference>
+
     </references>
     
   </back>

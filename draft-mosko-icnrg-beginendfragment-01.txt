@@ -4,12 +4,12 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                      PARC
 Intended status: Experimental                                C. Tschudin
-Expires: November 10, 2016                           University of Basel
-                                                             May 9, 2016
+Expires: December 9, 2016                            University of Basel
+                                                            June 7, 2016
 
 
                 ICN "Begin-End" Hop by Hop Fragmentation
-                 draft-mosko-icnrg-beginendfragment-00
+                 draft-mosko-icnrg-beginendfragment-01
 
 Abstract
 
@@ -34,7 +34,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 10, 2016.
+   This Internet-Draft will expire on December 9, 2016.
 
 Copyright Notice
 
@@ -52,9 +52,9 @@ Copyright Notice
 
 
 
-Mosko & Tschudin        Expires November 10, 2016               [Page 1]
+Mosko & Tschudin        Expires December 9, 2016                [Page 1]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
    described in the Simplified BSD License.
@@ -65,24 +65,26 @@ Table of Contents
    1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
      1.1.  Requirements Language  . . . . . . . . . . . . . . . . . .  4
    2.  Abstract Description of the Begin-End-Fragment Protocol  . . .  5
-     2.1.  Sender Protocol  . . . . . . . . . . . . . . . . . . . . .  6
-     2.2.  Receiver Protocol  . . . . . . . . . . . . . . . . . . . .  6
-   3.  Ethernet as a common use case  . . . . . . . . . . . . . . . .  7
-   4.  CCNx 1.0 Fragment Protocol Description . . . . . . . . . . . .  8
-     4.1.  Example  . . . . . . . . . . . . . . . . . . . . . . . . . 10
-     4.2.  CCNx 1.0 Frame Packing . . . . . . . . . . . . . . . . . . 13
-     4.3.  Assigned Numbers for CCNx 1.0 Begin-End fragmentation  . . 14
-   5.  NDN Fragment Protocol Description  . . . . . . . . . . . . . . 15
-     5.1.  Example  . . . . . . . . . . . . . . . . . . . . . . . . . 16
-     5.2.  NDN Frame Packing  . . . . . . . . . . . . . . . . . . . . 16
-     5.3.  Assigned Numbers for NDN Begin-End fragmentation . . . . . 16
-   6.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 17
-   7.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 18
-   8.  Security Considerations  . . . . . . . . . . . . . . . . . . . 19
-   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 20
-     9.1.  Normative References . . . . . . . . . . . . . . . . . . . 20
-     9.2.  Informative References . . . . . . . . . . . . . . . . . . 20
-   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 21
+     2.1.  Initialization . . . . . . . . . . . . . . . . . . . . . .  6
+       2.1.1.  Examples . . . . . . . . . . . . . . . . . . . . . . .  7
+     2.2.  Sender Protocol  . . . . . . . . . . . . . . . . . . . . .  8
+     2.3.  Receiver Protocol  . . . . . . . . . . . . . . . . . . . .  9
+   3.  Ethernet as a common use case  . . . . . . . . . . . . . . . . 10
+   4.  CCNx 1.0 Fragment Protocol Description . . . . . . . . . . . . 11
+     4.1.  Example  . . . . . . . . . . . . . . . . . . . . . . . . . 13
+     4.2.  CCNx 1.0 Frame Packing . . . . . . . . . . . . . . . . . . 16
+     4.3.  Assigned Numbers for CCNx 1.0 Begin-End fragmentation  . . 17
+   5.  NDN Fragment Protocol Description  . . . . . . . . . . . . . . 18
+     5.1.  Example  . . . . . . . . . . . . . . . . . . . . . . . . . 19
+     5.2.  NDN Frame Packing  . . . . . . . . . . . . . . . . . . . . 19
+     5.3.  Assigned Numbers for NDN Begin-End fragmentation . . . . . 19
+   6.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 20
+   7.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 21
+   8.  Security Considerations  . . . . . . . . . . . . . . . . . . . 22
+   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 23
+     9.1.  Normative References . . . . . . . . . . . . . . . . . . . 23
+     9.2.  Informative References . . . . . . . . . . . . . . . . . . 23
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 24
 
 
 
@@ -106,11 +108,9 @@ Table of Contents
 
 
 
-
-
-Mosko & Tschudin        Expires November 10, 2016               [Page 2]
+Mosko & Tschudin        Expires December 9, 2016                [Page 2]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 1.  Introduction
@@ -121,10 +121,10 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
    the old ccnb encoding.  In a first part, this document describes a
    third, hop-by-hop fragmentation protocol in an encoding-neutral way.
    In a second part, we show mappings of this "begin-end fragmentation
-   scheme" to the CCNx 1.0 [draft-mosko-icnrg-ccnxmessages-01] and the
-   NDN TLV [NDN] encoding.  Thirdly, possible extensions and their
-   encodings are discussed, for example reporting link reliability or
-   link ARQ schemes such as windowing protocols.
+   scheme" to the CCNx Messages in TLV Format [CCNMessages] and the NDN
+   TLV [NDN] encoding.  Thirdly, possible extensions and their encodings
+   are discussed, for example reporting link reliability or link ARQ
+   schemes such as windowing protocols.
 
    The proposed hop-by-hop "begin-end fragments" scheme may be used at
    Layer 3 when large ICN messages are to be natively sent over a Layer
@@ -164,14 +164,14 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016               [Page 3]
+Mosko & Tschudin        Expires December 9, 2016                [Page 3]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
    possibilities.  We use the convention that ASCII art fields enclosed
    by vertical bars "|" represent exact bit widths.  Fields with a
-   forward slash "/" are variable bitwidths, which we typically pad out
+   forward slash "/" are variable bit widths, which we typically pad out
    to word alignment for picture readability.
 
    TODO -- we have not adopted the Requirements Language yet.
@@ -220,15 +220,15 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016               [Page 4]
+Mosko & Tschudin        Expires December 9, 2016                [Page 4]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 2.  Abstract Description of the Begin-End-Fragment Protocol
 
    A Fragment is defined as the following fields (plus any additional
-   fields required by the wire formating in which fragments are
+   fields required by the wire formatting in which fragments are
    encoded):
 
  Fragment       = FragProtocolID FragProtocolData
@@ -245,7 +245,14 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
  FragData       = <Continuous octets (portion of Packet)>
 
    The fragmentation protocol is run between a sender and a "peer",
-   which can be one or more, potentially passive, receivers.
+   which can be one or more, potentially passive, receivers.  They
+   execute first an Initialization Protocol (Section 2.1), then use a
+   Sender Protocol (Section 2.2) and Receiver Protocol (Section 2.3) to
+   exchange frames.
+
+   The initialization protocol uses a reliable messages exchange to
+   reset the the FragSeqNo to 0 on both peers.  This ensures that when
+   one or another peer restarts both peers will reset their state.
 
    The sender breaks a packet P (typically an Interest- or Content
    packet in the embedding wire encoding) into one or more fragments
@@ -266,22 +273,160 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
    contain any Fragment Data, but do increment the fragment sequence
    number.  This is useful on lossy links to indicate that the sender is
    past the end of the previous packet in case the 'E' fragment was
+
+
+
+Mosko & Tschudin        Expires December 9, 2016                [Page 5]
+
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
+
+
    lost.  Moreover, as a possible extension of the protocol, this allows
    for periodic keepalives, measuring for example link quality when
    there is no other traffic to send.
 
+2.1.  Initialization
+
+   Whenever a peer begins operation, it must reliably reset the sequence
+   number space.  If the underlying link already ensures a complete
+   reset of both peers, that method MAY be used.  Otherwise, the method
+   presented here SHOULD be used.
+
+   1.   For each peer, a node tracks its local state, S_LOCAL[peer], and
+        its peer's state S_REMOTE[peer].  A state may be INIT or OK.
+
+   2.   RESET messages carry a sequence number denoted as N_LOCAL[peer]
+        and N_REMOTE[peer], for the messages in each direction.  The
+        sequence number MAY be a positive random number.
+
+   3.   A node tracks its FragSeqNo as FSN_LOCAL[peer] and the next
+        expected FragSeqno from its peer as FSN_REMOTE[peer].
+
+   4.   We will drop the [peer] subscript from the state variables in
+        the following with the understanding that this protocol executes
+        per pair of peers.
+
+   5.   If S_LOCAL or S_REMOTE is in INIT state, the node MUST only send
+        RESET or RESET_ACK messages.  Note that two sides need to both
+        be in the same set of states.  One side could be in OK/OK and
+        another in INIT/OK.  In that case the side in OK/OK may begin
+        sending data to the peer, though the peer cannot reply with data
+        until it progresses to OK/OK.
+
+   6.   Upon initialization, a peer sets its FSN_LOCAL and FSN_REMOTE to
+        0, and both S_LOCAL and S_REMOTE to INIT.  It sets N_LOCAL to a
+        new sequence number (i.e. a positive random number) and N_REMOTE
+        to 0.
+
+   7.   A first peer, called A, sends {RESET, N_LOCAL} to its peer,
+        called B.
+
+   8.   Upon receiving a message {RESET, N}:
+
+        1.  If N does not equal N_REMOTE, set N_REMOTE to N, set both
+            FSN_LOCAL and FSN_REMOTE to 0.  If S_REMOTE is not INIT, set
+            S_LOCAL to INIT.  Set S_REMOTE to OK.  The node MUST discard
+            any partially received packet, and MUST clear its current
+            partially transmitted packet (if any), though it MAY re-
+            queue it.
 
 
 
-
-
-
-Mosko & Tschudin        Expires November 10, 2016               [Page 5]
+Mosko & Tschudin        Expires December 9, 2016                [Page 6]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
-2.1.  Sender Protocol
+        2.  Send {RESET_ACK, N} to the peer
+
+   9.   Upon receiving a message {RESET_ACK, N}:
+
+        1.  If N does not equal N_LOCAL, discard the message.
+
+        2.  Else, set N_LOCAL to OK.  If this sets both N_LOCAL and
+            N_REMOTE to OK, this node may begin sending data.  It
+            cancels any pending RESET timer.
+
+   10.  Upon sending a first RESET message, the sending node starts a
+        retransmit timer for the peer.  It begins at RESET_TIMOUT (50
+        msec).
+
+   11.  At each RESET timeout, a node sets a new timeout as twice the
+        previous timeout.  If it is less than MAX_TIMEOUT (4 seconds),
+        it sends {RESET, N_LOCAL} again and starts a reset timer with
+        the new timeout.  If it is not less than MAX_TIMEOUT, it reports
+        an error for the peer.
+
+2.1.1.  Examples
+
+   The first example, Figure 1 shows an example message sequence diagram
+   of the initialization process.  The "T" column is Time, The "S"
+   column is for S_LOCAL and S_REMOTE, the N column is for N_LOCAL and
+   N_REMOTE, and the FSN column is for FSN_LOCAL and FSN_REMOTE.  We
+   show both peers, one on the left side of the figure and one on the
+   right side; call them nodes "A" and "B".  We only show an entry in
+   the table when state changes.
+
+   o  T=0: A initializes and sets its state values as shown, picking the
+      message sequence number 5.  It sends the message {RESET, 5} to B.
+      It starts a RESET timer.
+
+   o  T=2: Node B initializes, picking message sequence number 7.  It
+      sends {RESET, 7} to A. It starts a RESET timer.
+
+   o  T=3: Node A receives {RESET, 7}.  It sets S_REMOTE to OK and
+      records N_REMOTE as 7.  It sets FSN_LOCAL and FSN_REMOTE to 0.
+
+   o  T=4: Node A sends {RESET_ACK, 7} to node B.
+
+   o  T=5: Node B reeives {RESET_ACK, 7}, so it sets S_LOCAL to OK.  It
+      cancels its RESET timer.
+
+   o  T=6: Node A's RESET timer expires and it re-sends {RESET, 5} to B.
+
+
+
+
+
+Mosko & Tschudin        Expires December 9, 2016                [Page 7]
+
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
+
+
+   o  T=7: Node B receives {RESET, 5}.  It records N_REMOTE as 5 and
+      sets S_REMOTE to OK.  At this point, Node B is in OK/OK state and
+      may begin sending data.
+
+   o  T=8: Node B sends {RESET_ACK, 5}.
+
+   o  T=9: Node B begins sending data to A.
+
+   o  T=9: Node A reveives {RESET_ACK, 5} and sets S_LOCAL to OK.  It is
+      now in OK/OK state and may begin sending data to B.
+
+   o  T=10: Node A begins sending data to B.
+
+
+   |---|-----|-----|-----|                        |-----|-----|-----|
+   | T |  S  |  N  | FSN |                        |  S  |  N  | FSN |
+   |   | L R | L R | L R |                        | L R | L R | L R |
+   |---|-----|-----|-----|                        |-----|-----|-----|
+   | 0 | I I | 5 0 | 0 0 | >-{RESET, 5}--------->X|    not ready    |
+   |   |     |     |     |                        |     |     |     |
+   | 2 |     |     |     | <---------{RESET, 7}-< | I I | 7 0 | 0 0 |
+   | 3 |   OK| 5 7 | 0 0 |                        |     |     |     |
+   | 4 |     |     |     | >-{RESET_ACK, 7}-----> |     |     |     |
+   | 5 |     |     |     |                        |OK   | 7 0 | 0 0 |
+   | 6 |     |     |     | >-{RESET, 5}---------> |     |     |     |
+   | 7 |     |     |     |                        |   OK|   5 | 0 0 |
+   | 8 |     |     |     | <-----{RESET_ACK, 5}-< |     |     |     |
+   | 9 |OK   |     |     | <-------------{data}-< |     |     |     |
+   | 10|     |     |     | >-{data}-------------> |     |     |     |
+   |---|-----|-----|-----|                        |-----|-----|-----|
+
+                                 Figure 1
+
+2.2.  Sender Protocol
 
    1.  A sender maintains a separate state machine for each peer.
 
@@ -295,6 +440,15 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
    5.  In the last fragment for a packet, set the E bit to '1'.
 
+
+
+
+
+Mosko & Tschudin        Expires December 9, 2016                [Page 8]
+
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
+
+
    6.  Both the B and E bits must be set to '1' for a single fragment.
 
    7.  If both the B and E and I bits are not set, the fragment is in
@@ -305,7 +459,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
        that the sender has no packet to send.  Idle frames may only be
        sent in between E and B frames.
 
-2.2.  Receiver Protocol
+2.3.  Receiver Protocol
 
    1.  A receiver maintains one reassembly queue per sender.
 
@@ -332,9 +486,23 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016               [Page 6]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Tschudin        Expires December 9, 2016                [Page 9]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 3.  Ethernet as a common use case
@@ -388,9 +556,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016               [Page 7]
+Mosko & Tschudin        Expires December 9, 2016               [Page 10]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 4.  CCNx 1.0 Fragment Protocol Description
@@ -410,8 +578,8 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
    otherwise it is the basic encoding.
 
    The "hop-by-hop fixed header" follows the normal conventions: The
-   Version, PacketLength, and HeaderLength fields are as per
-   [draft-mosko-icnrg-ccnxmessages-01].  The PacketType is set to
+   Version, PacketLength, and HeaderLength fields are as per CCNx
+   Messages in TLV Format [CCNMessages].  The PacketType is set to
    PT_FRAG.  However, in the packet-type dependent fields, we reserve 4
    bits for flags and 20 bits for a sequence number.
 
@@ -444,9 +612,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016               [Page 8]
+Mosko & Tschudin        Expires December 9, 2016               [Page 11]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
    o  E: End flag.
@@ -488,7 +656,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
    to co-exist by changing the opening TLV type from T_FRAG_HEADER to a
    new type (specified in an external document).
 
-   The frist 8 bytes of the first fragment are the FixedHeader of the
+   The first 8 bytes of the first fragment are the FixedHeader of the
    encapsulated Packet, so one may learn the overall length of the
    Packet from that FixedHeader.
 
@@ -500,9 +668,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016               [Page 9]
+Mosko & Tschudin        Expires December 9, 2016               [Page 12]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
                         1                   2                   3
@@ -534,7 +702,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
    also has an RSA signature, but this cannot easily be used for
    integrity checking as the receiver may not have the appropriate key
    and it is an expensive operation.  We therefore chose to use a CRC32C
-   validator on each fragment.  The Content Object has the name lci:/
+   validator on each fragment.  The Content Object has the name ccnx:/
    abcd.  First, the original 2000 byte packet is shown in entirety.
 
 
@@ -556,9 +724,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016              [Page 10]
+Mosko & Tschudin        Expires December 9, 2016               [Page 13]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
                         1                   2                   3
@@ -612,9 +780,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016              [Page 11]
+Mosko & Tschudin        Expires December 9, 2016               [Page 14]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
                         1                   2                   3
@@ -668,9 +836,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016              [Page 12]
+Mosko & Tschudin        Expires December 9, 2016               [Page 15]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
                        1                   2                   3
@@ -724,9 +892,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016              [Page 13]
+Mosko & Tschudin        Expires December 9, 2016               [Page 16]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
    single Ethernet frame, up to the maximum Ethernet payload.
@@ -780,9 +948,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016              [Page 14]
+Mosko & Tschudin        Expires December 9, 2016               [Page 17]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 5.  NDN Fragment Protocol Description
@@ -794,7 +962,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
    NDNLPv2 packets have a start type NDNLP-TYPE which distinguishes them
    from the classic Interest and Data packets.  Inside the NDNLPv2 TLV
-   structure, a sequence of NDNLPv2 header fields preceed the payload
+   structure, a sequence of NDNLPv2 header fields precede the payload
    (fragment data) which is introduced by the type value NND-FRAGMENT-
    TYPE.
 
@@ -836,9 +1004,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016              [Page 15]
+Mosko & Tschudin        Expires December 9, 2016               [Page 18]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 5.1.  Example
@@ -892,9 +1060,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016              [Page 16]
+Mosko & Tschudin        Expires December 9, 2016               [Page 19]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 6.  Acknowledgements
@@ -948,9 +1116,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016              [Page 17]
+Mosko & Tschudin        Expires December 9, 2016               [Page 20]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 7.  IANA Considerations
@@ -1004,9 +1172,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016              [Page 18]
+Mosko & Tschudin        Expires December 9, 2016               [Page 21]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 8.  Security Considerations
@@ -1060,9 +1228,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-Mosko & Tschudin        Expires November 10, 2016              [Page 19]
+Mosko & Tschudin        Expires December 9, 2016               [Page 22]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 9.  References
@@ -1078,6 +1246,11 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
    [CCNLite]  Mosko, M., Plass, M., and C. Tschudin, "CCN-Lite
               fragmentation", Summer 2012, <http://ccn-lite.net>.
+
+   [CCNMessages]
+              Mosko, M., Solis, I., and C. Wood, "CCNx Messages in TLV
+              Format (Internet draft)", 2016, <http://tools.ietf.org/
+              html/draft-irtf-icnrg-ccnxmessages-03>.
 
    [CCNx]     PARC, Inc., "CCNx Open Source", 2007,
               <http://www.ccnx.org>.
@@ -1111,14 +1284,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
 
 
 
-
-
-
-
-
-Mosko & Tschudin        Expires November 10, 2016              [Page 20]
+Mosko & Tschudin        Expires December 9, 2016               [Page 23]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation               May 2016
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 Authors' Addresses
@@ -1172,5 +1340,5 @@ Authors' Addresses
 
 
 
-Mosko & Tschudin        Expires November 10, 2016              [Page 21]
+Mosko & Tschudin        Expires December 9, 2016               [Page 24]
 
