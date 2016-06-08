@@ -210,12 +210,12 @@ Receiver Protocol<br />
 Ethernet as a common use case<br />
 <a href="#ccnx_protocol">4.</a>&nbsp;
 CCNx 1.0 Fragment Protocol Description<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#example">4.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#init_packets">4.1.</a>&nbsp;
+Initialiation examples<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#example">4.2.</a>&nbsp;
 Example<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#FramePacking">4.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#FramePacking">4.3.</a>&nbsp;
 CCNx 1.0 Frame Packing<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#CCNxNumbers">4.3.</a>&nbsp;
-Assigned Numbers for CCNx 1.0 Begin-End fragmentation<br />
 <a href="#ndn_protocol">5.</a>&nbsp;
 NDN Fragment Protocol Description<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#NDNexample">5.1.</a>&nbsp;
@@ -228,6 +228,10 @@ Assigned Numbers for NDN Begin-End fragmentation<br />
 Acknowledgements<br />
 <a href="#IANA">7.</a>&nbsp;
 IANA Considerations<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#iana_packettype">7.1.</a>&nbsp;
+CCNx Packet Type Registry<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#iana_message">7.2.</a>&nbsp;
+CCNx Message Registry<br />
 <a href="#Security">8.</a>&nbsp;
 Security Considerations<br />
 <a href="#rfc.references1">9.</a>&nbsp;
@@ -677,6 +681,24 @@ CCNx 1.0 Fragment Protocol Description</h3>
         bits in subsequent TLV blocks. In this way, the fragment can
         be covered by a CRC32C checksum or stronger validation
         methods.
+</p>
+<p>The new TLV type T_FRAGMENT wraps the fragment bytes.
+        It is a top-level message TLV, similar to T_INTEREST or T_OBJECT.
+</p>
+<p>For sequence number reset, the new TLV types T_FRAG_RESET
+        and T_FRAG_RESET_ACK carry the initialization message sequence number.
+        They MUST appear in an Idle (I) frame.
+        A packet MUST NOT have T_FRAGMENT if it has one of these fields.
+        A single packet may have both a T_FRAG_RESET and a T_FRAG_RESET_ACK.
+        These fields appear in the CCNX message section.
+        It is RECOMMENDED to use a 64-bit sequence number, though an 
+        implementation MAY use any length appropriate to the media.
+      
+</p>
+<p>T_FRAG_RESET and T_FRAG_RESET_ACK may be in either basic
+        header or extended header packets.  In extended header format,
+        the T_FRAG_HEADER element MUST be length 1, which conveys only
+        the flags.
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -726,12 +748,6 @@ CCNx 1.0 Fragment Protocol Description</h3>
         approximately 10,500 maximum size (network protocol) packets.
       
 </p>
-<p>We do not specify a link negotiation protocol for CCNx 1.0 at
-        this time.  Such a protocol could negotiate certain starting
-        or operation parameters of the protocol, such as the starting
-        fragment number or the size of the sequence number field.
-      
-</p>
 <p>If a PT_FRAG packet has optional hop-by-hop headers, the
       implementation should pass the fragment to the appropriate
       subsystem to process those headers before discarding the
@@ -748,7 +764,7 @@ CCNx 1.0 Fragment Protocol Description</h3>
 </p>
 <p>The Extended encoding also allows different fragmentation
       protocols to co-exist by changing the opening TLV type from 
-      T_FRAG_HEADER to a new type (specified in an external document).
+      T_FRAG_HEADER to a new type.
 </p>
 <p>The first 8 bytes of the first fragment are the FixedHeader
       of the encapsulated Packet, so one may learn the overall length
@@ -775,9 +791,64 @@ CCNx 1.0 Fragment Protocol Description</h3>
 / Optional CCNx ValidationPayload TLV (ValidationAlg required)  /
 +---------------+---------------+---------------+---------------+
 </pre></div>
-<a name="example"></a><br /><hr />
+<a name="init_packets"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
+Initialiation examples</h3>
+
+<p>This section presents examples of initialization packets.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|    Version    |    PT_FRAG    |         PacketLength          |
++---------------+---------------+---------------+---------------+
+|0|0|0|1|                0                      | HeaderLength  |
++---------------+---------------+---------------+---------------+
+/ Optional Hop-by-hop header in TLV format                      /
++---------------+---------------+---------------+---------------+
+| T_FRAG_RESET (optional)       |               8               |
++---------------+---------------+---------------+---------------+
+/ 64-bit N_LOCAL value                                          /
++---------------+---------------+---------------+---------------+
+| T_FRAG_RESET_ACK (optional)   |               8               |
++---------------+---------------+---------------+---------------+
+/ 64-bit N_REMOTE value                                         /
++---------------+---------------+---------------+---------------+
+/ Optional CCNx ValidationAlgorithm TLV                         /
++---------------+---------------+---------------+---------------+
+/ Optional CCNx ValidationPayload TLV (ValidationAlg required)  /
++---------------+---------------+---------------+---------------+
+</pre></div><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|    Version    |    PT_FRAG    |         PacketLength          |
++---------------+---------------+---------------+---------------+
+|1|0|0|0|                 Reserved              | HeaderLength  |
++---------------+---------------+---------------+---------------+
+/ Optional Hop-by-hop header in TLV format                      /
++---------------+---------------+---------------+---------------+
+|          T_FRAG_HEADER        |               1               |
++---------------+---------------+---------------+---------------+
+|1|0|0|1|0|0|0|0|
++---------------+---------------+---------------+---------------+
+| T_FRAG_RESET (optional)       |               8               |
++---------------+---------------+---------------+---------------+
+/ 64-bit N_LOCAL value                                          /
++---------------+---------------+---------------+---------------+
+| T_FRAG_RESET_ACK (optional)   |               8               |
++---------------+---------------+---------------+---------------+
+/ 64-bit N_REMOTE value                                         /
++---------------+---------------+---------------+---------------+
+/ Optional CCNx ValidationAlgorithm TLV                         /
++---------------+---------------+---------------+---------------+
+/ Optional CCNx ValidationPayload TLV (ValidationAlg required)  /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="example"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
 Example</h3>
 
 <p>We present a complete example of the basic fragment encoding for a 2KB Content
@@ -918,7 +989,7 @@ Example</h3>
 </pre></div>
 <a name="FramePacking"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
+<a name="rfc.section.4.3"></a><h3>4.3.&nbsp;
 CCNx 1.0 Frame Packing</h3>
 
 <p>A sender/receiver pair may multiplex non-fragmentation
@@ -961,15 +1032,6 @@ content2(500B)
 
         
 </p>
-<a name="CCNxNumbers"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.3"></a><h3>4.3.&nbsp;
-Assigned Numbers for CCNx 1.0 Begin-End fragmentation</h3>
-<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-           PT_FRAG               0x03
-           T_FRAGMENT            0x05
-           T_FRAG_HEADER         0x10
-</pre></div>
 <a name="ndn_protocol"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.5"></a><h3>5.&nbsp;
@@ -1098,17 +1160,30 @@ Acknowledgements</h3>
 <a name="rfc.section.7"></a><h3>7.&nbsp;
 IANA Considerations</h3>
 
-<p>This memo includes no request to IANA.
+<p>This document adds new values to the CCNx Packet Type Registry
+        and CCNx Message Registry.
 </p>
-<p>All drafts are required to have an IANA considerations
-          section (see <a class='info' href='#RFC5226'>Guidelines for Writing
-          an IANA Considerations Section in RFCs<span> (</span><span class='info'>Narten, T. and H. Alvestrand, &ldquo;Guidelines for Writing an IANA Considerations Section in RFCs,&rdquo; May&nbsp;2008.</span><span>)</span></a> [RFC5226] for a
-          guide). If the draft does not require IANA to do anything,
-          the section contains an explicit statement that this is the
-          case (as above). If there are no requirements for IANA, the
-          section will be removed during conversion into an RFC by the
-          RFC Editor.
-</p>
+<a name="iana_packettype"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.1"></a><h3>7.1.&nbsp;
+CCNx Packet Type Registry</h3>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+Value    CCNx Packet Type                Definition
+----     ------------------------        ----------
+4        PT_FRAG                         See Section 4
+</pre></div>
+<a name="iana_message"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.2"></a><h3>7.2.&nbsp;
+CCNx Message Registry</h3>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+Value    CCNx Message Type               Definition
+----     ------------------------        ----------
+5        T_FRAGMENT                      See Section 4
+16       T_FRAG_HEADER                   See Section 4
+17       T_FRAG_RESET                    See Section 4
+18       T_FRAG_RESET_ACK                See Section 4
+</pre></div>
 <a name="Security"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8"></a><h3>8.&nbsp;

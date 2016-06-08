@@ -71,22 +71,22 @@ Table of Contents
      2.3.  Receiver Protocol  . . . . . . . . . . . . . . . . . . . .  9
    3.  Ethernet as a common use case  . . . . . . . . . . . . . . . . 10
    4.  CCNx 1.0 Fragment Protocol Description . . . . . . . . . . . . 11
-     4.1.  Example  . . . . . . . . . . . . . . . . . . . . . . . . . 13
-     4.2.  CCNx 1.0 Frame Packing . . . . . . . . . . . . . . . . . . 16
-     4.3.  Assigned Numbers for CCNx 1.0 Begin-End fragmentation  . . 17
-   5.  NDN Fragment Protocol Description  . . . . . . . . . . . . . . 18
-     5.1.  Example  . . . . . . . . . . . . . . . . . . . . . . . . . 19
-     5.2.  NDN Frame Packing  . . . . . . . . . . . . . . . . . . . . 19
-     5.3.  Assigned Numbers for NDN Begin-End fragmentation . . . . . 19
-   6.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 20
-   7.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 21
-   8.  Security Considerations  . . . . . . . . . . . . . . . . . . . 22
-   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 23
-     9.1.  Normative References . . . . . . . . . . . . . . . . . . . 23
-     9.2.  Informative References . . . . . . . . . . . . . . . . . . 23
-   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 24
-
-
+     4.1.  Initialiation examples . . . . . . . . . . . . . . . . . . 13
+     4.2.  Example  . . . . . . . . . . . . . . . . . . . . . . . . . 15
+     4.3.  CCNx 1.0 Frame Packing . . . . . . . . . . . . . . . . . . 18
+   5.  NDN Fragment Protocol Description  . . . . . . . . . . . . . . 20
+     5.1.  Example  . . . . . . . . . . . . . . . . . . . . . . . . . 21
+     5.2.  NDN Frame Packing  . . . . . . . . . . . . . . . . . . . . 21
+     5.3.  Assigned Numbers for NDN Begin-End fragmentation . . . . . 21
+   6.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 22
+   7.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 23
+     7.1.  CCNx Packet Type Registry  . . . . . . . . . . . . . . . . 23
+     7.2.  CCNx Message Registry  . . . . . . . . . . . . . . . . . . 23
+   8.  Security Considerations  . . . . . . . . . . . . . . . . . . . 24
+   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+     9.1.  Normative References . . . . . . . . . . . . . . . . . . . 25
+     9.2.  Informative References . . . . . . . . . . . . . . . . . . 25
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 26
 
 
 
@@ -589,6 +589,34 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
    blocks.  In this way, the fragment can be covered by a CRC32C
    checksum or stronger validation methods.
 
+   The new TLV type T_FRAGMENT wraps the fragment bytes.  It is a top-
+   level message TLV, similar to T_INTEREST or T_OBJECT.
+
+   For sequence number reset, the new TLV types T_FRAG_RESET and
+   T_FRAG_RESET_ACK carry the initialization message sequence number.
+   They MUST appear in an Idle (I) frame.  A packet MUST NOT have
+   T_FRAGMENT if it has one of these fields.  A single packet may have
+   both a T_FRAG_RESET and a T_FRAG_RESET_ACK.  These fields appear in
+   the CCNX message section.  It is RECOMMENDED to use a 64-bit sequence
+   number, though an implementation MAY use any length appropriate to
+   the media.
+
+   T_FRAG_RESET and T_FRAG_RESET_ACK may be in either basic header or
+   extended header packets.  In extended header format, the
+   T_FRAG_HEADER element MUST be length 1, which conveys only the flags.
+
+
+
+
+
+
+
+
+Mosko & Tschudin        Expires December 9, 2016               [Page 11]
+
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
+
+
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+---------------+---------------+
@@ -608,14 +636,6 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
    o  X: Extended Format (X=0 shown above)
 
    o  B: Begin flag.
-
-
-
-
-Mosko & Tschudin        Expires December 9, 2016               [Page 11]
-
-Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
-
 
    o  E: End flag.
 
@@ -637,11 +657,6 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
    space (when e.g. used over Ethernet) is approximately 10,500 maximum
    size (network protocol) packets.
 
-   We do not specify a link negotiation protocol for CCNx 1.0 at this
-   time.  Such a protocol could negotiate certain starting or operation
-   parameters of the protocol, such as the starting fragment number or
-   the size of the sequence number field.
-
    If a PT_FRAG packet has optional hop-by-hop headers, the
    implementation should pass the fragment to the appropriate subsystem
    to process those headers before discarding the fragment.
@@ -650,21 +665,6 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
    and sequence number) to the CCNx packet's message part, so they are
    covered by any ValidationAlgorithm used on the packet.  It also
    allows for variable length sequence numbers.  In the example shown
-   below, there is a 7-byte (56-bit) sequence number.
-
-   The Extended encoding also allows different fragmentation protocols
-   to co-exist by changing the opening TLV type from T_FRAG_HEADER to a
-   new type (specified in an external document).
-
-   The first 8 bytes of the first fragment are the FixedHeader of the
-   encapsulated Packet, so one may learn the overall length of the
-   Packet from that FixedHeader.
-
-
-
-
-
-
 
 
 
@@ -672,6 +672,16 @@ Mosko & Tschudin        Expires December 9, 2016               [Page 12]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
+
+   below, there is a 7-byte (56-bit) sequence number.
+
+   The Extended encoding also allows different fragmentation protocols
+   to co-exist by changing the opening TLV type from T_FRAG_HEADER to a
+   new type.
+
+   The first 8 bytes of the first fragment are the FixedHeader of the
+   encapsulated Packet, so one may learn the overall length of the
+   Packet from that FixedHeader.
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -694,7 +704,88 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
    / Optional CCNx ValidationPayload TLV (ValidationAlg required)  /
    +---------------+---------------+---------------+---------------+
 
-4.1.  Example
+4.1.  Initialiation examples
+
+   This section presents examples of initialization packets.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Tschudin        Expires December 9, 2016               [Page 13]
+
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
+
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |    Version    |    PT_FRAG    |         PacketLength          |
+   +---------------+---------------+---------------+---------------+
+   |0|0|0|1|                0                      | HeaderLength  |
+   +---------------+---------------+---------------+---------------+
+   / Optional Hop-by-hop header in TLV format                      /
+   +---------------+---------------+---------------+---------------+
+   | T_FRAG_RESET (optional)       |               8               |
+   +---------------+---------------+---------------+---------------+
+   / 64-bit N_LOCAL value                                          /
+   +---------------+---------------+---------------+---------------+
+   | T_FRAG_RESET_ACK (optional)   |               8               |
+   +---------------+---------------+---------------+---------------+
+   / 64-bit N_REMOTE value                                         /
+   +---------------+---------------+---------------+---------------+
+   / Optional CCNx ValidationAlgorithm TLV                         /
+   +---------------+---------------+---------------+---------------+
+   / Optional CCNx ValidationPayload TLV (ValidationAlg required)  /
+   +---------------+---------------+---------------+---------------+
+
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |    Version    |    PT_FRAG    |         PacketLength          |
+   +---------------+---------------+---------------+---------------+
+   |1|0|0|0|                 Reserved              | HeaderLength  |
+   +---------------+---------------+---------------+---------------+
+   / Optional Hop-by-hop header in TLV format                      /
+   +---------------+---------------+---------------+---------------+
+   |          T_FRAG_HEADER        |               1               |
+   +---------------+---------------+---------------+---------------+
+   |1|0|0|1|0|0|0|0|
+   +---------------+---------------+---------------+---------------+
+   | T_FRAG_RESET (optional)       |               8               |
+   +---------------+---------------+---------------+---------------+
+   / 64-bit N_LOCAL value                                          /
+   +---------------+---------------+---------------+---------------+
+   | T_FRAG_RESET_ACK (optional)   |               8               |
+   +---------------+---------------+---------------+---------------+
+   / 64-bit N_REMOTE value                                         /
+   +---------------+---------------+---------------+---------------+
+   / Optional CCNx ValidationAlgorithm TLV                         /
+   +---------------+---------------+---------------+---------------+
+   / Optional CCNx ValidationPayload TLV (ValidationAlg required)  /
+   +---------------+---------------+---------------+---------------+
+
+
+
+Mosko & Tschudin        Expires December 9, 2016               [Page 14]
+
+Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
+
+
+4.2.  Example
 
    We present a complete example of the basic fragment encoding for a
    2KB Content Object for 1500 byte frames according to the protocol
@@ -724,7 +815,28 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 13]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Tschudin        Expires December 9, 2016               [Page 15]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -780,7 +892,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 14]
+Mosko & Tschudin        Expires December 9, 2016               [Page 16]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -836,7 +948,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 15]
+Mosko & Tschudin        Expires December 9, 2016               [Page 17]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -877,7 +989,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
    |                         CRC32C Value                          |
    +---------------+---------------+---------------+---------------+
 
-4.2.  CCNx 1.0 Frame Packing
+4.3.  CCNx 1.0 Frame Packing
 
    A sender/receiver pair may multiplex non-fragmentation frames on the
    same link.  For example, in CCNx 1.0, there may be some PacketType
@@ -892,7 +1004,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 16]
+Mosko & Tschudin        Expires December 9, 2016               [Page 18]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -918,11 +1030,6 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
    [frag(content1, 1488B)]
    [frag(content1, 236B), frag(interest2, 200B), frag(content2, 500B)]
 
-4.3.  Assigned Numbers for CCNx 1.0 Begin-End fragmentation
-
-              PT_FRAG               0x03
-              T_FRAGMENT            0x05
-              T_FRAG_HEADER         0x10
 
 
 
@@ -948,7 +1055,12 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 17]
+
+
+
+
+
+Mosko & Tschudin        Expires December 9, 2016               [Page 19]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1004,7 +1116,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 18]
+Mosko & Tschudin        Expires December 9, 2016               [Page 20]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1060,7 +1172,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 19]
+Mosko & Tschudin        Expires December 9, 2016               [Page 21]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1116,32 +1228,30 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 20]
+Mosko & Tschudin        Expires December 9, 2016               [Page 22]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 7.  IANA Considerations
 
-   This memo includes no request to IANA.
+   This document adds new values to the CCNx Packet Type Registry and
+   CCNx Message Registry.
 
-   All drafts are required to have an IANA considerations section (see
-   Guidelines for Writing an IANA Considerations Section in RFCs
-   [RFC5226] for a guide).  If the draft does not require IANA to do
-   anything, the section contains an explicit statement that this is the
-   case (as above).  If there are no requirements for IANA, the section
-   will be removed during conversion into an RFC by the RFC Editor.
+7.1.  CCNx Packet Type Registry
 
+   Value    CCNx Packet Type                Definition
+   ----     ------------------------        ----------
+   4        PT_FRAG                         See Section 4
 
+7.2.  CCNx Message Registry
 
-
-
-
-
-
-
-
-
+   Value    CCNx Message Type               Definition
+   ----     ------------------------        ----------
+   5        T_FRAGMENT                      See Section 4
+   16       T_FRAG_HEADER                   See Section 4
+   17       T_FRAG_RESET                    See Section 4
+   18       T_FRAG_RESET_ACK                See Section 4
 
 
 
@@ -1172,7 +1282,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 21]
+
+
+Mosko & Tschudin        Expires December 9, 2016               [Page 23]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1228,7 +1340,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 22]
+Mosko & Tschudin        Expires December 9, 2016               [Page 24]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1284,7 +1396,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 23]
+Mosko & Tschudin        Expires December 9, 2016               [Page 25]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1340,5 +1452,5 @@ Authors' Addresses
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 24]
+Mosko & Tschudin        Expires December 9, 2016               [Page 26]
 

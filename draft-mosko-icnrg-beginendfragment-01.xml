@@ -530,6 +530,24 @@ FragData       = <Continuous octets (portion of Packet)>
         be covered by a CRC32C checksum or stronger validation
         methods.</t>
       
+      <t>The new TLV type T_FRAGMENT wraps the fragment bytes.
+        It is a top-level message TLV, similar to T_INTEREST or T_OBJECT.</t>
+      
+      <t>For sequence number reset, the new TLV types T_FRAG_RESET
+        and T_FRAG_RESET_ACK carry the initialization message sequence number.
+        They MUST appear in an Idle (I) frame.
+        A packet MUST NOT have T_FRAGMENT if it has one of these fields.
+        A single packet may have both a T_FRAG_RESET and a T_FRAG_RESET_ACK.
+        These fields appear in the CCNX message section.
+        It is RECOMMENDED to use a 64-bit sequence number, though an 
+        implementation MAY use any length appropriate to the media.
+      </t>
+      
+      <t>T_FRAG_RESET and T_FRAG_RESET_ACK may be in either basic
+        header or extended header packets.  In extended header format,
+        the T_FRAG_HEADER element MUST be length 1, which conveys only
+        the flags.</t>
+      
        <figure>
         <artwork align="left"><![CDATA[
                      1                   2                   3
@@ -575,12 +593,6 @@ FragData       = <Continuous octets (portion of Packet)>
         approximately 10,500 maximum size (network protocol) packets.
       </t>
 
-      <t>We do not specify a link negotiation protocol for CCNx 1.0 at
-        this time.  Such a protocol could negotiate certain starting
-        or operation parameters of the protocol, such as the starting
-        fragment number or the size of the sequence number field.
-      </t>
-      
       <t>If a PT_FRAG packet has optional hop-by-hop headers, the
       implementation should pass the fragment to the appropriate
       subsystem to process those headers before discarding the
@@ -600,7 +612,7 @@ FragData       = <Continuous octets (portion of Packet)>
       
       <t>The Extended encoding also allows different fragmentation
       protocols to co-exist by changing the opening TLV type from 
-      T_FRAG_HEADER to a new type (specified in an external document).</t>
+      T_FRAG_HEADER to a new type.</t>
       
       <t>The first 8 bytes of the first fragment are the FixedHeader
       of the encapsulated Packet, so one may learn the overall length
@@ -631,6 +643,65 @@ FragData       = <Continuous octets (portion of Packet)>
 ]]></artwork>
       </figure>
       
+      <section anchor="init_packets" title="Initialization examples">
+        <t>This section presents examples of initialization packets.</t>
+       <figure>
+        <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|    Version    |    PT_FRAG    |         PacketLength          |
++---------------+---------------+---------------+---------------+
+|0|0|0|1|                0                      | HeaderLength  |
++---------------+---------------+---------------+---------------+
+/ Optional Hop-by-hop header in TLV format                      /
++---------------+---------------+---------------+---------------+
+| T_FRAG_RESET (optional)       |               8               |
++---------------+---------------+---------------+---------------+
+/ 64-bit N_LOCAL value                                          /
++---------------+---------------+---------------+---------------+
+| T_FRAG_RESET_ACK (optional)   |               8               |
++---------------+---------------+---------------+---------------+
+/ 64-bit N_REMOTE value                                         /
++---------------+---------------+---------------+---------------+
+/ Optional CCNx ValidationAlgorithm TLV                         /
++---------------+---------------+---------------+---------------+
+/ Optional CCNx ValidationPayload TLV (ValidationAlg required)  /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+        </figure>
+        
+              <figure>
+        <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|    Version    |    PT_FRAG    |         PacketLength          |
++---------------+---------------+---------------+---------------+
+|1|0|0|0|                 Reserved              | HeaderLength  |
++---------------+---------------+---------------+---------------+
+/ Optional Hop-by-hop header in TLV format                      /
++---------------+---------------+---------------+---------------+
+|          T_FRAG_HEADER        |               1               |
++---------------+---------------+---------------+---------------+
+|1|0|0|1|0|0|0|0| 
++---------------+---------------+---------------+---------------+
+| T_FRAG_RESET (optional)       |               8               |
++---------------+---------------+---------------+---------------+
+/ 64-bit N_LOCAL value                                          /
++---------------+---------------+---------------+---------------+
+| T_FRAG_RESET_ACK (optional)   |               8               |
++---------------+---------------+---------------+---------------+
+/ 64-bit N_REMOTE value                                         /
++---------------+---------------+---------------+---------------+
+/ Optional CCNx ValidationAlgorithm TLV                         /
++---------------+---------------+---------------+---------------+
+/ Optional CCNx ValidationPayload TLV (ValidationAlg required)  /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+      </figure>
+      </section>
+
     <section anchor="example" title="Example">
       <t>We present a complete example of the basic fragment encoding for a 2KB Content
         Object for 1500 byte frames according to the protocol
@@ -820,16 +891,7 @@ content2(500B)
 [frag(content1, 236B), frag(interest2, 200B), frag(content2, 500B)]
         ]]></artwork></figure>
         </t>
-      </section>
- 
-      <section anchor="CCNxNumbers" title="Assigned Numbers for CCNx 1.0 Begin-End fragmentation">
-        <figure><artwork align="left"><![CDATA[
-           PT_FRAG               0x03
-           T_FRAGMENT            0x05
-           T_FRAG_HEADER         0x10
-]]></artwork></figure>
-      </section>
-      
+      </section> 
     </section>
 
 
@@ -946,16 +1008,31 @@ content2(500B)
     <!-- Possibly a 'Contributors' section ... -->
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>This memo includes no request to IANA.</t>
-
-      <t>All drafts are required to have an IANA considerations
-          section (see <xref target="RFC5226" >Guidelines for Writing
-          an IANA Considerations Section in RFCs</xref> for a
-          guide). If the draft does not require IANA to do anything,
-          the section contains an explicit statement that this is the
-          case (as above). If there are no requirements for IANA, the
-          section will be removed during conversion into an RFC by the
-          RFC Editor.</t>
+      <t>This document adds new values to the CCNx Packet Type Registry
+        and CCNx Message Registry.</t>
+        
+      <section anchor="iana_packettype" title="CCNx Packet Type Registry">
+        <figure>
+          <artwork align="left">
+Value    CCNx Packet Type                Definition
+----     ------------------------        ----------
+4        PT_FRAG                         See Section 4
+          </artwork>
+        </figure>
+      </section>
+      
+      <section anchor="iana_message" title="CCNx Message Registry">
+        <figure>
+          <artwork align="left">
+Value    CCNx Message Type               Definition
+----     ------------------------        ----------
+5        T_FRAGMENT                      See Section 4
+16       T_FRAG_HEADER                   See Section 4
+17       T_FRAG_RESET                    See Section 4
+18       T_FRAG_RESET_ACK                See Section 4        
+          </artwork>
+        </figure>
+      </section>
     </section>
 
     <section anchor="Security" title="Security Considerations">
