@@ -1651,12 +1651,12 @@
           <c></c>
 
           <c>%x0009</c>
-          <c>T_NAMEOFFSETS</c>
-          <c>????</c>
+          <c>Reserved</c>
+          <c></c>
 
           <c>%x000A</c>
-          <c>T_CHUNKOFFSETS</c>
-          <c>????</c>
+          <c>Reserved</c>
+          <c></c>
 
           <c>%x000B</c>
           <c>T_ORG</c>

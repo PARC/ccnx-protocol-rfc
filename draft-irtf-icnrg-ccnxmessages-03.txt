@@ -1934,9 +1934,9 @@ Internet-Draft                  CCNx TLV                       June 2016
    |               |                |                                  |
    |     %x0008    |   Unassigned   |                                  |
    |               |                |                                  |
-   |     %x0009    |  T_NAMEOFFSETS |               ????               |
+   |     %x0009    |    Reserved    |                                  |
    |               |                |                                  |
-   |     %x000A    | T_CHUNKOFFSETS |               ????               |
+   |     %x000A    |    Reserved    |                                  |
    |               |                |                                  |
    |     %x000B    |      T_ORG     |    Vendor Specific Information   |
    |               |                |          (Section 3.3.2)         |
