@@ -68,19 +68,20 @@
       </address>
     </author>
     <author fullname="Ignacio Solis" initials="I." surname="Solis">
-      <organization>TBD</organization>
+      <organization>LinkedIn</organization>
       <address>
-        <postal>
-          <street/>
-          <!-- Reorder these if your country does things differently -->
-          <city>TBD</city>
-          <region>California</region>
-          <code>TBD</code>
-          <country>USA</country>
-        </postal>
-        <email>isolis@igso.net</email>
-        <!-- uri and facsimile elements may also be added -->
-      </address>
+       <postal>
+          <street></street>
+         <!-- Reorder these if your country does things differently -->
+         <city>Mountain View</city>
+         <region>California</region>
+         <code>94043</code>
+         <country>USA</country>
+       </postal>
+       <phone></phone>
+       <email>nsolis@linkedin.com</email>
+       <!-- uri and facsimile elements may also be added -->
+     </address>
     </author>
     <author fullname="Christopher Wood" initials="C." surname="Wood">
       <organization>PARC, Inc.</organization>
@@ -497,7 +498,7 @@ SigTime       := AbsTime
             </t>
             <t>If the Interest has a Validation section, verify the ValidationPayload.
               Usually an Interest will only have a CRC32C unless the publisher application
-              specifically accomodates other validations.
+              specifically accommodates other validations.
               The publisher MAY choose to drop Interests that carry a Validation section if
               the publisher application does not expect those signatures as this could be
               a form of computational denial of service.  If the signature requires a key
@@ -543,36 +544,137 @@ SigTime       := AbsTime
           </t>          
         </section>
 
-        <section anchor="aggregation" title="Interest Aggregation">
-          <t>INTERST AGGREGATION RULES</t>
+            <section anchor="aggregation" title="Interest Aggregation">
+            <t>Interest aggregation is when a forwarder receives an Interest message that
+              could be satisfied by another Interest message already forwarded by the node so the
+              forwarder suppresses the new Interest; it only records the additional previous hop
+              so a Content Object sent in response to the first Interest will satisfy both Interests.
+          </t>
+            <t>CCNx uses an interest aggregation rule that assumes the InterestLifetime is 
+               akin to a subscription time and is not a network round trip time.  Some previous
+               aggregation rules assumed the lifetime was a round trip time, but this leads to
+               problems of expiring an Interest before a response comes if the RTT is estimated
+               too short or interfering with an ARQ scheme that wants to re-transmit an Interest
+               but a prior interest over-estimated the RTT.
+          </t>
+            <t>A forwarder MAY implement an Interest aggregation scheme.  If it does not, then
+               it will forward all Interest messages.  This does not imply that multiple,
+               possibly identical, Content Objects will come back.  A forwarder MUST still
+               satisfy all pending Interests, so one Content Object could satisfy multiple
+               similar interests, even if the forwarded did not suppress duplicate Interest
+               messages.
+          </t>
+            <t>A RECOMMENDED Interest aggregation scheme is:
+            <list style="symbols">
+            <t>Two Interests are considered 'similar' if they have the same Name, KeyIdRestr, and ObjHashRestr.
+          </t>
+            <t>Let the notional value InterestExpiry (a local value at the forwarder) be equal to
+               the receive time plus the InterestLifetime (or a platform-dependent default value if not present).
+          </t>
+            <t>An Interest record (PIT entry) is considered invalid if its InterestExpiry time is in the past.
+          </t>
+            <t>The first reception of an Interest MUST be forwarded.
+          </t>
+            <t>A second or later reception of an Interest similar to a valid pending Interest
+               from the same previous hop MUST be forwarded.  We consider these a retransmission request.
+          </t>
+            <t>A second or later reception of an Interest similar to a valid pending Interest 
+            from a new previous hop MAY be aggregated (not forwarded).
+          </t>
+            <t>Aggregating an Interest MUST extend the InterestExpiry time of the Interest record.
+               An implementation MAY keep a single InterestExpiry time for all previous hops
+               or MAY keep the InterestExpiry time per previous hop.  In the first case, the forwarder
+               might send a ContentObject down a path that is no longer waiting for it, in which case
+               the previous hop (next hop of the Content Object) would drop it.
+          </t>
+          </list>
+          </t>
+
+
         </section>
         
-        <section anchor="interest_pipe" title="Interest Pipeline">
-          <t>
-            <list style="numbered">
-              <t>Determine if the Interest can be aggregated, as per <xref target="aggregation"/>.  If
-                it can be, aggreagte and do not forward the Interest.
+        <section anchor="contentstore" title="ContentStore Behavior">
+          <t>The ContentStore is a special cache that sits on the fast path of a CCNx forwarder.
+            It is an optional component.  It serves to repair lost packets and handle flash requests
+            for popular content.  It could be pre-populated or use opportunistic caching.
+            Because the Content Store could serve to amplify an attach via cache poisoning, there
+            are special rules about how a Content Store behaves.
+            <list style="numbers">
+              <t>A forwarder MAY implement a ContentStore.  If it does, the Content Store
+                matches a Content Object to an Interest via the normal matching rules (see <xref target="matching"/>).
               </t>
-              <t>If forwarding the Interest, check for a hit in the Content Store.  If a matching
-                Content Object is found, return it to the Interest's previous hop.
+              <t>If an Interest has a KeyIdRestr, then the ContentStore MUST NOT reply unless it knows
+                the signature on the matching ContentObject is correct.  It may do this by external knowledge
+                (i.e. in a managed system pre-populating the cachine) or by having the public key and
+                cryptographically verifying the signature.  If the public key is provided in the ContentObject
+                itself (i.e. in the PublicKey field) or in the Interest, the ContentStore MUST verify that
+                the public key's SHA-256 hash is equal to the KeyId and that it verifies the signature.
+                A ContentStore SHOULD NOT fetch keys over the
+                network.  If it cannot verify the signature, it should treat the Interest as a cache miss.
+              </t>
+              <t>If an Interest has an ObjHashRestr, then the ContentStore MUST NOT reply unless it
+                knows the the matching ContentObject has the correct hash.  If it cannot verify the
+                hash, then it should treat the Interest as a cache miss.
+              </t>
+              <t>It must object the Cache Control directives (see <xref target="cachecontrol"/>).
               </t>
             </list>
           </t>
         </section>
         
+        <section anchor="interest_pipe" title="Interest Pipeline">
+          <t>
+            <list style="numbers">
+              <t>Perform the hoplimit check (see <xref target="hoplimit"/>).
+              </t>
+              <t>Determine if the Interest can be aggregated, as per <xref target="aggregation"/>.  If
+                it can be, aggregate and do not forward the Interest.
+              </t>
+              <t>If forwarding the Interest, check for a hit in the Content Store, as
+                per <xref target="contentstore"/>.  If a matching
+                Content Object is found, return it to the Interest's previous hop.  This
+                injects the ContentStore as per <xref target="object_pipe"/>.
+              </t>
+              <t>Lookup the Interest in the FIB.  The longest prefix match (LPM) is performed
+                name segment by name segment (not byte or bit).  It should exclude the
+                Interest's previous hop.  If a match is found, forward the Interest.
+                If no match is found or the forwarder choses to not forward due to
+                a local condition (e.g. congestion), it SHOULD send an InterestReturn
+                message, as per <xref target="InterestReturn"/>.</t>
+            </list>
+          </t>
+        </section>
+        
         <section anchor="object_pipe" title="Content Object Pipeline">
+          <t>
+            <list style="numbers">
+              <t>It is RECOMMENDED that a forwarder that receives a content object
+                check that the ContentObject came from an expected previous hop.  An
+                expected previous hop is one pointed to by the FIB or one recorded in the
+                PIT as having had a matching Interest sent that way.
+              </t>
+              <t>A Content Object MUST be matched to all pending Interests that
+                satisfy the matching rules (see <xref target="matching"/>).  Each statisfied
+                pending Interest MUST then be removed from the set of pending Interests.
+              </t>
+              <t>A forwarder SHOULD NOT send more then one copy of the received
+                Content Object to the same Interest previous hop.  It may happen, for example,
+                that two Interest ask for the same Content Object different ways (e.g. by name
+                and by name an keyid) and that they both come from the same previous hop.
+                It is normal to send
+                the same content object multiple times on the same interface, such as Ethernet,
+                if it is going to different previous hops.
+              </t>
+              <t>A Content Object SHOULD only be put in the Content Store if it satisfied
+                an Interest (and passed rule #1 above).  This is to reduce the chances
+                of cache poisoning.
+              </t>
+            </list>
+          </t>
         </section>
         
       </section>
-      
-      
     </section>
-    
-    
-    
-    
-    
-        
     
     <section anchor="names" title="Names">
       <t>A CCNx name is a composition of name segments. Each name segment carries a label
@@ -639,8 +741,27 @@ SigTime       := AbsTime
 
     </section>
     
-      <section anchor="cachecontrol" title="Cache Control">
-        <t>CACHE CONTROL RULES</t>
+    <section anchor="cachecontrol" title="Cache Control">
+      <t>CCNx supports two fields that affect cache control.  These determine how a
+        cache or Content Store handles a Content Object.  They are not used in the fast path,
+        but only to determine if a ContentObject can be injected on to the fast path in response
+        to an Interest.
+      </t>
+      <t>The ExpiryTime is a field that exists within the signature envelope of a Validation Algorithm.
+        It is the UTC time in milliseconds after which the ContentObject is considered expired and MUST
+        no longer be used to respond to an Interest from a cache.
+      </t>
+      <t>The Recommended Cache Time (RCT) is a field that exists outside the signature envelope.
+        It is the UTC time in milliseconds after which the publisher considers the Content Object to be
+        of low value to cache.  A cache SHOULD discard it after the RCT, though it MAY keep it and still
+        respond with it.  A cache is MAY discard the content object before the RCT time too; there is
+        no contractual obligaton to remember anything.
+      </t>
+      <t>This formulation allows a producer to create a Content Object with a long ExpiryTime
+        but short RCT and keep re-publishing the same, signed, Content Object over and over again
+        by extending the RCT.  This allows a form of "phone home" where the publisher wants to
+        periodically see that the content is being used.
+      </t>
       </section>
     
     <section anchor="ConObjHash" title="Content Object Hash">
@@ -747,7 +868,7 @@ SigTime       := AbsTime
         the Content Object cannot match an Interest with a KeyIdRestriction.</t>
     </section>
 
-    <section title="Interest Return">
+    <section anchor="InterestReturn" title="Interest Return">
       <t>This section describes the process whereby a network element may return an Interest message
         to a previous hop if there is an error processing the Interest. The returned Interest may be
         further processed at the previous hop or returned towards the Interest origin.
@@ -906,9 +1027,9 @@ SigTime       := AbsTime
     <section anchor="Security" title="Security Considerations">
       <t>The Interest Return message has no authenticator from the previous hop.  Therefore, the payload of the Interest Return
         should only be used locally to match an Interest.  A node should never forward that Interest payload as an Interest.
-        It should also verify that it send the Interest in the Interest Return to that node and not allow anyone to negate
+        It should also verify that it sent the Interest in the Interest Return to that node and not allow anyone to negate
         Interest messages.</t>
-      <t>If two peers require authenticated messaging, they must use an external mechanism.</t>
+      <t>If two peers require authenticated messaging, they must use an external mechanism such as MACSEC.</t>
     </section>
   </middle>
   <!--  *****BACK MATTER ***** -->

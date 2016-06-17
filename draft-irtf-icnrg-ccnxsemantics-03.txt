@@ -4,10 +4,10 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
 Intended status: Experimental                                   I. Solis
-Expires: December 11, 2016                                           TBD
+Expires: December 19, 2016                                      LinkedIn
                                                                  C. Wood
                                                               PARC, Inc.
-                                                            June 9, 2016
+                                                           June 17, 2016
 
 
                              CCNx Semantics
@@ -42,7 +42,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 11, 2016.
+   This Internet-Draft will expire on December 19, 2016.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Mosko, et al.           Expires December 11, 2016               [Page 1]
+Mosko, et al.           Expires December 19, 2016               [Page 1]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
@@ -108,7 +108,7 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016               [Page 2]
+Mosko, et al.           Expires December 19, 2016               [Page 2]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
@@ -122,40 +122,41 @@ Table of Contents
      2.1.  Message Grammar  . . . . . . . . . . . . . . . . . . . . .  8
      2.2.  Consumer Behavior  . . . . . . . . . . . . . . . . . . . . 11
      2.3.  Publisher Behavior . . . . . . . . . . . . . . . . . . . . 12
-     2.4.  Forwarder Behavior . . . . . . . . . . . . . . . . . . . . 12
-   3.  Named Payload  . . . . . . . . . . . . . . . . . . . . . . . . 13
-   4.  Names  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
-     4.1.  Name Examples  . . . . . . . . . . . . . . . . . . . . . . 15
-   5.  Interests  . . . . . . . . . . . . . . . . . . . . . . . . . . 16
-     5.1.  Interest Aggregation . . . . . . . . . . . . . . . . . . . 17
-   6.  Content Objects  . . . . . . . . . . . . . . . . . . . . . . . 18
-     6.1.  Cache Control  . . . . . . . . . . . . . . . . . . . . . . 18
-     6.2.  Content Object Hash  . . . . . . . . . . . . . . . . . . . 18
-   7.  Link . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
-   8.  Hashes . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
-   9.  Validation . . . . . . . . . . . . . . . . . . . . . . . . . . 22
-     9.1.  Validation Algorithm . . . . . . . . . . . . . . . . . . . 22
-   10. Interest to Content Object matching  . . . . . . . . . . . . . 23
-   11. Request/Response Protocol  . . . . . . . . . . . . . . . . . . 24
-   12. Interest Return  . . . . . . . . . . . . . . . . . . . . . . . 25
-     12.1. Message Format . . . . . . . . . . . . . . . . . . . . . . 25
-     12.2. ReturnCode Types . . . . . . . . . . . . . . . . . . . . . 26
-     12.3. Interest Return Protocol . . . . . . . . . . . . . . . . . 26
-       12.3.1.  No Route  . . . . . . . . . . . . . . . . . . . . . . 27
-       12.3.2.  HopLimit Exceeded . . . . . . . . . . . . . . . . . . 28
-       12.3.3.  Interest MTU Too Large  . . . . . . . . . . . . . . . 28
-       12.3.4.  No Resources  . . . . . . . . . . . . . . . . . . . . 28
-       12.3.5.  Path Error  . . . . . . . . . . . . . . . . . . . . . 28
-       12.3.6.  Prohibited  . . . . . . . . . . . . . . . . . . . . . 28
-       12.3.7.  Congestion  . . . . . . . . . . . . . . . . . . . . . 28
-       12.3.8.  Unsupported Content Object Hash Algorithm . . . . . . 29
-       12.3.9.  Malformed Interest  . . . . . . . . . . . . . . . . . 29
-   13. Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 30
-   14. IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 31
-   15. Security Considerations  . . . . . . . . . . . . . . . . . . . 32
-   16. References . . . . . . . . . . . . . . . . . . . . . . . . . . 33
-     16.1. Normative References . . . . . . . . . . . . . . . . . . . 33
-     16.2. Informative References . . . . . . . . . . . . . . . . . . 33
+     2.4.  Forwarder Behavior . . . . . . . . . . . . . . . . . . . . 13
+       2.4.1.  Interest HopLimit  . . . . . . . . . . . . . . . . . . 13
+       2.4.2.  Interest Aggregation . . . . . . . . . . . . . . . . . 14
+       2.4.3.  ContentStore Behavior  . . . . . . . . . . . . . . . . 15
+       2.4.4.  Interest Pipeline  . . . . . . . . . . . . . . . . . . 15
+       2.4.5.  Content Object Pipeline  . . . . . . . . . . . . . . . 16
+   3.  Names  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+     3.1.  Name Examples  . . . . . . . . . . . . . . . . . . . . . . 18
+     3.2.  Interest Payload ID  . . . . . . . . . . . . . . . . . . . 18
+   4.  Cache Control  . . . . . . . . . . . . . . . . . . . . . . . . 19
+   5.  Content Object Hash  . . . . . . . . . . . . . . . . . . . . . 20
+   6.  Link . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+   7.  Hashes . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+   8.  Validation . . . . . . . . . . . . . . . . . . . . . . . . . . 23
+     8.1.  Validation Algorithm . . . . . . . . . . . . . . . . . . . 23
+   9.  Interest to Content Object matching  . . . . . . . . . . . . . 24
+   10. Interest Return  . . . . . . . . . . . . . . . . . . . . . . . 25
+     10.1. Message Format . . . . . . . . . . . . . . . . . . . . . . 25
+     10.2. ReturnCode Types . . . . . . . . . . . . . . . . . . . . . 26
+     10.3. Interest Return Protocol . . . . . . . . . . . . . . . . . 26
+       10.3.1. No Route . . . . . . . . . . . . . . . . . . . . . . . 27
+       10.3.2. HopLimit Exceeded  . . . . . . . . . . . . . . . . . . 28
+       10.3.3. Interest MTU Too Large . . . . . . . . . . . . . . . . 28
+       10.3.4. No Resources . . . . . . . . . . . . . . . . . . . . . 28
+       10.3.5. Path Error . . . . . . . . . . . . . . . . . . . . . . 28
+       10.3.6. Prohibited . . . . . . . . . . . . . . . . . . . . . . 28
+       10.3.7. Congestion . . . . . . . . . . . . . . . . . . . . . . 28
+       10.3.8. Unsupported Content Object Hash Algorithm  . . . . . . 29
+       10.3.9. Malformed Interest . . . . . . . . . . . . . . . . . . 29
+   11. Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 30
+   12. IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 31
+   13. Security Considerations  . . . . . . . . . . . . . . . . . . . 32
+   14. References . . . . . . . . . . . . . . . . . . . . . . . . . . 33
+     14.1. Normative References . . . . . . . . . . . . . . . . . . . 33
+     14.2. Informative References . . . . . . . . . . . . . . . . . . 33
    Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 34
 
 
@@ -163,8 +164,7 @@ Table of Contents
 
 
 
-
-Mosko, et al.           Expires December 11, 2016               [Page 3]
+Mosko, et al.           Expires December 19, 2016               [Page 3]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
@@ -220,7 +220,7 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016               [Page 4]
+Mosko, et al.           Expires December 19, 2016               [Page 4]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
@@ -276,7 +276,7 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016               [Page 5]
+Mosko, et al.           Expires December 19, 2016               [Page 5]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
@@ -305,16 +305,17 @@ Internet-Draft               CCNx Semantics                    June 2016
 
    The notional PIT table stores the last hop of an Interest plus its
    Name and optional restrictions.  This is the data required to match a
-   Content Object to an Interest (see Section 10).  When a Content
-   Object arrives, it must be matched against the PIT to determine which
+   Content Object to an Interest (see Section 9).  When a Content Object
+   arrives, it must be matched against the PIT to determine which
    entries it satisfies.  For each such entry, at most one copy of the
    Content Object is sent to each listed last hop in the PIT entries.
 
    If multiple Interests with the same tuple {Name, KeyIdRestriction,
    ContentObjectHashRestriction} arrive at a node before a Content
    Object matching the first Interest comes back, they are grouped in
-   the same PIT entry and their last hops aggregated (see Section 5.1).
-   Thus, one Content Object might satisfy multiple pending Interests.
+   the same PIT entry and their last hops aggregated (see
+   Section 2.4.2).  Thus, one Content Object might satisfy multiple
+   pending Interests.
 
    In CCNx, higher-layer protocols often become so-called "name-based
    protocols" because they operate on the CCNx Name.  For example, a
@@ -328,15 +329,15 @@ Internet-Draft               CCNx Semantics                    June 2016
    This document also describes a control message called an
    InterestReturn.  A network element may return an Interest message to
    a previous hop if there is an error processing the Interest.  The
-   returned Interest may be further processed at the previous hop or
 
 
 
-Mosko, et al.           Expires December 11, 2016               [Page 6]
+Mosko, et al.           Expires December 19, 2016               [Page 6]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
+   returned Interest may be further processed at the previous hop or
    returned towards the Interest origin.  When a node returns an
    Interest it indicates that the previous hop should not expect a
    response from that node for the Interest -- i.e. there is no PIT
@@ -387,8 +388,7 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-
-Mosko, et al.           Expires December 11, 2016               [Page 7]
+Mosko, et al.           Expires December 19, 2016               [Page 7]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
@@ -417,7 +417,7 @@ Internet-Draft               CCNx Semantics                    June 2016
 
    o  CacheTime: The absolute time after which the publisher believes
       there is low value in caching the content object.  This is a
-      recommendation to caches (see Section 6.1).
+      recommendation to caches (see Section 4).
 
    o  ConObjField: These are optional fields that may appear in a
       Content Object.
@@ -426,10 +426,15 @@ Internet-Draft               CCNx Semantics                    June 2016
       SHA256-32 over the message from the beginning of the body to the
       end of the message.  Note that this coverage area is different
       from the ValidationAlg.  This value SHOULD NOT be trusted across
-      domains (see Section 6.2).
+      domains (see Section 5).
 
    o  ExpiryTime: An absolute time after which the content object should
-      be considered expired (see Section 6.1).
+      be considered expired (see Section 4).
+
+   o  HopLimit: Interest messages may loop if there are loops in the
+      forwarding plane.  To eventually terminate loops, each Interest
+      carries a HopLimit that is decremented after each hop and no
+      longer forwarded when it reaches zero.  See Section 2.4.
 
    o  InterestField: These are optional fields that may appear in an
       Interest message.
@@ -437,24 +442,23 @@ Internet-Draft               CCNx Semantics                    June 2016
    o  KeyIdRestr: The KeyId Restriction.  A Content Object must have a
       KeyId with the same value as the restriction.
 
-   o  ObjHashRestr: The Content Object Hash Restriction.  A content
-      object must hash to the same value as the restriction using the
-      same HashType.  The ObjHashRestr MUST use SHA256-32.
 
 
-
-
-Mosko, et al.           Expires December 11, 2016               [Page 8]
+Mosko, et al.           Expires December 19, 2016               [Page 8]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
+
+   o  ObjHashRestr: The Content Object Hash Restriction.  A content
+      object must hash to the same value as the restriction using the
+      same HashType.  The ObjHashRestr MUST use SHA256-32.
 
    o  KeyId: An identifier for the key used in the ValidationAlg.  For
       public key systems, this should be the SHA-256 hash of the public
       key.  For symmetric key systems, it should be an identifer agreed
       upon by the parties.
 
-   o  KeyLink: A Link (see Section 7) that names how to retrieve the key
+   o  KeyLink: A Link (see Section 6) that names how to retrieve the key
       used to verify the ValidationPayload.  A message SHOULD NOT have
       both a KeyLink and a PublicKey.
 
@@ -466,14 +470,14 @@ Internet-Draft               CCNx Semantics                    June 2016
       zero or more additional segments, which may be of 0 length.  Path
       segments are opaque octet strings, and are thus case-sensitive if
       encoding UTF-8.  An Interest MUST have a Name.  A ContentObject
-      MAY have a Name (see Section 10).
+      MAY have a Name (see Section 9).
 
    o  Payload: The message's data, as defined by PayloadType.
 
    o  PayloadType: The format of the Payload.  If missing, assume
       DataType.  DataType means the payload is opaque application bytes.
       KeyType means the payload is a DER-encoded public key.  LinkType
-      means it is a Link (see Section 7).
+      means it is a Link (see Section 6).
 
    o  PublicKey: Some applications may wish to embed the public key used
       to verify the signature within the message itself.  The PublickKey
@@ -483,7 +487,7 @@ Internet-Draft               CCNx Semantics                    June 2016
    o  RelTime: A relative time, measured in milli-seconds.
 
    o  ReturnCode: States the reason an Interest message is being
-      returned to the previous hop (see Section 12.2).
+      returned to the previous hop (see Section 10.2).
 
    o  SigTime: The absolute time (UTC milliseconds) when the signature
       was generated.
@@ -496,17 +500,13 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-
-
-
-
-Mosko, et al.           Expires December 11, 2016               [Page 9]
+Mosko, et al.           Expires December 19, 2016               [Page 9]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
    Message       := Interest / ContentObject / InterestReturn
-   Interest      := [Lifetime] BodyName [Validation]
+   Interest      := HopLimit [Lifetime] BodyName [Validation]
    ContentObject := [CacheTime / ConObjHash] BodyOptName [Validation]
    InterestReturn:= ReturnCode Interest
    BodyName      := Name Common
@@ -533,6 +533,7 @@ Internet-Draft               CCNx Semantics                    June 2016
    Field         := InterestField / ConObjField
    Hash          := HashType 1* OCTET
    HashType      := SHA256-32 / SHA512-64 / SHA512-32
+   HopLimit      := OCTET
    InterestField := KeyIdRestr / ObjHashRestr
    KeyId         := 1* OCTET ; key identifier
    KeyIdRestr    := 1* OCTET
@@ -555,8 +556,7 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-
-Mosko, et al.           Expires December 11, 2016              [Page 10]
+Mosko, et al.           Expires December 19, 2016              [Page 10]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
@@ -571,13 +571,35 @@ Internet-Draft               CCNx Semantics                    June 2016
    being aggregated with other Interests or satisfied by a Content
    Object that has no relation to the validation.
 
+   A consumer MAY put a Payload field in an Interest to send additional
+   data to the producer beyond what is in the Name.  The Name is used
+   for routing and may be rememberd at each hop in the notional PIT
+   table to facilitate returning a content object, so storing large
+   amounts of state in the Name could lead to high memory requirements.
+   Because the Payload is not considered when forwarding an Interest or
+   matching a Content Object to an Interest, a consumer SHOULD put an
+   Interest Payload ID (see Section 3.2) as part of the name to allow a
+   forwarder to match Interests to content objects and avoid aggregating
+   Interests with different payloads.
+
+   The consumer SHOULD specify an InterestLifetime, which is the length
+   of time the consumer is willing to wait for a response.  The
+   InterestLifetime is an application-scale time, not a network round
+   trip time (see Section 2.4.2).  If not present, the InterestLifetime
+   will use a default value (TO_INTERESTLIFETIME).
+
+   The consumer SHOULD set the Interest HopLimit to a reasonable value,
+   or use the default 255.  If the consumer knows the distances to the
+   producer via routing, it SHOULD use that value.
+
    A consumer hands off the Interest to its first forwarder, which will
    convey the Interest over the network to a publisher (or replica) that
    may satisfy it based on the name (see Section 2.4).
 
    Interest messages are unreliable.  A consumer SHOULD run a transport
-   protocol that will retry the Interest if it goes unanswered.  No
-   transport protocol is specified in this document.
+   protocol that will retry the Interest if it goes unanswered, up to
+   the InterestLifetime.  No transport protocol is specified in this
+   document.
 
    The network MAY send to the consumer an InterestReturn message that
    indicates the network cannot fulfill the Interest.  The ReturnCode
@@ -587,6 +609,13 @@ Internet-Draft               CCNx Semantics                    June 2016
 
    If the content was found and returned by the first forwarder, the
    consumer will receive a ContentObject.  The consumer SHOULD:
+
+
+
+Mosko, et al.           Expires December 19, 2016              [Page 11]
+
+Internet-Draft               CCNx Semantics                    June 2016
+
 
    o  Ensure the content object is properly formatted.
 
@@ -609,14 +638,6 @@ Internet-Draft               CCNx Semantics                    June 2016
       trustworthiness of the signing key to the namespace.  Such an
       assertion is beyond the scope of this document, though one may use
       traditional PKI methods, a trusted key resolution service, or
-
-
-
-Mosko, et al.           Expires December 11, 2016              [Page 11]
-
-Internet-Draft               CCNx Semantics                    June 2016
-
-
       methods like [schematized trust].
 
    o  It MAY cache the content object for future use, up to the
@@ -630,106 +651,253 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 2.3.  Publisher Behavior
 
+   This document does not specify the method by which names populate a
+   Forwarding Information Base (FIB) table at forwarders (see
+   Section 2.4).  A publisher is either configured with one or more name
+   prefixes under which it may create content, or it chooses its name
+   prefixes and informs the routing layer to advertise those prefixes.
+
+   When a publisher receives an Interest, it SHOULD:
+
+   o  Verify that the Interest is part of the publishers namespace(s).
+
+   o  If the Interest has a Validation section, verify the
+      ValidationPayload.  Usually an Interest will only have a CRC32C
+      unless the publisher application specifically accommodates other
+      validations.  The publisher MAY choose to drop Interests that
+
+
+
+Mosko, et al.           Expires December 19, 2016              [Page 12]
+
+Internet-Draft               CCNx Semantics                    June 2016
+
+
+      carry a Validation section if the publisher application does not
+      expect those signatures as this could be a form of computational
+      denial of service.  If the signature requires a key that the
+      publisher does not have, it is NOT RECOMMENDED that the publisher
+      fetch the key over the network, unless it is part of the
+      application's expected behavior.
+
+   o  Retrieve or generate the requested content object and return it to
+      the Interest's previous hop.  If the requested content cannot be
+      returned, the publisher SHOULD reply with an InterestReturn or a
+      content object with application payload that says the content is
+      not available; this content object should have a short ExpiryTime
+      in the future.
+
 2.4.  Forwarder Behavior
 
+   A forwarder routes Interest messages based on a Forwarding
+   Information Base (FIB), returns Content Objects that match Interests
+   to the Interest's previous hop, and processed InterestReturn control
+   messages.  It may also keep a cache of Content Objects in the
+   notional Content Store table.  This document does not specify the
+   internal behavior of a forwarder, only these and other external
+   behaviors.
+
+   In this document, we will use two processing pipelines, one for
+   Interests and one for Content Objects.  Interest processing is made
+   up of checking for duplicate Interests in the PIT (see
+   Section 2.4.2), checking for a cached Content Object in the Content
+   Store (see Section 2.4.3), and forwarding an Interest via the FIB.
+   Content Store processing is made up of checking for matching
+   Interests in the PIT and forwarding to those previous hops.
+
+2.4.1.  Interest HopLimit
+
+   Interest looping is not prevented in CCNx.  An Interest traversing
+   loops is eventually discarded using the hop-limit field of the
+   Interest, which is decremented at each hop traversed by the Interest.
+
+   Every Interest MUST carry a HopLimit.
+
+   When an Interest is received from another forwarder, the HopLimit
+   MUST be positive.  It MUST be decremented by at least 1.
+
+   If the HopLimit equals 0, the Interest MUST NOT be forwarded to
+   another forwarder; it MAY be sent to a publisher application or
+   serviced from a local Content Store.
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko, et al.           Expires December 11, 2016              [Page 12]
+Mosko, et al.           Expires December 19, 2016              [Page 13]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-3.  Named Payload
+2.4.2.  Interest Aggregation
 
-   CCNx supports several cryptographic means to bind a Name to a
-   payload.  Interest and Content Object messages include a section
-   called the ValidationAlgorithm, which specifies the algorithm to use
-   to verify the binding.  Several validation algorithms are supported
-   including specific Message Integrity Checks (MICs), Message
-   Authentication Codes (MACs), and Signature types.  These are over
-   specific wire format encodings.  Additional schemes could be added in
-   the future.  Interest and Content Object messages also include a
-   section called the ValidationPayload which contains the validation
-   output.
+   Interest aggregation is when a forwarder receives an Interest message
+   that could be satisfied by another Interest message already forwarded
+   by the node so the forwarder suppresses the new Interest; it only
+   records the additional previous hop so a Content Object sent in
+   response to the first Interest will satisfy both Interests.
 
-   The KeyId is an optional field in the ValidationAlgorithm.  It is an
-   octet string that identifies the key used to sign the Content Object.
-   It uniquely identifies the publisher.  It is similar to a Subject Key
-   Identifier from X509 [RFC 3280, Section 4.2.1.2].  It should be
-   derived from the key used to sign, for example SHA-256 hash of the
-   key.  It applies to both public/private key systems and to symmetric
-   key systems using HMAC.
+   CCNx uses an interest aggregation rule that assumes the
+   InterestLifetime is akin to a subscription time and is not a network
+   round trip time.  Some previous aggregation rules assumed the
+   lifetime was a round trip time, but this leads to problems of
+   expiring an Interest before a response comes if the RTT is estimated
+   too short or interfering with an ARQ scheme that wants to re-transmit
+   an Interest but a prior interest over-estimated the RTT.
 
-   A PublicKeyLocator is an optional field in the ValidationAlgorithm.
-   It may be one of (a) the signer's public key, (b) the signer's
-   certificate, or (c) a KeyName that points to the location of the
-   signer's key or certificate.
+   A forwarder MAY implement an Interest aggregation scheme.  If it does
+   not, then it will forward all Interest messages.  This does not imply
+   that multiple, possibly identical, Content Objects will come back.  A
+   forwarder MUST still satisfy all pending Interests, so one Content
+   Object could satisfy multiple similar interests, even if the
+   forwarded did not suppress duplicate Interest messages.
 
-   A Key inside a PublicKeyLocator is a public key corresponding to the
-   signer's private key.  Examples would be PEM or DER encodings.  The
-   exact encoding is up to the wire format.
+   A RECOMMENDED Interest aggregation scheme is:
 
-   A Certificate is an X.509 certificate of the signer's public key.
-   Examples would be PEM or DER encodings of the certificate.  The exact
-   encoding is up to the wire format.
+   o  Two Interests are considered 'similar' if they have the same Name,
+      KeyIdRestr, and ObjHashRestr.
 
-   A KeyName is a CCNx Name and optional signer's KeyId of that name's
-   publisher.  The CCNx Name points to a Key or Certificate.  The
-   KeyName signer KeyId is of the signer of the target name's Content
-   Object, not of the target key or certificate.
+   o  Let the notional value InterestExpiry (a local value at the
+      forwarder) be equal to the receive time plus the InterestLifetime
+      (or a platform-dependent default value if not present).
 
-   A SignatureTime is an optional field in the ValidationAlgorithm.  It
-   may be used as part of the signature validation check to ensure the
-   signature was generated around the expected time.  In particular, if
-   the public key is conveyed in a certificate with a validity period,
-   the verifying system may enforce that the signature came from a
-   corresponding period.  Some verifiers might determine a signature
-   without a SignatureTime to be invalid.
+   o  An Interest record (PIT entry) is considered invalid if its
+      InterestExpiry time is in the past.
+
+   o  The first reception of an Interest MUST be forwarded.
+
+   o  A second or later reception of an Interest similar to a valid
+      pending Interest from the same previous hop MUST be forwarded.  We
+      consider these a retransmission request.
+
+   o  A second or later reception of an Interest similar to a valid
+      pending Interest from a new previous hop MAY be aggregated (not
+      forwarded).
+
+   o  Aggregating an Interest MUST extend the InterestExpiry time of the
+      Interest record.  An implementation MAY keep a single
+      InterestExpiry time for all previous hops or MAY keep the
 
 
 
-
-
-Mosko, et al.           Expires December 11, 2016              [Page 13]
+Mosko, et al.           Expires December 19, 2016              [Page 14]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-4.  Names
+      InterestExpiry time per previous hop.  In the first case, the
+      forwarder might send a ContentObject down a path that is no longer
+      waiting for it, in which case the previous hop (next hop of the
+      Content Object) would drop it.
+
+2.4.3.  ContentStore Behavior
+
+   The ContentStore is a special cache that sits on the fast path of a
+   CCNx forwarder.  It is an optional component.  It serves to repair
+   lost packets and handle flash requests for popular content.  It could
+   be pre-populated or use opportunistic caching.  Because the Content
+   Store could serve to amplify an attach via cache poisoning, there are
+   special rules about how a Content Store behaves.
+
+   1.  A forwarder MAY implement a ContentStore.  If it does, the
+       Content Store matches a Content Object to an Interest via the
+       normal matching rules (see Section 9).
+
+   2.  If an Interest has a KeyIdRestr, then the ContentStore MUST NOT
+       reply unless it knows the signature on the matching ContentObject
+       is correct.  It may do this by external knowledge (i.e. in a
+       managed system pre-populating the cachine) or by having the
+       public key and cryptographically verifying the signature.  If the
+       public key is provided in the ContentObject itself (i.e. in the
+       PublicKey field) or in the Interest, the ContentStore MUST verify
+       that the public key's SHA-256 hash is equal to the KeyId and that
+       it verifies the signature.  A ContentStore SHOULD NOT fetch keys
+       over the network.  If it cannot verify the signature, it should
+       treat the Interest as a cache miss.
+
+   3.  If an Interest has an ObjHashRestr, then the ContentStore MUST
+       NOT reply unless it knows the the matching ContentObject has the
+       correct hash.  If it cannot verify the hash, then it should treat
+       the Interest as a cache miss.
+
+   4.  It must object the Cache Control directives (see Section 4).
+
+2.4.4.  Interest Pipeline
+
+   1.  Perform the hoplimit check (see Section 2.4.1).
+
+   2.  Determine if the Interest can be aggregated, as per
+       Section 2.4.2.  If it can be, aggregate and do not forward the
+       Interest.
+
+   3.  If forwarding the Interest, check for a hit in the Content Store,
+       as per Section 2.4.3.  If a matching Content Object is found,
+       return it to the Interest's previous hop.  This injects the
+
+
+
+Mosko, et al.           Expires December 19, 2016              [Page 15]
+
+Internet-Draft               CCNx Semantics                    June 2016
+
+
+       ContentStore as per Section 2.4.5.
+
+   4.  Lookup the Interest in the FIB.  The longest prefix match (LPM)
+       is performed name segment by name segment (not byte or bit).  It
+       should exclude the Interest's previous hop.  If a match is found,
+       forward the Interest.  If no match is found or the forwarder
+       choses to not forward due to a local condition (e.g. congestion),
+       it SHOULD send an InterestReturn message, as per Section 10.
+
+2.4.5.  Content Object Pipeline
+
+   1.  It is RECOMMENDED that a forwarder that receives a content object
+       check that the ContentObject came from an expected previous hop.
+       An expected previous hop is one pointed to by the FIB or one
+       recorded in the PIT as having had a matching Interest sent that
+       way.
+
+   2.  A Content Object MUST be matched to all pending Interests that
+       satisfy the matching rules (see Section 9).  Each statisfied
+       pending Interest MUST then be removed from the set of pending
+       Interests.
+
+   3.  A forwarder SHOULD NOT send more then one copy of the received
+       Content Object to the same Interest previous hop.  It may happen,
+       for example, that two Interest ask for the same Content Object
+       different ways (e.g. by name and by name an keyid) and that they
+       both come from the same previous hop.  It is normal to send the
+       same content object multiple times on the same interface, such as
+       Ethernet, if it is going to different previous hops.
+
+   4.  A Content Object SHOULD only be put in the Content Store if it
+       satisfied an Interest (and passed rule #1 above).  This is to
+       reduce the chances of cache poisoning.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.           Expires December 19, 2016              [Page 16]
+
+Internet-Draft               CCNx Semantics                    June 2016
+
+
+3.  Names
 
    A CCNx name is a composition of name segments.  Each name segment
    carries a label identifying the purpose of the name segment, and a
@@ -780,7 +948,7 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 14]
+Mosko, et al.           Expires December 19, 2016              [Page 17]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
@@ -788,7 +956,7 @@ Internet-Draft               CCNx Semantics                    June 2016
    value) for equality.  The Forwarder matches paths segment-by-segment
    against its forwarding table to determine a next hop.
 
-4.1.  Name Examples
+3.1.  Name Examples
 
    This section uses the CCNx URI [CCNxURI] representation of CCNx names
    .
@@ -809,47 +977,7 @@ Internet-Draft               CCNx Semantics                    June 2016
 
                         Table 2: CCNx Name Examples
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko, et al.           Expires December 11, 2016              [Page 15]
-
-Internet-Draft               CCNx Semantics                    June 2016
-
-
-5.  Interests
-
-   An Interest is composed of the tuple {Name, Metadata, Payload,
-   Validator}.  These fields are defined below.  Only the Name is
-   mandatory.  Other fields, if missing, should be interpreted as "do
-   not care".
-
-   Name is a hierarchical path that identifies the resource.  It is
-   matched as described above.
+3.2.  Interest Payload ID
 
    An Interest may also have a Payload which carries state about the
    Interest but is not used to match a Content Object.  If an Interest
@@ -862,68 +990,50 @@ Internet-Draft               CCNx Semantics                    June 2016
    as when it is derived from a hash of the payload.  No system is
    required to verify the IPID.
 
-   An Interest may contain Validation fields including a
-   ValidationAlgorithm section describing the type of validator to use
-   and the ValidationPayload fields containing the output of the
-   validation.  Typically this would only be a MIC - a crc, checksum, or
-   digest.
-
-   An Interest contains additional fields with information about the
-   query.  Two fields - the KeyIdRestriction and
-   ContentObjectHashRestriction - serve as selectors to help identify
-   the specific Content Object that should be returned.
-
-   The Interest Lifetime element specifies the maximum number of
-   milliseconds a Forwarder should retain the Interest in its PIT.  A
-   lifetime of "0" means the requester does not expect a response from
-   the Interest - it serves as a type of notification.  The lifetime is
-   only a guideline for a Forwarder, which may keep an Interest for a
-   shorter or longer time, based on local conditions and system policy.
-   It may change hop to hop if the Interest is delayed for any
-   signifiant amount of time.  It is measured in millisecond resolution,
-   so in fast switching it normally would not need to change.  This
-   field does not affect the matching of Content Objects.
-
-   The Interest HopLimit element is a counter that is decremented with
-   each hop.  It limits the distance an Interest may travel.  The node
-   originating the Interest may put in any value - up to the maximum -
-   in network byte order.  Each node that receives an Interest with a
-   HopLimit decrements the value upon reception.  If the value is 0
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 16]
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.           Expires December 19, 2016              [Page 18]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-   after the decrement, the Interest cannot be forwarded off the node.
-   The PIT entry should also track the maximum HopLimit forwarded.  If
-   an Interest with a longer HopLimit arrives, it should be forwarded
-   even if it is identical to a previously forwarded Interest.
+4.  Cache Control
 
-   Interest looping is not prevented in CCNx.  An Interest traversing
-   loops is eventually discarded using the hop-limit field of the
-   Interest, which is decremented at each hop traversed by the Interest.
-   Other implementations may define additional optional headers, for
-   example Nonces for loop detection, headers for Differentiated
-   Services Code Points (DSCP), or Flow Labels.
+   CCNx supports two fields that affect cache control.  These determine
+   how a cache or Content Store handles a Content Object.  They are not
+   used in the fast path, but only to determine if a ContentObject can
+   be injected on to the fast path in response to an Interest.
 
-5.1.  Interest Aggregation
+   The ExpiryTime is a field that exists within the signature envelope
+   of a Validation Algorithm.  It is the UTC time in milliseconds after
+   which the ContentObject is considered expired and MUST no longer be
+   used to respond to an Interest from a cache.
 
-   INTERST AGGREGATION RULES
+   The Recommended Cache Time (RCT) is a field that exists outside the
+   signature envelope.  It is the UTC time in milliseconds after which
+   the publisher considers the Content Object to be of low value to
+   cache.  A cache SHOULD discard it after the RCT, though it MAY keep
+   it and still respond with it.  A cache is MAY discard the content
+   object before the RCT time too; there is no contractual obligaton to
+   remember anything.
 
-
-
-
-
-
-
-
-
-
-
-
+   This formulation allows a producer to create a Content Object with a
+   long ExpiryTime but short RCT and keep re-publishing the same,
+   signed, Content Object over and over again by extending the RCT.
+   This allows a form of "phone home" where the publisher wants to
+   periodically see that the content is being used.
 
 
 
@@ -948,67 +1058,21 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 17]
+
+
+Mosko, et al.           Expires December 19, 2016              [Page 19]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-6.  Content Objects
-
-   A Content Object is composed of the same tuple as an Interest: {Name,
-   Metadata, Payload, Validator}.
-
-   The Name is an optional field that identifies the contents.  If the
-   name does not exist, then the ContentObject can only be matched by a
-   ContentObjectHashRestriction.
-
-   The Payload of a Content Object holds the upper layer payload.  It
-   may be encrypted, based on outside information or a protocol
-   information header.
-
-   The optional Metadata PayloadType field identifies the type of
-   Content Object: "DATA" implies an opaque payload; "LINK" is a Content
-   Object with an encoded Link as a payload.  "DATA" is the default.
-
-   The optional field ExpiryTime is a millisecond timestamp containing
-   the number of milliseconds since the epoch in UTC of when the
-   contents will expire.  If it is not present, there is no expiration
-   on the Content Object.  The ExpiryTime should be part of the signed
-   information covered by the Validator, if present.
-
-   A publisher or upstream node may include a Recommended Cache Time for
-   Content Objects.  It is represented as the number of milliseconds
-   since the epoch in UTC as the desired minimum time to keep the
-   content object in cache.  This recommendation is a guideline as to
-   the useful lifetime of a Content Object, but may be ignored.  The
-   RecommendedCacheTime should not be covered by the Validator, if
-   present, as nodes may change the value based on their caching.  The
-   ExpiryTime takes precedence over the RecommendedCacheTime, if both
-   exist.
-
-   Other protocols, such as versioning or chunking, could place other
-   kinds of metadata in the Content Object.
-
-6.1.  Cache Control
-
-   CACHE CONTROL RULES
-
-6.2.  Content Object Hash
+5.  Content Object Hash
 
    CCNx allows an Interest to restrict a response to a specific hash.
    The hash covers the message body and the validation section, thus it
    is specific to a given signature.  Because it is part of the matching
-   rules (see Section 10), the hash is used at every hop.
+   rules (see Section 9), the hash is used at every hop.
 
    There are two options for matching the content object hash
-
-
-
-Mosko, et al.           Expires December 11, 2016              [Page 18]
-
-Internet-Draft               CCNx Semantics                    June 2016
-
-
    restriction in an Interest.  First, a forwarder could compute for
    itself the hash value and compare it to the restriction.  This is an
    expensive operation.  The second option is for a border device to
@@ -1052,20 +1116,12 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-
-
-
-
-
-
-
-
-Mosko, et al.           Expires December 11, 2016              [Page 19]
+Mosko, et al.           Expires December 19, 2016              [Page 20]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-7.  Link
+6.  Link
 
    A Link is the tuple {Name, KeyId, ContentObjectHashRestriction}.  The
    information in a Link comprises the fields the fields of an Interest
@@ -1116,12 +1172,12 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 20]
+Mosko, et al.           Expires December 19, 2016              [Page 21]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-8.  Hashes
+7.  Hashes
 
    Several protocol fields use cryptographic hash functions, which must
    be secure against attack and collisions.  Because these hash
@@ -1172,14 +1228,14 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 21]
+Mosko, et al.           Expires December 19, 2016              [Page 22]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-9.  Validation
+8.  Validation
 
-9.1.  Validation Algorithm
+8.1.  Validation Algorithm
 
    The Validator consists of a ValidationAlgorithm that specifies how to
    verify the message and a ValidationPayload containing the validation
@@ -1228,12 +1284,12 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 22]
+Mosko, et al.           Expires December 19, 2016              [Page 23]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-10.  Interest to Content Object matching
+9.  Interest to Content Object matching
 
    A Content Object satisfies an Interest if and only if (a) the Content
    Object name, if given, exactly matches the Interest name, and (b) the
@@ -1284,68 +1340,12 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 23]
+Mosko, et al.           Expires December 19, 2016              [Page 24]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-11.  Request/Response Protocol
-
-   As an Interest moves through the network following the FIB table
-   based on longest matching prefix, it leaves state at each forwarding
-   node.  The state is represented in a notional Pending Interest Table
-   (PIT).  The PIT tracks the Name, KeyIdRestriction, and
-   ContentObjectHashRestriction to be matched by a Content Object.  If a
-   second Interest arrives with the same Name and selector values, it
-   may be aggregated with the existing pending Interest.  If the second
-   Interest extends the Lifetime of the pending Interest, it should be
-   forwarded to extend the life of downstream Interests.
-
-   When a Content Object arrives at a Forwarder, it is matched against
-   the Interests in the PIT.  For each matching Interest, the Content
-   Object is forwarded along the reverse path of that PIT entry and the
-   PIT entry is removed.  A Content Object that does not match any
-   Interest in the PIT is dropped.
-
-   A Forwarder may implement a Content Object cache called a Content
-   Store.  At the core protocol level, the Content Store must obey
-   similar rules as the Forwarder.  If an Interest specifies a
-   ContentObjectHashRestriction, the Content Store SHOULD NOT respond
-   unless it has verified the hash of the Content Object.  If the
-   Interest carries a KeyIdRestriction then the Content Store MUST
-   cryptographically verify the signature or not respond.
-
-   Note that performing digital signature verification in response to an
-   Interest is a vector for Denial of Service (DoS).  Two cooperating
-   nodes surrounding a forwarder may maliciously request and then
-   respond with fake content to (a) populate the cache with fake content
-   and (b) force the forwarder to perform wasteful verification
-   operations.  Implementations that support signature verification must
-   consider the ramifications of such on-path attacks.
-
-   TODO: Specify what to do in case of failure.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko, et al.           Expires December 11, 2016              [Page 24]
-
-Internet-Draft               CCNx Semantics                    June 2016
-
-
-12.  Interest Return
+10.  Interest Return
 
    This section describes the process whereby a network element may
    return an Interest message to a previous hop if there is an error
@@ -1384,7 +1384,7 @@ Internet-Draft               CCNx Semantics                    June 2016
    propagate its own InterestReturn to previous hops as indicated in the
    reverse path of a PIT entry.
 
-12.1.  Message Format
+10.1.  Message Format
 
    The Interest Return message looks exactly like the original Interest
    message with the exception of the two modifications mentioned above.
@@ -1396,12 +1396,12 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 25]
+Mosko, et al.           Expires December 19, 2016              [Page 25]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-12.2.  ReturnCode Types
+10.2.  ReturnCode Types
 
    This section defines the InterestReturn ReturnCode introduced in this
    RFC.  The numeric values used in the packet are defined in
@@ -1411,40 +1411,40 @@ Internet-Draft               CCNx Semantics                    June 2016
    | Name                 | Description                                |
    +----------------------+--------------------------------------------+
    | No Route             | The returning Forwarder has no route to    |
-   | (Section 12.3.1)     | the Interest name.                         |
+   | (Section 10.3.1)     | the Interest name.                         |
    |                      |                                            |
    | HopLimit Exceeded    | The HopLimit has decremented to 0 and need |
-   | (Section 12.3.2)     | to forward the packet.                     |
+   | (Section 10.3.2)     | to forward the packet.                     |
    |                      |                                            |
    | Interest MTU too     | The Interest's MTU does not conform to the |
    | large                | required minimum and would require         |
-   | (Section 12.3.3)     | fragmentation.                             |
+   | (Section 10.3.3)     | fragmentation.                             |
    |                      |                                            |
    | No Resources         | The node does not have the resources to    |
-   | (Section 12.3.4)     | process the Interest.                      |
+   | (Section 10.3.4)     | process the Interest.                      |
    |                      |                                            |
    | Path error           | There was a transmission error when        |
-   | (Section 12.3.5)     | forwarding the Interest along a route (a   |
+   | (Section 10.3.5)     | forwarding the Interest along a route (a   |
    |                      | transient error).                          |
    |                      |                                            |
    | Prohibited           | An administrative setting prohibits        |
-   | (Section 12.3.6)     | processing this Interest.                  |
+   | (Section 10.3.6)     | processing this Interest.                  |
    |                      |                                            |
    | Congestion           | The Interest was dropped due to congestion |
-   | (Section 12.3.7)     | (a transient error).                       |
+   | (Section 10.3.7)     | (a transient error).                       |
    |                      |                                            |
    | Unsupported Content  | The Interest was dropped because it        |
    | Object Hash          | requested a Content Object Hash            |
    | Algorithm            | Restriction using a hash algorithm that    |
-   | (Section 12.3.8)     | cannot be computed.                        |
+   | (Section 10.3.8)     | cannot be computed.                        |
    |                      |                                            |
    | Malformed Interest   | The Interest was dropped because it did    |
-   | (Section 12.3.9)     | not correctly parse.                       |
+   | (Section 10.3.9)     | not correctly parse.                       |
    +----------------------+--------------------------------------------+
 
                    Table 3: Interest Return Reason Codes
 
-12.3.  Interest Return Protocol
+10.3.  Interest Return Protocol
 
    This section describes the Forwarder behavior for the various Reason
    codes for Interest Return.  A Forwarder is not required to generate
@@ -1452,7 +1452,7 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 26]
+Mosko, et al.           Expires December 19, 2016              [Page 26]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
@@ -1494,7 +1494,7 @@ Internet-Draft               CCNx Semantics                    June 2016
    Interest Lifetime to account for the time spent thus far processing
    the Interest.
 
-12.3.1.  No Route
+10.3.1.  No Route
 
    If a Forwarder receives an Interest for which it has no route, or for
    which the only route is back towards the system that sent the
@@ -1508,7 +1508,7 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 27]
+Mosko, et al.           Expires December 19, 2016              [Page 27]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
@@ -1517,13 +1517,13 @@ Internet-Draft               CCNx Semantics                    June 2016
    correct the configuration.  A forwarder could suppress using that
    next hop for some period of time.
 
-12.3.2.  HopLimit Exceeded
+10.3.2.  HopLimit Exceeded
 
    A Forwarder MAY choose to send HopLimit Exceeded messages when it
    receives an Interest that must be forwarded off system and the
    HopLimit is 0.
 
-12.3.3.  Interest MTU Too Large
+10.3.3.  Interest MTU Too Large
 
    If a Forwarder receives an Interest whose MTU exceeds the prescribed
    minimum, it MAY send an "Interest MTU Too Large" message, or it may
@@ -1533,20 +1533,20 @@ Internet-Draft               CCNx Semantics                    June 2016
    alternate paths.  It SHOULD propagate the Interest Return to its
    previous hops.
 
-12.3.4.  No Resources
+10.3.4.  No Resources
 
    If a Forwarder receives an Interest and it cannot process the
    Interest due to lack of resources, it MAY send an InterestReturn.  A
    lack of resources could be the PIT table is too large, or some other
    capacity limit.
 
-12.3.5.  Path Error
+10.3.5.  Path Error
 
    If a forwarder detects an error forwarding an Interest, such as over
    a reliable link, it MAY send a Path Error Interest Return indicating
    that it was not able to send or repair a forwarding error.
 
-12.3.6.  Prohibited
+10.3.6.  Prohibited
 
    A forwarder may have administrative policies, such as access control
    lists, that prohibit receiving or forwarding an Interest.  If a
@@ -1556,7 +1556,7 @@ Internet-Draft               CCNx Semantics                    June 2016
    but the Forwarder receives one from e1, the Forwarder must have a way
    to return the Interest with an explanation.
 
-12.3.7.  Congestion
+10.3.7.  Congestion
 
    If a forwarder discards an Interest due to congestion, it MAY send a
    Congestion InterestReturn to the previous hop.
@@ -1564,18 +1564,18 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 28]
+Mosko, et al.           Expires December 19, 2016              [Page 28]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-12.3.8.  Unsupported Content Object Hash Algorithm
+10.3.8.  Unsupported Content Object Hash Algorithm
 
    If a Content Object Hash Restriction specifies a hash algorithm the
    forwarder cannot verify, the Interest should not be accepted and the
    forwarder MAY send an InterestReturn to the previous hop.
 
-12.3.9.  Malformed Interest
+10.3.9.  Malformed Interest
 
    If a forwarder detects a structural or syntactical error in an
    Interest, it SHOULD drop the interest and MAY send an InterestReturn
@@ -1620,12 +1620,12 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 29]
+Mosko, et al.           Expires December 19, 2016              [Page 29]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-13.  Acknowledgements
+11.  Acknowledgements
 
 
 
@@ -1676,15 +1676,16 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 30]
+Mosko, et al.           Expires December 19, 2016              [Page 30]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-14.  IANA Considerations
+12.  IANA Considerations
 
    This memo includes no request to IANA.
 
+   TO_INTERESTLIFETIME = 2 seconds.
 
 
 
@@ -1731,23 +1732,22 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-
-Mosko, et al.           Expires December 11, 2016              [Page 31]
+Mosko, et al.           Expires December 19, 2016              [Page 31]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-15.  Security Considerations
+13.  Security Considerations
 
    The Interest Return message has no authenticator from the previous
    hop.  Therefore, the payload of the Interest Return should only be
    used locally to match an Interest.  A node should never forward that
-   Interest payload as an Interest.  It should also verify that it send
+   Interest payload as an Interest.  It should also verify that it sent
    the Interest in the Interest Return to that node and not allow anyone
    to negate Interest messages.
 
    If two peers require authenticated messaging, they must use an
-   external mechanism.
+   external mechanism such as MACSEC.
 
 
 
@@ -1788,21 +1788,21 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 32]
+Mosko, et al.           Expires December 19, 2016              [Page 32]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
 
-16.  References
+14.  References
 
-16.1.  Normative References
+14.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
               RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
 
-16.2.  Informative References
+14.2.  Informative References
 
    [CCN]      PARC, Inc., "CCNx Open Source", 2007,
               <http://www.CCNx.org>.
@@ -1844,7 +1844,7 @@ Internet-Draft               CCNx Semantics                    June 2016
 
 
 
-Mosko, et al.           Expires December 11, 2016              [Page 33]
+Mosko, et al.           Expires December 19, 2016              [Page 33]
 
 Internet-Draft               CCNx Semantics                    June 2016
 
@@ -1861,11 +1861,12 @@ Authors' Addresses
 
 
    Ignacio Solis
-   TBD
-   TBD, California  TBD
+   LinkedIn
+   Mountain View, California  94043
    USA
 
-   Email: isolis@igso.net
+   Phone:
+   Email: nsolis@linkedin.com
 
 
    Christopher Wood
@@ -1899,6 +1900,5 @@ Authors' Addresses
 
 
 
-
-Mosko, et al.           Expires December 11, 2016              [Page 34]
+Mosko, et al.           Expires December 19, 2016              [Page 34]
 

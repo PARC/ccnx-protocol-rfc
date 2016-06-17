@@ -145,10 +145,10 @@
 <tr><td class="header">ICNRG</td><td class="header">M. Mosko</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">PARC, Inc.</td></tr>
 <tr><td class="header">Intended status: Experimental</td><td class="header">I. Solis</td></tr>
-<tr><td class="header">Expires: December 11, 2016</td><td class="header">TBD</td></tr>
+<tr><td class="header">Expires: December 19, 2016</td><td class="header">LinkedIn</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">C. Wood</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">PARC, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">June 9, 2016</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">June 17, 2016</td></tr>
 </table></td></tr></table>
 <h1><br />CCNx Semantics<br />draft-irtf-icnrg-ccnxsemantics-03</h1>
 
@@ -180,7 +180,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on December 11, 2016.</p>
+This Internet-Draft will expire on December 19, 2016.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -215,71 +215,73 @@ Consumer Behavior<br />
 Publisher Behavior<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#forwarder">2.4.</a>&nbsp;
 Forwarder Behavior<br />
-<a href="#named_payload">3.</a>&nbsp;
-Named Payload<br />
-<a href="#names">4.</a>&nbsp;
-Names<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#NameExamples">4.1.</a>&nbsp;
-Name Examples<br />
-<a href="#Interest">5.</a>&nbsp;
-Interests<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#aggregation">5.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#hoplimit">2.4.1.</a>&nbsp;
+Interest HopLimit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#aggregation">2.4.2.</a>&nbsp;
 Interest Aggregation<br />
-<a href="#object">6.</a>&nbsp;
-Content Objects<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#cachecontrol">6.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#contentstore">2.4.3.</a>&nbsp;
+ContentStore Behavior<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#interest_pipe">2.4.4.</a>&nbsp;
+Interest Pipeline<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#object_pipe">2.4.5.</a>&nbsp;
+Content Object Pipeline<br />
+<a href="#names">3.</a>&nbsp;
+Names<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#NameExamples">3.1.</a>&nbsp;
+Name Examples<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#ipid">3.2.</a>&nbsp;
+Interest Payload ID<br />
+<a href="#cachecontrol">4.</a>&nbsp;
 Cache Control<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#ConObjHash">6.2.</a>&nbsp;
+<a href="#ConObjHash">5.</a>&nbsp;
 Content Object Hash<br />
-<a href="#link">7.</a>&nbsp;
+<a href="#link">6.</a>&nbsp;
 Link<br />
-<a href="#hashes">8.</a>&nbsp;
+<a href="#hashes">7.</a>&nbsp;
 Hashes<br />
-<a href="#signature">9.</a>&nbsp;
+<a href="#signature">8.</a>&nbsp;
 Validation<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#valalg">9.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#valalg">8.1.</a>&nbsp;
 Validation Algorithm<br />
-<a href="#matching">10.</a>&nbsp;
+<a href="#matching">9.</a>&nbsp;
 Interest to Content Object matching<br />
-<a href="#behavior">11.</a>&nbsp;
-Request/Response Protocol<br />
-<a href="#anchor4">12.</a>&nbsp;
+<a href="#InterestReturn">10.</a>&nbsp;
 Interest Return<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#MessageFormat">12.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#MessageFormat">10.1.</a>&nbsp;
 Message Format<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#TypeDefinitions">12.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#TypeDefinitions">10.2.</a>&nbsp;
 ReturnCode Types<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Protocol">12.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#InterestReturnProtocol">10.3.</a>&nbsp;
 Interest Return Protocol<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#NoRoute">12.3.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#NoRoute">10.3.1.</a>&nbsp;
 No Route<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#HopLimit">12.3.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#HopLimit">10.3.2.</a>&nbsp;
 HopLimit Exceeded<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#MTU">12.3.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#MTU">10.3.3.</a>&nbsp;
 Interest MTU Too Large<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#NoResources">12.3.4.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#NoResources">10.3.4.</a>&nbsp;
 No Resources<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#PathError">12.3.5.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#PathError">10.3.5.</a>&nbsp;
 Path Error<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Prohibited">12.3.6.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Prohibited">10.3.6.</a>&nbsp;
 Prohibited<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Congestion">12.3.7.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Congestion">10.3.7.</a>&nbsp;
 Congestion<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#UnsupportedHashAlgorithm">12.3.8.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#UnsupportedHashAlgorithm">10.3.8.</a>&nbsp;
 Unsupported Content Object Hash Algorithm<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#MalformedInterest">12.3.9.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#MalformedInterest">10.3.9.</a>&nbsp;
 Malformed Interest<br />
-<a href="#Acknowledgements">13.</a>&nbsp;
+<a href="#Acknowledgements">11.</a>&nbsp;
 Acknowledgements<br />
-<a href="#IANA">14.</a>&nbsp;
+<a href="#IANA">12.</a>&nbsp;
 IANA Considerations<br />
-<a href="#Security">15.</a>&nbsp;
+<a href="#Security">13.</a>&nbsp;
 Security Considerations<br />
-<a href="#rfc.references1">16.</a>&nbsp;
+<a href="#rfc.references1">14.</a>&nbsp;
 References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">16.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">14.1.</a>&nbsp;
 Normative References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">16.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">14.2.</a>&nbsp;
 Informative References<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Authors' Addresses<br />
@@ -414,7 +416,7 @@ Protocol Overview</h3>
 </p>
 <p>The notional PIT table stores the last hop of an Interest plus its Name
           and optional restrictions.  This is the data required to match a Content Object
-          to an Interest (see <a class='info' href='#matching'>Section&nbsp;10<span> (</span><span class='info'>Interest to Content Object matching</span><span>)</span></a>).
+          to an Interest (see <a class='info' href='#matching'>Section&nbsp;9<span> (</span><span class='info'>Interest to Content Object matching</span><span>)</span></a>).
           When a Content Object arrives, it must be matched against the PIT to determine
           which entries it satisfies.  For each such entry, at most one copy of the
           Content Object is sent to each listed last hop in the PIT entries.
@@ -422,7 +424,7 @@ Protocol Overview</h3>
 </p>
 <p>If multiple Interests with the same tuple {Name, KeyIdRestriction, ContentObjectHashRestriction}
           arrive at a node before a Content Object matching the first Interest comes back,
-          they are grouped in the same PIT entry and their last hops aggregated (see <a class='info' href='#aggregation'>Section&nbsp;5.1<span> (</span><span class='info'>Interest Aggregation</span><span>)</span></a>).  
+          they are grouped in the same PIT entry and their last hops aggregated (see <a class='info' href='#aggregation'>Section&nbsp;2.4.2<span> (</span><span class='info'>Interest Aggregation</span><span>)</span></a>).  
           Thus, one Content Object might satisfy multiple pending Interests.
         
 </p>
@@ -484,7 +486,7 @@ Message Grammar</h3>
 </li>
 <li>CacheTime: The absolute time after which the publisher
               believes there is low value in caching the content object.  This is a recommendation
-              to caches (see <a class='info' href='#cachecontrol'>Section&nbsp;6.1<span> (</span><span class='info'>Cache Control</span><span>)</span></a>).
+              to caches (see <a class='info' href='#cachecontrol'>Section&nbsp;4<span> (</span><span class='info'>Cache Control</span><span>)</span></a>).
             
 </li>
 <li>ConObjField: These are optional fields that may appear in a Content Object.
@@ -493,11 +495,16 @@ Message Grammar</h3>
 <li>ConObjHash: The value of the Content Object Hash, which is the SHA256-32 over
               the message from the beginning of the body to the end of the message.  Note that this
               coverage area is different from the ValidationAlg.  This value SHOULD NOT be trusted
-              across domains (see <a class='info' href='#ConObjHash'>Section&nbsp;6.2<span> (</span><span class='info'>Content Object Hash</span><span>)</span></a>).
+              across domains (see <a class='info' href='#ConObjHash'>Section&nbsp;5<span> (</span><span class='info'>Content Object Hash</span><span>)</span></a>).
             
 </li>
 <li>ExpiryTime: An absolute time after which the 
-              content object should be considered expired (see <a class='info' href='#cachecontrol'>Section&nbsp;6.1<span> (</span><span class='info'>Cache Control</span><span>)</span></a>).
+              content object should be considered expired (see <a class='info' href='#cachecontrol'>Section&nbsp;4<span> (</span><span class='info'>Cache Control</span><span>)</span></a>).
+            
+</li>
+<li>HopLimit: Interest messages may loop if there are loops in the forwarding plane.
+              To eventually terminate loops, each Interest carries a HopLimit that is decremented
+              after each hop and no longer forwarded when it reaches zero.  See <a class='info' href='#forwarder'>Section&nbsp;2.4<span> (</span><span class='info'>Forwarder Behavior</span><span>)</span></a>.
             
 </li>
 <li>InterestField: These are optional fields that may appear in an Interest
@@ -518,7 +525,7 @@ Message Grammar</h3>
               should be an identifer agreed upon by the parties.
             
 </li>
-<li>KeyLink: A Link (see <a class='info' href='#link'>Section&nbsp;7<span> (</span><span class='info'>Link</span><span>)</span></a>) that names how to retrieve the key
+<li>KeyLink: A Link (see <a class='info' href='#link'>Section&nbsp;6<span> (</span><span class='info'>Link</span><span>)</span></a>) that names how to retrieve the key
               used to verify the ValidationPayload.  A message SHOULD NOT have both a KeyLink
               and a PublicKey.
             
@@ -531,7 +538,7 @@ Message Grammar</h3>
 <li>Name: A name is made up of a non-empty first segment followed by zero or
               more additional segments, which may be of 0 length.  Path segments are opaque
               octet strings, and are thus case-sensitive if encoding UTF-8.
-              An Interest MUST have a Name.  A ContentObject MAY have a Name (see <a class='info' href='#matching'>Section&nbsp;10<span> (</span><span class='info'>Interest to Content Object matching</span><span>)</span></a>).
+              An Interest MUST have a Name.  A ContentObject MAY have a Name (see <a class='info' href='#matching'>Section&nbsp;9<span> (</span><span class='info'>Interest to Content Object matching</span><span>)</span></a>).
             
 </li>
 <li>Payload: The message's data, as defined by PayloadType.
@@ -539,7 +546,7 @@ Message Grammar</h3>
 </li>
 <li>PayloadType: The format of the Payload.  If missing, assume DataType.  DataType
               means the payload is opaque application bytes.  KeyType means the payload is
-              a DER-encoded public key.  LinkType means it is a Link (see <a class='info' href='#link'>Section&nbsp;7<span> (</span><span class='info'>Link</span><span>)</span></a>).
+              a DER-encoded public key.  LinkType means it is a Link (see <a class='info' href='#link'>Section&nbsp;6<span> (</span><span class='info'>Link</span><span>)</span></a>).
             
 </li>
 <li>PublicKey: Some applications may wish to embed the public key used to
@@ -551,7 +558,7 @@ Message Grammar</h3>
             
 </li>
 <li>ReturnCode: States the reason an Interest message is being returned
-              to the previous hop (see <a class='info' href='#TypeDefinitions'>Section&nbsp;12.2<span> (</span><span class='info'>ReturnCode Types</span><span>)</span></a>).
+              to the previous hop (see <a class='info' href='#TypeDefinitions'>Section&nbsp;10.2<span> (</span><span class='info'>ReturnCode Types</span><span>)</span></a>).
             
 </li>
 <li>SigTime: The absolute time (UTC milliseconds) when the signature was
@@ -569,7 +576,7 @@ Message Grammar</h3>
 <a name="abnfgrammar"></a>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 Message       := Interest / ContentObject / InterestReturn
-Interest      := [Lifetime] BodyName [Validation]
+Interest      := HopLimit [Lifetime] BodyName [Validation]
 ContentObject := [CacheTime / ConObjHash] BodyOptName [Validation]
 InterestReturn:= ReturnCode Interest
 BodyName      := Name Common
@@ -596,6 +603,7 @@ ExpiryTime    := AbsTime
 Field         := InterestField / ConObjField
 Hash          := HashType 1* OCTET
 HashType      := SHA256-32 / SHA512-64 / SHA512-32
+HopLimit      := OCTET
 InterestField := KeyIdRestr / ObjHashRestr
 KeyId         := 1* OCTET ; key identifier
 KeyIdRestr    := 1* OCTET
@@ -626,14 +634,36 @@ Consumer Behavior</h3>
           has no relation to the validation.
         
 </p>
+<p>A consumer MAY put a Payload field in an Interest to send additional data
+          to the producer beyond what is in the Name.  The Name is used for routing and
+          may be rememberd at each hop in the notional PIT table to facilitate returning
+          a content object, so storing large amounts of state in the Name could lead to
+          high memory requirements.  Because the Payload is not considered when forwarding
+          an Interest or matching a Content Object to an Interest, a consumer SHOULD put
+          an Interest Payload ID (see <a class='info' href='#ipid'>Section&nbsp;3.2<span> (</span><span class='info'>Interest Payload ID</span><span>)</span></a>) as part of the name to
+          allow a forwarder to match Interests to content objects and avoid aggregating
+          Interests with different payloads.
+        
+</p>
+<p>The consumer SHOULD specify an InterestLifetime, which is the length of time
+          the consumer is willing to wait for a response.  The InterestLifetime is an
+          application-scale time, not a network round trip time (see <a class='info' href='#aggregation'>Section&nbsp;2.4.2<span> (</span><span class='info'>Interest Aggregation</span><span>)</span></a>).
+          If not present, the InterestLifetime will use a default value (TO_INTERESTLIFETIME).
+        
+</p>
+<p>The consumer SHOULD set the Interest HopLimit to a reasonable value, or use
+           the default 255.  If the consumer knows the distances to the producer via
+          routing, it SHOULD use that value.
+        
+</p>
 <p>A consumer hands off the Interest to its first forwarder, which will convey
           the Interest over the network to a publisher (or replica) that may satisfy it
           based on the name (see <a class='info' href='#forwarder'>Section&nbsp;2.4<span> (</span><span class='info'>Forwarder Behavior</span><span>)</span></a>).
         
 </p>
 <p>Interest messages are unreliable.  A consumer SHOULD run a transport protocol
-          that will retry the Interest if it goes unanswered.  No transport protocol is specified
-          in this document.
+          that will retry the Interest if it goes unanswered, up to the InterestLifetime.
+          No transport protocol is specified in this document.
         
 </p>
 <p>The network MAY send to the consumer an InterestReturn message that indicates the
@@ -688,52 +718,248 @@ Consumer Behavior</h3>
 <a name="rfc.section.2.3"></a><h3>2.3.&nbsp;
 Publisher Behavior</h3>
 
+<p> This document does not specify the method by which names populate a Forwarding
+          Information Base (FIB) table at forwarders (see <a class='info' href='#forwarder'>Section&nbsp;2.4<span> (</span><span class='info'>Forwarder Behavior</span><span>)</span></a>).
+          A publisher is either configured with one or more name prefixes under which it may
+          create content, or it chooses its name prefixes and informs the routing layer to advertise
+          those prefixes.
+        
+</p>
+<p>When a publisher receives an Interest, it SHOULD:
+          </p>
+<ul class="text">
+<li>Verify that the Interest is part of the publishers namespace(s).
+            
+</li>
+<li>If the Interest has a Validation section, verify the ValidationPayload.
+              Usually an Interest will only have a CRC32C unless the publisher application
+              specifically accommodates other validations.
+              The publisher MAY choose to drop Interests that carry a Validation section if
+              the publisher application does not expect those signatures as this could be
+              a form of computational denial of service.  If the signature requires a key
+              that the publisher does not have, it is NOT RECOMMENDED that the publisher fetch
+              the key over the network, unless it is part of the application's expected behavior.
+            
+</li>
+<li>Retrieve or generate the requested content object and return it to the
+              Interest's previous hop.  If the requested content cannot be returned,
+              the publisher SHOULD reply with an InterestReturn or a content object with
+              application payload that says the content is not available; this content object
+              should have a short ExpiryTime in the future.
+            
+</li>
+</ul><p>
+        
+</p>
 <a name="forwarder"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.2.4"></a><h3>2.4.&nbsp;
 Forwarder Behavior</h3>
 
-<a name="named_payload"></a><br /><hr />
+<p>A forwarder routes Interest messages based on a Forwarding Information Base (FIB),
+          returns Content Objects that match Interests to the Interest's previous hop, and
+          processed InterestReturn control messages.  It may also keep a cache of Content Objects
+          in the notional Content Store table.  This document does not specify the internal behavior
+          of a forwarder, only these and other external behaviors.
+        
+</p>
+<p>In this document, we will use two processing pipelines, one for Interests
+          and one for Content Objects.  Interest processing is made up of checking for
+          duplicate Interests in the PIT (see <a class='info' href='#aggregation'>Section&nbsp;2.4.2<span> (</span><span class='info'>Interest Aggregation</span><span>)</span></a>), checking
+            for a cached Content Object in the Content Store (see <a class='info' href='#contentstore'>Section&nbsp;2.4.3<span> (</span><span class='info'>ContentStore Behavior</span><span>)</span></a>),
+            and forwarding an Interest via the FIB.  Content Store processing is made up
+            of checking for matching Interests in the PIT and forwarding to those previous hops.
+        
+</p>
+<a name="hoplimit"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.3"></a><h3>3.&nbsp;
-Named Payload</h3>
+<a name="rfc.section.2.4.1"></a><h3>2.4.1.&nbsp;
+Interest HopLimit</h3>
 
-<p>CCNx supports several cryptographic means to bind a Name to a payload.  Interest and Content Object messages
-        include a section called the ValidationAlgorithm, which specifies the algorithm
-        to use to verify the binding.  Several validation algorithms
-        are supported including specific Message Integrity Checks (MICs), Message Authentication
-        Codes (MACs), and Signature types. These are over specific wire format encodings.
-        Additional
-        schemes could be added in the future. Interest and Content Object messages also include a section called the ValidationPayload which
-        contains the validation output. 
+<p>Interest looping is not prevented in CCNx. An Interest traversing loops is eventually
+            discarded using the hop-limit field of the Interest, which is decremented at each hop
+            traversed by the Interest.
+          
 </p>
-<p>The KeyId is an optional field in the ValidationAlgorithm.  It is an octet string that identifies the key used to sign the
-        Content Object.  It uniquely identifies the publisher. It is similar to a Subject Key
-        Identifier from X509 [RFC 3280, Section 4.2.1.2].
-        It should be derived from the key used to sign, for example SHA-256 hash of the key.  It
-        applies to both public/private key systems and to symmetric key systems using HMAC.
+<p>Every Interest MUST carry a HopLimit.
+          
 </p>
-<p>A PublicKeyLocator is an optional field in the ValidationAlgorithm.  It may be one of (a) the signer's public key, (b) the signer's certificate,
-        or (c) a KeyName that points to the location of the signer's key or certificate.
+<p>When an Interest is received from another forwarder, the HopLimit MUST
+            be positive.  It MUST be decremented by at least 1.
+          
 </p>
-<p>A Key inside a PublicKeyLocator is a public key corresponding to the signer's private key.  Examples
-        would be PEM or DER encodings.  The exact encoding is up to the wire format.
+<p>If the HopLimit equals 0, the Interest MUST NOT be forwarded to another forwarder; 
+            it MAY be sent to a publisher application or serviced from a local Content Store.
+          
 </p>
-<p>A Certificate is an X.509 certificate of the signer's public key.  Examples would be PEM or
-        DER encodings of the certificate.  The exact encoding is up to the wire format.
+<a name="aggregation"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2.4.2"></a><h3>2.4.2.&nbsp;
+Interest Aggregation</h3>
+
+<p>Interest aggregation is when a forwarder receives an Interest message that
+              could be satisfied by another Interest message already forwarded by the node so the
+              forwarder suppresses the new Interest; it only records the additional previous hop
+              so a Content Object sent in response to the first Interest will satisfy both Interests.
+          
 </p>
-<p>A KeyName is a CCNx Name and optional signer's KeyId of that name's publisher.
-        The CCNx Name points to a Key or Certificate.  The KeyName signer KeyId is of the signer of the
-        target name's Content Object, not of the target key or certificate.
+<p>CCNx uses an interest aggregation rule that assumes the InterestLifetime is 
+               akin to a subscription time and is not a network round trip time.  Some previous
+               aggregation rules assumed the lifetime was a round trip time, but this leads to
+               problems of expiring an Interest before a response comes if the RTT is estimated
+               too short or interfering with an ARQ scheme that wants to re-transmit an Interest
+               but a prior interest over-estimated the RTT.
+          
 </p>
-<p>A SignatureTime is an optional field in the ValidationAlgorithm.  It may be used as part of the signature validation check to ensure
-        the signature was generated around the expected time.  In particular, if the public key is conveyed in a certificate with a validity period,
-        the verifying system may enforce that the signature came from a corresponding period.  Some verifiers might determine a signature without
-        a SignatureTime to be invalid.
+<p>A forwarder MAY implement an Interest aggregation scheme.  If it does not, then
+               it will forward all Interest messages.  This does not imply that multiple,
+               possibly identical, Content Objects will come back.  A forwarder MUST still
+               satisfy all pending Interests, so one Content Object could satisfy multiple
+               similar interests, even if the forwarded did not suppress duplicate Interest
+               messages.
+          
+</p>
+<p>A RECOMMENDED Interest aggregation scheme is:
+            </p>
+<ul class="text">
+<li>Two Interests are considered 'similar' if they have the same Name, KeyIdRestr, and ObjHashRestr.
+          
+</li>
+<li>Let the notional value InterestExpiry (a local value at the forwarder) be equal to
+               the receive time plus the InterestLifetime (or a platform-dependent default value if not present).
+          
+</li>
+<li>An Interest record (PIT entry) is considered invalid if its InterestExpiry time is in the past.
+          
+</li>
+<li>The first reception of an Interest MUST be forwarded.
+          
+</li>
+<li>A second or later reception of an Interest similar to a valid pending Interest
+               from the same previous hop MUST be forwarded.  We consider these a retransmission request.
+          
+</li>
+<li>A second or later reception of an Interest similar to a valid pending Interest 
+            from a new previous hop MAY be aggregated (not forwarded).
+          
+</li>
+<li>Aggregating an Interest MUST extend the InterestExpiry time of the Interest record.
+               An implementation MAY keep a single InterestExpiry time for all previous hops
+               or MAY keep the InterestExpiry time per previous hop.  In the first case, the forwarder
+               might send a ContentObject down a path that is no longer waiting for it, in which case
+               the previous hop (next hop of the Content Object) would drop it.
+          
+</li>
+</ul><p>
+          
+</p>
+<a name="contentstore"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2.4.3"></a><h3>2.4.3.&nbsp;
+ContentStore Behavior</h3>
+
+<p>The ContentStore is a special cache that sits on the fast path of a CCNx forwarder.
+            It is an optional component.  It serves to repair lost packets and handle flash requests
+            for popular content.  It could be pre-populated or use opportunistic caching.
+            Because the Content Store could serve to amplify an attach via cache poisoning, there
+            are special rules about how a Content Store behaves.
+            </p>
+<ol class="text">
+<li>A forwarder MAY implement a ContentStore.  If it does, the Content Store
+                matches a Content Object to an Interest via the normal matching rules (see <a class='info' href='#matching'>Section&nbsp;9<span> (</span><span class='info'>Interest to Content Object matching</span><span>)</span></a>).
+              
+</li>
+<li>If an Interest has a KeyIdRestr, then the ContentStore MUST NOT reply unless it knows
+                the signature on the matching ContentObject is correct.  It may do this by external knowledge
+                (i.e. in a managed system pre-populating the cachine) or by having the public key and
+                cryptographically verifying the signature.  If the public key is provided in the ContentObject
+                itself (i.e. in the PublicKey field) or in the Interest, the ContentStore MUST verify that
+                the public key's SHA-256 hash is equal to the KeyId and that it verifies the signature.
+                A ContentStore SHOULD NOT fetch keys over the
+                network.  If it cannot verify the signature, it should treat the Interest as a cache miss.
+              
+</li>
+<li>If an Interest has an ObjHashRestr, then the ContentStore MUST NOT reply unless it
+                knows the the matching ContentObject has the correct hash.  If it cannot verify the
+                hash, then it should treat the Interest as a cache miss.
+              
+</li>
+<li>It must object the Cache Control directives (see <a class='info' href='#cachecontrol'>Section&nbsp;4<span> (</span><span class='info'>Cache Control</span><span>)</span></a>).
+              
+</li>
+</ol><p>
+          
+</p>
+<a name="interest_pipe"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2.4.4"></a><h3>2.4.4.&nbsp;
+Interest Pipeline</h3>
+
+<p>
+            </p>
+<ol class="text">
+<li>Perform the hoplimit check (see <a class='info' href='#hoplimit'>Section&nbsp;2.4.1<span> (</span><span class='info'>Interest HopLimit</span><span>)</span></a>).
+              
+</li>
+<li>Determine if the Interest can be aggregated, as per <a class='info' href='#aggregation'>Section&nbsp;2.4.2<span> (</span><span class='info'>Interest Aggregation</span><span>)</span></a>.  If
+                it can be, aggregate and do not forward the Interest.
+              
+</li>
+<li>If forwarding the Interest, check for a hit in the Content Store, as
+                per <a class='info' href='#contentstore'>Section&nbsp;2.4.3<span> (</span><span class='info'>ContentStore Behavior</span><span>)</span></a>.  If a matching
+                Content Object is found, return it to the Interest's previous hop.  This
+                injects the ContentStore as per <a class='info' href='#object_pipe'>Section&nbsp;2.4.5<span> (</span><span class='info'>Content Object Pipeline</span><span>)</span></a>.
+              
+</li>
+<li>Lookup the Interest in the FIB.  The longest prefix match (LPM) is performed
+                name segment by name segment (not byte or bit).  It should exclude the
+                Interest's previous hop.  If a match is found, forward the Interest.
+                If no match is found or the forwarder choses to not forward due to
+                a local condition (e.g. congestion), it SHOULD send an InterestReturn
+                message, as per <a class='info' href='#InterestReturn'>Section&nbsp;10<span> (</span><span class='info'>Interest Return</span><span>)</span></a>.
+</li>
+</ol><p>
+          
+</p>
+<a name="object_pipe"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2.4.5"></a><h3>2.4.5.&nbsp;
+Content Object Pipeline</h3>
+
+<p>
+            </p>
+<ol class="text">
+<li>It is RECOMMENDED that a forwarder that receives a content object
+                check that the ContentObject came from an expected previous hop.  An
+                expected previous hop is one pointed to by the FIB or one recorded in the
+                PIT as having had a matching Interest sent that way.
+              
+</li>
+<li>A Content Object MUST be matched to all pending Interests that
+                satisfy the matching rules (see <a class='info' href='#matching'>Section&nbsp;9<span> (</span><span class='info'>Interest to Content Object matching</span><span>)</span></a>).  Each statisfied
+                pending Interest MUST then be removed from the set of pending Interests.
+              
+</li>
+<li>A forwarder SHOULD NOT send more then one copy of the received
+                Content Object to the same Interest previous hop.  It may happen, for example,
+                that two Interest ask for the same Content Object different ways (e.g. by name
+                and by name an keyid) and that they both come from the same previous hop.
+                It is normal to send
+                the same content object multiple times on the same interface, such as Ethernet,
+                if it is going to different previous hops.
+              
+</li>
+<li>A Content Object SHOULD only be put in the Content Store if it satisfied
+                an Interest (and passed rule #1 above).  This is to reduce the chances
+                of cache poisoning.
+              
+</li>
+</ol><p>
+          
 </p>
 <a name="names"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4"></a><h3>4.&nbsp;
+<a name="rfc.section.3"></a><h3>3.&nbsp;
 Names</h3>
 
 <p>A CCNx name is a composition of name segments. Each name segment carries a label
@@ -788,7 +1014,7 @@ Names</h3>
 </p>
 <a name="NameExamples"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
+<a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
 Name Examples</h3>
 
 <p>This section uses the <a class='info' href='#CCNxURI'>CCNx URI<span> (</span><span class='info'>Mosko, M. and C. Wood, &ldquo;The CCNx URI Scheme (Internet draft),&rdquo; 2016.</span><span>)</span></a> [CCNxURI] representation of CCNx names .
@@ -814,113 +1040,57 @@ Name Examples</h3>
 <br clear="all" />
 <table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Table 2: CCNx Name Examples&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
-<a name="Interest"></a><br /><hr />
+<a name="ipid"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5"></a><h3>5.&nbsp;
-Interests</h3>
+<a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
+Interest Payload ID</h3>
 
-<p>An Interest is composed of the tuple {Name, Metadata, Payload, Validator}.
-        These fields are defined below.  Only the Name is mandatory. Other fields, if missing, should be
-        interpreted as "do not care".
-</p>
-<p>Name is a hierarchical path that identifies the resource.  It is matched as described above.
-</p>
-<p>An Interest may also have a Payload which carries state about the Interest but is not used to match a Content Object.
-        If an Interest contains a payload, the Interest name should contain an Interest Payload ID (IPID).
-        The IPID allows a PIT table entry to correctly multiplex Content Objects in response to a specific Interest with
-        a specific payload ID.  The IPID could be derived from a hash of the payload or could be a GUID or a nonce.
-        An optional Metadata field defines the IPID field so other systems could verify the IPID, such as when it is
-        derived from a hash of the payload.  No system is required to verify the IPID.
-      
-</p>
-<p>An Interest may contain Validation fields including a ValidationAlgorithm section describing the type of
-        validator to use and the ValidationPayload fields containing the output of the validation. Typically this would
-        only be a MIC - a crc, checksum, or digest.
-</p>
-<p>An Interest contains additional fields with information about the query. Two fields - the
-        KeyIdRestriction and ContentObjectHashRestriction - serve as
-        selectors to help identify the specific Content Object that should be returned.
-</p>
-<p>The Interest Lifetime element specifies the maximum number of milliseconds a Forwarder
-        should retain the Interest in its PIT.  A lifetime of "0" means the requester does not expect a
-        response from the Interest - it serves as a type of notification.
-        The lifetime is only a guideline for a Forwarder, which may keep an Interest for a
-        shorter or longer time, based on local conditions and system policy. It may change hop to hop
-        if the Interest is delayed for any signifiant amount of time. It is measured in millisecond
-        resolution, so in fast switching it normally would not need to change.
-        This field does not affect the matching of Content Objects.
-      
-</p>
-<p>The Interest HopLimit element is a counter that is decremented with each hop. It limits the
-        distance an Interest may travel.  The node originating the
-        Interest may put in any value - up to the maximum - in
-        network byte order.  Each node that receives
-        an Interest with a HopLimit decrements the value upon
-        reception.  If the value is 0 after the decrement, the Interest
-        cannot be forwarded off the node. The PIT entry should also track the maximum HopLimit forwarded.  If
-        an Interest with a longer HopLimit arrives, it should be forwarded
-        even if it is identical to a previously forwarded Interest.
-      
-</p>
-<p> Interest looping is not prevented in CCNx. An Interest traversing loops is eventually discarded using the hop-limit field of the Interest, which is decremented at each hop traversed by the Interest.  Other implementations may define additional optional headers, for example Nonces for loop detection,
-        headers for Differentiated Services Code Points (DSCP), or Flow Labels.
-      
-</p>
-<a name="aggregation"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.1"></a><h3>5.1.&nbsp;
-Interest Aggregation</h3>
-
-<p>INTERST AGGREGATION RULES
-</p>
-<a name="object"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6"></a><h3>6.&nbsp;
-Content Objects</h3>
-
-<p>A Content Object is composed of the same tuple as an Interest: {Name, Metadata, Payload, Validator}.
-      
-</p>
-<p>The Name is an optional field that identifies the contents.  If the name does not exist, then
-        the ContentObject can only be matched by a ContentObjectHashRestriction.
-</p>
-<p>The Payload of a Content Object holds the upper layer payload.  It may be encrypted, based
-        on outside information or a protocol information header.
-</p>
-<p>The optional Metadata PayloadType field identifies the type of Content Object: "DATA" implies an opaque payload;
-        "LINK" is a Content Object with an encoded Link as a payload. "DATA" is the default.
-</p>
-<p>The optional field ExpiryTime is a millisecond timestamp containing
-        the number of milliseconds since the epoch in UTC
-        of when the contents will expire. If it is not present, there is no expiration on the Content Object.
-        The ExpiryTime should be part of the signed information covered by the Validator, if present.
-</p>
-<p>A publisher or upstream node may include a Recommended Cache Time for Content Objects. It is represented as
-        the number of milliseconds since the epoch in UTC as the desired minimum time to keep the content object in cache.
-        This recommendation is a guideline as to the useful lifetime of a Content Object, but may be ignored.
-        The RecommendedCacheTime should not be covered by
-        the Validator, if present, as nodes may change the value based on their caching.
-        The ExpiryTime takes precedence over the RecommendedCacheTime, if both exist.
-</p>
-<p>
-        Other protocols, such as versioning or chunking, could place other kinds of metadata in the Content Object.
-      
+<p>An Interest may also have a Payload which carries state about the Interest but is not used to match
+          a Content Object.
+          If an Interest contains a payload, the Interest name should contain an Interest Payload ID (IPID).
+          The IPID allows a PIT table entry to correctly multiplex Content Objects in response to a specific Interest with
+          a specific payload ID.  The IPID could be derived from a hash of the payload or could be a GUID or a nonce.
+          An optional Metadata field defines the IPID field so other systems could verify the IPID, such as when it is
+          derived from a hash of the payload.  No system is required to verify the IPID.
+        
 </p>
 <a name="cachecontrol"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6.1"></a><h3>6.1.&nbsp;
+<a name="rfc.section.4"></a><h3>4.&nbsp;
 Cache Control</h3>
 
-<p>CACHE CONTROL RULES
+<p>CCNx supports two fields that affect cache control.  These determine how a
+        cache or Content Store handles a Content Object.  They are not used in the fast path,
+        but only to determine if a ContentObject can be injected on to the fast path in response
+        to an Interest.
+      
+</p>
+<p>The ExpiryTime is a field that exists within the signature envelope of a Validation Algorithm.
+        It is the UTC time in milliseconds after which the ContentObject is considered expired and MUST
+        no longer be used to respond to an Interest from a cache.
+      
+</p>
+<p>The Recommended Cache Time (RCT) is a field that exists outside the signature envelope.
+        It is the UTC time in milliseconds after which the publisher considers the Content Object to be
+        of low value to cache.  A cache SHOULD discard it after the RCT, though it MAY keep it and still
+        respond with it.  A cache is MAY discard the content object before the RCT time too; there is
+        no contractual obligaton to remember anything.
+      
+</p>
+<p>This formulation allows a producer to create a Content Object with a long ExpiryTime
+        but short RCT and keep re-publishing the same, signed, Content Object over and over again
+        by extending the RCT.  This allows a form of "phone home" where the publisher wants to
+        periodically see that the content is being used.
+      
 </p>
 <a name="ConObjHash"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6.2"></a><h3>6.2.&nbsp;
+<a name="rfc.section.5"></a><h3>5.&nbsp;
 Content Object Hash</h3>
 
 <p>CCNx allows an Interest to restrict a response to a specific hash.  The hash covers the
           message body and the validation section, thus it is specific to a given signature.  Because
-          it is part of the matching rules (see <a class='info' href='#matching'>Section&nbsp;10<span> (</span><span class='info'>Interest to Content Object matching</span><span>)</span></a>), the hash is used at every hop.
+          it is part of the matching rules (see <a class='info' href='#matching'>Section&nbsp;9<span> (</span><span class='info'>Interest to Content Object matching</span><span>)</span></a>), the hash is used at every hop.
         
 </p>
 <p>There are two options for matching the content object hash restriction in an Interest.
@@ -932,7 +1102,7 @@ Content Object Hash</h3>
 </p>
 <a name="link"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7"></a><h3>7.&nbsp;
+<a name="rfc.section.6"></a><h3>6.&nbsp;
 Link</h3>
 
 <p>A Link is the tuple {Name, KeyId, ContentObjectHashRestriction}.  The information in a Link comprises the fields
@@ -944,7 +1114,7 @@ Link</h3>
 </p>
 <a name="hashes"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.8"></a><h3>8.&nbsp;
+<a name="rfc.section.7"></a><h3>7.&nbsp;
 Hashes</h3>
 
 <p>Several protocol fields use cryptographic hash functions, which must be secure against attack
@@ -959,12 +1129,12 @@ Hashes</h3>
 </p>
 <a name="signature"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.9"></a><h3>9.&nbsp;
+<a name="rfc.section.8"></a><h3>8.&nbsp;
 Validation</h3>
 
 <a name="valalg"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.9.1"></a><h3>9.1.&nbsp;
+<a name="rfc.section.8.1"></a><h3>8.1.&nbsp;
 Validation Algorithm</h3>
 
 <p>The Validator consists of a ValidationAlgorithm that specifies how to verify the message
@@ -1003,7 +1173,7 @@ Validation Algorithm</h3>
 </p>
 <a name="matching"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.10"></a><h3>10.&nbsp;
+<a name="rfc.section.9"></a><h3>9.&nbsp;
 Interest to Content Object matching</h3>
 
 <p>A Content Object satisfies an Interest if and only if (a) the Content Object name, if given,
@@ -1043,43 +1213,9 @@ Interest to Content Object matching</h3>
         system. If a Content Object ValidationAlgorithm does not have a KeyId then
         the Content Object cannot match an Interest with a KeyIdRestriction.
 </p>
-<a name="behavior"></a><br /><hr />
+<a name="InterestReturn"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.11"></a><h3>11.&nbsp;
-Request/Response Protocol</h3>
-
-<p>As an Interest moves through the network following the FIB table based on
-        longest matching prefix, it leaves state at each forwarding node.  The state
-        is represented in a notional Pending Interest Table (PIT).  The PIT tracks the Name, KeyIdRestriction, and ContentObjectHashRestriction
-        to be matched by a Content Object.  If a second Interest arrives with the same Name and selector values,
-        it may be aggregated with the existing pending Interest.  If the second Interest extends the Lifetime
-        of the pending Interest, it should be forwarded to extend the life of downstream Interests. 
-</p>
-<p>When a Content Object arrives at a Forwarder, it is matched against the Interests in the PIT.
-        For each matching Interest, the Content Object is forwarded along the reverse path of that
-        PIT entry and the PIT entry is removed. A Content Object that does not match any Interest in the PIT is dropped.
-</p>
-<p>A Forwarder may implement a Content Object cache called a Content Store.  At the
-        core protocol level, the Content Store must obey similar rules as the Forwarder.
-        If an Interest specifies a ContentObjectHashRestriction, the Content Store SHOULD NOT respond unless it
-        has verified the hash of the Content Object. If the Interest carries a KeyIdRestriction then the Content
-        Store MUST cryptographically verify the signature or not respond.
-      
-</p>
-<p>
-        Note that performing digital signature verification in response to an Interest
-        is a vector for Denial of Service (DoS). Two cooperating nodes surrounding
-        a forwarder may maliciously request and then respond with fake content to
-        (a) populate the cache with fake content and (b) force the forwarder to perform
-        wasteful verification operations. Implementations that support signature
-        verification must consider the ramifications of such on-path attacks.
-      
-</p>
-<p>TODO: Specify what to do in case of failure.
-</p>
-<a name="anchor4"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12"></a><h3>12.&nbsp;
+<a name="rfc.section.10"></a><h3>10.&nbsp;
 Interest Return</h3>
 
 <p>This section describes the process whereby a network element may return an Interest message
@@ -1118,7 +1254,7 @@ Interest Return</h3>
 </p>
 <a name="MessageFormat"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.1"></a><h3>12.1.&nbsp;
+<a name="rfc.section.10.1"></a><h3>10.1.&nbsp;
 Message Format</h3>
 
 <p>The Interest Return message looks exactly like the original Interest message with the
@@ -1129,7 +1265,7 @@ Message Format</h3>
 </p>
 <a name="TypeDefinitions"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.2"></a><h3>12.2.&nbsp;
+<a name="rfc.section.10.2"></a><h3>10.2.&nbsp;
 ReturnCode Types</h3>
 
 <p>This section defines the InterestReturn ReturnCode introduced in this RFC.
@@ -1198,9 +1334,9 @@ ReturnCode Types</h3>
 <br clear="all" />
 <table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Table 3: Interest Return Reason Codes&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
-<a name="Protocol"></a><br /><hr />
+<a name="InterestReturnProtocol"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.3"></a><h3>12.3.&nbsp;
+<a name="rfc.section.10.3"></a><h3>10.3.&nbsp;
 Interest Return Protocol</h3>
 
 <p>This section describes the Forwarder behavior for the various Reason codes for Interest Return.
@@ -1244,7 +1380,7 @@ Interest Return Protocol</h3>
 </p>
 <a name="NoRoute"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.3.1"></a><h3>12.3.1.&nbsp;
+<a name="rfc.section.10.3.1"></a><h3>10.3.1.&nbsp;
 No Route</h3>
 
 <p>If a Forwarder receives an Interest for which it has no route, or for which the only route is
@@ -1260,7 +1396,7 @@ No Route</h3>
 </p>
 <a name="HopLimit"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.3.2"></a><h3>12.3.2.&nbsp;
+<a name="rfc.section.10.3.2"></a><h3>10.3.2.&nbsp;
 HopLimit Exceeded</h3>
 
 <p>A Forwarder MAY choose to send HopLimit Exceeded messages when it receives an Interest that must
@@ -1268,7 +1404,7 @@ HopLimit Exceeded</h3>
 </p>
 <a name="MTU"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.3.3"></a><h3>12.3.3.&nbsp;
+<a name="rfc.section.10.3.3"></a><h3>10.3.3.&nbsp;
 Interest MTU Too Large</h3>
 
 <p>If a Forwarder receives an Interest whose MTU exceeds the prescribed minimum, it MAY send
@@ -1279,7 +1415,7 @@ Interest MTU Too Large</h3>
 </p>
 <a name="NoResources"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.3.4"></a><h3>12.3.4.&nbsp;
+<a name="rfc.section.10.3.4"></a><h3>10.3.4.&nbsp;
 No Resources</h3>
 
 <p>If a Forwarder receives an Interest and it cannot process the Interest due to lack of resources,
@@ -1288,7 +1424,7 @@ No Resources</h3>
 </p>
 <a name="PathError"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.3.5"></a><h3>12.3.5.&nbsp;
+<a name="rfc.section.10.3.5"></a><h3>10.3.5.&nbsp;
 Path Error</h3>
 
 <p>If a forwarder detects an error forwarding an Interest, such as over a reliable link, it MAY send
@@ -1296,7 +1432,7 @@ Path Error</h3>
 </p>
 <a name="Prohibited"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.3.6"></a><h3>12.3.6.&nbsp;
+<a name="rfc.section.10.3.6"></a><h3>10.3.6.&nbsp;
 Prohibited</h3>
 
 <p>A forwarder may have administrative policies, such as access control lists, that prohibit receiving or
@@ -1306,7 +1442,7 @@ Prohibited</h3>
 </p>
 <a name="Congestion"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.3.7"></a><h3>12.3.7.&nbsp;
+<a name="rfc.section.10.3.7"></a><h3>10.3.7.&nbsp;
 Congestion</h3>
 
 <p>If a forwarder discards an Interest due to congestion, it MAY send a Congestion InterestReturn to
@@ -1314,7 +1450,7 @@ Congestion</h3>
 </p>
 <a name="UnsupportedHashAlgorithm"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.3.8"></a><h3>12.3.8.&nbsp;
+<a name="rfc.section.10.3.8"></a><h3>10.3.8.&nbsp;
 Unsupported Content Object Hash Algorithm</h3>
 
 <p>If a Content Object Hash Restriction specifies a hash algorithm the forwarder cannot verify,
@@ -1322,7 +1458,7 @@ Unsupported Content Object Hash Algorithm</h3>
 </p>
 <a name="MalformedInterest"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.12.3.9"></a><h3>12.3.9.&nbsp;
+<a name="rfc.section.10.3.9"></a><h3>10.3.9.&nbsp;
 Malformed Interest</h3>
 
 <p>If a forwarder detects a structural or syntactical error in an Interest, it SHOULD drop
@@ -1331,36 +1467,38 @@ Malformed Interest</h3>
 </p>
 <a name="Acknowledgements"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.13"></a><h3>13.&nbsp;
+<a name="rfc.section.11"></a><h3>11.&nbsp;
 Acknowledgements</h3>
 
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.14"></a><h3>14.&nbsp;
+<a name="rfc.section.12"></a><h3>12.&nbsp;
 IANA Considerations</h3>
 
 <p>This memo includes no request to IANA. 
 </p>
+<p>TO_INTERESTLIFETIME = 2 seconds.
+</p>
 <a name="Security"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.15"></a><h3>15.&nbsp;
+<a name="rfc.section.13"></a><h3>13.&nbsp;
 Security Considerations</h3>
 
 <p>The Interest Return message has no authenticator from the previous hop.  Therefore, the payload of the Interest Return
         should only be used locally to match an Interest.  A node should never forward that Interest payload as an Interest.
-        It should also verify that it send the Interest in the Interest Return to that node and not allow anyone to negate
+        It should also verify that it sent the Interest in the Interest Return to that node and not allow anyone to negate
         Interest messages.
 </p>
-<p>If two peers require authenticated messaging, they must use an external mechanism.
+<p>If two peers require authenticated messaging, they must use an external mechanism such as MACSEC.
 </p>
 <a name="rfc.references"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.16"></a><h3>16.&nbsp;
+<a name="rfc.section.14"></a><h3>14.&nbsp;
 References</h3>
 
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>16.1.&nbsp;Normative References</h3>
+<h3>14.1.&nbsp;Normative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
 <td class="author-text">Bradner, S., &ldquo;<a href="http://www.rfc-editor.org/info/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, DOI&nbsp;10.17487/RFC2119, March&nbsp;1997.</td></tr>
@@ -1368,7 +1506,7 @@ References</h3>
 
 <a name="rfc.references2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>16.2.&nbsp;Informative References</h3>
+<h3>14.2.&nbsp;Informative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="CCN">[CCN]</a></td>
 <td class="author-text">PARC, Inc., &ldquo;<a href="http://www.CCNx.org">CCNx Open Source</a>,&rdquo; 2007.</td></tr>
@@ -1404,13 +1542,15 @@ References</h3>
 <tr><td class="author-text">&nbsp;</td>
 <td class="author-text">Ignacio Solis</td></tr>
 <tr><td class="author-text">&nbsp;</td>
-<td class="author-text">TBD</td></tr>
+<td class="author-text">LinkedIn</td></tr>
 <tr><td class="author-text">&nbsp;</td>
-<td class="author-text">TBD, California  TBD</td></tr>
+<td class="author-text">Mountain View, California  94043</td></tr>
 <tr><td class="author-text">&nbsp;</td>
 <td class="author-text">USA</td></tr>
+<tr><td class="author" align="right">Phone:&nbsp;</td>
+<td class="author-text"></td></tr>
 <tr><td class="author" align="right">Email:&nbsp;</td>
-<td class="author-text"><a href="mailto:isolis@igso.net">isolis@igso.net</a></td></tr>
+<td class="author-text"><a href="mailto:nsolis@linkedin.com">nsolis@linkedin.com</a></td></tr>
 <tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td class="author-text">&nbsp;</td>
 <td class="author-text">Christopher Wood</td></tr>
