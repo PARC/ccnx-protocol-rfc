@@ -41,7 +41,7 @@
 
 <?rfc private="" ?>
 
-<rfc category="exp" docName="draft-irtf-icnrg-ccnxmessages-02" ipr="trust200902">
+<rfc category="exp" docName="draft-irtf-icnrg-ccnxmessages-03" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
        or pre5378Trust200902
@@ -257,8 +257,10 @@
           growth.</t>
 
           <t>Specifically, the TLV types in the range 0x1000 - 0x1FFF are reserved for experimental use.
-          These type values are reserved in all TLV container contexts.In the event that more space is needed,
-          either for types or for length, a new version of the protocol would be needed.</t>
+          These type values are reserved in all TLV container contexts. In the event that more space is needed,
+          either for types or for length, a new version of the protocol would be needed. See <xref target="vendor"></xref>
+          for more information about organization specific TLVs.
+            </t>
 
           <texttable anchor="reserved_types" title="Reserved TLV Types">
               <ttcol align="center">Abbrev</ttcol>
@@ -391,19 +393,19 @@
             </t>
 
           <t>The PacketType field indicates how the forwarder should process the packet.
-          A Request Packet (Interest) has PacketType T_PACKET_INTEREST, a Response (Content Object) has PacketType T_PACKET_CONTENT_OBJECT, and an InterestReturn
-          Packet has PacketType T_PACKET_INTEREST_RETURN.
+          A Request Packet (Interest) has PacketType PT_INTEREST, a Response (Content Object) has PacketType PT_CONTENT, and an InterestReturn
+          Packet has PacketType PT_RETURN.
         </t>
 
         <t>HeaderLength is the number of octets from the
-          start of the packet (Version) to the end of the hop-by-hop headers.  PacketLength is
+          start of the packet (Version) to the end of the hop-by-hop headers. PacketLength is
           the number of octets from the start of the packet to the end of the packet.</t>
 
         <t>The PacketType specific fields are reserved bits whose use depends on the
           PacketType.  They are used for network-level signaling.</t>
 
         <section title="Interest Fixed Header">
-          <t>If the PacketType in the Fixed Header is T_PACKET_INTEREST, it indicates that the PacketPayload should be processed
+          <t>If the PacketType in the Fixed Header is PT_INTEREST, it indicates that the PacketPayload should be processed
             as an Interest message.
             For this type of packet, the Fixed Header includes a field for a HopLimit as well as Reserved and Flags fields. The Reserved
             field must be set to 0 in an Interest - this field will be set to a return code in the case of an Interest Return.
@@ -415,7 +417,7 @@
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+---------------+---------------+
-|    Version    |       0       |         PacketLength          |
+|    Version    |  PT_INTEREST  |         PacketLength          |
 +---------------+---------------+---------------+---------------+
 |   HopLimit    |   Reserved    |     Flags     | HeaderLength  |
 +---------------+---------------+---------------+---------------+
@@ -435,7 +437,7 @@
         </section>
         </section>
         <section title="Content Object Fixed Header">
-          <t>If the PacketType in the Fixed Header is T_PACKET_CONTENT_OBJECT, it indicates that the PacketPayload should be processed
+          <t>If the PacketType in the Fixed Header is PT_CONTENT, it indicates that the PacketPayload should be processed
             as a Content Object message.
             A Content Object defines a Flags field, however there are currently no flags defined, so
           the Flags field must be set to 0.</t>
@@ -445,7 +447,7 @@
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+---------------+---------------+
-|    Version    |       1       |         PacketLength          |
+|    Version    |  PT_CONTENT   |         PacketLength          |
 +---------------+---------------+---------------+---------------+
 |            Reserved           |     Flags     | HeaderLength  |
 +---------------+---------------+---------------+---------------+
@@ -455,7 +457,7 @@
         </section>
 
         <section title="InterestReturn Fixed Header">
-          <t>If the PacketType in the Fixed Header is T_PACKET_INTEREST_RETURN, it indicates that the PacketPayload should be processed
+          <t>If the PacketType in the Fixed Header is PT_RETURN, it indicates that the PacketPayload should be processed
             as a returned Interest message.
             The only difference between this InterestReturn message and the original Interest is that the PacketType is changed
             to "2" and a ReturnCode is is put into the Reserved octet.  All other
@@ -469,7 +471,7 @@
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+---------------+---------------+
-|    Version    |       2       |         PacketLength          |
+|    Version    |   PT_RETURN   |         PacketLength          |
 +---------------+---------------+---------------+---------------+
 |   HopLimit    |  ReturnCode   |     Flags     | HeaderLength  |
 +---------------+---------------+---------------+---------------+
@@ -576,7 +578,7 @@
 
         <t>This nested format is used because it allows binary comparison of hash values for certain fields
             without a router needing to understand a new hash function.  For example, the KeyIdRestriction is bit-wise
-            compared between an Interest's KeyIdResrcition field and a ContentObject's KeyId field.  This format
+            compared between an Interest's KeyIdRestriction field and a ContentObject's KeyId field.  This format
             means the outer field values do not change with differing hash functions so a router can still identify
             those fields and do a binary comparison of the hash TLV without need to understand the specific
             hash used.  An alternative approach, such as using T_KEYID_SHA512-256, would require each router
@@ -1434,7 +1436,7 @@
     <section anchor="IANA" title="IANA Considerations">
         <t>This section details each kind of protocol value that can be
             registered. Each type registry can be updated by incrementally
-            expanding the typesapce, i.e., by allocating and reserving new types.</t>
+            expanding the typespace, i.e., by allocating and reserving new types.</t>
 
     <section anchor="IANA_PacketLevel" title="Packet Type Registry">
         <t> The following packet types should be allocated.</t>
@@ -1445,15 +1447,15 @@
           <ttcol align="center">Reference</ttcol>
 
           <c>%x00</c>
-          <c>T_PACKET_INTEREST</c>
+          <c>PT_INTEREST</c>
           <c><xref target="header">Fixed Header Types</xref></c>
 
           <c>%x01</c>
-          <c>T_PACKET_CONTENT_OBJECT</c>
+          <c>PT_CONTENT</c>
           <c><xref target="header">Fixed Header Types</xref></c>
 
           <c>%x02</c>
-          <c>T_PACKET_INTEREST_RETURN</c>
+          <c>PT_RETURN</c>
           <c><xref target="header">Fixed Header Types</xref></c>
       </texttable>
     </section>
@@ -1550,21 +1552,17 @@
           <c>T_MSGHASH</c>
           <c><xref target="per-hop">Hop-by-hop TLV headers</xref></c>
 
-          <c>%x0004</c>
-          <c>Unassigned</c>
-          <c></c>
-
-          <c>%x0005</c>
-          <c>Unassigned</c>
-          <c></c>
-
-          <c>%x006</c>
+          <c>%x0004-%x0007</c>
           <c>Reserved</c>
           <c></c>
 
-          <c>%x0007</c>
+          <c>%x0FFF</c>
+          <c>T_ORG</c>
+          <c><xref target="vendor">Organization-Specific TLVs</xref></c>
+
+          <c>%x1000-%x1FFF</c>
           <c>Reserved</c>
-          <c></c>
+          <c><xref target="TLV">Experimental Use</xref></c>
       </texttable>
     </section>
 
@@ -1584,21 +1582,17 @@
           <c>T_IPID</c>
           <c><xref target="names">Name</xref></c>
 
-          <c>%x0010</c>
+          <c>%x0FFF</c>
+          <c>T_ORG</c>
+          <c><xref target="vendor">Organization-Specific TLVs</xref></c>
+
+          <c>%x0010-%x0013</c>
           <c>Reserved</c>
           <c></c>
 
-          <c>%x0011</c>
-          <c>Reserved</c>
-          <c></c>
-
-          <c>%x0012</c>
-          <c>Reserved</c>
-          <c></c>
-
-          <c>%x0013</c>
-          <c>Reserved</c>
-          <c></c>
+          <c>%x0FFF</c>
+          <c>T_ORG</c>
+          <c><xref target="vendor">Organization-Specific TLVs</xref></c>
 
           <c>%x1000 - %x1FFF</c>
           <c>T_APP:00 - T_APP:4096</c>
@@ -1631,7 +1625,7 @@
           <c><xref target="CCNMessage">Message Types</xref></c>
 
           <c>%x0004</c>
-          <c>Unassigned</c>
+          <c>Reserved</c>
           <c></c>
 
           <c>%x0005</c>
@@ -1642,29 +1636,13 @@
           <c>T_EXPIRY</c>
           <c><xref target="COmetadata">Content Object Message Types</xref></c>
 
-          <c>%x0007</c>
-          <c>Unassigned</c>
-          <c></c>
-
-          <c>%x0008</c>
-          <c>Unassigned</c>
-          <c></c>
-
-          <c>%x0009</c>
+          <c>%x0007-%x000C</c>
           <c>Reserved</c>
           <c></c>
 
-          <c>%x000A</c>
-          <c>Reserved</c>
-          <c></c>
-
-          <c>%x000B</c>
+          <c>%x0FFF</c>
           <c>T_ORG</c>
-          <c><xref target="vendor">Vendor Specific Information</xref></c>
-
-          <c>%x000C</c>
-          <c>Reserved</c>
-          <c></c>
+          <c><xref target="vendor">Organization-Specific TLVs</xref></c>
 
           <c>%x1000-%x1FFF</c>
           <c>Reserved</c>
@@ -1703,7 +1681,7 @@
           <ttcol align="center">Reference</ttcol>
 
           <c>%x0001</c>
-          <c>Unassigned</c>
+          <c>Reserved</c>
           <c></c>
 
           <c>%x0002</c>
@@ -1711,7 +1689,7 @@
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
           <c>%x0003</c>
-          <c>Unassigned</c>
+          <c>Reserved</c>
           <c></c>
 
           <c>%x0004</c>
@@ -1733,6 +1711,14 @@
           <c>%x0008</c>
           <c>EC-SECP-384R1</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
+
+          <c>%x0FFF</c>
+          <c>T_ORG</c>
+          <c><xref target="vendor">Organization-Specific TLVs</xref></c>
+
+          <c>%x1000-%x1FFF</c>
+          <c>Reserved</c>
+          <c><xref target="TLV">Experimental Use</xref></c>
       </texttable>
     </section>
 
@@ -1745,7 +1731,7 @@
           <ttcol align="center">Reference</ttcol>
 
           <c>%x0001-%x0008</c>
-          <c>Unassigned</c>
+          <c>Reserved</c>
           <c></c>
 
           <c>%x0009</c>
@@ -1775,6 +1761,14 @@
           <c>%x000F</c>
           <c>T_SIGTIME</c>
           <c><xref target="vdd">Validation Dependent Data</xref></c>
+
+          <c>%x0FFF</c>
+          <c>T_ORG</c>
+          <c><xref target="vendor">Organization-Specific TLVs</xref></c>
+
+          <c>%x1000-%x1FFF</c>
+          <c>Reserved</c>
+          <c><xref target="TLV">Experimental Use</xref></c>
       </texttable>
     </section>
 
@@ -1794,9 +1788,13 @@
           <c>T_SHA-512</c>
           <c><xref target="hash_format">Hash Format</xref></c>
 
-          <c>%x1000 - %x1FFF</c>
+          <c>%x0FFF</c>
+          <c>T_ORG</c>
+          <c><xref target="vendor">Organization-Specific TLVs</xref></c>
+
+          <c>%x1000-%x1FFF</c>
           <c>Reserved</c>
-          <c><xref target="hash_format">Hash Format</xref></c>
+          <c><xref target="TLV">Experimental Use</xref></c>
       </texttable>
     </section>
 

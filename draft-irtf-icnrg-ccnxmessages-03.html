@@ -145,12 +145,12 @@
 <tr><td class="header">ICNRG</td><td class="header">M. Mosko</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">PARC, Inc.</td></tr>
 <tr><td class="header">Intended status: Experimental</td><td class="header">I. Solis</td></tr>
-<tr><td class="header">Expires: December 16, 2016</td><td class="header">LinkedIn</td></tr>
+<tr><td class="header">Expires: December 19, 2016</td><td class="header">LinkedIn</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">C. Wood</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">PARC, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">June 14, 2016</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">June 17, 2016</td></tr>
 </table></td></tr></table>
-<h1><br />CCNx Messages in TLV Format<br />draft-irtf-icnrg-ccnxmessages-02</h1>
+<h1><br />CCNx Messages in TLV Format<br />draft-irtf-icnrg-ccnxmessages-03</h1>
 
 <h3>Abstract</h3>
 
@@ -175,7 +175,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on December 16, 2016.</p>
+This Internet-Draft will expire on December 19, 2016.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -404,8 +404,10 @@ Type-Length-Value (TLV) Packets</h3>
           growth.
 </p>
 <p>Specifically, the TLV types in the range 0x1000 - 0x1FFF are reserved for experimental use.
-          These type values are reserved in all TLV container contexts.In the event that more space is needed,
-          either for types or for length, a new version of the protocol would be needed.
+          These type values are reserved in all TLV container contexts. In the event that more space is needed,
+          either for types or for length, a new version of the protocol would be needed. See <a class='info' href='#vendor'>Section&nbsp;3.3.2<span> (</span><span class='info'>Organization Specific TLVs</span><span>)</span></a>
+          for more information about organization specific TLVs.
+            
 </p><br /><hr class="insert" />
 <a name="reserved_types"></a>
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
@@ -539,12 +541,12 @@ Fixed Headers</h3>
             
 </p>
 <p>The PacketType field indicates how the forwarder should process the packet.
-          A Request Packet (Interest) has PacketType T_PACKET_INTEREST, a Response (Content Object) has PacketType T_PACKET_CONTENT_OBJECT, and an InterestReturn
-          Packet has PacketType T_PACKET_INTEREST_RETURN.
+          A Request Packet (Interest) has PacketType PT_INTEREST, a Response (Content Object) has PacketType PT_CONTENT, and an InterestReturn
+          Packet has PacketType PT_RETURN.
         
 </p>
 <p>HeaderLength is the number of octets from the
-          start of the packet (Version) to the end of the hop-by-hop headers.  PacketLength is
+          start of the packet (Version) to the end of the hop-by-hop headers. PacketLength is
           the number of octets from the start of the packet to the end of the packet.
 </p>
 <p>The PacketType specific fields are reserved bits whose use depends on the
@@ -555,7 +557,7 @@ Fixed Headers</h3>
 <a name="rfc.section.3.2.1"></a><h3>3.2.1.&nbsp;
 Interest Fixed Header</h3>
 
-<p>If the PacketType in the Fixed Header is T_PACKET_INTEREST, it indicates that the PacketPayload should be processed
+<p>If the PacketType in the Fixed Header is PT_INTEREST, it indicates that the PacketPayload should be processed
             as an Interest message.
             For this type of packet, the Fixed Header includes a field for a HopLimit as well as Reserved and Flags fields. The Reserved
             field must be set to 0 in an Interest - this field will be set to a return code in the case of an Interest Return.
@@ -565,7 +567,7 @@ Interest Fixed Header</h3>
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+---------------+---------------+
-|    Version    |       0       |         PacketLength          |
+|    Version    |  PT_INTEREST  |         PacketLength          |
 +---------------+---------------+---------------+---------------+
 |   HopLimit    |   Reserved    |     Flags     | HeaderLength  |
 +---------------+---------------+---------------+---------------+
@@ -589,7 +591,7 @@ Interest HopLimit</h3>
 <a name="rfc.section.3.2.2"></a><h3>3.2.2.&nbsp;
 Content Object Fixed Header</h3>
 
-<p>If the PacketType in the Fixed Header is T_PACKET_CONTENT_OBJECT, it indicates that the PacketPayload should be processed
+<p>If the PacketType in the Fixed Header is PT_CONTENT, it indicates that the PacketPayload should be processed
             as a Content Object message.
             A Content Object defines a Flags field, however there are currently no flags defined, so
           the Flags field must be set to 0.
@@ -597,7 +599,7 @@ Content Object Fixed Header</h3>
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+---------------+---------------+
-|    Version    |       1       |         PacketLength          |
+|    Version    |  PT_CONTENT   |         PacketLength          |
 +---------------+---------------+---------------+---------------+
 |            Reserved           |     Flags     | HeaderLength  |
 +---------------+---------------+---------------+---------------+
@@ -607,7 +609,7 @@ Content Object Fixed Header</h3>
 <a name="rfc.section.3.2.3"></a><h3>3.2.3.&nbsp;
 InterestReturn Fixed Header</h3>
 
-<p>If the PacketType in the Fixed Header is T_PACKET_INTEREST_RETURN, it indicates that the PacketPayload should be processed
+<p>If the PacketType in the Fixed Header is PT_RETURN, it indicates that the PacketPayload should be processed
             as a returned Interest message.
             The only difference between this InterestReturn message and the original Interest is that the PacketType is changed
             to "2" and a ReturnCode is is put into the Reserved octet.  All other
@@ -619,7 +621,7 @@ InterestReturn Fixed Header</h3>
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+---------------+---------------+
-|    Version    |       2       |         PacketLength          |
+|    Version    |   PT_RETURN   |         PacketLength          |
 +---------------+---------------+---------------+---------------+
 |   HopLimit    |  ReturnCode   |     Flags     | HeaderLength  |
 +---------------+---------------+---------------+---------------+
@@ -764,7 +766,7 @@ Hash Format</h3>
 </p>
 <p>This nested format is used because it allows binary comparison of hash values for certain fields
             without a router needing to understand a new hash function.  For example, the KeyIdRestriction is bit-wise
-            compared between an Interest's KeyIdResrcition field and a ContentObject's KeyId field.  This format
+            compared between an Interest's KeyIdRestriction field and a ContentObject's KeyId field.  This format
             means the outer field values do not change with differing hash functions so a router can still identify
             those fields and do a binary comparison of the hash TLV without need to understand the specific
             hash used.  An alternative approach, such as using T_KEYID_SHA512-256, would require each router
@@ -1664,7 +1666,7 @@ IANA Considerations</h3>
 
 <p>This section details each kind of protocol value that can be
             registered. Each type registry can be updated by incrementally
-            expanding the typesapce, i.e., by allocating and reserving new types.
+            expanding the typespace, i.e., by allocating and reserving new types.
 </p>
 <a name="IANA_PacketLevel"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1678,17 +1680,17 @@ Packet Type Registry</h3>
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
 <td align="center">%x00</td>
-<td align="center">T_PACKET_INTEREST</td>
+<td align="center">PT_INTEREST</td>
 <td align="center"><a class='info' href='#header'>Fixed Header Types<span> (</span><span class='info'>Fixed Headers</span><span>)</span></a></td>
 </tr>
 <tr>
 <td align="center">%x01</td>
-<td align="center">T_PACKET_CONTENT_OBJECT</td>
+<td align="center">PT_CONTENT</td>
 <td align="center"><a class='info' href='#header'>Fixed Header Types<span> (</span><span class='info'>Fixed Headers</span><span>)</span></a></td>
 </tr>
 <tr>
 <td align="center">%x02</td>
-<td align="center">T_PACKET_INTEREST_RETURN</td>
+<td align="center">PT_RETURN</td>
 <td align="center"><a class='info' href='#header'>Fixed Header Types<span> (</span><span class='info'>Fixed Headers</span><span>)</span></a></td>
 </tr>
 </table>
@@ -1814,24 +1816,19 @@ Hop-by-Hop Type Registry</h3>
 <td align="center"><a class='info' href='#per-hop'>Hop-by-hop TLV headers<span> (</span><span class='info'>Hop-by-hop TLV headers</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0004</td>
-<td align="center">Unassigned</td>
-<td align="center">&nbsp;</td>
-</tr>
-<tr>
-<td align="center">%x0005</td>
-<td align="center">Unassigned</td>
-<td align="center">&nbsp;</td>
-</tr>
-<tr>
-<td align="center">%x006</td>
+<td align="center">%x0004-%x0007</td>
 <td align="center">Reserved</td>
 <td align="center">&nbsp;</td>
 </tr>
 <tr>
-<td align="center">%x0007</td>
+<td align="center">%x0FFF</td>
+<td align="center">T_ORG</td>
+<td align="center"><a class='info' href='#vendor'>Organization-Specific TLVs<span> (</span><span class='info'>Organization Specific TLVs</span><span>)</span></a></td>
+</tr>
+<tr>
+<td align="center">%x1000-%x1FFF</td>
 <td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
+<td align="center"><a class='info' href='#TLV'>Experimental Use<span> (</span><span class='info'>Type-Length-Value (TLV) Packets</span><span>)</span></a></td>
 </tr>
 </table>
 <br clear="all" />
@@ -1858,24 +1855,19 @@ Name Segment Type Registry</h3>
 <td align="center"><a class='info' href='#names'>Name<span> (</span><span class='info'>Name</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0010</td>
+<td align="center">%x0FFF</td>
+<td align="center">T_ORG</td>
+<td align="center"><a class='info' href='#vendor'>Organization-Specific TLVs<span> (</span><span class='info'>Organization Specific TLVs</span><span>)</span></a></td>
+</tr>
+<tr>
+<td align="center">%x0010-%x0013</td>
 <td align="center">Reserved</td>
 <td align="center">&nbsp;</td>
 </tr>
 <tr>
-<td align="center">%x0011</td>
-<td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
-</tr>
-<tr>
-<td align="center">%x0012</td>
-<td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
-</tr>
-<tr>
-<td align="center">%x0013</td>
-<td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
+<td align="center">%x0FFF</td>
+<td align="center">T_ORG</td>
+<td align="center"><a class='info' href='#vendor'>Organization-Specific TLVs<span> (</span><span class='info'>Organization Specific TLVs</span><span>)</span></a></td>
 </tr>
 <tr>
 <td align="center">%x1000 - %x1FFF</td>
@@ -1918,7 +1910,7 @@ CCNx Message Type Registry</h3>
 </tr>
 <tr>
 <td align="center">%x0004</td>
-<td align="center">Unassigned</td>
+<td align="center">Reserved</td>
 <td align="center">&nbsp;</td>
 </tr>
 <tr>
@@ -1932,34 +1924,14 @@ CCNx Message Type Registry</h3>
 <td align="center"><a class='info' href='#COmetadata'>Content Object Message Types<span> (</span><span class='info'>Content Object Message TLVs</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0007</td>
-<td align="center">Unassigned</td>
-<td align="center">&nbsp;</td>
-</tr>
-<tr>
-<td align="center">%x0008</td>
-<td align="center">Unassigned</td>
-<td align="center">&nbsp;</td>
-</tr>
-<tr>
-<td align="center">%x0009</td>
+<td align="center">%x0007-%x000C</td>
 <td align="center">Reserved</td>
 <td align="center">&nbsp;</td>
 </tr>
 <tr>
-<td align="center">%x000A</td>
-<td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
-</tr>
-<tr>
-<td align="center">%x000B</td>
+<td align="center">%x0FFF</td>
 <td align="center">T_ORG</td>
-<td align="center"><a class='info' href='#vendor'>Vendor Specific Information<span> (</span><span class='info'>Organization Specific TLVs</span><span>)</span></a></td>
-</tr>
-<tr>
-<td align="center">%x000C</td>
-<td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
+<td align="center"><a class='info' href='#vendor'>Organization-Specific TLVs<span> (</span><span class='info'>Organization Specific TLVs</span><span>)</span></a></td>
 </tr>
 <tr>
 <td align="center">%x1000-%x1FFF</td>
@@ -2011,7 +1983,7 @@ Validation Algorithm Type Registry</h3>
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
 <td align="center">%x0001</td>
-<td align="center">Unassigned</td>
+<td align="center">Reserved</td>
 <td align="center">&nbsp;</td>
 </tr>
 <tr>
@@ -2021,7 +1993,7 @@ Validation Algorithm Type Registry</h3>
 </tr>
 <tr>
 <td align="center">%x0003</td>
-<td align="center">Unassigned</td>
+<td align="center">Reserved</td>
 <td align="center">&nbsp;</td>
 </tr>
 <tr>
@@ -2049,6 +2021,16 @@ Validation Algorithm Type Registry</h3>
 <td align="center">EC-SECP-384R1</td>
 <td align="center"><a class='info' href='#ValAlg'>Validation Algorithm<span> (</span><span class='info'>Validation Algorithm</span><span>)</span></a></td>
 </tr>
+<tr>
+<td align="center">%x0FFF</td>
+<td align="center">T_ORG</td>
+<td align="center"><a class='info' href='#vendor'>Organization-Specific TLVs<span> (</span><span class='info'>Organization Specific TLVs</span><span>)</span></a></td>
+</tr>
+<tr>
+<td align="center">%x1000-%x1FFF</td>
+<td align="center">Reserved</td>
+<td align="center"><a class='info' href='#TLV'>Experimental Use<span> (</span><span class='info'>Type-Length-Value (TLV) Packets</span><span>)</span></a></td>
+</tr>
 </table>
 <br clear="all" />
 <table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Validation Algorithm Type Namespace&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
@@ -2065,7 +2047,7 @@ Validation Dependent Data Type Registry</h3>
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
 <td align="center">%x0001-%x0008</td>
-<td align="center">Unassigned</td>
+<td align="center">Reserved</td>
 <td align="center">&nbsp;</td>
 </tr>
 <tr>
@@ -2103,6 +2085,16 @@ Validation Dependent Data Type Registry</h3>
 <td align="center">T_SIGTIME</td>
 <td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
 </tr>
+<tr>
+<td align="center">%x0FFF</td>
+<td align="center">T_ORG</td>
+<td align="center"><a class='info' href='#vendor'>Organization-Specific TLVs<span> (</span><span class='info'>Organization Specific TLVs</span><span>)</span></a></td>
+</tr>
+<tr>
+<td align="center">%x1000-%x1FFF</td>
+<td align="center">Reserved</td>
+<td align="center"><a class='info' href='#TLV'>Experimental Use<span> (</span><span class='info'>Type-Length-Value (TLV) Packets</span><span>)</span></a></td>
+</tr>
 </table>
 <br clear="all" />
 <table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Validation Dependent Data Type Namespace&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
@@ -2128,9 +2120,14 @@ CCNx Hash Function Type Registry</h3>
 <td align="center"><a class='info' href='#hash_format'>Hash Format<span> (</span><span class='info'>Hash Format</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x1000 - %x1FFF</td>
+<td align="center">%x0FFF</td>
+<td align="center">T_ORG</td>
+<td align="center"><a class='info' href='#vendor'>Organization-Specific TLVs<span> (</span><span class='info'>Organization Specific TLVs</span><span>)</span></a></td>
+</tr>
+<tr>
+<td align="center">%x1000-%x1FFF</td>
 <td align="center">Reserved</td>
-<td align="center"><a class='info' href='#hash_format'>Hash Format<span> (</span><span class='info'>Hash Format</span><span>)</span></a></td>
+<td align="center"><a class='info' href='#TLV'>Experimental Use<span> (</span><span class='info'>Type-Length-Value (TLV) Packets</span><span>)</span></a></td>
 </tr>
 </table>
 <br clear="all" />
