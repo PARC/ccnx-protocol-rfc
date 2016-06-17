@@ -4,8 +4,8 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                      PARC
 Intended status: Experimental                                C. Tschudin
-Expires: December 9, 2016                            University of Basel
-                                                            June 7, 2016
+Expires: December 10, 2016                           University of Basel
+                                                            June 8, 2016
 
 
                 ICN "Begin-End" Hop by Hop Fragmentation
@@ -34,7 +34,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 9, 2016.
+   This Internet-Draft will expire on December 10, 2016.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Mosko & Tschudin        Expires December 9, 2016                [Page 1]
+Mosko & Tschudin        Expires December 10, 2016               [Page 1]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -71,7 +71,7 @@ Table of Contents
      2.3.  Receiver Protocol  . . . . . . . . . . . . . . . . . . . .  9
    3.  Ethernet as a common use case  . . . . . . . . . . . . . . . . 10
    4.  CCNx 1.0 Fragment Protocol Description . . . . . . . . . . . . 11
-     4.1.  Initialiation examples . . . . . . . . . . . . . . . . . . 13
+     4.1.  Initialization examples  . . . . . . . . . . . . . . . . . 13
      4.2.  Example  . . . . . . . . . . . . . . . . . . . . . . . . . 15
      4.3.  CCNx 1.0 Frame Packing . . . . . . . . . . . . . . . . . . 18
    5.  NDN Fragment Protocol Description  . . . . . . . . . . . . . . 20
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Mosko & Tschudin        Expires December 9, 2016                [Page 2]
+Mosko & Tschudin        Expires December 10, 2016               [Page 2]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -164,7 +164,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016                [Page 3]
+Mosko & Tschudin        Expires December 10, 2016               [Page 3]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -220,7 +220,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016                [Page 4]
+Mosko & Tschudin        Expires December 10, 2016               [Page 4]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -276,7 +276,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016                [Page 5]
+Mosko & Tschudin        Expires December 10, 2016               [Page 5]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -332,7 +332,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016                [Page 6]
+Mosko & Tschudin        Expires December 10, 2016               [Page 6]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -388,7 +388,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016                [Page 7]
+Mosko & Tschudin        Expires December 10, 2016               [Page 7]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -444,7 +444,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016                [Page 8]
+Mosko & Tschudin        Expires December 10, 2016               [Page 8]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -500,7 +500,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016                [Page 9]
+Mosko & Tschudin        Expires December 10, 2016               [Page 9]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -556,7 +556,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 10]
+Mosko & Tschudin        Expires December 10, 2016              [Page 10]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -612,7 +612,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 11]
+Mosko & Tschudin        Expires December 10, 2016              [Page 11]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -668,7 +668,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 12]
+Mosko & Tschudin        Expires December 10, 2016              [Page 12]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -704,7 +704,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
    / Optional CCNx ValidationPayload TLV (ValidationAlg required)  /
    +---------------+---------------+---------------+---------------+
 
-4.1.  Initialiation examples
+4.1.  Initialization examples
 
    This section presents examples of initialization packets.
 
@@ -724,7 +724,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 13]
+Mosko & Tschudin        Expires December 10, 2016              [Page 13]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -780,7 +780,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 14]
+Mosko & Tschudin        Expires December 10, 2016              [Page 14]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -836,7 +836,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 15]
+Mosko & Tschudin        Expires December 10, 2016              [Page 15]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -892,7 +892,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 16]
+Mosko & Tschudin        Expires December 10, 2016              [Page 16]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -948,7 +948,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 17]
+Mosko & Tschudin        Expires December 10, 2016              [Page 17]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1004,7 +1004,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 18]
+Mosko & Tschudin        Expires December 10, 2016              [Page 18]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1060,7 +1060,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 19]
+Mosko & Tschudin        Expires December 10, 2016              [Page 19]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1116,7 +1116,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 20]
+Mosko & Tschudin        Expires December 10, 2016              [Page 20]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1172,7 +1172,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 21]
+Mosko & Tschudin        Expires December 10, 2016              [Page 21]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1228,7 +1228,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 22]
+Mosko & Tschudin        Expires December 10, 2016              [Page 22]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1284,7 +1284,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 23]
+Mosko & Tschudin        Expires December 10, 2016              [Page 23]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1340,7 +1340,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 24]
+Mosko & Tschudin        Expires December 10, 2016              [Page 24]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1396,7 +1396,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 25]
+Mosko & Tschudin        Expires December 10, 2016              [Page 25]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2016
 
@@ -1452,5 +1452,5 @@ Authors' Addresses
 
 
 
-Mosko & Tschudin        Expires December 9, 2016               [Page 26]
+Mosko & Tschudin        Expires December 10, 2016              [Page 26]
 
