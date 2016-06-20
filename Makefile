@@ -4,7 +4,7 @@
 ## NB: they will appear in the combined PDF
 ##     in the order listed.
 
-FILES += draft-irtf-icnrg-ccnxmessages-02
+FILES += draft-irtf-icnrg-ccnxmessages-03
 FILES += draft-irtf-icnrg-ccnxsemantics-03
 
 FILES += draft-mosko-icnrg-beginendfragment-01
@@ -14,8 +14,7 @@ FILES += draft-mosko-icnrg-ccnxfragmentation-01
 FILES += draft-mosko-icnrg-ccnxserialversion-01
 FILES += draft-mosko-icnrg-ccnxtimeversion-02
 
-#FILES += draft-wood-icnrg-ccnxmanifests-00
-FILES += draft-wood-icnrg-ccnxoverudp
+#FILES += draft-wood-icnrg-ccnxoverudp
 
 #############################
 
