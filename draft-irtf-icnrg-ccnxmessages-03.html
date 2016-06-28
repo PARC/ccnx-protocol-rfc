@@ -145,10 +145,10 @@
 <tr><td class="header">ICNRG</td><td class="header">M. Mosko</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">PARC, Inc.</td></tr>
 <tr><td class="header">Intended status: Experimental</td><td class="header">I. Solis</td></tr>
-<tr><td class="header">Expires: December 19, 2016</td><td class="header">LinkedIn</td></tr>
+<tr><td class="header">Expires: December 30, 2016</td><td class="header">LinkedIn</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">C. Wood</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">PARC, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">June 17, 2016</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">June 28, 2016</td></tr>
 </table></td></tr></table>
 <h1><br />CCNx Messages in TLV Format<br />draft-irtf-icnrg-ccnxmessages-03</h1>
 
@@ -175,7 +175,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on December 19, 2016.</p>
+This Internet-Draft will expire on December 30, 2016.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -262,37 +262,35 @@ Validation<br />
 Validation Algorithm<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#ValPayload">3.6.4.2.</a>&nbsp;
 Validation Payload<br />
-<a href="#Acknowledgements">4.</a>&nbsp;
-Acknowledgements<br />
-<a href="#IANA">5.</a>&nbsp;
+<a href="#IANA">4.</a>&nbsp;
 IANA Considerations<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_PacketLevel">5.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_PacketLevel">4.1.</a>&nbsp;
 Packet Type Registry<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_InterestReturnCodes">5.2.</a>&nbsp;
-Interest Return Type Registry<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_TopLevel">5.3.</a>&nbsp;
-Top-Level Type Registry<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_HopByHop">5.4.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_InterestReturnCodes">4.2.</a>&nbsp;
+Interest Return Code Registry<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_HopByHop">4.3.</a>&nbsp;
 Hop-by-Hop Type Registry<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_NameSegment">5.5.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_TopLevel">4.4.</a>&nbsp;
+Top-Level Type Registry<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_NameSegment">4.5.</a>&nbsp;
 Name Segment Type Registry<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_MessageTypes">5.6.</a>&nbsp;
-CCNx Message Type Registry<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_PayloadType">5.7.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_MessageTypes">4.6.</a>&nbsp;
+Message Type Registry<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_PayloadType">4.7.</a>&nbsp;
 Payload Type Registry<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_ValidationAlgorithm">5.8.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_ValidationAlgorithm">4.8.</a>&nbsp;
 Validation Algorithm Type Registry<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_ValidationDD">5.9.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_ValidationDD">4.9.</a>&nbsp;
 Validation Dependent Data Type Registry<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_HashFunctions">5.10.</a>&nbsp;
-CCNx Hash Function Type Registry<br />
-<a href="#Security">6.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#IANA_HashFunctions">4.10.</a>&nbsp;
+Hash Function Type Registry<br />
+<a href="#Security">5.</a>&nbsp;
 Security Considerations<br />
-<a href="#rfc.references1">7.</a>&nbsp;
+<a href="#rfc.references1">6.</a>&nbsp;
 References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">7.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">6.1.</a>&nbsp;
 Normative References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">7.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">6.2.</a>&nbsp;
 Informative References<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Authors' Addresses<br />
@@ -342,8 +340,9 @@ Introduction</h3>
 </ul><p>
       
 </p>
-<p>
-         In the final draft, the type values will be assigned to be compact.  All type values are
+<p>The type values in <a class='info' href='#IANA'>Section&nbsp;4<span> (</span><span class='info'>IANA Considerations</span><span>)</span></a> represent the values in common usage today.
+         These values may change pending IANA assignments.
+         All type values are
          relative to their parent containers. It is possible for a TLV to redefine a type value defined by
          its parent.  For example, each level of a nested TLV structure might define a "type = 1" with
          a completely different meaning.
@@ -354,8 +353,6 @@ Introduction</h3>
          fields enclosed by vertical bars "|" represent exact bit widths.  Fields
          with a forward slash "/" are variable bit widths, which we typically pad
          out to word alignment for picture readability.
-</p>
-<p>TODO -- we have not adopted the Requirements Language yet.
 </p>
 <a name="anchor2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -434,14 +431,16 @@ Type-Length-Value (TLV) Packets</h3>
 +---------------+---------------+---------------+---------------+
 </pre></div>
 <p>The Length field contains the length of the Value field in octets.  It does
-          not include the length of the Type and Length fields.  A zero length
-          TLV is permissible.
+          not include the length of the Type and Length fields.  They length MAY be zero.
+        
 </p>
 <p>TLV structures are nestable, allowing the Value field of one TLV structure to contain
           additional TLV structures. The enclosing TLV structure is called the container of the enclosed TLV.
+        
 </p>
 <p>Type values are context-dependent.  Within a TLV container, one may re-use previous type values for
       new context-dependent purposes.
+      
 </p>
 <a name="packet_format"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -503,7 +502,7 @@ Fixed Headers</h3>
             The PacketLength field represents the entire Packet length.
           
 </p>
-<p>A specific PacketType may assign meaning to the reserved bytes.
+<p>A specific PacketType may assign meaning to the "PacketType specific fields".
 </p>
 <p>The PacketPayload of a CCNx packet is the protocol message itself. The
             Content Object Hash is computed over the PacketPayload only, excluding
@@ -528,7 +527,7 @@ Fixed Headers</h3>
 <li>Version: defines the version of the packet.
 </li>
 <li>HeaderLength: The length of the fixed header (8 bytes) and hop-by-hop headers.
-                  The minimum value is "8".
+                  The minimum value MUST be "8".
 </li>
 <li>PacketType: describes forwarder actions to take on the packet.
 </li>
@@ -560,8 +559,8 @@ Interest Fixed Header</h3>
 <p>If the PacketType in the Fixed Header is PT_INTEREST, it indicates that the PacketPayload should be processed
             as an Interest message.
             For this type of packet, the Fixed Header includes a field for a HopLimit as well as Reserved and Flags fields. The Reserved
-            field must be set to 0 in an Interest - this field will be set to a return code in the case of an Interest Return.
-            There are currently no Flags defined, so this field must also be set to 0.
+            field MUST be set to 0 in an Interest - this field will be set to a return code in the case of an Interest Return.
+            There are currently no Flags defined, so this field MUST be set to 0.
            
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
                      1                   2                   3
@@ -579,10 +578,10 @@ Interest HopLimit</h3>
 
 <p>For an Interest message, the HopLimit is a counter that is decremented with each hop. It limits the
           distance an Interest may travel on the network.  The node originating the
-          Interest may put in any value - up to the maximum of 255.  Each node that receives
+          Interest MAY put in any value - up to the maximum of 255.  Each node that receives
           an Interest with a HopLimit decrements the value upon
           reception.  If the value is 0 after the decrement, the Interest
-          cannot be forwarded off the node.
+          MUST NOT be forwarded off the node.
 </p>
 <p>It is an error to receive an Interest with a 0 hop-limit from a remote node.
 </p>
@@ -612,7 +611,7 @@ InterestReturn Fixed Header</h3>
 <p>If the PacketType in the Fixed Header is PT_RETURN, it indicates that the PacketPayload should be processed
             as a returned Interest message.
             The only difference between this InterestReturn message and the original Interest is that the PacketType is changed
-            to "2" and a ReturnCode is is put into the Reserved octet.  All other
+            to PT_RETURN and a ReturnCode is is put into the Reserved octet.  All other
           fields are unchanged.  The purpose of this encoding is to prevent packet
           length changes so no additional bytes are needed to return an Interest to
           the previous hop.  See <a class='info' href='#CCNSemantics'>[CCNSemantics]<span> (</span><span class='info'>Mosko, M. and I. Solis, &ldquo;CCNx Semantics (Internet draft),&rdquo; 2016.</span><span>)</span></a> for a protocol description
@@ -632,7 +631,7 @@ InterestReturn Fixed Header</h3>
 InterestReturn HopLimit</h3>
 
 <p>This is the original Interest's HopLimit, as received.  It is the value before being
-            decremented at the current node.
+            decremented at the current node (i.e. the received value).
 </p>
 <a name="InterestReturnFlags"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -649,7 +648,7 @@ Return Code</h3>
 <p>The numeric value assigned to the return types is defined below.
             This value is set by the node creating the Interest Return.
 </p>
-<p>A return code of "0" is not allowed, as it indicates that the returning system
+<p>A return code of "0" MUST NOT be used, as it indicates that the returning system
             did not modify the Return Code field.
 </p><br /><hr class="insert" />
 <a name="ReturnCodeTable"></a>
@@ -715,8 +714,8 @@ Pad</h3>
             Length.
         
 </p>
-<p>A pad may be inserted after any TLV except within a Name TLV.  In the remainder of
-            this document, we will not show optional pad TLVs.
+<p>A pad MAY be inserted after any TLV in the CCNx Message or in the Validation Dependent Data
+          In the remainder of this document, we will not show optional pad TLVs.
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
                     1                   2                   3
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -731,11 +730,6 @@ Pad</h3>
 <a name="rfc.section.3.3.2"></a><h3>3.3.2.&nbsp;
 Organization Specific TLVs</h3>
 
-<p>Organizations may request proprietary TLV types in the Hop-By-Hop headers section or
-            other TLV containers.  The organization then has control of the contents of the Value, which may be
-            its own binary field or an encapsulated set of TLVs.  The inner TLVs, because we use a context-dependent
-            TLV scheme, may be fully defined by the organization.
-</p>
 <p>Organization specific TLVs MUST use the T_ORG type. The Length field is the length of the organization
             specific information plus 3. The Value begins with the 3 byte organization number derived from the last
             three digits of the <a class='info' href='#EpriseNumbers'>IANA Private Enterprise Numbers<span> (</span><span class='info'>IANA, &ldquo;IANA Private Enterprise Numbers,&rdquo; 2015.</span><span>)</span></a> [EpriseNumbers], followed by the
@@ -774,8 +768,7 @@ Hash Format</h3>
             parsing state-space.
 </p>
 <p>A CCN entity MUST support the hash type T_SHA-256. An entity MAY support
-            the remaining hash types, e.g., T_SHA-512 and any application-specific hash
-            type.
+            the remaining hash types.
 </p><br /><hr class="insert" />
 <a name="hash_types"></a>
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
@@ -791,7 +784,7 @@ Hash Format</h3>
 </tr>
 <tr>
 <td align="center">n/a</td>
-<td align="center">any</td>
+<td align="center">Experimental TLV types</td>
 </tr>
 </table>
 <br clear="all" />
@@ -834,9 +827,9 @@ Link</h3>
 <a name="rfc.section.3.4"></a><h3>3.4.&nbsp;
 Hop-by-hop TLV headers</h3>
 
-<p>Hop-by-hop TLV headers are unordered and no meaning
-          should be attached to their ordering.
-          Four hop-by-hop headers are described in this document:
+<p>Hop-by-hop TLV headers are unordered and meaning MUST NOT
+          be attached to their ordering.
+          Three hop-by-hop headers are described in this document:
 </p><br /><hr class="insert" />
 <a name="hbh_types"></a>
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
@@ -1072,7 +1065,7 @@ Name</h3>
 <td align="center"><a class='info' href='#name_ipid'>Interest Payload ID<span> (</span><span class='info'>Interest Payload ID</span><span>)</span></a></td>
 <td align="left">An identifier that represents the Interest Payload field. As an example, the Payload ID might be a hash of the Interest Payload.
                 This provides a way to differentiate between Interests based on their payloads without having to parse all the bytes of the payload
-                itself; instead using only this Payload ID Name segment  </td>
+                itself; instead using only this Payload ID Name segment.</td>
 </tr>
 <tr>
 <td align="center">T_APP:00 - T_APP:4096</td>
@@ -1202,7 +1195,7 @@ Interest Message TLVs</h3>
 <a name="rfc.section.3.6.2.1.1"></a><h3>3.6.2.1.1.&nbsp;
 KeyIdRestriction</h3>
 
-<p>An Interest may include a KeyIdRestriction selector.
+<p>An Interest MAY include a KeyIdRestriction selector.
                 This ensures that only Content Objects with matching KeyIds will
                 satisfy the Interest. See <a class='info' href='#KeyId'>Section&nbsp;3.6.4.1.4.1<span> (</span><span class='info'>KeyId</span><span>)</span></a> for the format of a KeyId.
 </p>
@@ -1211,7 +1204,7 @@ KeyIdRestriction</h3>
 <a name="rfc.section.3.6.2.1.2"></a><h3>3.6.2.1.2.&nbsp;
 ContentObjectHashRestriction</h3>
 
-<p>An Interest may also contain a ContentObjectHashRestriction selector. This is
+<p>An Interest MAY contain a ContentObjectHashRestriction selector. This is
                 the hash of the Content Object - the self-certifying name restriction that
                 must be verified in the network, if an Interest carried this restriction.
                 It is calculated from the beginning of the CCNx Message to the end of the packet.
@@ -1329,8 +1322,9 @@ ExpiryTime</h3>
 <a name="rfc.section.3.6.3"></a><h3>3.6.3.&nbsp;
 Payload</h3>
 
-<p>The Payload TLV contains the content of the packet.  It is permissible to have a "0" length.
-              If a packet does not have any payload, this field may be omitted, rather than carrying a "0" length.
+<p>The Payload TLV contains the content of the packet.  It MAY be of zero length.
+              If a packet does not have any payload, this field MAY be omitted, rather than carrying a zero length.
+            
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1596,14 +1590,14 @@ SignatureTime</h3>
 <a name="rfc.section.3.6.4.1.5"></a><h3>3.6.4.1.5.&nbsp;
 Validation Examples</h3>
 
-<p>As an example of a MIC type validation, the encoding for CRC32 validation would be:
+<p>As an example of a MIC type validation, the encoding for CRC32C validation would be:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+---------------+---------------+
 |      T_VALIDATION_ALG         |               4               |
 +---------------+---------------+---------------+---------------+
-|            T_CRC32            |               0               |
+|            T_CRC32C           |               0               |
 +---------------+---------------+---------------+---------------+
 </pre></div>
 <p>As an example of a MAC type validation, the encoding for an HMAC using a SHA256 hash would be:
@@ -1654,42 +1648,79 @@ Validation Payload</h3>
 </pre></div>
 <p>The ValidationPayload contains the validation output, such as the CRC32C code or the RSA signature.
 </p>
-<a name="Acknowledgements"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4"></a><h3>4.&nbsp;
-Acknowledgements</h3>
-
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5"></a><h3>5.&nbsp;
+<a name="rfc.section.4"></a><h3>4.&nbsp;
 IANA Considerations</h3>
 
 <p>This section details each kind of protocol value that can be
             registered. Each type registry can be updated by incrementally
-            expanding the typespace, i.e., by allocating and reserving new types.
-</p>
+            expanding the type space, i.e., by allocating and reserving new types.
+            As per <a class='info' href='#RFC5226'>[RFC5226]<span> (</span><span class='info'>Narten, T. and H. Alvestrand, &ldquo;Guidelines for Writing an IANA Considerations Section in RFCs,&rdquo; May&nbsp;2008.</span><span>)</span></a> this section details the creation of
+          the "CCNx Registry" and several sub-registries.
+        
+</p><br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Property</th><th align="left">Value</th></tr>
+<tr>
+<td align="left">Name</td>
+<td align="left">CCNx Registry</td>
+</tr>
+<tr>
+<td align="left">Abbrev</td>
+<td align="left">CCNx</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Registry Creation&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+
 <a name="IANA_PacketLevel"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.1"></a><h3>5.1.&nbsp;
+<a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
 Packet Type Registry</h3>
 
-<p> The following packet types should be allocated.
+<p> The following packet types should be allocated.  A PacketType MUST be 1 byte.
+        New packet types are allocated via "RFC Required" action.
 </p><br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Property</th><th align="left">Value</th></tr>
+<tr>
+<td align="left">Name</td>
+<td align="left">Packet Type Registry</td>
+</tr>
+<tr>
+<td align="left">Parent</td>
+<td align="left">CCNx Registry</td>
+</tr>
+<tr>
+<td align="left">Review process</td>
+<td align="left">RFC Required</td>
+</tr>
+<tr>
+<td align="left">Syntax</td>
+<td align="left">1 octet (decimal)</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Registry Creation&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+<br /><hr class="insert" />
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
 <col align="center"><col align="center"><col align="center">
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
-<td align="center">%x00</td>
+<td align="center">0</td>
 <td align="center">PT_INTEREST</td>
 <td align="center"><a class='info' href='#header'>Fixed Header Types<span> (</span><span class='info'>Fixed Headers</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x01</td>
+<td align="center">1</td>
 <td align="center">PT_CONTENT</td>
 <td align="center"><a class='info' href='#header'>Fixed Header Types<span> (</span><span class='info'>Fixed Headers</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x02</td>
+<td align="center">2</td>
 <td align="center">PT_RETURN</td>
 <td align="center"><a class='info' href='#header'>Fixed Header Types<span> (</span><span class='info'>Fixed Headers</span><span>)</span></a></td>
 </tr>
@@ -1699,56 +1730,79 @@ Packet Type Registry</h3>
 
 <a name="IANA_InterestReturnCodes"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.2"></a><h3>5.2.&nbsp;
-Interest Return Type Registry</h3>
+<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
+Interest Return Code Registry</h3>
 
 <p> The following InterestReturn code types should be allocated.
 </p><br /><hr class="insert" />
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Property</th><th align="left">Value</th></tr>
+<tr>
+<td align="left">Name</td>
+<td align="left">Interest Return Code</td>
+</tr>
+<tr>
+<td align="left">Parent</td>
+<td align="left">CCNx Registry</td>
+</tr>
+<tr>
+<td align="left">Review process</td>
+<td align="left">Expert Review, should include public standard leading to RFC.</td>
+</tr>
+<tr>
+<td align="left">Syntax</td>
+<td align="left">1 octet (decimal)</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Registry Creation&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+<br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
 <col align="center"><col align="center"><col align="center">
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
-<td align="center">%x01</td>
+<td align="center">1</td>
 <td align="center">T_RETURN_NO_ROUTE</td>
 <td align="center"><a class='info' href='#ReturnCode'>Fixed Header Types<span> (</span><span class='info'>Return Code</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x02</td>
+<td align="center">2</td>
 <td align="center">T_RETURN_LIMIT_EXCEEDED</td>
 <td align="center"><a class='info' href='#ReturnCode'>Fixed Header Types<span> (</span><span class='info'>Return Code</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x03</td>
+<td align="center">3</td>
 <td align="center">T_RETURN_NO_RESOURCES</td>
 <td align="center"><a class='info' href='#ReturnCode'>Fixed Header Types<span> (</span><span class='info'>Return Code</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x04</td>
+<td align="center">4</td>
 <td align="center">T_RETURN_PATH_ERROR</td>
 <td align="center"><a class='info' href='#ReturnCode'>Fixed Header Types<span> (</span><span class='info'>Return Code</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x05</td>
+<td align="center">5</td>
 <td align="center">T_RETURN_PROHIBITED</td>
 <td align="center"><a class='info' href='#ReturnCode'>Fixed Header Types<span> (</span><span class='info'>Return Code</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x06</td>
+<td align="center">6</td>
 <td align="center">T_RETURN_CONGESTED</td>
 <td align="center"><a class='info' href='#ReturnCode'>Fixed Header Types<span> (</span><span class='info'>Return Code</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x07</td>
+<td align="center">7</td>
 <td align="center">T_RETURN_MTU_TOO_LARGE</td>
 <td align="center"><a class='info' href='#ReturnCode'>Fixed Header Types<span> (</span><span class='info'>Return Code</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x08</td>
+<td align="center">8</td>
 <td align="center">T_RETURN_UNSUPPORTED_HASH_RESTRICTION</td>
 <td align="center"><a class='info' href='#ReturnCode'>Fixed Header Types<span> (</span><span class='info'>Return Code</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x09</td>
+<td align="center">9</td>
 <td align="center">T_RETURN_MALFORMED_INTEREST</td>
 <td align="center"><a class='info' href='#ReturnCode'>Fixed Header Types<span> (</span><span class='info'>Return Code</span><span>)</span></a></td>
 </tr>
@@ -1756,69 +1810,63 @@ Interest Return Type Registry</h3>
 <br clear="all" />
 <table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Interest Return Type Namespace&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
-<a name="IANA_TopLevel"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.3"></a><h3>5.3.&nbsp;
-Top-Level Type Registry</h3>
-
-<p> The following top-level types should be allocated.
-</p><br /><hr class="insert" />
-<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
-<col align="center"><col align="center"><col align="center">
-<tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
-<tr>
-<td align="center">%x0001</td>
-<td align="center">T_INTEREST</td>
-<td align="center"><a class='info' href='#top_level'>Top-Level Types<span> (</span><span class='info'>Top-Level Types</span><span>)</span></a></td>
-</tr>
-<tr>
-<td align="center">%x0002</td>
-<td align="center">T_OBJECT</td>
-<td align="center"><a class='info' href='#top_level'>Top-Level Types<span> (</span><span class='info'>Top-Level Types</span><span>)</span></a></td>
-</tr>
-<tr>
-<td align="center">%x0003</td>
-<td align="center">T_VALIDATION_ALG</td>
-<td align="center"><a class='info' href='#top_level'>Top-Level Types<span> (</span><span class='info'>Top-Level Types</span><span>)</span></a></td>
-</tr>
-<tr>
-<td align="center">%x0004</td>
-<td align="center">T_VALIDATION_PAYLOAD</td>
-<td align="center"><a class='info' href='#top_level'>Top-Level Types<span> (</span><span class='info'>Top-Level Types</span><span>)</span></a></td>
-</tr>
-</table>
-<br clear="all" />
-<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Top-Level Type Namespace&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
-
 <a name="IANA_HopByHop"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.4"></a><h3>5.4.&nbsp;
+<a name="rfc.section.4.3"></a><h3>4.3.&nbsp;
 Hop-by-Hop Type Registry</h3>
 
 <p>The following hop-by-hop types should be allocated.
 </p><br /><hr class="insert" />
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Property</th><th align="left">Value</th></tr>
+<tr>
+<td align="left">Name</td>
+<td align="left">Hop-by-Hop Type Registry</td>
+</tr>
+<tr>
+<td align="left">Parent</td>
+<td align="left">CCNx Registry</td>
+</tr>
+<tr>
+<td align="left">Review process</td>
+<td align="left">RFC Required</td>
+</tr>
+<tr>
+<td align="left">Syntax</td>
+<td align="left">2 octet TLV type (decimal)</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Registry Creation&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+<br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
 <col align="center"><col align="center"><col align="center">
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
-<td align="center">%x0001</td>
+<td align="center">1</td>
 <td align="center">T_INTLIFE</td>
 <td align="center"><a class='info' href='#per-hop'>Hop-by-hop TLV headers<span> (</span><span class='info'>Hop-by-hop TLV headers</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0002</td>
+<td align="center">2</td>
 <td align="center">T_CACHETIME</td>
 <td align="center"><a class='info' href='#per-hop'>Hop-by-hop TLV headers<span> (</span><span class='info'>Hop-by-hop TLV headers</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0003</td>
+<td align="center">3</td>
 <td align="center">T_MSGHASH</td>
 <td align="center"><a class='info' href='#per-hop'>Hop-by-hop TLV headers<span> (</span><span class='info'>Hop-by-hop TLV headers</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0004-%x0007</td>
+<td align="center">4 - 7</td>
 <td align="center">Reserved</td>
 <td align="center">&nbsp;</td>
+</tr>
+<tr>
+<td align="center">%x0FFE</td>
+<td align="center">T_PAD</td>
+<td align="center"><a class='info' href='#pad'>Pad<span> (</span><span class='info'>Pad</span><span>)</span></a></td>
 </tr>
 <tr>
 <td align="center">%x0FFF</td>
@@ -1834,35 +1882,110 @@ Hop-by-Hop Type Registry</h3>
 <br clear="all" />
 <table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Hop-by-Hop Type Namespace&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
+<a name="IANA_TopLevel"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.4"></a><h3>4.4.&nbsp;
+Top-Level Type Registry</h3>
+
+<p> The following top-level types should be allocated.
+</p><br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Property</th><th align="left">Value</th></tr>
+<tr>
+<td align="left">Name</td>
+<td align="left">Top-Level Type Registry</td>
+</tr>
+<tr>
+<td align="left">Parent</td>
+<td align="left">CCNx Registry</td>
+</tr>
+<tr>
+<td align="left">Review process</td>
+<td align="left">RFC Required</td>
+</tr>
+<tr>
+<td align="left">Syntax</td>
+<td align="left">2 octet TLV type (decimal)</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Registry Creation&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+<br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="center"><col align="center"><col align="center">
+<tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
+<tr>
+<td align="center">1</td>
+<td align="center">T_INTEREST</td>
+<td align="center"><a class='info' href='#top_level'>Top-Level Types<span> (</span><span class='info'>Top-Level Types</span><span>)</span></a></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">T_OBJECT</td>
+<td align="center"><a class='info' href='#top_level'>Top-Level Types<span> (</span><span class='info'>Top-Level Types</span><span>)</span></a></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">T_VALIDATION_ALG</td>
+<td align="center"><a class='info' href='#top_level'>Top-Level Types<span> (</span><span class='info'>Top-Level Types</span><span>)</span></a></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">T_VALIDATION_PAYLOAD</td>
+<td align="center"><a class='info' href='#top_level'>Top-Level Types<span> (</span><span class='info'>Top-Level Types</span><span>)</span></a></td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Top-Level Type Namespace&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+
 <a name="IANA_NameSegment"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.5"></a><h3>5.5.&nbsp;
+<a name="rfc.section.4.5"></a><h3>4.5.&nbsp;
 Name Segment Type Registry</h3>
 
 <p>The following name segment types should be allocated.
 </p><br /><hr class="insert" />
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Property</th><th align="left">Value</th></tr>
+<tr>
+<td align="left">Name</td>
+<td align="left">Name Segment Type Registry</td>
+</tr>
+<tr>
+<td align="left">Parent</td>
+<td align="left">CCNx Registry</td>
+</tr>
+<tr>
+<td align="left">Review process</td>
+<td align="left">Expert Review with public specification</td>
+</tr>
+<tr>
+<td align="left">Syntax</td>
+<td align="left">2 octet TLV type (decimal)</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Registry Creation&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+<br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
 <col align="center"><col align="center"><col align="center">
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
-<td align="center">%x0001</td>
+<td align="center">1</td>
 <td align="center">T_NAMESEGMENT</td>
 <td align="center"><a class='info' href='#names'>Name<span> (</span><span class='info'>Name</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0002</td>
+<td align="center">2</td>
 <td align="center">T_IPID</td>
 <td align="center"><a class='info' href='#names'>Name<span> (</span><span class='info'>Name</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0FFF</td>
-<td align="center">T_ORG</td>
-<td align="center"><a class='info' href='#vendor'>Organization-Specific TLVs<span> (</span><span class='info'>Organization Specific TLVs</span><span>)</span></a></td>
-</tr>
-<tr>
-<td align="center">%x0010-%x0013</td>
+<td align="center">16 - 19</td>
 <td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
+<td align="center">Used in other drafts</td>
 </tr>
 <tr>
 <td align="center">%x0FFF</td>
@@ -1880,53 +2003,76 @@ Name Segment Type Registry</h3>
 
 <a name="IANA_MessageTypes"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.6"></a><h3>5.6.&nbsp;
-CCNx Message Type Registry</h3>
+<a name="rfc.section.4.6"></a><h3>4.6.&nbsp;
+Message Type Registry</h3>
 
 <p>The following CCNx message segment types should be allocated.
 </p><br /><hr class="insert" />
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Property</th><th align="left">Value</th></tr>
+<tr>
+<td align="left">Name</td>
+<td align="left">Message Type Registry</td>
+</tr>
+<tr>
+<td align="left">Parent</td>
+<td align="left">CCNx Registry</td>
+</tr>
+<tr>
+<td align="left">Review process</td>
+<td align="left">RFC Required</td>
+</tr>
+<tr>
+<td align="left">Syntax</td>
+<td align="left">2 octet TLV type (decimal)</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Registry Creation&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+<br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
 <col align="center"><col align="center"><col align="center">
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
-<td align="center">%x0000</td>
+<td align="center">0</td>
 <td align="center">T_NAME</td>
 <td align="center"><a class='info' href='#CCNMessage'>Message Types<span> (</span><span class='info'>CCNx Message</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0001</td>
+<td align="center">1</td>
 <td align="center">T_PAYLOAD</td>
 <td align="center"><a class='info' href='#CCNMessage'>Message Types<span> (</span><span class='info'>CCNx Message</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0002</td>
+<td align="center">2</td>
 <td align="center">T_KEYIDRESTR</td>
 <td align="center"><a class='info' href='#CCNMessage'>Message Types<span> (</span><span class='info'>CCNx Message</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0003</td>
+<td align="center">3</td>
 <td align="center">T_OBJHASHRESTR</td>
 <td align="center"><a class='info' href='#CCNMessage'>Message Types<span> (</span><span class='info'>CCNx Message</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0004</td>
-<td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
-</tr>
-<tr>
-<td align="center">%x0005</td>
+<td align="center">5</td>
 <td align="center">T_PAYLDTYPE</td>
 <td align="center"><a class='info' href='#COmetadata'>Content Object Message Types<span> (</span><span class='info'>Content Object Message TLVs</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0006</td>
+<td align="center">6</td>
 <td align="center">T_EXPIRY</td>
 <td align="center"><a class='info' href='#COmetadata'>Content Object Message Types<span> (</span><span class='info'>Content Object Message TLVs</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0007-%x000C</td>
+<td align="center">7 - 12</td>
 <td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
+<td align="center">Used in other RFC drafts</td>
+</tr>
+<tr>
+<td align="center">%x0FFE</td>
+<td align="center">T_PAD</td>
+<td align="center"><a class='info' href='#pad'>Pad<span> (</span><span class='info'>Pad</span><span>)</span></a></td>
 </tr>
 <tr>
 <td align="center">%x0FFF</td>
@@ -1944,26 +2090,49 @@ CCNx Message Type Registry</h3>
 
 <a name="IANA_PayloadType"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.7"></a><h3>5.7.&nbsp;
+<a name="rfc.section.4.7"></a><h3>4.7.&nbsp;
 Payload Type Registry</h3>
 
 <p>The following payload types should be allocated.
 </p><br /><hr class="insert" />
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Property</th><th align="left">Value</th></tr>
+<tr>
+<td align="left">Name</td>
+<td align="left">PayloadType Registry</td>
+</tr>
+<tr>
+<td align="left">Parent</td>
+<td align="left">CCNx Registry</td>
+</tr>
+<tr>
+<td align="left">Review process</td>
+<td align="left">Expert Review with public specification</td>
+</tr>
+<tr>
+<td align="left">Syntax</td>
+<td align="left">Variable length unsigned integer (decimal)</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Registry Creation&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+<br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
 <col align="center"><col align="center"><col align="center">
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
-<td align="center">%x0000</td>
+<td align="center">0</td>
 <td align="center">T_PAYLOADTYPE_DATA</td>
 <td align="center"><a class='info' href='#payload_type'>Payload Types<span> (</span><span class='info'>PayloadType</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0001</td>
+<td align="center">1</td>
 <td align="center">T_PAYLOADTYPE_KEY</td>
 <td align="center"><a class='info' href='#payload_type'>Payload Types<span> (</span><span class='info'>PayloadType</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0002</td>
+<td align="center">2</td>
 <td align="center">T_PAYLOADTYPE_LINK</td>
 <td align="center"><a class='info' href='#payload_type'>Payload Types<span> (</span><span class='info'>PayloadType</span><span>)</span></a></td>
 </tr>
@@ -1973,53 +2142,71 @@ Payload Type Registry</h3>
 
 <a name="IANA_ValidationAlgorithm"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.8"></a><h3>5.8.&nbsp;
+<a name="rfc.section.4.8"></a><h3>4.8.&nbsp;
 Validation Algorithm Type Registry</h3>
 
 <p>The following validation algorithm types should be allocated.
 </p><br /><hr class="insert" />
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Property</th><th align="left">Value</th></tr>
+<tr>
+<td align="left">Name</td>
+<td align="left">Validation Algorithm Type Registry</td>
+</tr>
+<tr>
+<td align="left">Parent</td>
+<td align="left">CCNx Registry</td>
+</tr>
+<tr>
+<td align="left">Review process</td>
+<td align="left">Expert Review with public specification of the algorithm</td>
+</tr>
+<tr>
+<td align="left">Syntax</td>
+<td align="left">2 octet TLV type (decimal)</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Registry Creation&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+<br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
 <col align="center"><col align="center"><col align="center">
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
-<td align="center">%x0001</td>
-<td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
-</tr>
-<tr>
-<td align="center">%x0002</td>
+<td align="center">2</td>
 <td align="center">T_CRC32C</td>
 <td align="center"><a class='info' href='#ValAlg'>Validation Algorithm<span> (</span><span class='info'>Validation Algorithm</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0003</td>
-<td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
-</tr>
-<tr>
-<td align="center">%x0004</td>
+<td align="center">4</td>
 <td align="center">T_HMAC-SHA256</td>
 <td align="center"><a class='info' href='#ValAlg'>Validation Algorithm<span> (</span><span class='info'>Validation Algorithm</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0005</td>
+<td align="center">5</td>
 <td align="center">T_VMAC-128</td>
 <td align="center"><a class='info' href='#ValAlg'>Validation Algorithm<span> (</span><span class='info'>Validation Algorithm</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0006</td>
+<td align="center">6</td>
 <td align="center">T_RSA-SHA256</td>
 <td align="center"><a class='info' href='#ValAlg'>Validation Algorithm<span> (</span><span class='info'>Validation Algorithm</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0007</td>
+<td align="center">7</td>
 <td align="center">EC-SECP-256K1</td>
 <td align="center"><a class='info' href='#ValAlg'>Validation Algorithm<span> (</span><span class='info'>Validation Algorithm</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0008</td>
+<td align="center">8</td>
 <td align="center">EC-SECP-384R1</td>
 <td align="center"><a class='info' href='#ValAlg'>Validation Algorithm<span> (</span><span class='info'>Validation Algorithm</span><span>)</span></a></td>
+</tr>
+<tr>
+<td align="center">%x0FFE</td>
+<td align="center">T_PAD</td>
+<td align="center"><a class='info' href='#pad'>Pad<span> (</span><span class='info'>Pad</span><span>)</span></a></td>
 </tr>
 <tr>
 <td align="center">%x0FFF</td>
@@ -2037,51 +2224,69 @@ Validation Algorithm Type Registry</h3>
 
 <a name="IANA_ValidationDD"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.9"></a><h3>5.9.&nbsp;
+<a name="rfc.section.4.9"></a><h3>4.9.&nbsp;
 Validation Dependent Data Type Registry</h3>
 
 <p>The following validation dependent data types should be allocated.
 </p><br /><hr class="insert" />
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Property</th><th align="left">Value</th></tr>
+<tr>
+<td align="left">Name</td>
+<td align="left">Validation Dependent Data Type Registry</td>
+</tr>
+<tr>
+<td align="left">Parent</td>
+<td align="left">CCNx Registry</td>
+</tr>
+<tr>
+<td align="left">Review process</td>
+<td align="left">RFC Required</td>
+</tr>
+<tr>
+<td align="left">Syntax</td>
+<td align="left">2 octet TLV type (decimal)</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Registry Creation&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+<br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
 <col align="center"><col align="center"><col align="center">
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
-<td align="center">%x0001-%x0008</td>
-<td align="center">Reserved</td>
-<td align="center">&nbsp;</td>
-</tr>
-<tr>
-<td align="center">%x0009</td>
+<td align="center">9</td>
 <td align="center">T_KEYID</td>
 <td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x000A</td>
+<td align="center">10</td>
 <td align="center">T_PUBLICKEYLOC</td>
 <td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x000B</td>
+<td align="center">11</td>
 <td align="center">T_PUBLICKEY</td>
 <td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x000C</td>
+<td align="center">12</td>
 <td align="center">T_CERT</td>
 <td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x000D</td>
+<td align="center">13</td>
 <td align="center">T_LINK</td>
 <td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x000E</td>
+<td align="center">14</td>
 <td align="center">T_KEYNAME</td>
 <td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x000F</td>
+<td align="center">15</td>
 <td align="center">T_SIGTIME</td>
 <td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
 </tr>
@@ -2101,21 +2306,44 @@ Validation Dependent Data Type Registry</h3>
 
 <a name="IANA_HashFunctions"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5.10"></a><h3>5.10.&nbsp;
-CCNx Hash Function Type Registry</h3>
+<a name="rfc.section.4.10"></a><h3>4.10.&nbsp;
+Hash Function Type Registry</h3>
 
 <p>The following CCNx hash function types should be allocated.
 </p><br /><hr class="insert" />
 <table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Property</th><th align="left">Value</th></tr>
+<tr>
+<td align="left">Name</td>
+<td align="left">Hash Function Type Registry</td>
+</tr>
+<tr>
+<td align="left">Parent</td>
+<td align="left">CCNx Registry</td>
+</tr>
+<tr>
+<td align="left">Review process</td>
+<td align="left">Expert Review with public specification of the hash function</td>
+</tr>
+<tr>
+<td align="left">Syntax</td>
+<td align="left">2 octet TLV type (decimal)</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Registry Creation&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+<br /><hr class="insert" />
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
 <col align="center"><col align="center"><col align="center">
 <tr><th align="center">Type</th><th align="center">Name</th><th align="center">Reference</th></tr>
 <tr>
-<td align="center">%x0001</td>
+<td align="center">1</td>
 <td align="center">T_SHA-256</td>
 <td align="center"><a class='info' href='#hash_format'>Hash Format<span> (</span><span class='info'>Hash Format</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">%x0002</td>
+<td align="center">2</td>
 <td align="center">T_SHA-512</td>
 <td align="center"><a class='info' href='#hash_format'>Hash Format<span> (</span><span class='info'>Hash Format</span><span>)</span></a></td>
 </tr>
@@ -2135,19 +2363,35 @@ CCNx Hash Function Type Registry</h3>
 
 <a name="Security"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6"></a><h3>6.&nbsp;
+<a name="rfc.section.5"></a><h3>5.&nbsp;
 Security Considerations</h3>
 
-<p>All drafts are required to have a security considerations section. See <a class='info' href='#RFC3552'>RFC 3552<span> (</span><span class='info'>Rescorla, E. and B. Korver, &ldquo;Guidelines for Writing RFC Text on Security Considerations,&rdquo; July&nbsp;2003.</span><span>)</span></a> [RFC3552] for a guide.
+<p>
+        The CCNx message format includes the ability to attach MICs, MACs, and Signatures to
+        all packet types.  This does not mean that it is a good idea to use an arbitrary
+        ValidationAlgorithm, nor to include computationally expensive algorithms in Interest
+        packets, as that could lead to computational DoS attacks.  Application protocols should
+        use an explicit protocol to guide their use of packet signatures.
+      
+</p>
+<p>The CCNx message format does not include explicit guidance for encryption.  This is
+         covered by other specifications.
+      
+</p>
+<p>Because some implementations may store the entire Name at intermediate hops,
+      application designers should use concise names and not store large fields there.
+      Deployments may choose to use their own guidelines for name limitations.  There is currently
+      no recommended practices for Interest deployments.
+      
 </p>
 <a name="rfc.references"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7"></a><h3>7.&nbsp;
+<a name="rfc.section.6"></a><h3>6.&nbsp;
 References</h3>
 
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>7.1.&nbsp;Normative References</h3>
+<h3>6.1.&nbsp;Normative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
 <td class="author-text">Bradner, S., &ldquo;<a href="http://www.rfc-editor.org/info/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, DOI&nbsp;10.17487/RFC2119, March&nbsp;1997.</td></tr>
@@ -2155,7 +2399,7 @@ References</h3>
 
 <a name="rfc.references2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>7.2.&nbsp;Informative References</h3>
+<h3>6.2.&nbsp;Informative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="CCN">[CCN]</a></td>
 <td class="author-text">PARC, Inc., &ldquo;<a href="http://www.CCNx.org">CCNx Open Source</a>,&rdquo; 2007.</td></tr>

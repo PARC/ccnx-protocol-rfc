@@ -166,21 +166,7 @@
   </front>
 
   <middle>
- <!--
-    <section title="Change Log">
-      <texttable anchor="changelog" title="Change Log">
-      <ttcol align="center">Date</ttcol>
-      <ttcol align="center">Version</ttcol>
-      <ttcol align="left">Changes</ttcol>
-      <c>Aug. 5, 2015</c>
-      <c>1</c>
-      <c>Modified Link Section to use the words "Restriction".
-      </c>
-    </texttable>
-    </section>
--->
-
-     <section title="Introduction">
+      <section title="Introduction">
        <t>This document specifies a Type-Length-Value (TLV) packet format and the TLV type and value encodings for the CCNx network protocol
          as specified in <xref target="CCNSemantics"></xref>.  This draft describes the mandatory and common optional
          fields of Interests and Content Objects.  Several additional protocols specified in their own documents are
@@ -209,8 +195,9 @@
         <t>URI notation: see <xref target="CCNxURI"></xref> for the CCNx URI notation.</t>
       </list>
       </t>
-       <t>
-         In the final draft, the type values will be assigned to be compact.  All type values are
+       <t>The type values in <xref target="IANA"/> represent the values in common usage today.
+         These values may change pending IANA assignments.
+         All type values are
          relative to their parent containers. It is possible for a TLV to redefine a type value defined by
          its parent.  For example, each level of a nested TLV structure might define a "type = 1" with
          a completely different meaning.</t>
@@ -221,8 +208,6 @@
          fields enclosed by vertical bars "|" represent exact bit widths.  Fields
          with a forward slash "/" are variable bit widths, which we typically pad
          out to word alignment for picture readability.</t>
-
-       <t>TODO -- we have not adopted the Requirements Language yet.</t>
 
       <section title="Requirements Language">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
@@ -289,12 +274,14 @@
         </figure>
 
         <t>The Length field contains the length of the Value field in octets.  It does
-          not include the length of the Type and Length fields.  A zero length
-          TLV is permissible.</t>
+          not include the length of the Type and Length fields.  They length MAY be zero.
+        </t>
         <t>TLV structures are nestable, allowing the Value field of one TLV structure to contain
-          additional TLV structures. The enclosing TLV structure is called the container of the enclosed TLV.</t>
+          additional TLV structures. The enclosing TLV structure is called the container of the enclosed TLV.
+        </t>
       <t>Type values are context-dependent.  Within a TLV container, one may re-use previous type values for
-      new context-dependent purposes.</t>
+      new context-dependent purposes.
+      </t>
 
         <section anchor="packet_format" title="Overall packet format">
           <t>Each packet includes the 8 byte fixed header described below, followed by a set of TLV fields. These fields are
@@ -358,7 +345,7 @@
             The PacketLength field represents the entire Packet length.
           </t>
 
-          <t>A specific PacketType may assign meaning to the reserved bytes.</t>
+          <t>A specific PacketType may assign meaning to the "PacketType specific fields".</t>
 
           <t>The PacketPayload of a CCNx packet is the protocol message itself. The
             Content Object Hash is computed over the PacketPayload only, excluding
@@ -384,7 +371,7 @@
               <list style="symbols">
                 <t>Version: defines the version of the packet.</t>
                 <t>HeaderLength: The length of the fixed header (8 bytes) and hop-by-hop headers.
-                  The minimum value is "8".</t>
+                  The minimum value MUST be "8".</t>
                 <t>PacketType: describes forwarder actions to take on the packet.</t>
                 <t>PacketLength: Total octets of packet including all headers (fixed header
                   plus hop-by-hop headers) and protocol message.</t>
@@ -408,8 +395,8 @@
           <t>If the PacketType in the Fixed Header is PT_INTEREST, it indicates that the PacketPayload should be processed
             as an Interest message.
             For this type of packet, the Fixed Header includes a field for a HopLimit as well as Reserved and Flags fields. The Reserved
-            field must be set to 0 in an Interest - this field will be set to a return code in the case of an Interest Return.
-            There are currently no Flags defined, so this field must also be set to 0.
+            field MUST be set to 0 in an Interest - this field will be set to a return code in the case of an Interest Return.
+            There are currently no Flags defined, so this field MUST be set to 0.
            </t>
 
        <figure>
@@ -428,10 +415,10 @@
       <section anchor="hoplimit" title="Interest HopLimit">
         <t>For an Interest message, the HopLimit is a counter that is decremented with each hop. It limits the
           distance an Interest may travel on the network.  The node originating the
-          Interest may put in any value - up to the maximum of 255.  Each node that receives
+          Interest MAY put in any value - up to the maximum of 255.  Each node that receives
           an Interest with a HopLimit decrements the value upon
           reception.  If the value is 0 after the decrement, the Interest
-          cannot be forwarded off the node.</t>
+          MUST NOT be forwarded off the node.</t>
 
         <t>It is an error to receive an Interest with a 0 hop-limit from a remote node.</t>
         </section>
@@ -460,7 +447,7 @@
           <t>If the PacketType in the Fixed Header is PT_RETURN, it indicates that the PacketPayload should be processed
             as a returned Interest message.
             The only difference between this InterestReturn message and the original Interest is that the PacketType is changed
-            to "2" and a ReturnCode is is put into the Reserved octet.  All other
+            to PT_RETURN and a ReturnCode is is put into the Reserved octet.  All other
           fields are unchanged.  The purpose of this encoding is to prevent packet
           length changes so no additional bytes are needed to return an Interest to
           the previous hop.  See <xref target="CCNSemantics"></xref> for a protocol description
@@ -481,7 +468,7 @@
 
           <section anchor="InterestReturnHopLimit" title="InterestReturn HopLimit">
             <t>This is the original Interest's HopLimit, as received.  It is the value before being
-            decremented at the current node.</t>
+            decremented at the current node (i.e. the received value).</t>
           </section>
 
           <section anchor="InterestReturnFlags" title="InterestReturn Flags">
@@ -492,7 +479,7 @@
             <t>The numeric value assigned to the return types is defined below.
             This value is set by the node creating the Interest Return.</t>
 
-            <t>A return code of "0" is not allowed, as it indicates that the returning system
+            <t>A return code of "0" MUST NOT be used, as it indicates that the returning system
             did not modify the Return Code field.</t>
 
             <texttable anchor="ReturnCodeTable" title="Return Codes">
@@ -525,8 +512,8 @@
             Length.
         </t>
 
-        <t>A pad may be inserted after any TLV except within a Name TLV.  In the remainder of
-            this document, we will not show optional pad TLVs.</t>
+        <t>A pad MAY be inserted after any TLV in the CCNx Message or in the Validation Dependent Data
+          In the remainder of this document, we will not show optional pad TLVs.</t>
 
         <figure>
 
@@ -543,10 +530,6 @@
     </section>
 
     <section anchor="vendor" title="Organization Specific TLVs">
-        <t>Organizations may request proprietary TLV types in the Hop-By-Hop headers section or
-            other TLV containers.  The organization then has control of the contents of the Value, which may be
-            its own binary field or an encapsulated set of TLVs.  The inner TLVs, because we use a context-dependent
-            TLV scheme, may be fully defined by the organization.</t>
         <t>Organization specific TLVs MUST use the T_ORG type. The Length field is the length of the organization
             specific information plus 3. The Value begins with the 3 byte organization number derived from the last
             three digits of the <xref target="EpriseNumbers">IANA Private Enterprise Numbers</xref>, followed by the
@@ -586,8 +569,7 @@
             parsing state-space.</t>
 
         <t>A CCN entity MUST support the hash type T_SHA-256. An entity MAY support
-            the remaining hash types, e.g., T_SHA-512 and any application-specific hash
-            type.</t>
+            the remaining hash types.</t>
 
         <texttable anchor="hash_types" title="CCNx Hash Functions">
             <ttcol align="center">Abbrev</ttcol>
@@ -600,7 +582,7 @@
             <c>64, 32</c>
 
             <c>n/a</c>
-            <c>any</c>
+            <c>Experimental TLV types</c>
         </texttable>
 
         <figure title="Example nesting inside type T_FOO">
@@ -640,9 +622,9 @@
 </section>
 
       <section anchor="per-hop" title="Hop-by-hop TLV headers">
-        <t>Hop-by-hop TLV headers are unordered and no meaning
-          should be attached to their ordering.
-          Four hop-by-hop headers are described in this document:</t>
+        <t>Hop-by-hop TLV headers are unordered and meaning MUST NOT
+          be attached to their ordering.
+          Three hop-by-hop headers are described in this document:</t>
           <texttable anchor="hbh_types" title="Hop-by-hop Header Types">
             <ttcol align="center">Abbrev</ttcol>
             <ttcol align="center">Name</ttcol>
@@ -864,7 +846,7 @@
                 <c><xref target="name_ipid">Interest Payload ID</xref></c>
                 <c>An identifier that represents the Interest Payload field. As an example, the Payload ID might be a hash of the Interest Payload.
                 This provides a way to differentiate between Interests based on their payloads without having to parse all the bytes of the payload
-                itself; instead using only this Payload ID Name segment  </c>
+                itself; instead using only this Payload ID Name segment.</c>
 
                 <c>T_APP:00 - T_APP:4096</c>
                 <c><xref target="name_segment">Application Components</xref></c>
@@ -982,7 +964,7 @@
 
 
             <section anchor="KeyIdRes" title="KeyIdRestriction">
-              <t>An Interest may include a KeyIdRestriction selector.
+              <t>An Interest MAY include a KeyIdRestriction selector.
                 This ensures that only Content Objects with matching KeyIds will
                 satisfy the Interest. See <xref target="KeyId" /> for the format of a KeyId.</t>
 
@@ -990,7 +972,7 @@
             </section>
 
             <section anchor="COH" title="ContentObjectHashRestriction">
-              <t>An Interest may also contain a ContentObjectHashRestriction selector. This is
+              <t>An Interest MAY contain a ContentObjectHashRestriction selector. This is
                 the hash of the Content Object - the self-certifying name restriction that
                 must be verified in the network, if an Interest carried this restriction.
                 It is calculated from the beginning of the CCNx Message to the end of the packet.
@@ -1069,7 +1051,7 @@
                 The Data type indicate that the Payload of the ContentObject
                 is opaque application bytes. The Key type indicates that the Payload is a
                 DER encoded public key. The Link type indicates that the Payload is a
-                <xref target="Link">Link </xref>. If this field is missing, a "Data" type is assumed.
+                <xref target="Link">Link</xref>. If this field is missing, a "Data" type is assumed.
               </t>
 
               <figure>
@@ -1109,8 +1091,9 @@
         </section>
         </section>
           <section anchor="content" title="Payload">
-            <t>The Payload TLV contains the content of the packet.  It is permissible to have a "0" length.
-              If a packet does not have any payload, this field may be omitted, rather than carrying a "0" length.</t>
+            <t>The Payload TLV contains the content of the packet.  It MAY be of zero length.
+              If a packet does not have any payload, this field MAY be omitted, rather than carrying a zero length.
+            </t>
 
             <figure>
               <artwork align="left"><![CDATA[
@@ -1346,7 +1329,7 @@
             </section>
 
           <section anchor="valexamples" title="Validation Examples">
-            <t>As an example of a MIC type validation, the encoding for CRC32 validation would be:</t>
+            <t>As an example of a MIC type validation, the encoding for CRC32C validation would be:</t>
 
             <figure>
               <artwork align="left"><![CDATA[
@@ -1355,7 +1338,7 @@
 +---------------+---------------+---------------+---------------+
 |      T_VALIDATION_ALG         |               4               |
 +---------------+---------------+---------------+---------------+
-|            T_CRC32            |               0               |
+|            T_CRC32C           |               0               |
 +---------------+---------------+---------------+---------------+
 ]]></artwork>
             </figure>
@@ -1429,133 +1412,175 @@
     <!-- This PI places the pagebreak correctly (before the section title) in the text output. -->
     </section>
 
-    <section anchor="Acknowledgements" title="Acknowledgements"> </section>
-
     <!-- Possibly a 'Contributors' section ... -->
 
     <section anchor="IANA" title="IANA Considerations">
         <t>This section details each kind of protocol value that can be
             registered. Each type registry can be updated by incrementally
-            expanding the typespace, i.e., by allocating and reserving new types.</t>
+            expanding the type space, i.e., by allocating and reserving new types.
+            As per <xref target="RFC5226"/> this section details the creation of
+          the "CCNx Registry" and several sub-registries.
+        </t>
 
+      <texttable title="Registry Creation">
+        <ttcol align="left">Property</ttcol>
+        <ttcol align="left">Value</ttcol>
+        
+        <c>Name</c>
+        <c>CCNx Registry</c>
+        <c>Abbrev</c>
+        <c>CCNx</c>
+        
+      </texttable>
+      
     <section anchor="IANA_PacketLevel" title="Packet Type Registry">
-        <t> The following packet types should be allocated.</t>
+        <t> The following packet types should be allocated.  A PacketType MUST be 1 byte.
+        New packet types are allocated via "RFC Required" action.</t>
+      
+      <texttable title="Registry Creation">
+        <ttcol align="left">Property</ttcol>
+        <ttcol align="left">Value</ttcol>
+        
+        <c>Name</c>
+        <c>Packet Type Registry</c>
+        
+        <c>Parent</c>
+        <c>CCNx Registry</c>
+        
+        <c>Review process</c>
+        <c>RFC Required</c>
+        
+        <c>Syntax</c>
+        <c>1 octet (decimal)</c>
+      </texttable>
 
         <texttable title="Packet Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x00</c>
+          <c>0</c>
           <c>PT_INTEREST</c>
           <c><xref target="header">Fixed Header Types</xref></c>
 
-          <c>%x01</c>
+          <c>1</c>
           <c>PT_CONTENT</c>
           <c><xref target="header">Fixed Header Types</xref></c>
 
-          <c>%x02</c>
+          <c>2</c>
           <c>PT_RETURN</c>
           <c><xref target="header">Fixed Header Types</xref></c>
       </texttable>
     </section>
 
-    <section anchor="IANA_InterestReturnCodes" title="Interest Return Type Registry">
+    <section anchor="IANA_InterestReturnCodes" title="Interest Return Code Registry">
         <t> The following InterestReturn code types should be allocated.</t>
 
+      <texttable title="Registry Creation">
+        <ttcol align="left">Property</ttcol>
+        <ttcol align="left">Value</ttcol>
+        
+        <c>Name</c>
+        <c>Interest Return Code</c>
+        
+        <c>Parent</c>
+        <c>CCNx Registry</c>
+        
+        <c>Review process</c>
+        <c>Expert Review, should include public standard leading to RFC.</c>
+        
+        <c>Syntax</c>
+        <c>1 octet (decimal)</c>
+      </texttable>
+      
         <texttable title="Interest Return Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x01</c>
+          <c>1</c>
           <c>T_RETURN_NO_ROUTE</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x02</c>
+          <c>2</c>
           <c>T_RETURN_LIMIT_EXCEEDED</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x03</c>
+          <c>3</c>
           <c>T_RETURN_NO_RESOURCES</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x04</c>
+          <c>4</c>
           <c>T_RETURN_PATH_ERROR</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x05</c>
+          <c>5</c>
           <c>T_RETURN_PROHIBITED</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x06</c>
+          <c>6</c>
           <c>T_RETURN_CONGESTED</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x07</c>
+          <c>7</c>
           <c>T_RETURN_MTU_TOO_LARGE</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x08</c>
+          <c>8</c>
           <c>T_RETURN_UNSUPPORTED_HASH_RESTRICTION</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x09</c>
+          <c>9</c>
           <c>T_RETURN_MALFORMED_INTEREST</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
-      </texttable>
-    </section>
-
-    <section anchor="IANA_TopLevel" title="Top-Level Type Registry">
-        <t> The following top-level types should be allocated.</t>
-
-        <texttable title="Top-Level Type Namespace">
-          <ttcol align="center">Type</ttcol>
-          <ttcol align="center">Name</ttcol>
-          <ttcol align="center">Reference</ttcol>
-
-          <c>%x0001</c>
-          <c>T_INTEREST</c>
-          <c><xref target="top_level">Top-Level Types</xref></c>
-
-          <c>%x0002</c>
-          <c>T_OBJECT</c>
-          <c><xref target="top_level">Top-Level Types</xref></c>
-
-          <c>%x0003</c>
-          <c>T_VALIDATION_ALG</c>
-          <c><xref target="top_level">Top-Level Types</xref></c>
-
-          <c>%x0004</c>
-          <c>T_VALIDATION_PAYLOAD</c>
-          <c><xref target="top_level">Top-Level Types</xref></c>
       </texttable>
     </section>
 
     <section anchor="IANA_HopByHop" title="Hop-by-Hop Type Registry">
         <t>The following hop-by-hop types should be allocated.</t>
 
+      <texttable title="Registry Creation">
+        <ttcol align="left">Property</ttcol>
+        <ttcol align="left">Value</ttcol>
+        
+        <c>Name</c>
+        <c>Hop-by-Hop Type Registry</c>
+        
+        <c>Parent</c>
+        <c>CCNx Registry</c>
+        
+        <c>Review process</c>
+        <c>RFC Required</c>
+        
+        <c>Syntax</c>
+        <c>2 octet TLV type (decimal)</c>
+      </texttable>
+      
         <texttable title="Hop-by-Hop Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0001</c>
+          <c>1</c>
           <c>T_INTLIFE</c>
           <c><xref target="per-hop">Hop-by-hop TLV headers</xref></c>
 
-          <c>%x0002</c>
+          <c>2</c>
           <c>T_CACHETIME</c>
           <c><xref target="per-hop">Hop-by-hop TLV headers</xref></c>
 
-          <c>%x0003</c>
+          <c>3</c>
           <c>T_MSGHASH</c>
           <c><xref target="per-hop">Hop-by-hop TLV headers</xref></c>
 
-          <c>%x0004-%x0007</c>
+          <c>4 - 7</c>
           <c>Reserved</c>
           <c></c>
 
+          <c>%x0FFE</c>
+          <c>T_PAD</c>
+          <c><xref target="pad">Pad</xref></c>
+          
           <c>%x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
@@ -1566,30 +1591,87 @@
       </texttable>
     </section>
 
-    <section anchor="IANA_NameSegment" title="Name Segment Type Registry">
+      <section anchor="IANA_TopLevel" title="Top-Level Type Registry">
+        <t> The following top-level types should be allocated.</t>
+        
+        <texttable title="Registry Creation">
+          <ttcol align="left">Property</ttcol>
+          <ttcol align="left">Value</ttcol>
+          
+          <c>Name</c>
+          <c>Top-Level Type Registry</c>
+          
+          <c>Parent</c>
+          <c>CCNx Registry</c>
+          
+          <c>Review process</c>
+          <c>RFC Required</c>
+          
+          <c>Syntax</c>
+          <c>2 octet TLV type (decimal)</c>
+        </texttable>
+        
+        
+        <texttable title="Top-Level Type Namespace">
+          <ttcol align="center">Type</ttcol>
+          <ttcol align="center">Name</ttcol>
+          <ttcol align="center">Reference</ttcol>
+          
+          <c>1</c>
+          <c>T_INTEREST</c>
+          <c><xref target="top_level">Top-Level Types</xref></c>
+          
+          <c>2</c>
+          <c>T_OBJECT</c>
+          <c><xref target="top_level">Top-Level Types</xref></c>
+          
+          <c>3</c>
+          <c>T_VALIDATION_ALG</c>
+          <c><xref target="top_level">Top-Level Types</xref></c>
+          
+          <c>4</c>
+          <c>T_VALIDATION_PAYLOAD</c>
+          <c><xref target="top_level">Top-Level Types</xref></c>
+        </texttable>
+      </section>
+      
+      <section anchor="IANA_NameSegment" title="Name Segment Type Registry">
         <t>The following name segment types should be allocated.</t>
 
+        <texttable title="Registry Creation">
+          <ttcol align="left">Property</ttcol>
+          <ttcol align="left">Value</ttcol>
+          
+          <c>Name</c>
+          <c>Name Segment Type Registry</c>
+          
+          <c>Parent</c>
+          <c>CCNx Registry</c>
+          
+          <c>Review process</c>
+          <c>Expert Review with public specification</c>
+          
+          <c>Syntax</c>
+          <c>2 octet TLV type (decimal)</c>
+        </texttable>
+        
         <texttable title="Name Segment Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0001</c>
+          <c>1</c>
           <c>T_NAMESEGMENT</c>
           <c><xref target="names">Name</xref></c>
 
-          <c>%x0002</c>
+          <c>2</c>
           <c>T_IPID</c>
           <c><xref target="names">Name</xref></c>
 
-          <c>%x0FFF</c>
-          <c>T_ORG</c>
-          <c><xref target="vendor">Organization-Specific TLVs</xref></c>
-
-          <c>%x0010-%x0013</c>
+          <c>16 - 19</c>
           <c>Reserved</c>
-          <c></c>
-
+          <c>Used in other drafts</c>
+          
           <c>%x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
@@ -1600,46 +1682,63 @@
       </texttable>
     </section>
 
-    <section anchor="IANA_MessageTypes" title="CCNx Message Type Registry">
+    <section anchor="IANA_MessageTypes" title="Message Type Registry">
         <t>The following CCNx message segment types should be allocated.</t>
 
+      <texttable title="Registry Creation">
+        <ttcol align="left">Property</ttcol>
+        <ttcol align="left">Value</ttcol>
+        
+        <c>Name</c>
+        <c>Message Type Registry</c>
+        
+        <c>Parent</c>
+        <c>CCNx Registry</c>
+        
+        <c>Review process</c>
+        <c>RFC Required</c>
+        
+        <c>Syntax</c>
+        <c>2 octet TLV type (decimal)</c>
+      </texttable>
+      
         <texttable title="CCNx Message Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0000</c>
+          <c>0</c>
           <c>T_NAME</c>
           <c><xref target="CCNMessage">Message Types</xref></c>
 
-          <c>%x0001</c>
+          <c>1</c>
           <c>T_PAYLOAD</c>
           <c><xref target="CCNMessage">Message Types</xref></c>
 
-          <c>%x0002</c>
+          <c>2</c>
           <c>T_KEYIDRESTR</c>
           <c><xref target="CCNMessage">Message Types</xref></c>
 
-          <c>%x0003</c>
+          <c>3</c>
           <c>T_OBJHASHRESTR</c>
           <c><xref target="CCNMessage">Message Types</xref></c>
 
-          <c>%x0004</c>
-          <c>Reserved</c>
-          <c></c>
-
-          <c>%x0005</c>
+          <c>5</c>
           <c>T_PAYLDTYPE</c>
           <c><xref target="COmetadata">Content Object Message Types</xref></c>
 
-          <c>%x0006</c>
+          <c>6</c>
           <c>T_EXPIRY</c>
           <c><xref target="COmetadata">Content Object Message Types</xref></c>
 
-          <c>%x0007-%x000C</c>
+          <c>7 - 12</c>
           <c>Reserved</c>
-          <c></c>
+          <c>Used in other RFC drafts</c>
 
+          <c>%x0FFE</c>
+          <c>T_PAD</c>
+          <c><xref target="pad">Pad</xref></c>
+          
           <c>%x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
@@ -1653,20 +1752,38 @@
     <section anchor="IANA_PayloadType" title="Payload Type Registry">
         <t>The following payload types should be allocated.</t>
 
+      <texttable title="Registry Creation">
+        <ttcol align="left">Property</ttcol>
+        <ttcol align="left">Value</ttcol>
+        
+        <c>Name</c>
+        <c>PayloadType Registry</c>
+        
+        <c>Parent</c>
+        <c>CCNx Registry</c>
+        
+        <c>Review process</c>
+        <c>Expert Review with public specification</c>
+        
+        <c>Syntax</c>
+        <c>Variable length unsigned integer (decimal)</c>
+      </texttable>
+      
+      
         <texttable title="Payload Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0000</c>
+          <c>0</c>
           <c>T_PAYLOADTYPE_DATA</c>
           <c><xref target="payload_type">Payload Types</xref></c>
 
-          <c>%x0001</c>
+          <c>1</c>
           <c>T_PAYLOADTYPE_KEY</c>
           <c><xref target="payload_type">Payload Types</xref></c>
 
-          <c>%x0002</c>
+          <c>2</c>
           <c>T_PAYLOADTYPE_LINK</c>
           <c><xref target="payload_type">Payload Types</xref></c>
       </texttable>
@@ -1675,43 +1792,56 @@
     <section anchor="IANA_ValidationAlgorithm" title="Validation Algorithm Type Registry">
         <t>The following validation algorithm types should be allocated.</t>
 
+      <texttable title="Registry Creation">
+        <ttcol align="left">Property</ttcol>
+        <ttcol align="left">Value</ttcol>
+        
+        <c>Name</c>
+        <c>Validation Algorithm Type Registry</c>
+        
+        <c>Parent</c>
+        <c>CCNx Registry</c>
+        
+        <c>Review process</c>
+        <c>Expert Review with public specification of the algorithm</c>
+        
+        <c>Syntax</c>
+        <c>2 octet TLV type (decimal)</c>
+      </texttable>
+      
         <texttable title="Validation Algorithm Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0001</c>
-          <c>Reserved</c>
-          <c></c>
-
-          <c>%x0002</c>
+          <c>2</c>
           <c>T_CRC32C</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
-          <c>%x0003</c>
-          <c>Reserved</c>
-          <c></c>
-
-          <c>%x0004</c>
+          <c>4</c>
           <c>T_HMAC-SHA256</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
-          <c>%x0005</c>
+          <c>5</c>
           <c>T_VMAC-128</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
-          <c>%x0006</c>
+          <c>6</c>
           <c>T_RSA-SHA256</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
-          <c>%x0007</c>
+          <c>7</c>
           <c>EC-SECP-256K1</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
-          <c>%x0008</c>
+          <c>8</c>
           <c>EC-SECP-384R1</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
+          <c>%x0FFE</c>
+          <c>T_PAD</c>
+          <c><xref target="pad">Pad</xref></c>
+          
           <c>%x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
@@ -1724,41 +1854,54 @@
 
     <section anchor="IANA_ValidationDD" title="Validation Dependent Data Type Registry">
         <t>The following validation dependent data types should be allocated.</t>
-
+      
+      <texttable title="Registry Creation">
+        <ttcol align="left">Property</ttcol>
+        <ttcol align="left">Value</ttcol>
+        
+        <c>Name</c>
+        <c>Validation Dependent Data Type Registry</c>
+        
+        <c>Parent</c>
+        <c>CCNx Registry</c>
+        
+        <c>Review process</c>
+        <c>RFC Required</c>
+        
+        <c>Syntax</c>
+        <c>2 octet TLV type (decimal)</c>
+      </texttable>
+      
         <texttable title="Validation Dependent Data Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0001-%x0008</c>
-          <c>Reserved</c>
-          <c></c>
-
-          <c>%x0009</c>
+          <c>9</c>
           <c>T_KEYID</c>
           <c><xref target="vdd">Validation Dependent Data</xref></c>
 
-          <c>%x000A</c>
+          <c>10</c>
           <c>T_PUBLICKEYLOC</c>
           <c><xref target="vdd">Validation Dependent Data</xref></c>
 
-          <c>%x000B</c>
+          <c>11</c>
           <c>T_PUBLICKEY</c>
           <c><xref target="vdd">Validation Dependent Data</xref></c>
 
-          <c>%x000C</c>
+          <c>12</c>
           <c>T_CERT</c>
           <c><xref target="vdd">Validation Dependent Data</xref></c>
 
-          <c>%x000D</c>
+          <c>13</c>
           <c>T_LINK</c>
           <c><xref target="vdd">Validation Dependent Data</xref></c>
 
-          <c>%x000E</c>
+          <c>14</c>
           <c>T_KEYNAME</c>
           <c><xref target="vdd">Validation Dependent Data</xref></c>
 
-          <c>%x000F</c>
+          <c>15</c>
           <c>T_SIGTIME</c>
           <c><xref target="vdd">Validation Dependent Data</xref></c>
 
@@ -1772,19 +1915,37 @@
       </texttable>
     </section>
 
-    <section anchor="IANA_HashFunctions" title="CCNx Hash Function Type Registry">
+    <section anchor="IANA_HashFunctions" title="Hash Function Type Registry">
         <t>The following CCNx hash function types should be allocated.</t>
 
+
+      <texttable title="Registry Creation">
+        <ttcol align="left">Property</ttcol>
+        <ttcol align="left">Value</ttcol>
+        
+        <c>Name</c>
+        <c>Hash Function Type Registry</c>
+        
+        <c>Parent</c>
+        <c>CCNx Registry</c>
+        
+        <c>Review process</c>
+        <c>Expert Review with public specification of the hash function</c>
+        
+        <c>Syntax</c>
+        <c>2 octet TLV type (decimal)</c>
+      </texttable>
+      
         <texttable title="CCNx Hash Function Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0001</c>
+          <c>1</c>
           <c>T_SHA-256</c>
           <c><xref target="hash_format">Hash Format</xref></c>
 
-          <c>%x0002</c>
+          <c>2</c>
           <c>T_SHA-512</c>
           <c><xref target="hash_format">Hash Format</xref></c>
 
@@ -1801,8 +1962,21 @@
     </section>
 
     <section anchor="Security" title="Security Considerations">
-      <t>All drafts are required to have a security considerations section. See <xref
-          target="RFC3552">RFC 3552</xref> for a guide.</t>
+      <t>
+        The CCNx message format includes the ability to attach MICs, MACs, and Signatures to
+        all packet types.  This does not mean that it is a good idea to use an arbitrary
+        ValidationAlgorithm, nor to include computationally expensive algorithms in Interest
+        packets, as that could lead to computational DoS attacks.  Application protocols should
+        use an explicit protocol to guide their use of packet signatures.
+      </t>
+      <t>The CCNx message format does not include explicit guidance for encryption.  This is
+         covered by other specifications.
+      </t>
+      <t>Because some implementations may store the entire Name at intermediate hops,
+      application designers should use concise names and not store large fields there.
+      Deployments may choose to use their own guidelines for name limitations.  There is currently
+      no recommended practices for Interest deployments.
+      </t>
     </section>
   </middle>
 
