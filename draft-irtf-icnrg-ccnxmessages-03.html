@@ -145,10 +145,10 @@
 <tr><td class="header">ICNRG</td><td class="header">M. Mosko</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">PARC, Inc.</td></tr>
 <tr><td class="header">Intended status: Experimental</td><td class="header">I. Solis</td></tr>
-<tr><td class="header">Expires: December 30, 2016</td><td class="header">LinkedIn</td></tr>
+<tr><td class="header">Expires: January 5, 2017</td><td class="header">LinkedIn</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">C. Wood</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">PARC, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">June 28, 2016</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">July 4, 2016</td></tr>
 </table></td></tr></table>
 <h1><br />CCNx Messages in TLV Format<br />draft-irtf-icnrg-ccnxmessages-03</h1>
 
@@ -175,7 +175,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on December 30, 2016.</p>
+This Internet-Draft will expire on January 5, 2017.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -1476,8 +1476,8 @@ Validation Dependent Data</h3>
 <td align="left">DER encoded X509 certificate.</td>
 </tr>
 <tr>
-<td align="center">T_KEYNAME</td>
-<td align="center"><a class='info' href='#KeyName'>KeyName<span> (</span><span class='info'>KeyName</span><span>)</span></a></td>
+<td align="center">T_KEYLINK</td>
+<td align="center"><a class='info' href='#KeyLink'>KeyLink<span> (</span><span class='info'>KeyLink</span><span>)</span></a></td>
 <td align="left">A CCNx Link object. </td>
 </tr>
 <tr>
@@ -1541,23 +1541,23 @@ Certificate</h3>
 /                 Certificate (DER encoded X509)                /
 +---------------+---------------+---------------+---------------+
 </pre></div>
-<a name="KeyName"></a><br /><hr />
+<a name="KeyLink"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3.6.4.1.4.4"></a><h3>3.6.4.1.4.4.&nbsp;
-KeyName</h3>
+KeyLink</h3>
 
-<p>A KeyName type KeyLocator is a Link.
+<p>A KeyLink type KeyLocator is a Link.
 </p>
-<p>The KeyName digest is the publisher digest of
-                the Content Object identified by KeyName.  It may be
-                included on an Interest's digest restriction. A KeyName is a mandatory Name and an optional KeyId.  The KeyId inside the KeyLocator
+<p>The KeyLink digest is the publisher digest of
+                the Content Object identified by KeyLink.  It may be
+                included on an Interest's digest restriction. A KeyLink is a mandatory Name and an optional KeyId.  The KeyId inside the KeyLocator
                   may be included in an Interest's KeyId to retrieve only the specified key.
               
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+-------------------------------+
-|          T_KEYNAME            |            Length             |
+|          T_KEYLINK            |            Length             |
 +---------------+---------------+-------------------------------+
 / Link                                                          /
 +---------------------------------------------------------------+
@@ -2262,31 +2262,21 @@ Validation Dependent Data Type Registry</h3>
 </tr>
 <tr>
 <td align="center">10</td>
-<td align="center">T_PUBLICKEYLOC</td>
-<td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
-</tr>
-<tr>
-<td align="center">11</td>
 <td align="center">T_PUBLICKEY</td>
 <td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
 </tr>
 <tr>
-<td align="center">12</td>
+<td align="center">11</td>
 <td align="center">T_CERT</td>
 <td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
 </tr>
 <tr>
+<td align="center">12</td>
+<td align="center">T_KEYLINK</td>
+<td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
+</tr>
+<tr>
 <td align="center">13</td>
-<td align="center">T_LINK</td>
-<td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
-</tr>
-<tr>
-<td align="center">14</td>
-<td align="center">T_KEYNAME</td>
-<td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
-</tr>
-<tr>
-<td align="center">15</td>
 <td align="center">T_SIGTIME</td>
 <td align="center"><a class='info' href='#vdd'>Validation Dependent Data<span> (</span><span class='info'>Validation Dependent Data</span><span>)</span></a></td>
 </tr>

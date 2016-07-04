@@ -4,10 +4,10 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
 Intended status: Experimental                                   I. Solis
-Expires: December 30, 2016                                      LinkedIn
+Expires: January 5, 2017                                        LinkedIn
                                                                  C. Wood
                                                               PARC, Inc.
-                                                           June 28, 2016
+                                                            July 4, 2016
 
 
                       CCNx Messages in TLV Format
@@ -35,7 +35,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 30, 2016.
+   This Internet-Draft will expire on January 5, 2017.
 
 Copyright Notice
 
@@ -52,9 +52,9 @@ Copyright Notice
 
 
 
-Mosko, et al.           Expires December 30, 2016               [Page 1]
+Mosko, et al.            Expires January 5, 2017                [Page 1]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -108,9 +108,9 @@ Table of Contents
 
 
 
-Mosko, et al.           Expires December 30, 2016               [Page 2]
+Mosko, et al.            Expires January 5, 2017                [Page 2]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
      4.8.  Validation Algorithm Type Registry . . . . . . . . . . . . 37
@@ -164,9 +164,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016               [Page 3]
+Mosko, et al.            Expires January 5, 2017                [Page 3]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 1.  Introduction
@@ -220,9 +220,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016               [Page 4]
+Mosko, et al.            Expires January 5, 2017                [Page 4]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    by vertical bars "|" represent exact bit widths.  Fields with a
@@ -276,9 +276,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016               [Page 5]
+Mosko, et al.            Expires January 5, 2017                [Page 5]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 2.  Definitions
@@ -332,9 +332,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016               [Page 6]
+Mosko, et al.            Expires January 5, 2017                [Page 6]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 3.  Type-Length-Value (TLV) Packets
@@ -388,9 +388,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016               [Page 7]
+Mosko, et al.            Expires January 5, 2017                [Page 7]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 3.1.  Overall packet format
@@ -444,9 +444,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016               [Page 8]
+Mosko, et al.            Expires January 5, 2017                [Page 8]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 3.2.  Fixed Headers
@@ -500,9 +500,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016               [Page 9]
+Mosko, et al.            Expires January 5, 2017                [Page 9]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    The PacketType specific fields are reserved bits whose use depends on
@@ -556,9 +556,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 10]
+Mosko, et al.            Expires January 5, 2017               [Page 10]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 3.2.3.  InterestReturn Fixed Header
@@ -612,9 +612,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 11]
+Mosko, et al.            Expires January 5, 2017               [Page 11]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    +-------------------------------------+-----------------------------+
@@ -668,9 +668,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 12]
+Mosko, et al.            Expires January 5, 2017               [Page 12]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    +---------------+---------------+---------------+---------------+
@@ -724,9 +724,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 13]
+Mosko, et al.            Expires January 5, 2017               [Page 13]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
                   +-----------+------------------------+
@@ -780,9 +780,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 14]
+Mosko, et al.            Expires January 5, 2017               [Page 14]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    +-------------+-------------------+---------------------------------+
@@ -836,9 +836,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 15]
+Mosko, et al.            Expires January 5, 2017               [Page 15]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    contrast to the ExpiryTime (described in Section 3.6.2.2.2)which
@@ -892,9 +892,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 16]
+Mosko, et al.            Expires January 5, 2017               [Page 16]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
                        1                   2                   3
@@ -948,9 +948,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 17]
+Mosko, et al.            Expires January 5, 2017               [Page 17]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    "CCNx Message TLV" depicted in the beginning of Section 3.  The CCNx
@@ -1004,9 +1004,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 18]
+Mosko, et al.            Expires January 5, 2017               [Page 18]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
                         1                   2                   3
@@ -1060,9 +1060,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 19]
+Mosko, et al.            Expires January 5, 2017               [Page 19]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
                         1                   2                   3
@@ -1116,9 +1116,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 20]
+Mosko, et al.            Expires January 5, 2017               [Page 20]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 3.6.2.  Message TLVs
@@ -1172,9 +1172,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 21]
+Mosko, et al.            Expires January 5, 2017               [Page 21]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 3.6.2.1.2.  ContentObjectHashRestriction
@@ -1228,9 +1228,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 22]
+Mosko, et al.            Expires January 5, 2017               [Page 22]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    +-------------+---------------------+-------------------------------+
@@ -1284,9 +1284,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 23]
+Mosko, et al.            Expires January 5, 2017               [Page 23]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    not need to check the ExpiryTime.  If the ExpiryTime field is
@@ -1340,9 +1340,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 24]
+Mosko, et al.            Expires January 5, 2017               [Page 24]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    is identified with the "ValidationType" as shown in the figure below
@@ -1396,9 +1396,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 25]
+Mosko, et al.            Expires January 5, 2017               [Page 25]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 3.6.4.1.1.  Message Integrity Checks
@@ -1445,16 +1445,16 @@ Internet-Draft                  CCNx TLV                       June 2016
    |    T_CERT   |      Certificate      | DER encoded X509            |
    |             | (Section 3.6.4.1.4.3) | certificate.                |
    |             |                       |                             |
-   |  T_KEYNAME  |        KeyName        | A CCNx Link object.         |
+   |  T_KEYLINK  |        KeyLink        | A CCNx Link object.         |
    |             | (Section 3.6.4.1.4.4) |                             |
    |             |                       |                             |
 
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 26]
+Mosko, et al.            Expires January 5, 2017               [Page 26]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    |  T_SIGTIME  |     SignatureTime     | A millsecond timestamp      |
@@ -1508,9 +1508,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 27]
+Mosko, et al.            Expires January 5, 2017               [Page 27]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 3.6.4.1.4.3.  Certificate
@@ -1523,20 +1523,20 @@ Internet-Draft                  CCNx TLV                       June 2016
    /                 Certificate (DER encoded X509)                /
    +---------------+---------------+---------------+---------------+
 
-3.6.4.1.4.4.  KeyName
+3.6.4.1.4.4.  KeyLink
 
-   A KeyName type KeyLocator is a Link.
+   A KeyLink type KeyLocator is a Link.
 
-   The KeyName digest is the publisher digest of the Content Object
-   identified by KeyName.  It may be included on an Interest's digest
-   restriction.  A KeyName is a mandatory Name and an optional KeyId.
+   The KeyLink digest is the publisher digest of the Content Object
+   identified by KeyLink.  It may be included on an Interest's digest
+   restriction.  A KeyLink is a mandatory Name and an optional KeyId.
    The KeyId inside the KeyLocator may be included in an Interest's
    KeyId to retrieve only the specified key.
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+-------------------------------+
-   |          T_KEYNAME            |            Length             |
+   |          T_KEYLINK            |            Length             |
    +---------------+---------------+-------------------------------+
    / Link                                                          /
    +---------------------------------------------------------------+
@@ -1564,9 +1564,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 28]
+Mosko, et al.            Expires January 5, 2017               [Page 28]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
                         1                   2                   3
@@ -1620,9 +1620,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 29]
+Mosko, et al.            Expires January 5, 2017               [Page 29]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
                         1                   2                   3
@@ -1676,9 +1676,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 30]
+Mosko, et al.            Expires January 5, 2017               [Page 30]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 4.  IANA Considerations
@@ -1732,9 +1732,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 31]
+Mosko, et al.            Expires January 5, 2017               [Page 31]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 4.2.  Interest Return Code Registry
@@ -1788,9 +1788,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 32]
+Mosko, et al.            Expires January 5, 2017               [Page 32]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    |   9  |      T_RETURN_MALFORMED_INTEREST      | Fixed Header Types |
@@ -1844,9 +1844,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 33]
+Mosko, et al.            Expires January 5, 2017               [Page 33]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 4.4.  Top-Level Type Registry
@@ -1900,9 +1900,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 34]
+Mosko, et al.            Expires January 5, 2017               [Page 34]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
                              Registry Creation
@@ -1956,9 +1956,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 35]
+Mosko, et al.            Expires January 5, 2017               [Page 35]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    +---------------+----------------+----------------------------------+
@@ -2012,9 +2012,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 36]
+Mosko, et al.            Expires January 5, 2017               [Page 36]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
      +------+--------------------+-----------------------------------+
@@ -2068,9 +2068,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 37]
+Mosko, et al.            Expires January 5, 2017               [Page 37]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    +---------------+---------------+-----------------------------------+
@@ -2124,40 +2124,34 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 38]
+Mosko, et al.            Expires January 5, 2017               [Page 38]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
-   +---------------+----------------+----------------------------------+
-   |      Type     |      Name      |             Reference            |
-   +---------------+----------------+----------------------------------+
-   |       9       |     T_KEYID    |     Validation Dependent Data    |
-   |               |                |        (Section 3.6.4.1.4)       |
-   |               |                |                                  |
-   |       10      | T_PUBLICKEYLOC |     Validation Dependent Data    |
-   |               |                |        (Section 3.6.4.1.4)       |
-   |               |                |                                  |
-   |       11      |   T_PUBLICKEY  |     Validation Dependent Data    |
-   |               |                |        (Section 3.6.4.1.4)       |
-   |               |                |                                  |
-   |       12      |     T_CERT     |     Validation Dependent Data    |
-   |               |                |        (Section 3.6.4.1.4)       |
-   |               |                |                                  |
-   |       13      |     T_LINK     |     Validation Dependent Data    |
-   |               |                |        (Section 3.6.4.1.4)       |
-   |               |                |                                  |
-   |       14      |    T_KEYNAME   |     Validation Dependent Data    |
-   |               |                |        (Section 3.6.4.1.4)       |
-   |               |                |                                  |
-   |       15      |    T_SIGTIME   |     Validation Dependent Data    |
-   |               |                |        (Section 3.6.4.1.4)       |
-   |               |                |                                  |
-   |     %x0FFF    |      T_ORG     |    Organization-Specific TLVs    |
-   |               |                |          (Section 3.3.2)         |
-   |               |                |                                  |
-   | %x1000-%x1FFF |    Reserved    |   Experimental Use (Section 3)   |
-   +---------------+----------------+----------------------------------+
+   +---------------+-------------+-------------------------------------+
+   |      Type     |     Name    |              Reference              |
+   +---------------+-------------+-------------------------------------+
+   |       9       |   T_KEYID   |      Validation Dependent Data      |
+   |               |             |         (Section 3.6.4.1.4)         |
+   |               |             |                                     |
+   |       10      | T_PUBLICKEY |      Validation Dependent Data      |
+   |               |             |         (Section 3.6.4.1.4)         |
+   |               |             |                                     |
+   |       11      |    T_CERT   |      Validation Dependent Data      |
+   |               |             |         (Section 3.6.4.1.4)         |
+   |               |             |                                     |
+   |       12      |  T_KEYLINK  |      Validation Dependent Data      |
+   |               |             |         (Section 3.6.4.1.4)         |
+   |               |             |                                     |
+   |       13      |  T_SIGTIME  |      Validation Dependent Data      |
+   |               |             |         (Section 3.6.4.1.4)         |
+   |               |             |                                     |
+   |     %x0FFF    |    T_ORG    |      Organization-Specific TLVs     |
+   |               |             |           (Section 3.3.2)           |
+   |               |             |                                     |
+   | %x1000-%x1FFF |   Reserved  |     Experimental Use (Section 3)    |
+   +---------------+-------------+-------------------------------------+
 
                  Validation Dependent Data Type Namespace
 
@@ -2178,14 +2172,18 @@ Internet-Draft                  CCNx TLV                       June 2016
    | Syntax       | 2 octet TLV type (decimal)                         |
    +--------------+----------------------------------------------------+
 
-
-
-Mosko, et al.           Expires December 30, 2016              [Page 39]
-
-Internet-Draft                  CCNx TLV                       June 2016
-
-
                              Registry Creation
+
+
+
+
+
+
+
+Mosko, et al.            Expires January 5, 2017               [Page 39]
+
+Internet-Draft                  CCNx TLV                       July 2016
+
 
    +---------------+-----------+---------------------------------------+
    |      Type     |    Name   |               Reference               |
@@ -2236,9 +2234,11 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 40]
+
+
+Mosko, et al.            Expires January 5, 2017               [Page 40]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 5.  Security Considerations
@@ -2292,9 +2292,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 41]
+Mosko, et al.            Expires January 5, 2017               [Page 41]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 6.  References
@@ -2348,9 +2348,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 42]
+Mosko, et al.            Expires January 5, 2017               [Page 42]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
    [RFC6920]  Farrell, S., Kutscher, D., Dannewitz, C., Ohlman, B.,
@@ -2404,9 +2404,9 @@ Internet-Draft                  CCNx TLV                       June 2016
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 43]
+Mosko, et al.            Expires January 5, 2017               [Page 43]
 
-Internet-Draft                  CCNx TLV                       June 2016
+Internet-Draft                  CCNx TLV                       July 2016
 
 
 Authors' Addresses
@@ -2460,5 +2460,5 @@ Authors' Addresses
 
 
 
-Mosko, et al.           Expires December 30, 2016              [Page 44]
+Mosko, et al.            Expires January 5, 2017               [Page 44]
 

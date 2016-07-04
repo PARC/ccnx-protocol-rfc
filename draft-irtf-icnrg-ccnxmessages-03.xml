@@ -1224,8 +1224,8 @@
                 <c><xref target="Cert">Certificate</xref></c>
                 <c>DER encoded X509 certificate.</c>
 
-                <c>T_KEYNAME</c>
-                <c><xref target="KeyName">KeyName</xref></c>
+                <c>T_KEYLINK</c>
+                <c><xref target="KeyLink">KeyLink</xref></c>
                 <c>A CCNx Link object. </c>
 
                 <c>T_SIGTIME</c>
@@ -1285,11 +1285,11 @@
             </section>
 
 
-            <section anchor="KeyName" title="KeyName">
-              <t>A KeyName type KeyLocator is a Link.</t>
-              <t>The KeyName digest is the publisher digest of
-                the Content Object identified by KeyName.  It may be
-                included on an Interest's digest restriction. A KeyName is a mandatory Name and an optional KeyId.  The KeyId inside the KeyLocator
+            <section anchor="KeyLink" title="KeyLink">
+              <t>A KeyLink type KeyLocator is a Link.</t>
+              <t>The KeyLink digest is the publisher digest of
+                the Content Object identified by KeyLink.  It may be
+                included on an Interest's digest restriction. A KeyLink is a mandatory Name and an optional KeyId.  The KeyId inside the KeyLocator
                   may be included in an Interest's KeyId to retrieve only the specified key.
               </t>
               <figure>
@@ -1297,7 +1297,7 @@
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+-------------------------------+
-|          T_KEYNAME            |            Length             |
+|          T_KEYLINK            |            Length             |
 +---------------+---------------+-------------------------------+
 / Link                                                          /
 +---------------------------------------------------------------+
@@ -1425,31 +1425,31 @@
       <texttable title="Registry Creation">
         <ttcol align="left">Property</ttcol>
         <ttcol align="left">Value</ttcol>
-        
+
         <c>Name</c>
         <c>CCNx Registry</c>
         <c>Abbrev</c>
         <c>CCNx</c>
-        
+
       </texttable>
-      
+
     <section anchor="IANA_PacketLevel" title="Packet Type Registry">
         <t> The following packet types should be allocated.  A PacketType MUST be 1 byte.
         New packet types are allocated via "RFC Required" action.</t>
-      
+
       <texttable title="Registry Creation">
         <ttcol align="left">Property</ttcol>
         <ttcol align="left">Value</ttcol>
-        
+
         <c>Name</c>
         <c>Packet Type Registry</c>
-        
+
         <c>Parent</c>
         <c>CCNx Registry</c>
-        
+
         <c>Review process</c>
         <c>RFC Required</c>
-        
+
         <c>Syntax</c>
         <c>1 octet (decimal)</c>
       </texttable>
@@ -1479,20 +1479,20 @@
       <texttable title="Registry Creation">
         <ttcol align="left">Property</ttcol>
         <ttcol align="left">Value</ttcol>
-        
+
         <c>Name</c>
         <c>Interest Return Code</c>
-        
+
         <c>Parent</c>
         <c>CCNx Registry</c>
-        
+
         <c>Review process</c>
         <c>Expert Review, should include public standard leading to RFC.</c>
-        
+
         <c>Syntax</c>
         <c>1 octet (decimal)</c>
       </texttable>
-      
+
         <texttable title="Interest Return Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
@@ -1542,20 +1542,20 @@
       <texttable title="Registry Creation">
         <ttcol align="left">Property</ttcol>
         <ttcol align="left">Value</ttcol>
-        
+
         <c>Name</c>
         <c>Hop-by-Hop Type Registry</c>
-        
+
         <c>Parent</c>
         <c>CCNx Registry</c>
-        
+
         <c>Review process</c>
         <c>RFC Required</c>
-        
+
         <c>Syntax</c>
         <c>2 octet TLV type (decimal)</c>
       </texttable>
-      
+
         <texttable title="Hop-by-Hop Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
@@ -1580,7 +1580,7 @@
           <c>%x0FFE</c>
           <c>T_PAD</c>
           <c><xref target="pad">Pad</xref></c>
-          
+
           <c>%x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
@@ -1593,68 +1593,68 @@
 
       <section anchor="IANA_TopLevel" title="Top-Level Type Registry">
         <t> The following top-level types should be allocated.</t>
-        
+
         <texttable title="Registry Creation">
           <ttcol align="left">Property</ttcol>
           <ttcol align="left">Value</ttcol>
-          
+
           <c>Name</c>
           <c>Top-Level Type Registry</c>
-          
+
           <c>Parent</c>
           <c>CCNx Registry</c>
-          
+
           <c>Review process</c>
           <c>RFC Required</c>
-          
+
           <c>Syntax</c>
           <c>2 octet TLV type (decimal)</c>
         </texttable>
-        
-        
+
+
         <texttable title="Top-Level Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
-          
+
           <c>1</c>
           <c>T_INTEREST</c>
           <c><xref target="top_level">Top-Level Types</xref></c>
-          
+
           <c>2</c>
           <c>T_OBJECT</c>
           <c><xref target="top_level">Top-Level Types</xref></c>
-          
+
           <c>3</c>
           <c>T_VALIDATION_ALG</c>
           <c><xref target="top_level">Top-Level Types</xref></c>
-          
+
           <c>4</c>
           <c>T_VALIDATION_PAYLOAD</c>
           <c><xref target="top_level">Top-Level Types</xref></c>
         </texttable>
       </section>
-      
+
       <section anchor="IANA_NameSegment" title="Name Segment Type Registry">
         <t>The following name segment types should be allocated.</t>
 
         <texttable title="Registry Creation">
           <ttcol align="left">Property</ttcol>
           <ttcol align="left">Value</ttcol>
-          
+
           <c>Name</c>
           <c>Name Segment Type Registry</c>
-          
+
           <c>Parent</c>
           <c>CCNx Registry</c>
-          
+
           <c>Review process</c>
           <c>Expert Review with public specification</c>
-          
+
           <c>Syntax</c>
           <c>2 octet TLV type (decimal)</c>
         </texttable>
-        
+
         <texttable title="Name Segment Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
@@ -1671,7 +1671,7 @@
           <c>16 - 19</c>
           <c>Reserved</c>
           <c>Used in other drafts</c>
-          
+
           <c>%x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
@@ -1688,20 +1688,20 @@
       <texttable title="Registry Creation">
         <ttcol align="left">Property</ttcol>
         <ttcol align="left">Value</ttcol>
-        
+
         <c>Name</c>
         <c>Message Type Registry</c>
-        
+
         <c>Parent</c>
         <c>CCNx Registry</c>
-        
+
         <c>Review process</c>
         <c>RFC Required</c>
-        
+
         <c>Syntax</c>
         <c>2 octet TLV type (decimal)</c>
       </texttable>
-      
+
         <texttable title="CCNx Message Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
@@ -1738,7 +1738,7 @@
           <c>%x0FFE</c>
           <c>T_PAD</c>
           <c><xref target="pad">Pad</xref></c>
-          
+
           <c>%x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
@@ -1755,21 +1755,21 @@
       <texttable title="Registry Creation">
         <ttcol align="left">Property</ttcol>
         <ttcol align="left">Value</ttcol>
-        
+
         <c>Name</c>
         <c>PayloadType Registry</c>
-        
+
         <c>Parent</c>
         <c>CCNx Registry</c>
-        
+
         <c>Review process</c>
         <c>Expert Review with public specification</c>
-        
+
         <c>Syntax</c>
         <c>Variable length unsigned integer (decimal)</c>
       </texttable>
-      
-      
+
+
         <texttable title="Payload Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
@@ -1795,20 +1795,20 @@
       <texttable title="Registry Creation">
         <ttcol align="left">Property</ttcol>
         <ttcol align="left">Value</ttcol>
-        
+
         <c>Name</c>
         <c>Validation Algorithm Type Registry</c>
-        
+
         <c>Parent</c>
         <c>CCNx Registry</c>
-        
+
         <c>Review process</c>
         <c>Expert Review with public specification of the algorithm</c>
-        
+
         <c>Syntax</c>
         <c>2 octet TLV type (decimal)</c>
       </texttable>
-      
+
         <texttable title="Validation Algorithm Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
@@ -1841,7 +1841,7 @@
           <c>%x0FFE</c>
           <c>T_PAD</c>
           <c><xref target="pad">Pad</xref></c>
-          
+
           <c>%x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
@@ -1854,24 +1854,24 @@
 
     <section anchor="IANA_ValidationDD" title="Validation Dependent Data Type Registry">
         <t>The following validation dependent data types should be allocated.</t>
-      
+
       <texttable title="Registry Creation">
         <ttcol align="left">Property</ttcol>
         <ttcol align="left">Value</ttcol>
-        
+
         <c>Name</c>
         <c>Validation Dependent Data Type Registry</c>
-        
+
         <c>Parent</c>
         <c>CCNx Registry</c>
-        
+
         <c>Review process</c>
         <c>RFC Required</c>
-        
+
         <c>Syntax</c>
         <c>2 octet TLV type (decimal)</c>
       </texttable>
-      
+
         <texttable title="Validation Dependent Data Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
@@ -1882,26 +1882,18 @@
           <c><xref target="vdd">Validation Dependent Data</xref></c>
 
           <c>10</c>
-          <c>T_PUBLICKEYLOC</c>
-          <c><xref target="vdd">Validation Dependent Data</xref></c>
-
-          <c>11</c>
           <c>T_PUBLICKEY</c>
           <c><xref target="vdd">Validation Dependent Data</xref></c>
 
-          <c>12</c>
+          <c>11</c>
           <c>T_CERT</c>
           <c><xref target="vdd">Validation Dependent Data</xref></c>
 
+          <c>12</c>
+          <c>T_KEYLINK</c>
+          <c><xref target="vdd">Validation Dependent Data</xref></c>
+
           <c>13</c>
-          <c>T_LINK</c>
-          <c><xref target="vdd">Validation Dependent Data</xref></c>
-
-          <c>14</c>
-          <c>T_KEYNAME</c>
-          <c><xref target="vdd">Validation Dependent Data</xref></c>
-
-          <c>15</c>
           <c>T_SIGTIME</c>
           <c><xref target="vdd">Validation Dependent Data</xref></c>
 
@@ -1918,24 +1910,23 @@
     <section anchor="IANA_HashFunctions" title="Hash Function Type Registry">
         <t>The following CCNx hash function types should be allocated.</t>
 
-
       <texttable title="Registry Creation">
         <ttcol align="left">Property</ttcol>
         <ttcol align="left">Value</ttcol>
-        
+
         <c>Name</c>
         <c>Hash Function Type Registry</c>
-        
+
         <c>Parent</c>
         <c>CCNx Registry</c>
-        
+
         <c>Review process</c>
         <c>Expert Review with public specification of the hash function</c>
-        
+
         <c>Syntax</c>
         <c>2 octet TLV type (decimal)</c>
       </texttable>
-      
+
         <texttable title="CCNx Hash Function Type Namespace">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
