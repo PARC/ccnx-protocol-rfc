@@ -1,0 +1,1960 @@
+
+
+
+Internet Engineering Task Force                            M. Mosko, Ed.
+Internet-Draft                                                      PARC
+Intended status: Experimental                            October 8, 2013
+Expires: April 11, 2014
+
+
+                         CCNx TLV Packet Format
+                      draft-ietf-ccnxtlv-mosko-03
+
+Abstract
+
+   This document specifies a Type-Length-Value (TLV) encoding of Content
+   Centric Networking (CCN) packets.
+
+   Copyright (C) 2013, Palo Alto Research Center
+
+Status of this Memo
+
+   This document is an Internet-Draft and is NOT offered in accordance
+   with Section 10 of RFC 2026, and the author does not provide the IETF
+   with any rights other than to publish as an Internet-Draft.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on April 11, 2014.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                 [Page 1]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+Table of Contents
+
+   1.  Changes  . . . . . . . . . . . . . . . . . . . . . . . . . . .  4
+     1.1.  From version 1 . . . . . . . . . . . . . . . . . . . . . .  4
+     1.2.  From version 2 . . . . . . . . . . . . . . . . . . . . . .  4
+   2.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  5
+     2.1.  Requirements Language  . . . . . . . . . . . . . . . . . .  6
+   3.  Definitions  . . . . . . . . . . . . . . . . . . . . . . . . .  7
+   4.  Type-Length-Value Structure  . . . . . . . . . . . . . . . . .  8
+   5.  Fixed Headers  . . . . . . . . . . . . . . . . . . . . . . . .  9
+     5.1.  Common Header  . . . . . . . . . . . . . . . . . . . . . .  9
+     5.2.  Per-hop TLVs . . . . . . . . . . . . . . . . . . . . . . .  9
+       5.2.1.  Interest Scope . . . . . . . . . . . . . . . . . . . . 10
+       5.2.2.  Allowed Response Type  . . . . . . . . . . . . . . . . 10
+       5.2.3.  Object Handling  . . . . . . . . . . . . . . . . . . . 11
+       5.2.4.  Per Hop Fragment . . . . . . . . . . . . . . . . . . . 11
+       5.2.5.  End-to-End Fragment  . . . . . . . . . . . . . . . . . 11
+   6.  Type Values  . . . . . . . . . . . . . . . . . . . . . . . . . 12
+   7.  Type Formats . . . . . . . . . . . . . . . . . . . . . . . . . 18
+     7.1.  Pad  . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+     7.2.  Content Name . . . . . . . . . . . . . . . . . . . . . . . 18
+       7.2.1.  Name Components  . . . . . . . . . . . . . . . . . . . 18
+     7.3.  Digest . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+     7.4.  Interests  . . . . . . . . . . . . . . . . . . . . . . . . 20
+       7.4.1.  Interest Selectors . . . . . . . . . . . . . . . . . . 20
+       7.4.2.  Child Selector . . . . . . . . . . . . . . . . . . . . 21
+       7.4.3.  Interest Min(Max)SuffixComponets . . . . . . . . . . . 21
+       7.4.4.  Interest Lifetime  . . . . . . . . . . . . . . . . . . 22
+       7.4.5.  Interest Nonce . . . . . . . . . . . . . . . . . . . . 22
+       7.4.6.  Interest Excludes  . . . . . . . . . . . . . . . . . . 22
+         7.4.6.1.  Exclude Singleton  . . . . . . . . . . . . . . . . 23
+         7.4.6.2.  Exclude Range  . . . . . . . . . . . . . . . . . . 23
+     7.5.  Content Objects  . . . . . . . . . . . . . . . . . . . . . 24
+       7.5.1.  Signed Info  . . . . . . . . . . . . . . . . . . . . . 24
+         7.5.1.1.  Content Type . . . . . . . . . . . . . . . . . . . 25
+         7.5.1.2.  Content Timestamp (milli-second) . . . . . . . . . 26
+         7.5.1.3.  Content Expiry . . . . . . . . . . . . . . . . . . 26
+         7.5.1.4.  Final Block ID . . . . . . . . . . . . . . . . . . 26
+         7.5.1.5.  Key Name . . . . . . . . . . . . . . . . . . . . . 27
+         7.5.1.6.  Key  . . . . . . . . . . . . . . . . . . . . . . . 27
+         7.5.1.7.  Certificate  . . . . . . . . . . . . . . . . . . . 28
+         7.5.1.8.  Extended Options . . . . . . . . . . . . . . . . . 28
+       7.5.2.  Signature  . . . . . . . . . . . . . . . . . . . . . . 28
+         7.5.2.1.  Signature Bits . . . . . . . . . . . . . . . . . . 29
+         7.5.2.2.  Digest Algorithm . . . . . . . . . . . . . . . . . 29
+         7.5.2.3.  Cipher Suite . . . . . . . . . . . . . . . . . . . 29
+         7.5.2.4.  Witness  . . . . . . . . . . . . . . . . . . . . . 30
+       7.5.3.  Content  . . . . . . . . . . . . . . . . . . . . . . . 30
+
+
+
+Mosko                    Expires April 11, 2014                 [Page 2]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+   8.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 31
+   9.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 32
+   10. Security Considerations  . . . . . . . . . . . . . . . . . . . 33
+   11. References . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+     11.1. Normative References . . . . . . . . . . . . . . . . . . . 34
+     11.2. Informative References . . . . . . . . . . . . . . . . . . 34
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 35
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                 [Page 3]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+1.  Changes
+
+1.1.  From version 1
+
+   o  TL format from 7/8 and 7/16 to 7/8 and 15/16.
+
+   o  Use fixed header at start of packet, not an opening TL.
+
+   o  No fixed headers inside inner-Vs, only nested TLVs.
+
+   o  Use a TLV name component format.
+
+   o  Removed the 64b/64b variant, but added several reserved values for
+      future stuff.
+
+   o  Fixed headers for Object, Interest (hoplimit), and Interest
+      (nonce) defined.  No variable headers based on flags.
+
+   o  Changed the Digest to the four specific types of digests we use,
+      rather than have a fixed header for it inside the V.
+
+   o  Specified for Key, Certificate, and Witness the type of encoding.
+
+   o  Updated the Exclude format for the TLV name components.
+
+1.2.  From version 2
+
+   o  Consolidated the message types.
+
+   o  Changed the hdrlen and defined the TLV types that appear between
+      fixed header and Name.
+
+   o  Clarified that fixed header plus special TLVs are nor part of the
+      Interest or Object.
+
+   o  Added per-hops headers inside hdrlen before name
+
+   o  Changed AOK to Accepted Response Type
+
+   o  Changed Freshness Seconds to Expiry time
+
+   o  Moved Scope and Accepted Response Type (AOK) to per-hops headers
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                 [Page 4]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+2.  Introduction
+
+   Content Centric Networking CCNx [CCNx] was introduced with a binary
+   XML encoding at the packet level.  This RFC specifies a different
+   TLV-based encoding and packet format.  The format is suitable for use
+   directly over a MAC layer, or encapsulated within a network or
+   transport protocol.  The CCNx protocol messages, namely Interests and
+   Content Objects, are defined in CCNx Message formats [mosko-
+   ccnxmessages-01.txt].
+
+   CCNx uses two types of messages: Interests and Content Objects.  An
+   Interest carries the hierarchically structured variable-length
+   identifier (HSVLI), also called the "name", of a Content Object and
+   serves as a request for that object.  If a network element seems
+   multiple interests for the same name, it may aggregate those
+   interests.  A network element along the path of the Interest with a
+   matching Content Object may return that object, satisfying the
+   Interest.  The Content Object follows the reverse path of the
+   Interest to the origin(s) of the Interest.  A Content Object contains
+   the HSVLI, the object's payload, and cryptographic information used
+   to bind the HSVLI to the payload.
+
+   This document specifies:
+
+   o  A TLV encoding
+
+   o  A packet format with mixed fixed headers and TLV fields
+
+   o  The formats for existing Interest and Content Object messages from
+      CCNx
+
+   The CCNx TLV packet format is designed for high-speed performance on
+   hardware implementations while maintaining flexibility to introduced
+   new protocol extensions via TLVs.  Specifically:
+
+   o  Content Objects may be large (8K or more) to amortize the size of
+      the HSVLI and cryptographic material to the payload.  Previously,
+      the size was unbounded, but with a practical limit of 8KiB.  The
+      maximum Content Object size in CCNx TLV is 64KiB.
+
+   o  Routers must be able to fragment Content Objects to media MTUs.
+      All fragments carry the HSVLI of the underlying CCNx message so
+      routers may forward them without reassembly.
+
+   o  One form of Interests carries a Hop Limit, which is decremented on
+      packet reception.  Some routers may employ an Interest Nonce
+      cache, but that is implementation specific.  Hop Limit is the
+      common minimum requirement to prevent loops.
+
+
+
+Mosko                    Expires April 11, 2014                 [Page 5]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+   o  A second form of Interests uses a Nonce, not a Hop Limit.
+
+   Packets are represented as 32-bit wide words using ASCII art.
+   Because of the TLV encoding and optional fields or sizes, there is no
+   concise way to represent all possibilities.  We use the convention
+   that ASCII art fields enclosed by vertical bars "|" represent exact
+   bit widths.  Fields with a forward slash "/" are variable bitwidths,
+   which we typically pad out to word alignment for picture readability.
+
+2.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                 [Page 6]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+3.  Definitions
+
+   o  HSVLI: Hierarchically structured variable length identifier, also
+      called a Name.  It is an ordered list of Name Components, which
+      may be variable length octet strings.  In human-readable form, it
+      is represented in URI [cite] Format as ccnx:/path/part.  There is
+      not a host or query string.
+
+   o  Name: see HSVLI
+
+   o  Interest: A request for a Content Object that specifies a HSVLI
+      name prefix and other optional selectors to choose among multiple
+      objects with the same name prefix.  Any Content Object whose name
+      matches the Interest name prefix and selectors satisfies the
+      Interest.
+
+   o  Content Object: A data object sent in response to an Interest.  It
+      has a HSVLI name and a Contents payload that are bound together
+      via a cryptographic signature.  All Content Objects have an
+      implicit terminal name component made up of the SHA-256 [cite]
+      digest of the Content Object.  The implicit digest is not
+      transfered on the wire, but is computed at each hop, if needed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                 [Page 7]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+4.  Type-Length-Value Structure
+
+   CCNx over TLV uses a Type-Length-Value encoding for many fields of
+   CCNx Messages.  The TLV scheme has two primary purposes (a) encode
+   CCNx protocol messages, and (b) encode variable user messages in the
+   payload of a Content Object.  These two requirements make different
+   demands on the TLV scheme.
+
+   To encode CCNx network messages, a 7-bit type and 8-bit length is
+   suffucient for the majority of TLVs.  The exceptions are overall
+   packet length and overall name length, which could exceed 256 bytes.
+   They may need a longer length, so a second fixed format is 15-bit
+   type and 16-bit length.
+
+   To process a TLV, a system needs to read the first byte.  Based on
+   the flags or reserved value, a system makes a deterministic mapping
+   of the TL header to a data structure.
+
+                        1
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
+   +---------------+---------------+
+   |0|    type     |     length    |
+   +---------------+---------------+
+                        1                   2
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |1|            type             |            length             |
+   +---------------+---------------+---------------+---------------+
+
+   The length field is the length of the Value in octets.  It does not
+   include the length of the Type and Length fields.  A zero length TLV
+   is permissible.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                 [Page 8]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+5.  Fixed Headers
+
+   Interest and Content objects begin with a non-TLV header followed by
+   per-hop processed TLVs before the Name.  The per-hop processed TLVs
+   are covered in the "hdrlen" field, so to find the beginning of the
+   Name TLV, one moves to "packet start + 4 * hdrlen".
+
+   Signed information or Similarity Hashs should not include any of the
+   fixed header or per-hop TLVs.
+
+5.1.  Common Header
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |       ver     |    msg type   |         payload length        |
+   +---------------+---------------+---------------+---------------+
+   |    hdrlen     |                                               |
+   +---------------+---------------+---------------+---------------+
+
+   o  ver: defines the version of the packet.  Make it 8 bits?
+
+   o  hdrlen: number of 4-octet words in the header until the Name.  The
+      minimum value is "2".
+
+   o  msg type: 0 = object, 1 = interest, 2 = control.
+
+   o  payload length: Total octets following the header (fixed header
+      plus optional headers).  To total packet length is 4 * hdrlen +
+      payload length
+
+5.2.  Per-hop TLVs
+
+   Between the fixed header and the Name are per-hop TLVs.  These TLVs
+   follow the normal 8b/8b and 16b/16b formats of other TLVs.  They are
+   for per-hop processed options, such as a DSCP-equivalent field, or
+   perhaps a loop-preventing Nonce.
+
+   Per-hop TLVs may be in any order.
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                 [Page 9]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |       ver     |    msg type   |         payload length        |
+   +---------------+---------------+---------------+---------------+
+   |    hdrlen     |                                               |
+   +---------------+---------------+---------------+---------------+
+   / Optional Interest Scope TLV                                   /
+   +---------------------------------------------------------------+
+   / Optional Interest Allowed Response Type TLV                   /
+   +---------------------------------------------------------------+
+   / Optional Object Handling TLV                                  /
+   +---------------------------------------------------------------+
+   / Optional Per-hop Fragment TLV                                 /
+   +---------------------------------------------------------------+
+   / Optional End-to-end Fragment TLV                              /
+   +---------------------------------------------------------------+
+
+5.2.1.  Interest Scope
+
+   The Interest Scope limits the propagation of an Interest in slightly
+   different ways than a Hop Limit.
+
+   0 = Local cache only, 1 = local cache or local apps, 2 = anything
+   local or 1-hop neighbor cache or local apps.  Other values are
+   undefined and should be ignored.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+
+   |      %x04     |     length    |    Scope      |
+   +---------------+---------------+---------------+
+
+5.2.2.  Allowed Response Type
+
+   The Allowed Response Type in an Interest determines the desired types
+   of responses.  It is a binary OR of these flags.  If the field is
+   missing, any response type is allowed.
+
+   0x01 = Cached Responses Only, 0x02 = Dynamically generated Only
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+
+   |      %x18     |     length    |  AllowedType  |
+   +---------------+---------------+---------------+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 10]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+5.2.3.  Object Handling
+
+   Specifies per-hop behavior for handling a Content Object.  It is the
+   binary OR of these flags:
+
+   0x01 = Do not cache
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+
+   |      %x19     |     length    |    handling   |
+   +---------------+---------------+---------------+
+
+5.2.4.  Per Hop Fragment
+
+   Taken from work done with Christian Tschudin
+
+   hop-by-hop fragments MUST carry at least . a sequence number, wrap-
+   around according to RFC1982, default width 32 bits . a flag field,
+   encoding START/MID/END/SINGLE as in PPP - the hop-by-hop protocol,
+   using sequence numbers, can handle out-of-order delivery, but the
+   heuristics is left to the implementation - it is highly desirable to
+   have a "face control protocol" (like PPP's LCP) where fragmentation
+   options and other neighboring parameters can be negotiated. .
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |      %x1A     |     length    |      flags    |
+   +---------------+---------------+---------------+---------------+
+              32-bit sequence number               |
+   +---------------+---------------+---------------+
+
+5.2.5.  End-to-End Fragment
+
+   12-bytes for an end-to-end fragment.  Description forthcoming.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |      %x1B     |     length    |                               |
+   +---------------+---------------+---------------+---------------+
+   |                                                               |
+   +---------------+---------------+---------------+---------------+
+   |                                                               |
+   +---------------+---------------+---------------+---------------+
+   |                               |
+   +---------------+---------------+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 11]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+6.  Type Values
+
+   CCNx over TLV uses global types.  A type "5", for example, is always
+   a Content Name, no matter where it is in a TLV hierarchy.
+
+   We include the length flag in the type values, therefore all short
+   TLVs are from 0 - 127.  All long TLVs are %x8000 - %xFFFF.
+
+   +------+--------+----------------------------+----------------------+
+   | Shor |  Long  |            Name            | Description          |
+   |   t  |  Type  |                            |                      |
+   | Type |        |                            |                      |
+   +------+--------+----------------------------+----------------------+
+   |      | %x8001 |     Name (Section 7.2)     | Content Name,        |
+   |      |        |                            | encoded using the    |
+   |      |        |                            | "flat name" style.   |
+   |      |        |                            |                      |
+   | %x01 |        |       Interest Nonce       | A large random       |
+   |      |        |       (Section 7.4.5)      | number used for loop |
+   |      |        |                            | detection.           |
+   |      |        |                            |                      |
+   |      | %x8002 |     Interest Selectors     | Selectors for object |
+   |      |        |       (Section 7.4.1)      | return, such as      |
+   |      |        |                            | mininum and maximum  |
+   |      |        |                            | suffix componets,    |
+   |      |        |                            | publisher public key |
+   |      |        |                            | digest, and so on.   |
+   |      |        |                            |                      |
+   | %x02 |        |    Selectors: Min Suffix   | Minimum number of    |
+   |      |        | Components (Section 7.4.3) | additonal name       |
+   |      |        |                            | compoents after      |
+   |      |        |                            | given name to match  |
+   |      |        |                            | (0 default if        |
+   |      |        |                            | missing).            |
+   |      |        |                            |                      |
+   | %x03 |        |    Selectors: Max Suffix   | Maximum number of    |
+   |      |        | Components (Section 7.4.3) | additonal name       |
+   |      |        |                            | compoents after      |
+   |      |        |                            | given name to match  |
+   |      |        |                            | (unlimited default   |
+   |      |        |                            | is missing).         |
+   |      |        |                            |                      |
+   | %x04 |        |  Selectors: Child Selector | 0 = left, 1 = right  |
+   |      |        |       (Section 7.4.2)      | (default)            |
+   |      |        |                            |                      |
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 12]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+   | %x05 |        |       Content Expiry       | The UTC time (in     |
+   |      |        |      (Section 7.5.1.3)     | seconds) at which    |
+   |      |        |                            | the content object   |
+   |      |        |                            | expires and is       |
+   |      |        |                            | "stale".             |
+   |      |        |                            |                      |
+   | %x06 |        |       Final Block ID       | The segment number   |
+   |      |        |      (Section 7.5.1.4)     | of the final block   |
+   |      |        |                            | in a segmented       |
+   |      |        |                            | object (big-endian   |
+   |      |        |                            | ingteger)            |
+   |      |        |                            |                      |
+   |  %07 |        |    Content Object Cipher   | A short identiier of |
+   |      |        |   Suite (Section 7.5.2.3)  | the cipher suite     |
+   |      |        |                            | (digest algorithm    |
+   |      |        |                            | and signature        |
+   |      |        |                            | algorithm) used by a |
+   |      |        |                            | Content Object.      |
+   |      |        |                            |                      |
+   | %x08 |        |      Interest Lifetime     | Interest Lifetime,   |
+   |      |        |       (Section 7.4.4)      | in milli-seconds     |
+   |      |        |                            |                      |
+   | %x09 |        |      Pad (Section 7.1)     | A protocol may chose |
+   |      |        |                            | to word-align fields |
+   |      |        |                            | by using a Pad type. |
+   |      |        |                            |                      |
+   |      |  %8003 |      Interest Excludes     | Encloses             |
+   |      |        |       (Section 7.4.6)      | ExcludeComponents,   |
+   |      |        |                            | 16-bit length only   |
+   |      |        |                            |                      |
+   |      | %x8004 |      Exclude Singleton     | Exclude a single     |
+   |      |        |      (Section 7.4.6.1)     | name component,      |
+   |      |        |                            | containing only the  |
+   |      |        |                            | bytes of the         |
+   |      |        |                            | component, not the   |
+   |      |        |                            | "flat name" with     |
+   |      |        |                            | continuation-bit     |
+   |      |        |                            | length.              |
+   |      |        |                            |                      |
+   |      | %x8005 |        Exclude Range       | Exclude an inclusive |
+   |      |        |      (Section 7.4.6.2)     | range, begining at   |
+   |      |        |                            | this value and       |
+   |      |        |                            | continuting through  |
+   |      |        |                            | the next Singleton,  |
+   |      |        |                            | or to infinity if    |
+   |      |        |                            | ommited on the last  |
+   |      |        |                            | entry.               |
+   |      |        |                            |                      |
+
+
+
+Mosko                    Expires April 11, 2014                [Page 13]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+   | %x10 |        |  PublisherPublicKeyDigest  | SHA-256 digest of    |
+   |      |        |        (Section 7.3)       | the Publisher Public |
+   |      |        |                            | Key.                 |
+   |      |        |                            |                      |
+   | %x11 |        | PublisherCertificateDigest | SHA-256 digest of    |
+   |      |        |        (Section 7.3)       | the Publisher        |
+   |      |        |                            | Certificate.         |
+   |      |        |                            |                      |
+   | %x12 |        |    IsuerPublicKeyDigest    | SHA-256 digest of    |
+   |      |        |        (Section 7.3)       | the Issuer Public    |
+   |      |        |                            | Key.                 |
+   |      |        |                            |                      |
+   | %x13 |        |   IssuerCertificateDigest  | SHA-256 digest of    |
+   |      |        |        (Section 7.3)       | the Issuer           |
+   |      |        |                            | Certificate.         |
+   |      |        |                            |                      |
+   | %x14 |        |     Content Object Type    | Indicates the type   |
+   |      |        |      (Section 7.5.1.1)     | of Contents (data,   |
+   |      |        |                            | encrypted, key,      |
+   |      |        |                            | link, etc.)          |
+   |      |        |                            |                      |
+   | %x15 |        |      Content Timestamp     | A milli-second since |
+   |      |        |      (Section 7.5.1.2)     | epoch in UTC         |
+   |      |        |                            | timestamp.           |
+   |      |        |                            |                      |
+   |  %16 |        |    Digest and Signature    | A UTF-8 OID          |
+   |      |        |       Algorithm OIDs       | representation of    |
+   |      |        |      (Section 7.5.2.2)     | the dignest and      |
+   |      |        |                            | signature algorithm  |
+   |      |        |                            | used by a Content    |
+   |      |        |                            | Object.              |
+   |      |        |                            |                      |
+   |  %17 |        |       Interest Scope       | The Scope of an      |
+   |      |        |       (Section 5.2.1)      | Interest.            |
+   |      |        |                            |                      |
+   |  %18 |        |    Allowed Response Type   | A bitfield           |
+   |      |        |       (Section 5.2.2)      | indicating the       |
+   |      |        |                            | allowed types of     |
+   |      |        |                            | respone, such as     |
+   |      |        |                            | dynamic content or   |
+   |      |        |                            | no cache. (old name  |
+   |      |        |                            | was Answer Origin    |
+   |      |        |                            | Kind)                |
+   |      |        |                            |                      |
+   |  %19 |        |       Object Handling      | Per-hop directives   |
+   |      |        |       (Section 5.2.3)      | on object handling.  |
+   |      |        |                            |                      |
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 14]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+   |  %1A |        |    Per Hop Fragmentation   | Per-hop              |
+   |      |        |       (Section 5.2.4)      | fragmentation        |
+   |      |        |                            | header.              |
+   |      |        |                            |                      |
+   |  %1B |        |  End-to-end Fragmentation  | End-to-end           |
+   |      |        |       (Section 5.2.5)      | fragmentation        |
+   |      |        |                            | header.              |
+   |      |        |                            |                      |
+   |      | %x8006 |         Signed Info        | Meta information     |
+   |      |        |       (Section 7.5.1)      | about a signature.   |
+   |      |        |                            |                      |
+   |      | %x8007 |       Signature Block      | Contains the         |
+   |      |        |       (Section 7.5.2)      | Signature Bits,      |
+   |      |        |                            | optional Witness,    |
+   |      |        |                            | and optional Digest  |
+   |      |        |                            | Algorithm.           |
+   |      |        |                            |                      |
+   |      | %x8008 |  Witness (Section 7.5.2.4) | An array of SHA-256  |
+   |      |        |                            | digests.             |
+   |      |        |                            |                      |
+   |      | %x8009 |       Signature Bits       | A signature,         |
+   |      |        |      (Section 7.5.2.1)     | contents varies      |
+   |      |        |                            | depending on         |
+   |      |        |                            | algorithm.           |
+   |      |        |                            |                      |
+   |      | %x800A |   Content (Section 7.5.3)  | Binary data, the     |
+   |      |        |                            | contents of a        |
+   |      |        |                            | Content Object.      |
+   |      |        |                            | Certain types of     |
+   |      |        |                            | content objects have |
+   |      |        |                            | specified Contents,  |
+   |      |        |                            | such as a Link or    |
+   |      |        |                            | Collection.          |
+   |      |        |                            |                      |
+   |      | %x800B | Key Name (Section 7.5.1.5) | A content name and   |
+   |      |        |                            | optional digest of   |
+   |      |        |                            | the key used to sign |
+   |      |        |                            | the packet.          |
+   |      |        |                            |                      |
+   |      | %x800C |    Key (Section 7.5.1.6)   | Key bytes            |
+   |      |        |                            |                      |
+   |      | %x800D |         Certificate        | ASN.1 encoded        |
+   |      |        |      (Section 7.5.1.7)     | certificate          |
+   |      |        |                            |                      |
+   |      |  %800E |           ExtOpt           | Extended Options     |
+   |      |        |                            |                      |
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 15]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+   |      | %xE000 |        Experimental        | Experimental fields  |
+   |      |    -   |                            |                      |
+   |      | %xEFFF |                            |                      |
+   |      |        |                            |                      |
+   | %x20 |        |  Name Component (Generic)  | A generic name       |
+   |      |        |       (Section 7.2.1)      | component (binary or |
+   |      |        |                            | utf-8).              |
+   |      |        |                            |                      |
+   | %x21 |        |  Name Component (Version)  | A monotonic          |
+   |      |        |       (Section 7.2.1)      | (non-decreasing)     |
+   |      |        |                            | version number       |
+   |      |        |                            |                      |
+   | %x22 |        |   Name Component (Serial   | A serial             |
+   |      |        |  Segment) (Section 7.2.1)  | (incrementing by 1)  |
+   |      |        |                            | segment number       |
+   |      |        |                            | (0-based). Old %00   |
+   |      |        |                            | marker.              |
+   |      |        |                            |                      |
+   | %x23 |        |  Name Component (Monotonic | A monotonic          |
+   |      |        |  Segment) (Section 7.2.1)  | (non-decreasing)     |
+   |      |        |                            | segment number. Old  |
+   |      |        |                            | %FB command marker.  |
+   |      |        |                            |                      |
+   | %x24 |        |   Name Component (Nonce)   | A nonce name         |
+   |      |        |       (Section 7.2.1)      | component, promoted  |
+   |      |        |                            | out of the           |
+   |      |        |                            | %xC1.N%x00           |
+   |      |        |                            | namespace.           |
+   |      |        |                            |                      |
+   | %x25 |        | Name Component (Functional | A functional name    |
+   |      |        | Component) (Section 7.2.1) | componet, replaces   |
+   |      |        |                            | %xC1 command         |
+   |      |        |                            | markers. First bytes |
+   |      |        |                            | of the name          |
+   |      |        |                            | component define the |
+   |      |        |                            | function, so a       |
+   |      |        |                            | %xC1.R.sw would      |
+   |      |        |                            | translate to a %x25  |
+   |      |        |                            | type and ".R.sw" in  |
+   |      |        |                            | side the name        |
+   |      |        |                            | component.           |
+   |      |        |                            |                      |
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 16]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+   |      | %xF000 |  Name Component (Payload)  | Application-specific |
+   |      |    -   |       (Section 7.2.1)      | payload in a name    |
+   |      | %xF0FF |                            | component. An        |
+   |      |        |                            | application may      |
+   |      |        |                            | apply its own        |
+   |      |        |                            | semantics to the 256 |
+   |      |        |                            | payload components.  |
+   +------+--------+----------------------------+----------------------+
+
+                    Table 1: CCNx Network Message Types
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 17]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+7.  Type Formats
+
+7.1.  Pad
+
+   The pad type may be used by protocols that prefer word-aligned data.
+   The size of the word may be defined by the protocol.  Padding 4-byte
+   words, for example, would use a 0-byte, 1-byte, and 3-byte length.
+   Padding 8-byte words would use a (0, 1, 2, 3, 4, 5, 7)-byte length.
+
+   A pad may be inserted after any other TLV.  In the remainder of this
+   document, we will not show optional pad TLVs.
+
+   Name
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |     %x09      |     length    |                               /
+   +---------------+---------------+                               /
+   /                 variable length pad MUST be zeros             /
+   +---------------+---------------+---------------+---------------+
+
+7.2.  Content Name
+
+   Content Names are encoded as 15b/16b Name TLV.  The value of the Name
+   is a specially encoded sequence of name components.  A Name MUST NOT
+   include PAD TLVs.
+
+   Name
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x8001             |            length             |
+   +---------------+---------------+---------------+---------------+
+   /                                                               /
+   /                 Variable length name components               /
+   +---------------+---------------+---------------+---------------+
+
+7.2.1.  Name Components
+
+   Name components are encoded as 7b/8b TLVs in the range %x20 - %x25.
+   %x20 is the generic name component, with a non-functional meaning.
+   Types %x21-%x24 have specific functional types (version, segment,
+   nonce) and type %x25 have variable function behavior depending on the
+   contents of the name component.
+
+   Special application payload name componets are in the range %xF000 -
+
+
+
+Mosko                    Expires April 11, 2014                [Page 18]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+   %F0FF.  These have application semantics applied to them.
+
+   For example, a name like "ccnx:/foo/bar/{version 17}/{seq 256}" would
+   be encoded as:
+
+   Name
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x8001             |             %x11              |
+   +---------------+---------------+---------------+---------------+
+   |      %x20     |     %x03      |        f            o
+   +---------------+---------------+---------------+---------------+
+          o        |     %x20      |      %x03     |       b
+   +---------------+---------------+---------------+---------------+
+          a                r       |      %x21     |      %x01     |
+   +---------------+---------------+---------------+---------------+
+         %x11      |     %x22      |      %x02     |      %x01
+   +---------------+---------------+---------------+---------------+
+         %x00      |
+   +---------------+
+
+   TBD: What is the URI syntax of typed name components?
+
+7.3.  Digest
+
+   CCNx uses four types of digests, all represented as 32-byte SHA-256.
+
+   Cryptographic Digest
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |  %x10 - %x13  |     length    |                               /
+   +---------------+---------------+                               /
+   /                                                               /
+   /                      Digest (length octets)                   /
+   /                                                               /
+   /                                                               /
+   +---------------+---------------+---------------+---------------+
+   %x10 = Publisher Public Key Digest
+   %x11 = Publisher Certificate Digest
+   %x12 = Issuer Public Key Digest
+   %x13 = Issuer Certificate Digest
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 19]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+7.4.  Interests
+
+   An Interest is a Common Header, an Interest Header, followed by a
+   Name TLV.  It may then have optional Selectors, Lifetime, and Nonce
+   TLVs.
+
+   An Interest similarity Hash is computed
+
+   The Interest is organized such that the optional Lifetime and Nonce
+   are at the end.  This allows a similarity check on the bytes up to,
+   but not including the lifetime or nonce.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |                          Fixed Header                         |
+   |                                                               |
+   +---------------+---------------+---------------+---------------|
+   / Per-hop TLVs                                                  /
+   +---------------+---------------+---------------+---------------|
+   / Mandatory Name TLV                                            /
+   +---------------------------------------------------------------+
+   / Optional Interest Selectors TLV                               /
+   +---------------------------------------------------------------+
+   / Optional Interest Lifetime TLV                                /
+   +---------------------------------------------------------------+
+   / Optional Interest Nonce TLV                                   /
+   +---------------------------------------------------------------+
+
+7.4.1.  Interest Selectors
+
+   An Interest Selectors container holds up to four optional TLVs.
+   While it is accetable to have a zero-length Selectors (meaning none
+   included), best practice is to not include the Selectors TL if the
+   length is zero.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 20]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x8002             |            length             |
+   +---------------+---------------+---------------+---------------+
+   / Optional Child Selector TLV                                   /
+   +---------------------------------------------------------------+
+   / Optional MinSuffixComponents TLV                              /
+   +---------------------------------------------------------------+
+   / Optional MaxSuffixComponents TLV                              /
+   +---------------------------------------------------------------+
+   / Optional Exclude TLV                                          /
+   +---------------------------------------------------------------+
+   / Optional Digest Restriction                                   /
+   +---------------------------------------------------------------+
+
+7.4.2.  Child Selector
+
+   If there are multiple choices to answer an Interest, the Child
+   Selector specifies the desired ordering of resposnes. %x00 =
+   leftmost, %x01 = rightmost.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+
+   |      %04      |     length    |   selector    |
+   +---------------+---------------+---------------+
+
+7.4.3.  Interest Min(Max)SuffixComponets
+
+   The Min and Max suffix components are encoded as a minimum-length Big
+   Endian (network byte order) number inside the value.  A "0" is
+   represented as a single byte %0x00.  A length 0 V is interpreted the
+   same as the type not being present.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |      %08      |     length    |                               /
+   +---------------+---------------+                               /
+   /                      Min(Max)SuffixComponentrs                /
+   /                                                               /
+   +---------------+---------------+---------------+---------------+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 21]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+7.4.4.  Interest Lifetime
+
+   The Interest Lifetime expresses how long an Interest should stay
+   pending at an intermediate node.  It is express in milli-seconds as a
+   non-negative big-endian integer.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |      %08      |     length    |                               /
+   +---------------+---------------+                               /
+   /                      lifetime (length octets)                 /
+   /                                                               /
+   +---------------+---------------+---------------+---------------+
+
+7.4.5.  Interest Nonce
+
+   A Nonce is used to distinguish unique repetitions of the same
+   Interest.  A requestor, for example, may issue an Interest, timeout,
+   and then re-issue the same Interest.  To indicate that it is not a
+   duplicate the requestor uses a different Nonce.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |       %x06    |     length    |                               /
+   +---------------+---------------+                               /
+   /                           Nonce (length octets)               /
+   /                                                               /
+   +---------------+---------------+---------------+---------------+
+
+7.4.6.  Interest Excludes
+
+   Interest Excludes specify a set of singletons and ranges to exclude
+   when matching content object names to an Interest.  They match the
+   name component immediately following the last componnet of the
+   Interest name.  The excludes must be sorted in ascending order, using
+   the normal Name sorting rules.
+
+   The normal name sorting rules use a shortlex alogrithm.  A name
+   component A is less than a name component B iff A is fewer bytes, or
+   the byte size being equal, A is lexicagraphically sorted before B,
+   where the most significant byte is first.
+
+   The zero-length name component is the minimum name component.  If
+   present, it must be the first Exclude component.
+
+   An exclude may contain either an Exclude Range type or an Exclude
+
+
+
+Mosko                    Expires April 11, 2014                [Page 22]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+   Singleton type.  An Exclude Range type means the given value starts
+   an inclusive exclusion range that ends at the next Singleton or at
+   infinity if it is the last exclude component.  An Exclude Singleton
+   means to exclude the exact value given.
+
+                         1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x8003             |            length             |
+   +---------------+---------------+---------------+---------------+
+   / Zero or more exclude-components                               /
+   +---------------------------------------------------------------+
+
+   exclude-components = *component [start-range-tlv]
+   component = (start-range-tlv singleton-tlv) / singleton-tlv
+
+   EXAMPLES
+
+7.4.6.1.  Exclude Singleton
+
+   A singleton exclude component means to exclude a name component
+   exactly matching the given value.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x8004             |            length             |
+   +---------------+---------------+---------------+---------------+
+   /                        TLV name component                     /
+   +---------------+---------------+---------------+---------------+
+
+7.4.6.2.  Exclude Range
+
+   A Range exclude means to exclude the from the given value up to an
+   including the next Singleton.  If the Range is the last componet in
+   the Exclude, it means to exclude to infinity.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x8005             |            length             |
+   +---------------+---------------+---------------+---------------+
+   /                        TLV name component                     /
+   +---------------+---------------+---------------+---------------+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 23]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+7.5.  Content Objects
+
+   A Content Object contains four mandatory sections, some of which
+   contain optional TLVs.
+
+   The Implicit Digest of a Content Object is defined as a SHA-256
+   beginning at the Name TLV and ended at (not including) the Signature
+   Block TLV
+
+   The signing hash is defined over the same range as the implicit
+   digest, but using the mechanisms defined in the Signature Block, or
+   using SHA-256/RSA if not defined.
+
+   Content Object
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |                          Fixed Header                         |
+   |                                                               |
+   +---------------+---------------+---------------+---------------|
+   / Per-hop TLVs                                                  /
+   +---------------+---------------+---------------+---------------|
+   / Mandatory Name TLV                                            /
+   +---------------------------------------------------------------+
+   / Mandatory Signed Info TLV                                     /
+   +---------------------------------------------------------------+
+   / Mandatory Contents TLV                                        /
+   +---------------------------------------------------------------+
+   / Mandatory Signature Block TLV                                 /
+   +---------------------------------------------------------------+
+
+7.5.1.  Signed Info
+
+   Signed Info is meta-data about the name and Contents.  The
+   information is part of the signature digest.
+
+   The ContentType TLV specifies the type of the Content Object
+
+   The timestamp header is a UTC time in milli-seconds representing the
+   time at which the signature took place.
+
+   Signed Info must include a Publisher Public Key Digest inside a
+   Digest TLV of the object signer.
+
+   A Signed Info block may contain up to 4 optional TLVs, described
+   below.  It may contain at most only one of KeyName or Key or
+   Certificate.
+
+
+
+Mosko                    Expires April 11, 2014                [Page 24]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x8006             |            length             |
+   +---------------+---------------+---------------+---------------+
+   / Mandatory Content Type TLV                                    /
+   +---------------------------------------------------------------+
+   / Mandatory Timestamp TLV                                       /
+   +---------------------------------------------------------------+
+   / Mandatory Publisher Public Key Digest TLV                     /
+   +---------------------------------------------------------------+
+   / Optional Expiry Time TLV                                      /
+   +---------------------------------------------------------------+
+   / Optional Final Block ID TLV                                   /
+   +---------------------------------------------------------------+
+   / Optional KeyName or Key or Certificate (at most one)          /
+   +---------------------------------------------------------------+
+   / Optional Extended Options                                     /
+   +---------------------------------------------------------------+
+
+7.5.1.1.  Content Type
+
+   The Content Type is a network byte order integer encoded in the
+   shortest length, representing the general type of the Contents TLV.
+
+   o  0: Data
+
+   o  1: Encrypted Data
+
+   o  2: Gone (whiteout)
+
+   o  3: Key
+
+   o  4: Link
+
+   o  5: NACK
+
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+-------------------------------+
+   |      %x14     |    length     |   content type value          /
+   +---------------+---------------+---------------+---------------+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 25]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+7.5.1.2.  Content Timestamp (milli-second)
+
+   A milli-second timestamp is a big-endian ordered integer of the
+   number of milli-seconds since the epoch in UTC.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+-------------------------------+
+   |      %x15     |    length     |                               /
+   +---------------+---------------+                               /
+   /             milli-seconds (variable length integer)           /
+   +---------------+---------------+-------------------------------+
+
+7.5.1.3.  Content Expiry
+
+   The 64-bit UTC time in seconds since the epoch, at which the object
+   expires and becomes "stale".  A stale content object should never be
+   sent from cache to answer an Interest.  A forwarder is not required
+   to check the expiration time and MAY forward an in-flight Content
+   Object past its expiry time.  A content store, cache, repository, or
+   applicaiton SHOULD never respond with an expired content object.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+-------------------------------+
+   |      %x05     |    length     |                               /
+   +---------------+---------------+                               /
+   /                       64-bit UTC seconds                      /
+   +                               +-------------------------------+
+   /                               |
+   +---------------+---------------+
+
+7.5.1.4.  Final Block ID
+
+   The Final Block ID is used to indicate the last segment number of a
+   stream.  If the segment number of the current Content Object equals
+   the Final Block ID, then it is the final segment.
+
+   An encoder may set a Final Block ID in an earlier segment, and then
+   later extend the stream beyond that estimate.  A Content Object is
+   only the final block if its segment number exactly equals the Final
+   Block ID it carries.
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 26]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+-------------------------------+
+   |      %x06     |    length     |                               /
+   +---------------+---------------+                               /
+   /            Final Block ID (variable length integer)           /
+   +---------------+---------------+---------------+---------------+
+
+7.5.1.5.  Key Name
+
+   A key name type key locator is a mandatory Name TLV followed by an
+   optional Digest (%x10-%x13) key digest.
+
+   Including the key digest allows a verifying node to see if it has the
+   given digest already in its key cache to expidite lookup.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+-------------------------------+
+   |            %x800B             |            length             |
+   +---------------+---------------+-------------------------------+
+   / Mandatory Name TLV                                            /
+   +---------------------------------------------------------------+
+   / Optional Cryptographic Digest                                 /
+   +---------------------------------------------------------------+
+
+7.5.1.6.  Key
+
+   A Key is a DER encoded Subject Publick Key Info block, as in an X509
+   certificate.
+
+                        1
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
+   +---------------+---------------+---------------+---------------+
+   |            %x800C             |            length             |
+   +---------------+---------------+---------------+---------------+
+   /                      Key (DER encoded SPKI)                   /
+   +---------------+---------------+---------------+---------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 27]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+7.5.1.7.  Certificate
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x800D             |            length             |
+   +---------------+---------------+---------------+---------------+
+   /                 Certificate (DER encoded X509)                /
+   +---------------+---------------+---------------+---------------+
+
+7.5.1.8.  Extended Options
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x800E             |            length             |
+   +---------------+---------------+---------------+---------------+
+   /                            ExtOpts                            /
+   +---------------+---------------+---------------+---------------+
+
+   ExtOpts = *<TLVs>
+
+7.5.2.  Signature
+
+   The Signature Block includes the cryptographic signature of the
+   contents and information about how the signature was computed.
+
+   The Signature Block MUST contain either a Digest Algorithm TLV or a
+   Cipher Suite TLV.  These specify the algorithms used to digest and
+   sign the content object.
+
+   A Signature Block MUST contain a Signature Bits TLV.
+
+   A Content Object without a mandatory field that is understood by an
+   implementation, and that verifies, should be silently discarded.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x8007             |            length             |
+   +---------------+---------------+---------------+---------------+
+   / Mandatory Digest Algorithm or Cipher Suite TLV                /
+   +---------------------------------------------------------------+
+   / Optional Witness TLV                                          /
+   +---------------------------------------------------------------+
+   / Mandatory Signature Bits TLV                                  /
+   +---------------------------------------------------------------+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 28]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+7.5.2.1.  Signature Bits
+
+   The cryptographic signature using the given or implicit Digest
+   Algorithm.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x8009             |            length             |
+   +---------------+---------------+---------------+---------------+
+   /                           Signature                           /
+   +---------------+---------------+---------------+---------------+
+
+7.5.2.2.  Digest Algorithm
+
+   The Digest Algorithm is a UTF-8 null-terminated OID string
+   representing the digest algorithm and encryption used to sign a
+   Content Object.  A typical value is SHA-256 with RSA
+   "1.2.840.113549.1.1.11\x00".
+
+   It may optionally be two separate OIDs for the digest algorithm
+   followed by the signature algorithm if no combined pair exists.  For
+   example, "2.16.840.1.101.3.4.2.1\x001.2.246.530.1.2.15.2.4\x00" is
+   also SHA-256 with RSA encryption.  If specifying two OIDs, neither
+   may be empty
+
+   If an implementation cannot parse or does not implemented a specified
+   algorithm, it MUST silently discard the content object.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |      %x16     |    length     |                               /
+   +---------------+---------------+                               /
+   /                       Digest Algorithm(s)                     /
+   +---------------+---------------+---------------+---------------+
+
+7.5.2.3.  Cipher Suite
+
+   The Cipher Suite is a short notation indicating the digest algorithm
+   and encryption used to sign a Content Object.  The Cipher Suite is a
+   variable-length number evaluated in network-byte order.
+
+   If an implementation cannot parse or does not implemented a specified
+   algorithm, it MUST silently discard the content object.
+
+   An implementation may choose which cipher suites, if any.  The
+   initial list of Cipher Suites is:
+
+
+
+Mosko                    Expires April 11, 2014                [Page 29]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+         +-------------------------+-----------------------------+
+         | Network Byte Order Code |            Suite            |
+         +-------------------------+-----------------------------+
+         |           %x00          |      SHA-256 with RSA.      |
+         |                         |                             |
+         |           %x01          |    SHA-256 with AES-256.    |
+         |                         |                             |
+         |           %x02          |     SHA-256 with ECDSA.     |
+         |                         |                             |
+         |           %x03          | SHA-256 with Symmetric Key. |
+         +-------------------------+-----------------------------+
+
+                          Table 2: Cipher Suites
+
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |      %x07     |    length     |         Cipher Suite          |
+   +---------------+---------------+---------------+---------------+
+
+7.5.2.4.  Witness
+
+   The Witness is a DER encoded PKCS #1 Info element.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x8008             |            length             |
+   +---------------+---------------+---------------+---------------+
+   /                            Witness                            /
+   +---------------+---------------+---------------+---------------+
+
+7.5.3.  Content
+
+   Opaque content bytes.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |            %x800A             |            length             |
+   +---------------+---------------+---------------+---------------+
+   /                            Content                            /
+   +---------------+---------------+---------------+---------------+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 30]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+8.  Acknowledgements
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 31]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+9.  IANA Considerations
+
+   This memo includes no request to IANA.
+
+   All drafts are required to have an IANA considerations section (see
+   Guidelines for Writing an IANA Considerations Section in RFCs
+   [RFC5226] for a guide).  If the draft does not require IANA to do
+   anything, the section contains an explicit statement that this is the
+   case (as above).  If there are no requirements for IANA, the section
+   will be removed during conversion into an RFC by the RFC Editor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 32]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+10.  Security Considerations
+
+   All drafts are required to have a security considerations section.
+   See RFC 3552 [RFC3552] for a guide.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 33]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+11.  References
+
+11.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+11.2.  Informative References
+
+   [CCNx]     PARC, Inc., "CCNx Open Source", 2007,
+              <http://www.ccnx.org>.
+
+   [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
+              Text on Security Considerations", BCP 72, RFC 3552,
+              July 2003.
+
+   [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
+              IANA Considerations Section in RFCs", BCP 26, RFC 5226,
+              May 2008.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 34]
+
+Internet-Draft                  CCNx TLV                    October 2013
+
+
+Author's Address
+
+   Marc Mosko (editor)
+   PARC
+   Palo Alto, California  94304
+   USA
+
+   Phone: +01 650-812-4405
+   Email: marc.mosko@parc.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 11, 2014                [Page 35]
+

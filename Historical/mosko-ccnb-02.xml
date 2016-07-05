@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+    which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+    There has to be one entity for each item to be referenced. 
+    An alternate method (rfc include) is described in the references. -->
+
+<!ENTITY RFC2119 SYSTEM "bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2234 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2234.xml">
+<!ENTITY RFC2629 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2629.xml">
+<!ENTITY RFC3552 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3552.xml">
+<!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
+<!ENTITY RFC3629 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3629.xml'>
+
+<!ENTITY RFC5234 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5234.xml">
+
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+    please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+    (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space 
+    (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+
+<?rfc private="" ?>
+
+<rfc category="exp" docName="draft-ietf-ccnb-mosko-01" ipr="none">
+	<!-- category values: std, bcp, info, exp, and historic
+    ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
+       or pre5378Trust200902
+    you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+    they will automatically be output with "(if approved)" -->
+
+	<!-- ***** FRONT MATTER ***** -->
+
+	<front>
+		<!-- The abbreviated title is used in the page header - it is only necessary if the 
+        full title is longer than 39 characters -->
+
+		<title abbrev="CCNB Encoding">CCN Binary Encoding (CCNB)</title>
+
+		<!-- add 'role="editor"' below for the editors if appropriate -->
+
+		<!-- Another author who claims to be an editor -->
+
+		<author fullname="Marc Mosko" initials="M.E." role="editor" surname="Mosko">
+			<organization>PARC</organization>
+
+			<address>
+       <postal>
+         <street/>
+
+         <!-- Reorder these if your country does things differently -->
+
+         <city>Palo Alto</city>
+
+         <region>California</region>
+
+         <code>94304</code>
+
+         <country>USA</country>
+       </postal>
+
+       <phone>+01 650-812-4405</phone>
+
+       <email>marc.mosko@parc.com</email>
+
+       <!-- uri and facsimile elements may also be added -->
+     </address>
+		</author>
+
+		<date month="October" year="2013"/>
+
+		<!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
+        in the current day for you. If only the current year is specified, xml2rfc will fill 
+	 in the current day and month for you. If the year is not the current one, it is 
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
+	 specify just the year. -->
+
+		<!-- Meta-data Declarations -->
+
+		<area>General</area>
+
+		<workgroup>Internet Engineering Task Force</workgroup>
+
+		<!-- WG name at the upperleft corner of the doc,
+        IETF is fine for individual submissions.  
+	 If this element is not present, the default is "Network Working Group",
+        which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+		<keyword>Content Centric Networking</keyword>
+
+		<!-- Keywords will be incorporated into HTML output
+        files in a meta tag but they have no effect on text or nroff
+        output. If you submit your draft to the RFC Editor, the
+        keywords will be used for the search engine. -->
+
+		<abstract>
+			<t>This document specifies the Content Centric Networking (CCN) Binary encoding (CCNB).
+				CCNB is a compact binary representation of variable-length structured data.</t>
+
+			<t>Copyright (C) 2013 Palo Alto Research Center</t>
+		</abstract>
+	</front>
+
+	<middle>
+		<section title="Introduction">
+			<t>Content Centric Networking <xref target="CCNx">CCNx</xref> represents variable length
+				network messages as compactly encoded binary structured messages, called CCNB. The
+				encoding may be of value to other protocols or applications due to its efficient and
+				flexible encoding of variable length structured data. The CCNB format is designed
+				for high-speed data transfer of structured, hierarchical data. </t>
+
+			<t>Message elements, called ``blocks'', are identified by a ``tag''. The tag may be an
+				unsigned integer size of (4 + n * 7)-bits, where n is 0 or more. Tags may also be
+				encoded as UTF-8 strings, if a tag dictionary is not used. CCNB does not process tag
+				values, so a protocol may use any schema or tag dictionary.</t>
+
+			<t>This document specifies: <list style="symbols">
+					<t>A binary byte-oriented "block" encoding format.</t>
+					<t>Encodings for binary, UTF-8, and dictionary tags.</t>
+				</list>
+			</t>
+
+			<t>Formal grammars use the <xref target="RFC5234">ABNF</xref> notation. We use the
+				notation "&lt;N&gt;(element)" to indicate a variable-length repetition of element
+				using the value of element N. For example, "&lt;header-value&gt;(UTF8-octets)" means
+				there are header-value UTF8 characters. </t>
+
+			<section title="Requirements Language">
+				<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+					"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+					interpreted as described in <xref target="RFC2119">RFC 2119</xref>.</t>
+			</section>
+		</section>
+
+		<section anchor="blocks" title="Binary blocks">
+			<t>CCNB is composed of nested blocks. Each CCNB block begins with a CCNB Header. The
+				purpose of the header is to encode a variable length non-negative integer, called
+				the header-value, and a fixed length header-type. The header-type determines how to
+				interpret the header-value, such as a content length or dictionary index. The header
+				field encoded-value uses a stop-bit multi-byte representation of the header-value.
+				The term header-value is used for purposes of description, although its production
+				is not used in the grammar.  For example, the header-type "Integer Tag" is encoded
+				as "2" and it could carry a header-value of "64" to represent a CCNx Content Object.
+				The value "64" is a variable length encoding.
+			    </t>
+
+			<t>The header-value is encoded as zero or more 7-bit values, and one 4-bit value. CCNB
+				uses a stop-bit that is set to "0" for 7-bit values and "1" for the 4-bit value. The
+				first 7-bit value cannot be exactly 0, otherwise the first byte of the header would
+				be %x00, which is a special value used to close CCNB blocks (see <xref
+					target="messages"/>). The type non-zero-octet represents the "0" stop bit plus
+				7-bits, excluding %x00, notated as %x01-7F. The type any-octet represents the "0"
+				stop bit plus any 7-bit value. The type five-bit represents the "1" stop bit plus a
+				4-bit value. header-value is encoded most-significant-bit first, so the final 4-bit
+				value is the low-order bits. One MUST encode the header-value using the shortest
+				encoding. The first byte of a header MUST NOT be %x00. </t>
+
+			<t>The encoded-value is a sequence of 0 or more octets followed by a 5-bit sequence. The
+				octets are a "0" stop-bit plus a 7-bit field. The 5-bit sequence is a "1" stop-bit
+				plus a 4-bit field.</t>
+
+			<t>When the last 5-bits of the encoded-value are taken together with the 3-bit
+				header-type, the last byte becomes what we call the tail-byte. This makes the header
+				byte-aligned. We use the term tail-byte for purposes of description, although its
+				production is not actually used in the grammar.</t>
+			
+			<t>Continuing the example above, of an Integer Tag of header-type "2" and a header-value
+			of "64", we would encode it as follows.  The value 64 is binary %b100.0000, where we inserted
+			 a "." for readability.  The header-type is "010" to encode "2" in 3 bits.  The five-bit field
+			is the value "1" "0000", comprising the stop-bit and the 4 lower bits of %b100.0000.  The
+			non-zero-octet is "0" "000.0100", being a 0-stop bit plus the high-order 7 bits of 64.
+			Putting it all together, we have %b0000.0100.1000.0010, or %x0482.</t>
+
+			<figure>
+				<artwork align="left"><![CDATA[
+header        = encoded-value header-type
+
+encoded-value = [non-zero-7bit-octet *(any-7bit-octet)] four-of-five-bit
+
+non-zero-7bit-octet = "0" %x01-7F
+any-7bit-octet      = "0" 7BIT
+four-of-five-bit    = "1" 4BIT
+header-type         = 3BIT
+
+; descriptive productions           
+tail-byte      = five-bit header-type
+header-value   = <concatenate 7b/4b values>
+		]]></artwork>
+			</figure>
+
+			<t>Some readers prefer to look at the header in a slightly different style, as it 
+			may be more clear what is happening.  The header-type is a three-bit-type, so there
+			are only 8 of them, as described below.  The header-value is broken up in to 7-of-8
+			bit lead octets plus one four-bit nibble in the tail-byte.</t>
+			
+			<t>The minimum header is a single octet given by "1" four-bit-value three-bit-type.</t>
+
+			<figure>
+				<artwork align="left"><![CDATA[
+header              = [non-zero-7bit-octet *(any-7bit-octet)] 
+                      "1" four-bit-value three-bit-type
+                 
+non-zero-7bit-octet = "0" %x01-7F
+any-7bit-octet      = "0" 7BIT
+four-bit-value      = 4BIT 
+three-bit-type      = 3BIT ; same as header-type above
+		]]></artwork>
+			</figure>
+			
+
+			<t>To illustrate the header we give a few examples in binary. We use "." to separate
+				fields from the grammar. </t>
+			<texttable anchor="example_headers" title="Example Headers">
+				<ttcol align="center">header-value</ttcol>
+				<ttcol align="center">header-type</ttcol>
+				<ttcol align="left">header</ttcol>
+
+				<c>%x0000</c>
+				<c>0x0</c>
+				<c>%b1.0000.000 (%x80)</c>
+
+				<c>%x0005</c>
+				<c>0x3</c>
+				<c>%b1.0101.011 (%xAB)</c>
+
+				<c>%x0010</c>
+				<c>0x6</c>
+				<c>%b0.0000001.1.0000.110 (%x0186)</c>
+
+				<c>%x0417</c>
+				<c>0x2</c>
+				<c>%b0.1000001.1.0111.010 (%x41BA)</c>
+
+				<c>%x0C17</c>
+				<c>0x2</c>
+				<c>%b0.0000001.0.1000001.1.0111.010 (%x0141BA)</c>
+			</texttable>
+		</section>
+
+		<section anchor="messages" title="Messages">
+			<t> A message is composed of specific types of blocks, called openers, enclosing other
+				blocks, which could be more openers or data blocks. All openers have a closer block,
+				which creates a balanced expression.  All openers have a label, also called the "tag",
+				which identifies the block.</t>
+
+			<t>CCNB uses a minimum grammar for mandatory blocks. These comprise the integer tag
+				blocks, binary blobs, and UTF-8 blocks. A full grammar includes optional blocks,
+				which include string tags, block attributes, and extended tags</t>
+
+			<t>A CCNB implementation MUST support the minimum grammar, and MAY support the full
+				grammar. Some types use <xref target="RFC3629">UTF-8 encoding</xref>, though
+				CCNB does not need to parse or validate UTF-8.</t>
+
+			<t> CCNB distinguishes between UTF8 labeled blocks and integer labeled blocks. In an
+				integer labeled block, the header-value is the label, such as from a data dictionary. 
+				In a UTF8 labeled block,
+				the block label is specified in a UTF8 string, which is considered part of the
+				opener. The header-value is the length of the string. There are also UTF8 labeled
+				attributes and integer labeled attributes. </t>
+
+			<section anchor="min_grammar" title="Minimum Grammar">
+				<t>The minimum grammar has an integer labeled opener tag
+					that encloses other integer labeled openers or binary
+					data or UTF-8 data.  Opener tags must be closed by a
+					closer %x00.</t>
+				
+				<t><xref target="block_types"/> describes the allowed header-values
+				for the minimum grammar.  The column "header-type" is the value of
+				that 3-bit header field.  The column Name is a descriptive name and
+				the corresponding grammar production name.  The "header-value"
+				describes the purpose of the header-value field for the header-type.
+				</t>
+				
+				<t>Integer tag (int-tag) is the only allowed
+				opener.  The header-value is a non-negative integer representing
+				the name of the block.  One could, for example, use a variable name
+				to integer tag dictionary when encoding a data structure.
+				For example, one may be encoding a tuple such as (person = (surname=Mosko,
+				phone=650-555-1212, stats=(height=70", eyes=green))).  One could
+				assign a dictionary where (person=0, surname=1, phone=2, stats=3, height=4,
+				eyes=5).</t>
+				
+				<t>Binary data (bin-data) is a length plus arbitrary octets,
+				including the %x00 value.  For example, one could have
+				an Integer Tag with header value 4 (height) enclosing
+				a Binary Data with length 1 and value 70.</t>
+				
+				<t>UTF8 data (utf8-data) is a length plus well-formed UTF-8
+				octets.  For example, one could have an Integer Tag with header
+				value 2 (phone) enclosing a utf8-data with length 12 and
+				the UTF8 string "650-555-1212".</t>
+				
+				<figure>
+					<artwork align="left"><![CDATA[
+element   = opener *(element / data) closer
+opener    = int-tag
+int-tag   = header
+data      = bin-data / utf8-data
+utf8-data = header <header-value>(UTF8-octet)
+bin-data  = header <header-value>(OCTET)
+closer    = %x00
+		]]></artwork>
+				</figure>
+
+				<texttable anchor="block_types" title="Minimum Block Types">
+					<ttcol align="center">header type</ttcol>
+					<ttcol align="left">Name</ttcol>
+					<ttcol align="center">header value</ttcol>
+					<ttcol align="center">Closer</ttcol>
+					<ttcol align="left">Description</ttcol>
+
+					<c>2</c>
+					<c>Integer Tag (int-tag)</c>
+					<c>Dictionary tag</c>
+					<c>YES</c>
+					<c>Opening block tag.</c>
+
+					<c>5</c>
+					<c>Binary Data (bin-data)</c>
+					<c>Length</c>
+					<c>NO</c>
+					<c>Opaque data, including %x00.</c>
+
+					<c>6</c>
+					<c>UTF-8 Data (utf8-data)</c>
+					<c>Length</c>
+					<c>NO</c>
+					<c>Data confirming to UTF-8.</c>
+				</texttable>
+				
+				<t>The figure below works a complete example of encoding
+					a data structure to message format to ccnb binary
+					format.  The column "Data Structure" presents
+					the above example "person" data record in the
+					intermediate message encoding and in the final
+					ccnb binary encoding.  For the ccnb binary encoding,
+					we use hexadecimal to represent the ccnb headers
+					and values.  For UTF-8 strings, we represent
+					them as quoted strings, such as "green", where the
+					quotes are not part of the binary value.  For
+					brevity to fit in a text table, we abbreviate
+					the final phone number as "650..."; it is encoded
+					as all 10 UTF-8 octets.
+					</t>
+				
+				
+				<figure>
+					<artwork align="left"><![CDATA[
++--------------------+--------------------------------+-------------+						
+| Data Structure     | Message Encoding               | CCNB        |
++--------------------+--------------------------------+-------------+						
+| person=(           | <int-tag 0>                    | %x82        | 
+|  surname=Mosko,    |  <int-tag 1>                   | %x8A        |
+|                    |   <utf8-data len=5>Mosko       | %xAE"Mosko" | 
+|                    |  <closer>                      | %x00        | 
+|  phone=6505551212, |  <int-tag 2>                   | %x92        |
+|                    |   <utf8-data len=10>6505551212 | %xD6"650..."|
+|                    |  <closer>                      | %x00        |
+|  stats=(           |  <int-tag 3>                   | %x9A        |
+|   height=70,       |   <int-tag 4>                  | %xA2        |
+|                    |    <bin-data len=1>70          | %x8D46      |
+|                    |   <closer>                     | %x00        | 
+|   eyes=green       |   <int-tag 5>                  | %xAA        | 
+|                    |    <utf8-data len=5>green      | %xAE"green" |
+|                    |   <closer>                     | %x00        |
+|   )                |  <closer>                      | %x00        |
+| )                  | <closer>                       | %x00        |
++--------------------+--------------------------------+-------------+						
+]]></artwork>
+					<postamble>CCNB Message Example</postamble>
+				</figure>
+
+						
+			</section>
+
+
+			<section anchor="full_grammar" title="Full Grammar">				
+				<t>The full grammar,
+					in <xref target="full_block_types"/>
+					allows for optional attributes
+				to annotate the immediately enclosing opener.
+				It also allows for UTF-8 labeled openers and
+				extended tags.</t>
+				
+				<t>UTF8 tag (utf8-tag) is an opener that uses a
+				UTF8 string to label the block.  The header-value
+				is the string length minus 1, because the minimum
+				string length is 1 character.  The UTF8-octets
+				that follow the utf8-tag header are considered
+				part of the opener.</t>
+				
+				<t>Extension tag (ext-tag) is an opener that uses
+				an integer label in header-value, like int-tag, but
+				from a second user dictionary.</t>
+				
+				<t>Integer attribute (int-attr) is an attribute
+					for the immediately enclosing opener.  The attribute
+				label is encoded as a non-negative integer in the
+				header-value, such as from a data dictionary.  The
+				attribute value is encoded as utf8-data
+				immediately following the attribute.  The utf8-data
+				has its own header to encode its length.</t>
+				
+				<t>UTF-8 attribute (utf8-attr) functions like
+				int-attr, except the label of the attribute is
+				encoded as a UTF-8 string immediately after
+				the header, similar to utf8-tag.</t>
+				
+				<t>Attributes SHOULD come immediately following
+					the opener to which they apply, but MAY be
+					anywhere within its direct containment.</t>
+				
+				<figure>
+					<artwork align="left"><![CDATA[
+full-element = full-opener *attribute *(full-element / data) closer
+full-opener  = int-tag / utf8-tag / ext-tag
+
+utf8-tag     = header <header-value plus 1>(UTF8-octets)
+ext-tag      = header 
+
+attribute    = int-attr / utf8-attr
+utf8-attr    = header <header-value plus 1>(UTF8-octets) utf8-data
+int-attr     = header utf8-data
+		]]></artwork>
+				</figure>
+				
+				<texttable anchor="full_block_types" title="Additional Block Types">
+					<ttcol align="center">header type</ttcol>
+					<ttcol align="center">Name</ttcol>
+					<ttcol align="left">header value</ttcol>
+					<ttcol align="center">closer</ttcol>
+					<ttcol align="left">Description</ttcol>
+					
+					<c>0</c>
+					<c>Extension (ext-tag)</c>
+					<c>Extension Subtype</c>
+					<c>YES</c>
+					<c>Opener with integer label from second dictionary.</c>
+
+					<c>1</c>
+					<c>UTF8 Tag (utf8-tag)</c>
+					<c>Length-1</c>
+					<c>YES</c>
+					<c>Opener with UTF-8 label.</c>
+					
+					<c>3</c>
+					<c>UTF8 Attribute (utf8-attr)</c>
+					<c>Length-1</c>
+					<c>NO</c>
+					<c>Attribute of enclosing opener using UTF-8 name and UTF-8 value.</c>
+					
+					<c>4</c>
+					<c>Integer Attribute (int-attr)</c>
+					<c>Dictionary attribute</c>
+					<c>NO</c>
+					<c>Attribute of enclosing opener using integer name and UTF-8 value.</c>
+					
+				</texttable>
+				
+				<t>The figure below works a complete example of encoding
+					a message with the Full Grammar.  The data structure
+					to encode is (salary=(alice=400,bob=250) __attribute__((aligned (16)))
+					__attribute__ ((nocommon))), where we have included two
+					variable attributes.  The data dictionary is
+					(salary=0, alice=1, aligned=2), so the tag "bob" and
+					attribute "nocommon" will need to be UTF-8 encoded.
+				</t>
+				
+				
+				<figure>
+					<artwork align="left"><![CDATA[
++------------------+--------------------------------+---------------+						
+| Data Structure   | Message Encoding               | CCNB          |
++------------------+--------------------------------+---------------+						
+| salary=(         | <int-tag 0>                    | %x82          |
+|  attr aligned=16 |  <int-attr 2>                  | %x94          |
+|                  |   <utf8-data len=2>"16"        | %x96"16"      |
+|  attr nocommon   |  <utf8-attr len=7>"nocommon"   | %xBB"nocommon"|
+|                  |   <utf8-data len=0>            | %x86          |
+|  alice=400,      |  <int-tag 1>                   | %x8A          |
+|                  |   <bin-data len=2>400          | %x950190      |
+|                  |  <closer>                      | %x00          |
+|  bob=250         |  <utf8-tag len=2> "Bob"        | %x91"Bob"     |
+|                  |   <bin-data len=1>250          | %x9DFA        |
+|                  |  <closer>                      | %x00          |
+| )                | <closer>                       | %x00          |
++------------------+--------------------------------+---------------+						
+]]></artwork>
+					<postamble>CCNB Full Grammar Example</postamble>
+				</figure>
+				
+			</section>
+		</section>
+
+		<section title="Behavior">
+			<t>A message must be well formed. If the message is not well formed, it should be
+				dropped.</t>
+
+			<t>A protocol that uses CCNB as the codec should specify if it uses
+			the minimum grammar or the full grammar.  The "wire" format of CCNx
+			uses only the minimum grammar.</t>
+
+			<t>If a message contains an unsupported type, it should be
+				discarded.</t>
+		</section>
+
+		<section title="Examples">
+			<t>In these examples, we represent binary data in hexadecimal notation, with a "%x"
+				prefix. We represent UTF-8 encoded data as ASCII strings. We represent binary
+				strings with the prefix "%b". For long binary or hexadecimal expressions, we may use
+				a "." spacer every 4 characters to improve readability. </t>
+
+			<section title="Encode a 7-byte binary block">
+				<t>A 7-byte binary data block is encoded as only a tail-byte followed by 7 bytes of binary
+					data. In the tail-byte, the stop bit is "1" (meaning last byte), the 4BIT value is
+					%b0111 for "7", and header-type is %b101 for "5". <figure>
+						<artwork align="left"><![CDATA[
+            1          2          3            6
+ 01234567 89012345 67890123 45678901       67890123
++--------+--------+--------+--------+     +--------+
+|10111101|        |        |        | ... |        |
++--------+--------+--------+--------+     +--------+
+		]]></artwork>
+					</figure>
+				</t>
+			</section>
+			
+			<section title="Encode a 2345-byte binary block">			
+				<t>A 2345-byte binary data has a header-value of %b1001.0010.1001. This requires two
+					7-bit encoded-value fields and one 4-bit value. The three values are filled
+					right-to-left, so the high-order block contains the value %b000.0001, with the
+					stop-bit set to "0". The middle block contains the value %b001.0010, with the
+					stop-bit bit "0". The final block contains the value %b1001, with the stop-bit
+					bit set to "1". The header-type is set to %b101. <figure>
+						<artwork align="left"><![CDATA[
+ byte 0   byte 1   byte 2                  byte 2347
++--------+--------+--------+--------+     +--------+
+|00000001|00010010|11001101|        | ... |        |
++--------+--------+--------+--------+     +--------+
+		]]></artwork>
+					</figure>
+				</t>
+			</section>
+			
+			<section title="Encode a UTF-tag with inner UTF-8 value">							
+				<t>Encode the utf8-tag "hello" has the value "world!". This is a UTF-8 tag with a UTF-8 value,
+					so it is encoded as a block type 1 with the with string label "hello", followed
+					by a utf8-data block type 6 with the value "world!". Because utf8-tag requires a closer,
+					there is a final 0x00 byte. The utf8-tag opener has header-value 0b0100, being
+					strlen("hello")-1. The utf8-data block has header-value 0b0110, being
+					strlen("world!"). 
+				</t>
+				
+				<t>It is important to note that the UTF-8 tag length is "4", not the string length
+					of "hello", which is 5.  This is because the
+				    the definition of a UTF-8 tag says the header-value is the length minus 1.
+				    All UTF-8 tags must be at least 1 character.</t>
+					<figure>
+						<artwork align="left"><![CDATA[                              
+ byte 0              byte 6              byte 13
++--------+----//----+--------+----//----+--------+
+|10100001| "hello"  |10110110| "world!" |00000000|
++--------+----//----+--------+----//----+--------+ 
+		]]></artwork>
+					</figure>
+			</section>
+			<section title="Encode Integer tag with inner binary block">
+				<t>Encode the int-tag 0xC2 with the binary value 0x0123.4567.89AB. An int-tag has
+					a type 2 and the header-value is 0xC2, which requires 8 bits to encode. This
+					requires a non-zero-octet of %b000.1100 and a five-bit field of %b10010
+					followed by the header-type %b010.
+					The bin-data is 6 bytes
+					long, so it only needs a five-bit to encode its length. 
+					The bin-data tail-byte is thus
+					%b10110101, where the leading "1" is the stop-bit, %b0110 is the octet length of
+					the data, and %b101 is the bin-data type "5". A final 0x00 closes the int-tag. <figure>
+						<artwork align="left"><![CDATA[                              
+ byte 0                              byte 4            byte 10
++--------+--------+--------+--------+--------//--------+------+
+|00001100|10010010|00000001|11000101| 0x0123.4567.89AB | 0x00 |
++--------+--------+--------+--------+--------//--------+------+
+		]]></artwork>
+					</figure>
+				</t>
+			</section>
+		</section>
+
+		<section anchor="Acknowledgements" title="Acknowledgements">
+			<t/>
+		</section>
+
+		<!-- Possibly a 'Contributors' section ... -->
+
+		<section anchor="IANA" title="IANA Considerations">
+			<t>This memo includes no request to IANA.</t>
+
+			<t>All drafts are required to have an IANA considerations section (see <xref
+					target="RFC5226">Guidelines for Writing an IANA Considerations Section in
+					RFCs</xref> for a guide). If the draft does not require IANA to do anything, the
+				section contains an explicit statement that this is the case (as above). If there
+				are no requirements for IANA, the section will be removed during conversion into an
+				RFC by the RFC Editor.</t>
+		</section>
+
+		<section anchor="Security" title="Security Considerations">
+			<t>CCNB does not offer any security for messages, it is a data encoding specification
+				not a complete network protocol. The main threats to CCNB are buffer overruns and
+				mal-formed expressions that violate the encoding rules.</t>
+
+			<section anchor="buffers" title="Buffer Considerations">
+				<t>CCNB allows for variable length data. A parser should ensure that the encoded
+					length does not exhaust memory. A particular protocol, for example, may know the
+					maximum allowable length for an encoded field, such as a 32-byte digest, or a
+					1.5KiB packet, and should ensure the encoded lengths are in-line with
+					expectations.</t>
+				
+				<t>A protocol implementor is encouraged to define maximum field sizes
+				and validate those sizes during parsing.</t>
+
+				<t>CCNB allows for some expressions to be unbounded length, such as the data between
+					an opener and a closer. A parser should ensure that such entities do not exhaust
+					memory. If a particular protocol knows there is an effective maximum length, it
+					should enforce that length.</t>
+
+			</section>
+
+			<section anchor="schema" title="Well-formed messages">
+				<t>A parser MUST follow the header and message grammars to ensure that the bytes
+					received are a well-formed message.</t>
+
+				<t>A protocol implementor is encouraged to define a data schema for the data encoded
+					in CCNB and validate the received data conforms to the schema.</t>
+			</section>
+
+		</section>
+	</middle>
+
+	<!--  *****BACK MATTER ***** -->
+
+	<back>
+		<!-- References split into informative and normative -->
+
+		<!-- There are 2 ways to insert reference entries from the citation libraries:
+    1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+    2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+       (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+    Both are cited textually in the same manner: by using xref elements.
+    If you use the PI option, xml2rfc will, by default, try to find included files in the same
+    directory as the including file. You can also define the XML_LIBRARY environment variable
+    with a value containing a set of directories to search.  These can be either in the local
+    filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+		<references title="Normative References">
+			<!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+			&RFC2119;
+	    </references>
+
+		<references title="Informative References">
+			<!-- Here we use entities that we defined at the beginning. --> 
+			&RFC3629;
+			&RFC5226; 
+			&RFC5234;
+			<!-- A reference written by by an organization not a person. -->
+
+			<reference anchor="CCNx" target="http://ccnx.org">
+				<front>
+					<title>CCNx Open Source</title>
+
+					<author>
+						<organization>PARC, Inc.</organization>
+					</author>
+
+					<date year="2007"/>
+				</front>
+			</reference>
+		</references>
+
+		<section anchor="app-xml" title="Use with XML">
+			<t>CCNB may be used to transfer a subset of XML documents, with these limitations: <list
+					style="symbols">
+					<t>Binary to XML to binary: output should exactly match input</t>
+					<t>XML to binary to XML: output not guaranteed to exactly match input</t>
+				</list>
+			</t>
+		</section>
+
+		<section anchor="app-code" title="Encoder/Decoder for Headers">
+			<t>For a Java example of encoding and decoding 64-bit long values in ccnb headers, see
+				BinaryXMLCodec.encodeTypeAndVal(int type, long value, OutputStream ostream) and
+				BinaryXMLCodec.decodeTypeAndVal(InputStream istream) from the CCNx Open Source
+				project. </t>
+			
+			<t>For a C example of encoding and decoding ccnb headers, see ccn_xmltoccb.c
+			and ccn_ccnbtoxml.c in the CCNx Open Source project.</t>
+		</section>
+
+	</back>
+</rfc>

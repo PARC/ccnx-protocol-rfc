@@ -1,0 +1,728 @@
+
+
+
+Internet Engineering Task Force                            M. Mosko, Ed.
+Internet-Draft                                                      PARC
+Intended status: Experimental                           October 16, 2013
+Expires: April 19, 2014
+
+
+                       CCN Binary Encoding (CCNB)
+                        draft-ietf-ccnb-mosko-01
+
+Abstract
+
+   This document specifies the Content Centric Networking (CCN) Binary
+   encoding (CCNB).  CCNB is a compact binary representation of
+   variable-length structured data.
+
+   Copyright (C) 2013 Palo Alto Research Center
+
+Status of this Memo
+
+   This document is an Internet-Draft and is NOT offered in accordance
+   with Section 10 of RFC 2026, and the author does not provide the IETF
+   with any rights other than to publish as an Internet-Draft.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on April 19, 2014.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 19, 2014                 [Page 1]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+Table of Contents
+
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     1.1.  Requirements Language  . . . . . . . . . . . . . . . . . .  3
+   2.  Binary blocks  . . . . . . . . . . . . . . . . . . . . . . . .  3
+   3.  Messages . . . . . . . . . . . . . . . . . . . . . . . . . . .  5
+     3.1.  Minimum Grammar  . . . . . . . . . . . . . . . . . . . . .  6
+     3.2.  Full Grammar . . . . . . . . . . . . . . . . . . . . . . .  8
+   4.  Behavior . . . . . . . . . . . . . . . . . . . . . . . . . . .  9
+   5.  Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+     5.1.  Encode a 7-byte binary block . . . . . . . . . . . . . . . 10
+     5.2.  Encode a 2345-byte binary block  . . . . . . . . . . . . . 10
+     5.3.  Encode a UTF-tag with inner UTF-8 value  . . . . . . . . . 10
+     5.4.  Encode Integer tag with inner binary block . . . . . . . . 11
+   6.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 11
+   7.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 11
+   8.  Security Considerations  . . . . . . . . . . . . . . . . . . . 11
+     8.1.  Buffer Considerations  . . . . . . . . . . . . . . . . . . 12
+     8.2.  Well-formed messages . . . . . . . . . . . . . . . . . . . 12
+   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+     9.1.  Normative References . . . . . . . . . . . . . . . . . . . 12
+     9.2.  Informative References . . . . . . . . . . . . . . . . . . 12
+   Appendix A.  Use with XML  . . . . . . . . . . . . . . . . . . . . 13
+   Appendix B.  Encoder/Decoder for Headers . . . . . . . . . . . . . 13
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 13
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 19, 2014                 [Page 2]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+1.  Introduction
+
+   Content Centric Networking CCNx [CCNx] represents variable length
+   network messages as compactly encoded binary structured messages,
+   called CCNB.  The encoding may be of value to other protocols or
+   applications due to its efficient and flexible encoding of variable
+   length structured data.  The CCNB format is designed for high-speed
+   data transfer of structured, hierarchical data.
+
+   Message elements, called ``blocks'', are identified by a ``tag''.
+   The tag may be an unsigned integer size of (4 + n * 7)-bits, where n
+   is 0 or more.  Tags may also be encoded as UTF-8 strings, if a tag
+   dictionary is not used.  CCNB does not process tag values, so a
+   protocol may use any schema or tag dictionary.
+
+   This document specifies:
+
+   o  A binary byte-oriented "block" encoding format.
+
+   o  Encodings for binary, UTF-8, and dictionary tags.
+
+   Formal grammars use the ABNF [RFC5234] notation.  We use the notation
+   "<N>(element)" to indicate a variable-length repetition of element
+   using the value of element N. For example, "<header-value>(UTF8-
+   octets)" means there are header-value UTF8 characters.
+
+1.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+
+2.  Binary blocks
+
+   CCNB is composed of nested blocks.  Each CCNB block begins with a
+   CCNB Header.  The purpose of the header is to encode a variable
+   length non-negative integer, called the header-value, and a fixed
+   length header-type.  The header-type determines how to interpret the
+   header-value, such as a content length or dictionary index.  The
+   header field encoded-value uses a stop-bit multi-byte representation
+   of the header-value.  The term header-value is used for purposes of
+   description, although its production is not used in the grammar.  For
+   example, the header-type "Integer Tag" is encoded as "2" and it could
+   carry a header-value of "64" to represent a CCNx Content Object.  The
+   value "64" is a variable length encoding.
+
+   The header-value is encoded as zero or more 7-bit values, and one
+
+
+
+Mosko                    Expires April 19, 2014                 [Page 3]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+   4-bit value.  CCNB uses a stop-bit that is set to "0" for 7-bit
+   values and "1" for the 4-bit value.  The first 7-bit value cannot be
+   exactly 0, otherwise the first byte of the header would be %x00,
+   which is a special value used to close CCNB blocks (see Section 3).
+   The type non-zero-octet represents the "0" stop bit plus 7-bits,
+   excluding %x00, notated as %x01-7F. The type any-octet represents the
+   "0" stop bit plus any 7-bit value.  The type five-bit represents the
+   "1" stop bit plus a 4-bit value. header-value is encoded most-
+   significant-bit first, so the final 4-bit value is the low-order
+   bits.  One MUST encode the header-value using the shortest encoding.
+   The first byte of a header MUST NOT be %x00.
+
+   The encoded-value is a sequence of 0 or more octets followed by a
+   5-bit sequence.  The octets are a "0" stop-bit plus a 7-bit field.
+   The 5-bit sequence is a "1" stop-bit plus a 4-bit field.
+
+   When the last 5-bits of the encoded-value are taken together with the
+   3-bit header-type, the last byte becomes what we call the tail-byte.
+   This makes the header byte-aligned.  We use the term tail-byte for
+   purposes of description, although its production is not actually used
+   in the grammar.
+
+   Continuing the example above, of an Integer Tag of header-type "2"
+   and a header-value of "64", we would encode it as follows.  The value
+   64 is binary %b100.0000, where we inserted a "." for readability.
+   The header-type is "010" to encode "2" in 3 bits.  The five-bit field
+   is the value "1" "0000", comprising the stop-bit and the 4 lower bits
+   of %b100.0000.  The non-zero-octet is "0" "000.0100", being a 0-stop
+   bit plus the high-order 7 bits of 64.  Putting it all together, we
+   have %b0000.0100.1000.0010, or %x0482.
+
+header        = encoded-value header-type
+
+encoded-value = [non-zero-7bit-octet *(any-7bit-octet)] four-of-five-bit
+
+non-zero-7bit-octet = "0" %x01-7F
+any-7bit-octet      = "0" 7BIT
+four-of-five-bit    = "1" 4BIT
+header-type         = 3BIT
+
+; descriptive productions
+tail-byte      = five-bit header-type
+header-value   = <concatenate 7b/4b values>
+
+   Some readers prefer to look at the header in a slightly different
+   style, as it may be more clear what is happening.  The header-type is
+   a three-bit-type, so there are only 8 of them, as described below.
+   The header-value is broken up in to 7-of-8 bit lead octets plus one
+
+
+
+Mosko                    Expires April 19, 2014                 [Page 4]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+   four-bit nibble in the tail-byte.
+
+   The minimum header is a single octet given by "1" four-bit-value
+   three-bit-type.
+
+   header              = [non-zero-7bit-octet *(any-7bit-octet)]
+                         "1" four-bit-value three-bit-type
+
+   non-zero-7bit-octet = "0" %x01-7F
+   any-7bit-octet      = "0" 7BIT
+   four-bit-value      = 4BIT
+   three-bit-type      = 3BIT ; same as header-type above
+
+   To illustrate the header we give a few examples in binary.  We use
+   "." to separate fields from the grammar.
+
+   +--------------+-------------+--------------------------------------+
+   | header-value | header-type | header                               |
+   +--------------+-------------+--------------------------------------+
+   |    %x0000    |     0x0     | %b1.0000.000 (%x80)                  |
+   |    %x0005    |     0x3     | %b1.0101.011 (%xAB)                  |
+   |    %x0010    |     0x6     | %b0.0000001.1.0000.110 (%x0186)      |
+   |    %x0417    |     0x2     | %b0.1000001.1.0111.010 (%x41BA)      |
+   |    %x0C17    |     0x2     | %b0.0000001.0.1000001.1.0111.010     |
+   |              |             | (%x0141BA)                           |
+   +--------------+-------------+--------------------------------------+
+
+                         Table 1: Example Headers
+
+
+3.  Messages
+
+   A message is composed of specific types of blocks, called openers,
+   enclosing other blocks, which could be more openers or data blocks.
+   All openers have a closer block, which creates a balanced expression.
+   All openers have a label, also called the "tag", which identifies the
+   block.
+
+   CCNB uses a minimum grammar for mandatory blocks.  These comprise the
+   integer tag blocks, binary blobs, and UTF-8 blocks.  A full grammar
+   includes optional blocks, which include string tags, block
+   attributes, and extended tags
+
+   A CCNB implementation MUST support the minimum grammar, and MAY
+   support the full grammar.  Some types use UTF-8 encoding [RFC3629],
+   though CCNB does not need to parse or validate UTF-8.
+
+   CCNB distinguishes between UTF8 labeled blocks and integer labeled
+
+
+
+Mosko                    Expires April 19, 2014                 [Page 5]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+   blocks.  In an integer labeled block, the header-value is the label,
+   such as from a data dictionary.  In a UTF8 labeled block, the block
+   label is specified in a UTF8 string, which is considered part of the
+   opener.  The header-value is the length of the string.  There are
+   also UTF8 labeled attributes and integer labeled attributes.
+
+3.1.  Minimum Grammar
+
+   The minimum grammar has an integer labeled opener tag that encloses
+   other integer labeled openers or binary data or UTF-8 data.  Opener
+   tags must be closed by a closer %x00.
+
+   Table 2 describes the allowed header-values for the minimum grammar.
+   The column "header-type" is the value of that 3-bit header field.
+   The column Name is a descriptive name and the corresponding grammar
+   production name.  The "header-value" describes the purpose of the
+   header-value field for the header-type.
+
+   Integer tag (int-tag) is the only allowed opener.  The header-value
+   is a non-negative integer representing the name of the block.  One
+   could, for example, use a variable name to integer tag dictionary
+   when encoding a data structure.  For example, one may be encoding a
+   tuple such as (person = (surname=Mosko, phone=650-555-1212,
+   stats=(height=70", eyes=green))).  One could assign a dictionary
+   where (person=0, surname=1, phone=2, stats=3, height=4, eyes=5).
+
+   Binary data (bin-data) is a length plus arbitrary octets, including
+   the %x00 value.  For example, one could have an Integer Tag with
+   header value 4 (height) enclosing a Binary Data with length 1 and
+   value 70.
+
+   UTF8 data (utf8-data) is a length plus well-formed UTF-8 octets.  For
+   example, one could have an Integer Tag with header value 2 (phone)
+   enclosing a utf8-data with length 12 and the UTF8 string "650-555-
+   1212".
+
+   element   = opener *(element / data) closer
+   opener    = int-tag
+   int-tag   = header
+   data      = bin-data / utf8-data
+   utf8-data = header <header-value>(UTF8-octet)
+   bin-data  = header <header-value>(OCTET)
+   closer    = %x00
+
+
+
+
+
+
+
+
+Mosko                    Expires April 19, 2014                 [Page 6]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+   +---------+----------------+------------+--------+------------------+
+   |  header | Name           |   header   | Closer | Description      |
+   |   type  |                |    value   |        |                  |
+   +---------+----------------+------------+--------+------------------+
+   |    2    | Integer Tag    | Dictionary |   YES  | Opening block    |
+   |         | (int-tag)      |     tag    |        | tag.             |
+   |    5    | Binary Data    |   Length   |   NO   | Opaque data,     |
+   |         | (bin-data)     |            |        | including %x00.  |
+   |    6    | UTF-8 Data     |   Length   |   NO   | Data confirming  |
+   |         | (utf8-data)    |            |        | to UTF-8.        |
+   +---------+----------------+------------+--------+------------------+
+
+                       Table 2: Minimum Block Types
+
+   The figure below works a complete example of encoding a data
+   structure to message format to ccnb binary format.  The column "Data
+   Structure" presents the above example "person" data record in the
+   intermediate message encoding and in the final ccnb binary encoding.
+   For the ccnb binary encoding, we use hexadecimal to represent the
+   ccnb headers and values.  For UTF-8 strings, we represent them as
+   quoted strings, such as "green", where the quotes are not part of the
+   binary value.  For brevity to fit in a text table, we abbreviate the
+   final phone number as "650..."; it is encoded as all 10 UTF-8 octets.
+
+   +--------------------+--------------------------------+-------------+
+   | Data Structure     | Message Encoding               | CCNB        |
+   +--------------------+--------------------------------+-------------+
+   | person=(           | <int-tag 0>                    | %x82        |
+   |  surname=Mosko,    |  <int-tag 1>                   | %x8A        |
+   |                    |   <utf8-data len=5>Mosko       | %xAE"Mosko" |
+   |                    |  <closer>                      | %x00        |
+   |  phone=6505551212, |  <int-tag 2>                   | %x92        |
+   |                    |   <utf8-data len=10>6505551212 | %xD6"650..."|
+   |                    |  <closer>                      | %x00        |
+   |  stats=(           |  <int-tag 3>                   | %x9A        |
+   |   height=70,       |   <int-tag 4>                  | %xA2        |
+   |                    |    <bin-data len=1>70          | %x8D46      |
+   |                    |   <closer>                     | %x00        |
+   |   eyes=green       |   <int-tag 5>                  | %xAA        |
+   |                    |    <utf8-data len=5>green      | %xAE"green" |
+   |                    |   <closer>                     | %x00        |
+   |   )                |  <closer>                      | %x00        |
+   | )                  | <closer>                       | %x00        |
+   +--------------------+--------------------------------+-------------+
+
+   CCNB Message Example
+
+
+
+
+
+Mosko                    Expires April 19, 2014                 [Page 7]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+3.2.  Full Grammar
+
+   The full grammar, in Table 3 allows for optional attributes to
+   annotate the immediately enclosing opener.  It also allows for UTF-8
+   labeled openers and extended tags.
+
+   UTF8 tag (utf8-tag) is an opener that uses a UTF8 string to label the
+   block.  The header-value is the string length minus 1, because the
+   minimum string length is 1 character.  The UTF8-octets that follow
+   the utf8-tag header are considered part of the opener.
+
+   Extension tag (ext-tag) is an opener that uses an integer label in
+   header-value, like int-tag, but from a second user dictionary.
+
+   Integer attribute (int-attr) is an attribute for the immediately
+   enclosing opener.  The attribute label is encoded as a non-negative
+   integer in the header-value, such as from a data dictionary.  The
+   attribute value is encoded as utf8-data immediately following the
+   attribute.  The utf8-data has its own header to encode its length.
+
+   UTF-8 attribute (utf8-attr) functions like int-attr, except the label
+   of the attribute is encoded as a UTF-8 string immediately after the
+   header, similar to utf8-tag.
+
+   Attributes SHOULD come immediately following the opener to which they
+   apply, but MAY be anywhere within its direct containment.
+
+   full-element = full-opener *attribute *(full-element / data) closer
+   full-opener  = int-tag / utf8-tag / ext-tag
+
+   utf8-tag     = header <header-value plus 1>(UTF8-octets)
+   ext-tag      = header
+
+   attribute    = int-attr / utf8-attr
+   utf8-attr    = header <header-value plus 1>(UTF8-octets) utf8-data
+   int-attr     = header utf8-data
+
+   +--------+-------------+------------+--------+----------------------+
+   | header |     Name    | header     | closer | Description          |
+   |  type  |             | value      |        |                      |
+   +--------+-------------+------------+--------+----------------------+
+   |    0   |  Extension  | Extension  |   YES  | Opener with integer  |
+   |        |  (ext-tag)  | Subtype    |        | label from second    |
+   |        |             |            |        | dictionary.          |
+   |    1   |   UTF8 Tag  | Length-1   |   YES  | Opener with UTF-8    |
+   |        |  (utf8-tag) |            |        | label.               |
+
+
+
+
+
+Mosko                    Expires April 19, 2014                 [Page 8]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+   |    3   |     UTF8    | Length-1   |   NO   | Attribute of         |
+   |        |  Attribute  |            |        | enclosing opener     |
+   |        | (utf8-attr) |            |        | using UTF-8 name and |
+   |        |             |            |        | UTF-8 value.         |
+   |    4   |   Integer   | Dictionary |   NO   | Attribute of         |
+   |        |  Attribute  | attribute  |        | enclosing opener     |
+   |        |  (int-attr) |            |        | using integer name   |
+   |        |             |            |        | and UTF-8 value.     |
+   +--------+-------------+------------+--------+----------------------+
+
+                      Table 3: Additional Block Types
+
+   The figure below works a complete example of encoding a message with
+   the Full Grammar.  The data structure to encode is
+   (salary=(alice=400,bob=250) __attribute__((aligned (16)))
+   __attribute__ ((nocommon))), where we have included two variable
+   attributes.  The data dictionary is (salary=0, alice=1, aligned=2),
+   so the tag "bob" and attribute "nocommon" will need to be UTF-8
+   encoded.
+
+   +------------------+--------------------------------+---------------+
+   | Data Structure   | Message Encoding               | CCNB          |
+   +------------------+--------------------------------+---------------+
+   | salary=(         | <int-tag 0>                    | %x82          |
+   |  attr aligned=16 |  <int-attr 2>                  | %x94          |
+   |                  |   <utf8-data len=2>"16"        | %x96"16"      |
+   |  attr nocommon   |  <utf8-attr len=7>"nocommon"   | %xBB"nocommon"|
+   |                  |   <utf8-data len=0>            | %x86          |
+   |  alice=400,      |  <int-tag 1>                   | %x8A          |
+   |                  |   <bin-data len=2>400          | %x950190      |
+   |                  |  <closer>                      | %x00          |
+   |  bob=250         |  <utf8-tag len=2> "Bob"        | %x91"Bob"     |
+   |                  |   <bin-data len=1>250          | %x9DFA        |
+   |                  |  <closer>                      | %x00          |
+   | )                | <closer>                       | %x00          |
+   +------------------+--------------------------------+---------------+
+
+   CCNB Full Grammar Example
+
+
+4.  Behavior
+
+   A message must be well formed.  If the message is not well formed, it
+   should be dropped.
+
+   A protocol that uses CCNB as the codec should specify if it uses the
+   minimum grammar or the full grammar.  The "wire" format of CCNx uses
+   only the minimum grammar.
+
+
+
+Mosko                    Expires April 19, 2014                 [Page 9]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+   If a message contains an unsupported type, it should be discarded.
+
+
+5.  Examples
+
+   In these examples, we represent binary data in hexadecimal notation,
+   with a "%x" prefix.  We represent UTF-8 encoded data as ASCII
+   strings.  We represent binary strings with the prefix "%b".  For long
+   binary or hexadecimal expressions, we may use a "." spacer every 4
+   characters to improve readability.
+
+5.1.  Encode a 7-byte binary block
+
+   A 7-byte binary data block is encoded as only a tail-byte followed by
+   7 bytes of binary data.  In the tail-byte, the stop bit is "1"
+   (meaning last byte), the 4BIT value is %b0111 for "7", and header-
+   type is %b101 for "5".
+
+               1          2          3            6
+    01234567 89012345 67890123 45678901       67890123
+   +--------+--------+--------+--------+     +--------+
+   |10111101|        |        |        | ... |        |
+   +--------+--------+--------+--------+     +--------+
+
+5.2.  Encode a 2345-byte binary block
+
+   A 2345-byte binary data has a header-value of %b1001.0010.1001.  This
+   requires two 7-bit encoded-value fields and one 4-bit value.  The
+   three values are filled right-to-left, so the high-order block
+   contains the value %b000.0001, with the stop-bit set to "0".  The
+   middle block contains the value %b001.0010, with the stop-bit bit
+   "0".  The final block contains the value %b1001, with the stop-bit
+   bit set to "1".  The header-type is set to %b101.
+
+    byte 0   byte 1   byte 2                  byte 2347
+   +--------+--------+--------+--------+     +--------+
+   |00000001|00010010|11001101|        | ... |        |
+   +--------+--------+--------+--------+     +--------+
+
+5.3.  Encode a UTF-tag with inner UTF-8 value
+
+   Encode the utf8-tag "hello" has the value "world!".  This is a UTF-8
+   tag with a UTF-8 value, so it is encoded as a block type 1 with the
+   with string label "hello", followed by a utf8-data block type 6 with
+   the value "world!".  Because utf8-tag requires a closer, there is a
+   final 0x00 byte.  The utf8-tag opener has header-value 0b0100, being
+   strlen("hello")-1.  The utf8-data block has header-value 0b0110,
+   being strlen("world!").
+
+
+
+Mosko                    Expires April 19, 2014                [Page 10]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+   It is important to note that the UTF-8 tag length is "4", not the
+   string length of "hello", which is 5.  This is because the the
+   definition of a UTF-8 tag says the header-value is the length minus
+   1.  All UTF-8 tags must be at least 1 character.
+
+    byte 0              byte 6              byte 13
+   +--------+----//----+--------+----//----+--------+
+   |10100001| "hello"  |10110110| "world!" |00000000|
+   +--------+----//----+--------+----//----+--------+
+
+5.4.  Encode Integer tag with inner binary block
+
+   Encode the int-tag 0xC2 with the binary value 0x0123.4567.89AB.  An
+   int-tag has a type 2 and the header-value is 0xC2, which requires 8
+   bits to encode.  This requires a non-zero-octet of %b000.1100 and a
+   five-bit field of %b10010 followed by the header-type %b010.  The
+   bin-data is 6 bytes long, so it only needs a five-bit to encode its
+   length.  The bin-data tail-byte is thus %b10110101, where the leading
+   "1" is the stop-bit, %b0110 is the octet length of the data, and
+   %b101 is the bin-data type "5".  A final 0x00 closes the int-tag.
+
+    byte 0                              byte 4            byte 10
+   +--------+--------+--------+--------+--------//--------+------+
+   |00001100|10010010|00000001|11000101| 0x0123.4567.89AB | 0x00 |
+   +--------+--------+--------+--------+--------//--------+------+
+
+
+6.  Acknowledgements
+
+
+7.  IANA Considerations
+
+   This memo includes no request to IANA.
+
+   All drafts are required to have an IANA considerations section (see
+   Guidelines for Writing an IANA Considerations Section in RFCs
+   [RFC5226] for a guide).  If the draft does not require IANA to do
+   anything, the section contains an explicit statement that this is the
+   case (as above).  If there are no requirements for IANA, the section
+   will be removed during conversion into an RFC by the RFC Editor.
+
+
+8.  Security Considerations
+
+   CCNB does not offer any security for messages, it is a data encoding
+   specification not a complete network protocol.  The main threats to
+   CCNB are buffer overruns and mal-formed expressions that violate the
+   encoding rules.
+
+
+
+Mosko                    Expires April 19, 2014                [Page 11]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+8.1.  Buffer Considerations
+
+   CCNB allows for variable length data.  A parser should ensure that
+   the encoded length does not exhaust memory.  A particular protocol,
+   for example, may know the maximum allowable length for an encoded
+   field, such as a 32-byte digest, or a 1.5KiB packet, and should
+   ensure the encoded lengths are in-line with expectations.
+
+   A protocol implementor is encouraged to define maximum field sizes
+   and validate those sizes during parsing.
+
+   CCNB allows for some expressions to be unbounded length, such as the
+   data between an opener and a closer.  A parser should ensure that
+   such entities do not exhaust memory.  If a particular protocol knows
+   there is an effective maximum length, it should enforce that length.
+
+8.2.  Well-formed messages
+
+   A parser MUST follow the header and message grammars to ensure that
+   the bytes received are a well-formed message.
+
+   A protocol implementor is encouraged to define a data schema for the
+   data encoded in CCNB and validate the received data conforms to the
+   schema.
+
+
+9.  References
+
+9.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+9.2.  Informative References
+
+   [CCNx]     PARC, Inc., "CCNx Open Source", 2007, <http://ccnx.org>.
+
+   [RFC3629]  Yergeau, F., "UTF-8, a transformation format of ISO
+              10646", STD 63, RFC 3629, November 2003.
+
+   [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
+              IANA Considerations Section in RFCs", BCP 26, RFC 5226,
+              May 2008.
+
+   [RFC5234]  Crocker, D. and P. Overell, "Augmented BNF for Syntax
+              Specifications: ABNF", STD 68, RFC 5234, January 2008.
+
+
+
+
+
+Mosko                    Expires April 19, 2014                [Page 12]
+
+Internet-Draft                CCNB Encoding                 October 2013
+
+
+Appendix A.  Use with XML
+
+   CCNB may be used to transfer a subset of XML documents, with these
+   limitations:
+
+   o  Binary to XML to binary: output should exactly match input
+
+   o  XML to binary to XML: output not guaranteed to exactly match input
+
+
+Appendix B.  Encoder/Decoder for Headers
+
+   For a Java example of encoding and decoding 64-bit long values in
+   ccnb headers, see BinaryXMLCodec.encodeTypeAndVal(int type, long
+   value, OutputStream ostream) and
+   BinaryXMLCodec.decodeTypeAndVal(InputStream istream) from the CCNx
+   Open Source project.
+
+   For a C example of encoding and decoding ccnb headers, see
+   ccn_xmltoccb.c and ccn_ccnbtoxml.c in the CCNx Open Source project.
+
+
+Author's Address
+
+   Marc Mosko (editor)
+   PARC
+   Palo Alto, California  94304
+   USA
+
+   Phone: +01 650-812-4405
+   Email: marc.mosko@parc.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires April 19, 2014                [Page 13]
+

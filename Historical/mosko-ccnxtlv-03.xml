@@ -1,0 +1,1431 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+    which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+    There has to be one entity for each item to be referenced. 
+    An alternate method (rfc include) is described in the references. -->
+
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2629 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2629.xml">
+<!ENTITY RFC3552 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3552.xml">
+<!ENTITY RFC5226 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+    please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+    (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space 
+    (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="no" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+
+<?rfc private="" ?>
+
+<rfc category="exp" docName="draft-ietf-ccnxtlv-mosko-03" ipr="none">
+  <!-- category values: std, bcp, info, exp, and historic
+    ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
+       or pre5378Trust200902
+    you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+    they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the 
+        full title is longer than 39 characters -->
+
+    <title abbrev="CCNx TLV">CCNx TLV Packet Format</title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+    <!-- Another author who claims to be an editor -->
+
+    <author fullname="Marc Mosko" initials="M.M." role="editor" surname="Mosko">
+      <organization>PARC</organization>
+
+      <address>
+       <postal>
+         <street/>
+
+         <!-- Reorder these if your country does things differently -->
+
+         <city>Palo Alto</city>
+
+         <region>California</region>
+
+         <code>94304</code>
+
+         <country>USA</country>
+       </postal>
+
+       <phone>+01 650-812-4405</phone>
+
+       <email>marc.mosko@parc.com</email>
+
+       <!-- uri and facsimile elements may also be added -->
+     </address>
+    </author>
+
+    <date year="2013"/>
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
+        in the current day for you. If only the current year is specified, xml2rfc will fill 
+	 in the current day and month for you. If the year is not the current one, it is 
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
+	 specify just the year. -->
+
+    <!-- Meta-data Declarations -->
+
+    <area>General</area>
+
+    <workgroup>Internet Engineering Task Force</workgroup>
+
+    <!-- WG name at the upperleft corner of the doc,
+        IETF is fine for individual submissions.  
+	 If this element is not present, the default is "Network Working Group",
+        which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+    <keyword>Content Centric Networking</keyword>
+
+    <!-- Keywords will be incorporated into HTML output
+        files in a meta tag but they have no effect on text or nroff
+        output. If you submit your draft to the RFC Editor, the
+        keywords will be used for the search engine. -->
+
+    <abstract>
+      <t>This document specifies a Type-Length-Value (TLV) encoding of Content Centric
+        Networking (CCN) packets.</t>
+
+		<t>Copyright (C) 2013, Palo Alto Research Center</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Changes">
+      <section title="From version 1">
+        <t>
+        <list style="symbols">
+          <t>TL format from 7/8 and 7/16 to 7/8 and 15/16.</t>
+          <t>Use fixed header at start of packet, not an opening TL.</t>
+          <t>No fixed headers inside inner-Vs, only nested TLVs.</t>
+          <t>Use a TLV name component format.</t>
+          <t>Removed the 64b/64b variant, but added several reserved
+            values for future stuff.</t>
+          <t>Fixed headers for Object, Interest (hoplimit), and 
+          Interest (nonce) defined.  No variable headers based on
+          flags.</t>
+          <t>Changed the Digest to the four specific types of digests we use,
+          rather than have a fixed header for it inside the V.</t>
+          <t>Specified for Key, Certificate, and Witness the type of
+          encoding.</t>
+          <t>Updated the Exclude format for the TLV name components.</t>
+        </list>
+        </t>
+      </section>
+      <section title="From version 2">
+        <t>
+          <list style="symbols">
+            <t>Consolidated the message types.</t>
+            <t>Changed the hdrlen and defined the TLV types that appear between fixed header and Name.</t>
+            <t>Clarified that fixed header plus special TLVs are nor part of the Interest or Object.</t>
+            <t>Added per-hops headers inside hdrlen before name</t>
+            <t>Changed AOK to Accepted Response Type</t>
+            <t>Changed Freshness Seconds to Expiry time</t>
+            <t>Moved Scope and Accepted Response Type (AOK) to per-hops headers</t>
+          </list>
+        </t>
+      </section>
+      
+    </section>
+    
+     <section title="Introduction">
+      <t>Content Centric Networking <xref target="CCNx">CCNx</xref> was introduced with a binary XML
+        encoding at the packet level. This RFC specifies a different TLV-based encoding and packet
+        format. The format is suitable for use directly over a MAC layer, or encapsulated within a
+        network or transport protocol. The CCNx protocol messages, namely Interests and Content
+        Objects, are defined in CCNx Message formats [mosko-ccnxmessages-01.txt]. </t>
+
+      <t>CCNx uses two types of messages: Interests and Content Objects. An Interest carries the
+        hierarchically structured variable-length identifier (HSVLI), also called the "name", of a
+        Content Object and serves as a request for that object. If a network element seems multiple
+        interests for the same name, it may aggregate those interests. A network element along the
+        path of the Interest with a matching Content Object may return that object, satisfying the
+        Interest. The Content Object follows the reverse path of the Interest to the origin(s) of
+        the Interest. A Content Object contains the HSVLI, the object's payload, and cryptographic
+        information used to bind the HSVLI to the payload. </t>
+
+      <t>This document specifies: <list style="symbols">
+          <t>A TLV encoding</t>
+          <t>A packet format with mixed fixed headers and TLV fields</t>
+          <t>The formats for existing Interest and Content Object messages from CCNx</t>
+        </list>
+      </t>
+
+      <t>The CCNx TLV packet format is designed for high-speed performance on hardware
+        implementations while maintaining flexibility to introduced new protocol extensions via
+        TLVs. Specifically: <list style="symbols">
+          <t>Content Objects may be large (8K or more) to amortize the size of the HSVLI and
+            cryptographic material to the payload. Previously, the size was unbounded, but with a
+            practical limit of 8KiB. The maximum Content Object size in CCNx TLV is 64KiB.</t>
+          <t>Routers must be able to fragment Content Objects to media MTUs. All fragments carry the
+            HSVLI of the underlying CCNx message so routers may forward them without reassembly.</t>
+          <t>One form of Interests carries a Hop Limit, which is decremented on packet reception. Some routers
+            may employ an Interest Nonce cache, but that is implementation specific. Hop Limit is
+            the common minimum requirement to prevent loops.</t>
+          <t>A second form of Interests uses a Nonce, not a Hop Limit.</t>
+          
+        </list>
+      </t>
+      
+      <t>Packets are represented as 32-bit wide words using ASCII art.  Because
+      of the TLV encoding and optional fields or sizes, there is no concise
+      way to represent all possibilities.  We use the convention that ASCII art
+      fields enclosed by vertical bars "|" represent exact bit widths.  Fields
+      with a forward slash "/" are variable bitwidths, which we typically pad
+      out to word alignment for picture readability.</t>
+
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+          NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in <xref target="RFC2119">RFC 2119</xref>.</t>
+      </section>
+    </section>
+
+    <section anchor="definitions" title="Definitions">
+      <t>
+        <list style="symbols">
+          <t>HSVLI: Hierarchically structured variable length identifier, also called a Name. It is
+            an ordered list of Name Components, which may be variable length octet strings. In
+            human-readable form, it is represented in URI [cite] Format as ccnx:/path/part. There is
+            not a host or query string.</t>
+          <t>Name: see HSVLI</t>
+          <t>Interest: A request for a Content Object that specifies a HSVLI name prefix and other
+            optional selectors to choose among multiple objects with the same name prefix. Any
+            Content Object whose name matches the Interest name prefix and selectors satisfies the
+            Interest.</t>
+          <t>Content Object: A data object sent in response to an Interest. It has a HSVLI name and
+            a Contents payload that are bound together via a cryptographic signature. All Content
+            Objects have an implicit terminal name component made up of the SHA-256 [cite] digest of
+            the Content Object. The implicit digest is not transfered on the wire, but is computed
+            at each hop, if needed.</t>
+        </list>
+      </t>
+    </section>
+
+       
+    <section anchor="TLV" title="Type-Length-Value Structure">
+      <t>CCNx over TLV uses a Type-Length-Value encoding for many fields of CCNx Messages. The TLV
+        scheme has two primary purposes (a) encode CCNx protocol messages, and (b) encode variable
+        user messages in the payload of a Content Object. These two requirements make different
+        demands on the TLV scheme.</t>
+
+      <t>To encode CCNx network messages, a 7-bit type and 8-bit length is suffucient for the
+        majority of TLVs. The exceptions are overall packet length and overall name length, which
+        could exceed 256 bytes. They may need a longer length, so a second fixed format is 15-bit
+        type and 16-bit length.</t>
+
+      <t>To process a TLV, a system needs to read the first byte. Based on the flags or reserved
+        value, a system makes a deterministic mapping of the TL header to a data structure.</t>
+
+      <figure>
+        <artwork align="left"><![CDATA[
+                     1
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
++---------------+---------------+
+|0|    type     |     length    |
++---------------+---------------+
+                     1                   2
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 
++---------------+---------------+---------------+---------------+
+|1|            type             |            length             | 
++---------------+---------------+---------------+---------------+
+]]></artwork>
+      </figure>
+      
+      <t>The length field is the length of the Value in octets.  It does
+      not include the length of the Type and Length fields.  A zero length
+      TLV is permissible.</t>
+    </section>
+
+
+    <section anchor="header" title="Fixed Headers">
+      <t>Interest and Content objects begin with a non-TLV header followed
+        by per-hop processed TLVs before the Name.  The per-hop processed
+        TLVs are covered in the "hdrlen" field, so to find the beginning
+        of the Name TLV, one moves to "packet start + 4 * hdrlen".</t>
+      
+      <t>Signed information or Similarity Hashs should not include any
+        of the fixed header or per-hop TLVs.</t>
+      
+      <section anchor="universal_header" title="Common Header">
+        <figure>
+          <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|       ver     |    msg type   |         payload length        |
++---------------+---------------+---------------+---------------+
+|    hdrlen     |                                               |
++---------------+---------------+---------------+---------------+
+]]></artwork>
+        </figure>
+        <t>
+          <list style="symbols">
+            <t>ver: defines the version of the packet.  Make it 8 bits?</t>  
+            <t>hdrlen: number of 4-octet words in the header until the Name.
+              The minimum value is "2".</t>
+            <t>msg type: 0 = object, 1 = interest, 2 = control.</t>
+            <t>payload length: Total octets following the header (fixed header
+              plus optional headers).  To total packet length is 4 * hdrlen + 
+              payload length</t>
+          </list>
+        </t>
+      </section>
+      
+      <section anchor="per-hop-tlvs" title="Per-hop TLVs"> 
+        <t>Between the fixed header and the Name are per-hop TLVs.  These
+          TLVs follow the normal 8b/8b and 16b/16b formats of other TLVs.
+          They are for per-hop processed options, such as a DSCP-equivalent
+          field, or perhaps a loop-preventing Nonce.
+        </t>
+        
+        <t>Per-hop TLVs may be in any order.</t>
+        
+        <figure>
+          <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|       ver     |    msg type   |         payload length        |
++---------------+---------------+---------------+---------------+
+|    hdrlen     |                                               |
++---------------+---------------+---------------+---------------+
+/ Optional Interest Scope TLV                                   / 
++---------------------------------------------------------------+
+/ Optional Interest Allowed Response Type TLV                   / 
++---------------------------------------------------------------+
+/ Optional Object Handling TLV                                  / 
++---------------------------------------------------------------+
+/ Optional Per-hop Fragment TLV                                 / 
++---------------------------------------------------------------+
+/ Optional End-to-end Fragment TLV                              / 
++---------------------------------------------------------------+
+]]></artwork>
+        </figure>
+        
+        <section anchor="scope" title="Interest Scope">
+          <t>The Interest Scope limits the propagation of an Interest
+            in slightly different ways than a Hop Limit.</t>
+          <t>0 = Local cache only, 1 = local cache or local apps, 
+            2 = anything local or 1-hop neighbor cache or local apps.
+            Other values are undefined and should be ignored.</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+
+|      %x04     |     length    |    Scope      |
++---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>
+        
+        <section anchor="aok" title="Allowed Response Type">
+          <t>The Allowed Response Type in an Interest determines the desired types of
+            responses.  It is a binary OR of these flags.  If the field is missing,
+            any response type is allowed.</t>
+          <t>0x01 = Cached Responses Only, 0x02 = Dynamically generated Only</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+
+|      %x18     |     length    |  AllowedType  |
++---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>
+
+        <section anchor="object_handling" title="Object Handling">
+          <t>Specifies per-hop behavior for handling a Content Object.  It is the
+          binary OR of these flags:</t>
+          <t>0x01 = Do not cache</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+
+|      %x19     |     length    |    handling   |
++---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>        
+
+        <section anchor="per_hop_frag" title="Per Hop Fragment">
+          <t>Taken from work done with Christian Tschudin</t>
+          <t>hop-by-hop fragments MUST carry at least
+            . a sequence number, wrap-around according to RFC1982, default width 32 bits
+            . a flag field, encoding START/MID/END/SINGLE as in PPP            
+            - the hop-by-hop protocol, using sequence numbers, can handle out-of-order
+            delivery, but the heuristics is left to the implementation
+            - it is highly desirable to have a "face control protocol" (like PPP's LCP)
+            where fragmentation options and other neighboring parameters can be
+            negotiated.
+            .</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|      %x1A     |     length    |      flags    |           
++---------------+---------------+---------------+---------------+
+           32-bit sequence number               | 
++---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>        
+        
+        <section anchor="end_end_frag" title="End-to-End Fragment">
+          <t>12-bytes for an end-to-end fragment.  Description forthcoming.</t>
+           <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|      %x1B     |     length    |                               |
++---------------+---------------+---------------+---------------+
+|                                                               | 
++---------------+---------------+---------------+---------------+
+|                                                               | 
++---------------+---------------+---------------+---------------+
+|                               |
++---------------+---------------+
+
+]]></artwork>
+          </figure>
+        </section>        
+        
+      </section>
+    </section>
+    
+    <section anchor="type_values" title="Type Values">
+
+      <t>CCNx over TLV uses global types. A type "5", for example, is always a Content Name, no
+        matter where it is in a TLV hierarchy. </t>
+
+      <t>We include the length flag in the type values, therefore all short
+      TLVs are from 0 - 127.  All long TLVs are %x8000 - %xFFFF.</t>
+
+      <texttable anchor="types" title="CCNx Network Message Types">
+        <ttcol align="center">Short Type</ttcol>
+        <ttcol align="center">Long Type</ttcol>
+        <ttcol align="center">Name</ttcol>
+        <ttcol align="left">Description</ttcol>
+
+        <c/>
+        <c>%x8001</c>
+        <c><xref target="names">Name</xref></c>
+        <c>Content Name, encoded using the "flat name" style.</c>
+
+        <c>%x01</c>
+        <c/>
+        <c><xref target="nonce">Interest Nonce</xref></c>
+        <c>A large random number used for loop detection.</c>
+
+        <c/>
+        <c>%x8002</c>
+        <c><xref target="selectors">Interest Selectors</xref></c>
+        <c>Selectors for object return, such as mininum and maximum suffix componets, publisher
+          public key digest, and so on.</c>
+
+        <c>%x02</c>
+        <c/>
+        <c><xref target="suffix">Selectors: Min Suffix Components</xref></c>
+        <c>Minimum number of additonal name compoents after given name to match (0
+          default if missing).</c>
+        
+        <c>%x03</c>
+        <c/>
+        <c><xref target="suffix">Selectors: Max Suffix Components</xref></c>
+        <c>Maximum number of additonal name compoents after given name to match (unlimited default
+          is missing).</c>
+        
+        <c>%x04</c>
+        <c/>
+        <c><xref target="child">Selectors: Child Selector</xref></c>
+        <c>0 = left, 1 = right (default)</c>
+
+        <c>%x05</c>
+        <c/>
+        <c><xref target="expiry">Content Expiry</xref></c>
+        <c>The UTC time (in seconds) at which the content object expires and is "stale".</c>
+        
+        <c>%x06</c>
+        <c/>
+        <c><xref target="final_block">Final Block ID</xref></c>
+        <c>The segment number of the final block in a segmented object (big-endian ingteger)</c>
+
+        <c>%07</c>
+        <c/>
+        <c><xref target="cipher_suite">Content Object Cipher Suite</xref></c>
+        <c>A short identiier of the cipher suite (digest algorithm and signature algorithm)
+        used by a Content Object.</c>
+
+        <c>%x08</c>
+        <c/>
+        <c><xref target="lifetime">Interest Lifetime</xref></c>
+        <c>Interest Lifetime, in milli-seconds</c>
+        
+        <c>%x09</c>
+        <c/>
+        <c><xref target="pad">Pad</xref></c>
+        <c>A protocol may chose to word-align fields by using a Pad type.</c>
+               
+        <c/>
+        <c>%8003</c>
+        <c><xref target="excludes">Interest Excludes</xref></c>
+        <c>Encloses ExcludeComponents, 16-bit length only</c>
+
+        <c/>
+        <c>%x8004</c>
+        <c><xref target="singleton">Exclude Singleton</xref></c>
+        <c>Exclude a single name component, containing only the bytes of the component, not the
+          "flat name" with continuation-bit length.</c>
+
+        <c/>
+        <c>%x8005</c>
+        <c><xref target="range">Exclude Range</xref></c>
+        <c>Exclude an inclusive range, begining at this value and continuting through the next
+          Singleton, or to infinity if ommited on the last entry.</c>
+
+        <c>%x10</c>
+        <c/>
+        <c><xref target="digests">PublisherPublicKeyDigest</xref></c>
+        <c>SHA-256 digest of the Publisher Public Key.</c>
+
+        <c>%x11</c>
+        <c/>
+        <c><xref target="digests">PublisherCertificateDigest</xref></c>
+        <c>SHA-256 digest of the Publisher Certificate.</c>
+        
+        <c>%x12</c>
+        <c/>
+        <c><xref target="digests">IsuerPublicKeyDigest</xref></c>
+        <c>SHA-256 digest of the Issuer Public Key.</c>
+        
+        <c>%x13</c>
+        <c/>
+        <c><xref target="digests">IssuerCertificateDigest</xref></c>
+        <c>SHA-256 digest of the Issuer Certificate.</c>
+
+        <c>%x14</c>
+        <c/>
+        <c><xref target="content_type">Content Object Type</xref></c>
+        <c>Indicates the type of Contents (data, encrypted, key, link, etc.)</c>
+        
+        <c>%x15</c>
+        <c/>
+        <c><xref target="timestamp">Content Timestamp</xref></c>
+        <c>A milli-second since epoch in UTC timestamp.</c>
+
+        <c>%16</c>
+        <c/>
+        <c><xref target="digest_alg">Digest and Signature Algorithm OIDs</xref></c>
+        <c>A UTF-8 OID representation of the dignest and signature algorithm used
+        by a Content Object.</c>
+
+        <c>%17</c>
+        <c/>
+        <c><xref target="scope">Interest Scope</xref></c>
+        <c>The Scope of an Interest.</c>
+        
+        <c>%18</c>
+        <c/>
+        <c><xref target="aok">Allowed Response Type</xref></c>
+        <c>A bitfield indicating the allowed types of respone, such as dynamic content
+          or no cache.  (old name was Answer Origin Kind)</c>
+        
+        <c>%19</c>
+        <c/>
+        <c><xref target="object_handling">Object Handling</xref></c>
+        <c>Per-hop directives on object handling.</c>
+
+        <c>%1A</c>
+        <c/>
+        <c><xref target="per_hop_frag">Per Hop Fragmentation</xref></c>
+        <c>Per-hop fragmentation header.</c>
+        
+        <c>%1B</c>
+        <c/>
+        <c><xref target="end_end_frag">End-to-end Fragmentation</xref></c>
+        <c>End-to-end fragmentation header.</c>
+        
+        <c/>
+        <c>%x8006</c>
+        <c><xref target="signed_info">Signed Info</xref></c>
+        <c>Meta information about a signature.</c>
+
+        <c/>
+        <c>%x8007</c>
+        <c><xref target="signature">Signature Block</xref></c>
+        <c>Contains the Signature Bits, optional Witness, and optional Digest Algorithm.</c>
+
+         <c/>
+        <c>%x8008</c>
+        <c><xref target="witness">Witness</xref></c>
+        <c>An array of SHA-256 digests.</c>
+
+        <c/>
+        <c>%x8009</c>
+        <c><xref target="signature_bits">Signature Bits</xref></c>
+        <c>A signature, contents varies depending on algorithm.</c>
+
+
+        <c/>
+        <c>%x800A</c>
+        <c><xref target="content">Content</xref></c>
+        <c>Binary data, the contents of a Content Object. Certain types of content objects have
+          specified Contents, such as a Link or Collection.</c>
+
+        <c/>
+        <c>%x800B</c>
+        <c><xref target="keyname">Key Name</xref></c>
+        <c>A content name and optional digest of the key used to sign the packet.</c>
+
+        <c/>
+        <c>%x800C</c>
+        <c><xref target="key">Key</xref></c>
+        <c>Key bytes</c>
+
+        <c/>
+        <c>%x800D</c>
+        <c><xref target="certificate">Certificate</xref></c>
+        <c>ASN.1 encoded certificate</c>
+
+        <c/>
+        <c>%800E</c>
+        <c>ExtOpt</c>
+        <c>Extended Options</c>
+        
+        <c/>
+        <c>%xE000 - %xEFFF</c>
+        <c>Experimental</c>
+        <c>Experimental fields</c>
+        
+        <c>%x20</c>
+        <c/>
+        <c><xref target="name_component">Name Component (Generic)</xref></c>
+        <c>A generic name component (binary or utf-8).</c>
+        
+        <c>%x21</c>
+        <c/>
+        <c><xref target="name_component">Name Component (Version)</xref></c>
+        <c>A monotonic (non-decreasing) version number</c>
+        
+        <c>%x22</c>
+        <c/>
+        <c><xref target="name_component">Name Component (Serial Segment)</xref></c>
+        <c>A serial (incrementing by 1) segment number (0-based).  Old %00 marker.</c>
+        
+        <c>%x23</c>
+        <c/>
+        <c><xref target="name_component">Name Component (Monotonic Segment)</xref></c>
+        <c>A monotonic (non-decreasing) segment number.  Old %FB command marker.</c>
+        
+        <c>%x24</c>
+        <c/>
+        <c><xref target="name_component">Name Component (Nonce)</xref></c>
+        <c>A nonce name component, promoted out of the %xC1.N%x00 namespace.</c>
+        
+        <c>%x25</c>
+        <c/>
+        <c><xref target="name_component">Name Component (Functional Component)</xref></c>
+        <c>A functional name componet, replaces %xC1 command markers.  First bytes
+        of the name component define the function, so a %xC1.R.sw would translate
+        to a %x25 type and ".R.sw" in side the name component.</c>
+        
+        <c/>
+        <c>%xF000 - %xF0FF</c>
+        <c><xref target="name_component">Name Component (Payload)</xref></c>
+        <c>Application-specific payload in a name component.  An application may apply
+        its own semantics to the 256 payload components.</c>       
+      </texttable>
+    </section>
+
+
+    <section anchor="formats" title="Type Formats">
+
+      <!-- =========================================================== -->
+      <section anchor="pad" title="Pad">
+        <t>
+          The pad type may be used by protocols that prefer word-aligned
+          data.  The size of the word may be defined by the protocol.
+          Padding 4-byte words, for example, would use a 0-byte, 1-byte,
+          and 3-byte length.  Padding 8-byte words would use a (0, 1, 2, 3, 4, 5, 7)-byte
+          length.
+        </t>
+        
+        <t>A pad may be inserted after any other TLV.  In the remainder of
+        this document, we will not show optional pad TLVs.</t>
+        
+        <figure>
+          <preamble>Name</preamble>
+          <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|     %x09      |     length    |                               /
++---------------+---------------+                               /
+/                 variable length pad MUST be zeros             /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+        </figure>
+      </section>
+      
+      <section anchor="names" title="Content Name">
+        <t>Content Names are encoded as 15b/16b Name TLV. 
+          The value of the Name is a specially encoded sequence of name
+          components.  A Name MUST NOT include PAD TLVs.</t>
+
+        <figure>
+          <preamble>Name</preamble>
+          <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x8001             |            length             |
++---------------+---------------+---------------+---------------+
+/                                                               /
+/                 Variable length name components               /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+        </figure>
+        
+        <section anchor="name_component" title="Name Components">
+          <t>Name components are encoded as 7b/8b TLVs in the range
+          %x20 - %x25.  %x20 is the generic name component, with
+          a non-functional meaning.  Types %x21-%x24 have specific
+          functional types (version, segment, nonce) and type
+          %x25 have variable function behavior depending on the
+          contents of the name component.</t>
+          
+          <t>Special application payload name componets are in 
+          the range %xF000 - %F0FF.  These have application
+          semantics applied to them.</t>
+          
+          <t>For example, a name like "ccnx:/foo/bar/{version 17}/{seq 256}"
+            would be encoded as:
+            <figure>
+              <preamble>Name</preamble>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x8001             |             %x11              |
++---------------+---------------+---------------+---------------+
+|      %x20     |     %x03      |        f            o         
++---------------+---------------+---------------+---------------+
+       o        |     %x20      |      %x03     |       b
++---------------+---------------+---------------+---------------+
+       a                r       |      %x21     |      %x01     |
++---------------+---------------+---------------+---------------+
+      %x11      |     %x22      |      %x02     |      %x01
++---------------+---------------+---------------+---------------+
+      %x00      |
++---------------+
+]]></artwork>
+            </figure>           
+          </t>
+          
+          <t>TBD: What is the URI syntax of typed name components?</t>
+        </section>
+        
+      </section>
+
+      <!-- =========================================================== -->
+      <section anchor="digests" title="Digest">
+        <t>CCNx uses four types of digests, all represented as 32-byte SHA-256. </t>
+
+        <figure>
+          <preamble>Cryptographic Digest</preamble>
+          <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|  %x10 - %x13  |     length    |                               /
++---------------+---------------+                               /
+/                                                               /
+/                      Digest (length octets)                   /
+/                                                               /
+/                                                               /
++---------------+---------------+---------------+---------------+
+%x10 = Publisher Public Key Digest
+%x11 = Publisher Certificate Digest
+%x12 = Issuer Public Key Digest
+%x13 = Issuer Certificate Digest
+]]></artwork>
+        </figure>
+      </section>
+
+      <!-- =========================================================== -->
+      <section anchor="interests" title="Interests">
+        <t>An Interest is a Common Header, an Interest Header, followed
+        by a Name TLV.  It may then have optional Selectors, Lifetime,
+        and Nonce TLVs.</t>
+        
+        <t>An Interest similarity Hash is computed </t>
+        
+        <t>The Interest is organized such that the optional Lifetime
+        and Nonce are at the end.  This allows a similarity check
+        on the bytes up to, but not including the lifetime or
+        nonce.</t>
+
+        <figure>
+          <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|                          Fixed Header                         |
+|                                                               |
++---------------+---------------+---------------+---------------|
+/ Per-hop TLVs                                                  /
++---------------+---------------+---------------+---------------|
+/ Mandatory Name TLV                                            /
++---------------------------------------------------------------+
+/ Optional Interest Selectors TLV                               /
++---------------------------------------------------------------+
+/ Optional Interest Lifetime TLV                                /
++---------------------------------------------------------------+
+/ Optional Interest Nonce TLV                                   /
++---------------------------------------------------------------+
+]]></artwork>
+        </figure>
+
+        <section anchor="selectors" title="Interest Selectors">
+          <t>An Interest Selectors container holds up to
+          four optional TLVs.  While it is accetable to have
+          a zero-length Selectors (meaning none included),
+          best practice is to not include the Selectors TL
+          if the length is zero.</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x8002             |            length             |
++---------------+---------------+---------------+---------------+
+/ Optional Child Selector TLV                                   / 
++---------------------------------------------------------------+
+/ Optional MinSuffixComponents TLV                              / 
++---------------------------------------------------------------+
+/ Optional MaxSuffixComponents TLV                              / 
++---------------------------------------------------------------+
+/ Optional Exclude TLV                                          / 
++---------------------------------------------------------------+
+/ Optional Digest Restriction                                   /
++---------------------------------------------------------------+
+]]></artwork>
+          </figure>
+        </section>
+
+        <section anchor="child" title="Child Selector">
+          <t>If there are multiple choices to answer an Interest, the Child Selector
+          specifies the desired ordering of resposnes.  %x00 = leftmost, %x01 = rightmost.</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+
+|      %04      |     length    |   selector    |
++---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>
+        
+        <section anchor="suffix" title="Interest Min(Max)SuffixComponets">
+          <t>The Min and Max suffix components are encoded as
+          a minimum-length Big Endian (network byte order) number inside the value.
+          A "0" is represented as a single byte %0x00.  A length
+          0 V is interpreted the same as the type not being
+          present.</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|      %08      |     length    |                               /
++---------------+---------------+                               /
+/                      Min(Max)SuffixComponentrs                /
+/                                                               /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>
+        
+        <section anchor="lifetime" title="Interest Lifetime">
+          <t>The Interest Lifetime expresses how long an
+            Interest should stay pending at an intermediate node.
+            It is express in milli-seconds as a non-negative
+            big-endian integer.</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|      %08      |     length    |                               /
++---------------+---------------+                               /
+/                      lifetime (length octets)                 /
+/                                                               /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>
+       
+        <section anchor="nonce" title="Interest Nonce">
+          <t>A Nonce is used to distinguish unique repetitions
+          of the same Interest.  A requestor, for example, may
+          issue an Interest, timeout, and then re-issue the same
+          Interest.  To indicate that it is not a duplicate
+          the requestor uses a different Nonce.</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|       %x06    |     length    |                               /
++---------------+---------------+                               /
+/                           Nonce (length octets)               /
+/                                                               /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>
+
+        <section anchor="excludes" title="Interest Excludes">
+          <t>Interest Excludes specify a set of singletons and
+          ranges to exclude when matching content object names
+          to an Interest.  They match the name component
+          immediately following the last componnet of
+          the Interest name.  The excludes must be sorted
+          in ascending order, using the normal Name sorting
+          rules.</t>
+          
+          <t>The normal name sorting rules use a shortlex
+          alogrithm.  A name component A is less than a
+          name component B iff A is fewer bytes, or the
+          byte size being equal, A is lexicagraphically
+          sorted before B, where the most significant byte
+          is first.</t>
+          
+          <t>The zero-length name component is the minimum
+          name component.  If present, it must be the first
+          Exclude component.</t>
+          
+          <t>An exclude may contain either an Exclude Range type
+          or an Exclude Singleton type.  An Exclude Range type
+          means the given value starts an inclusive exclusion
+          range that ends at the next Singleton or at infinity
+          if it is the last exclude component.  An Exclude Singleton
+          means to exclude the exact value given.</t>
+          
+          <figure>
+            <artwork align="left"><![CDATA[
+                      1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x8003             |            length             |
++---------------+---------------+---------------+---------------+
+/ Zero or more exclude-components                               / 
++---------------------------------------------------------------+
+
+exclude-components = *component [start-range-tlv]
+component = (start-range-tlv singleton-tlv) / singleton-tlv
+]]></artwork>
+          </figure>
+          
+          <t>EXAMPLES</t>
+          
+          <section anchor="singleton" title="Exclude Singleton">
+            <t>A singleton exclude component means to exclude
+            a name component exactly matching the given value.</t>
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x8004             |            length             |
++---------------+---------------+---------------+---------------+
+/                        TLV name component                     /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+            </figure>
+         </section>
+          
+          <section anchor="range" title="Exclude Range">
+            <t>A Range exclude means to exclude the from the
+            given value up to an including the next Singleton.
+            If the Range is the last componet in the Exclude,
+            it means to exclude to infinity.</t>
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x8005             |            length             |
++---------------+---------------+---------------+---------------+
+/                        TLV name component                     /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+            </figure>
+          </section>
+          
+        </section>
+      </section>
+
+      <section anchor="objects" title="Content Objects">
+        <t>A Content Object contains four mandatory sections, some
+        of which contain optional TLVs.</t>
+        <t>The Implicit Digest of a Content Object is defined as a SHA-256 beginning
+          at the Name TLV and ended at (not including) the Signature Block TLV</t>
+        <t>The signing hash is defined over the same range as the implicit
+        digest, but using the mechanisms defined in the Signature Block, or
+        using SHA-256/RSA if not defined.</t>
+        <figure>
+          <preamble>Content Object</preamble>
+          <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|                          Fixed Header                         |
+|                                                               |
++---------------+---------------+---------------+---------------|
+/ Per-hop TLVs                                                  /
++---------------+---------------+---------------+---------------|
+/ Mandatory Name TLV                                            /
++---------------------------------------------------------------+
+/ Mandatory Signed Info TLV                                     / 
++---------------------------------------------------------------+
+/ Mandatory Contents TLV                                        / 
++---------------------------------------------------------------+
+/ Mandatory Signature Block TLV                                 / 
++---------------------------------------------------------------+
+]]></artwork>
+        </figure>
+
+        <section anchor="signed_info" title="Signed Info">
+          <t>Signed Info is meta-data about the name and Contents.
+          The information is part of the signature digest.</t>
+          
+          <t>The ContentType TLV specifies the type
+          of the Content Object</t>
+          
+          <t>The timestamp header is a UTC time in milli-seconds
+          representing the time at which the signature took place.</t>
+          
+          <t>Signed Info must include a Publisher Public Key
+          Digest inside a Digest TLV of the
+          object signer.</t>
+          
+          <t>A Signed Info block may contain up to 4 optional
+          TLVs, described below.  It may contain at most only 
+          one of KeyName or Key or Certificate.</t>
+          
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x8006             |            length             |
++---------------+---------------+---------------+---------------+
+/ Mandatory Content Type TLV                                    /
++---------------------------------------------------------------+
+/ Mandatory Timestamp TLV                                       /
++---------------------------------------------------------------+
+/ Mandatory Publisher Public Key Digest TLV                     /
++---------------------------------------------------------------+
+/ Optional Expiry Time TLV                                      /
++---------------------------------------------------------------+
+/ Optional Final Block ID TLV                                   /
++---------------------------------------------------------------+
+/ Optional KeyName or Key or Certificate (at most one)          /
++---------------------------------------------------------------+
+/ Optional Extended Options                                     /
++---------------------------------------------------------------+
+]]></artwork>
+          </figure>
+          
+          <section anchor="content_type" title="Content Type">
+            <t>The Content Type is a network byte order integer
+              encoded in the shortest length, representing
+              the general type of the Contents TLV.
+              <list style="symbols">
+                <t>0: Data</t>  
+                <t>1: Encrypted Data</t>
+                <t>2: Gone (whiteout)</t>
+                <t>3: Key</t>
+                <t>4: Link</t>
+                <t>5: NACK</t>
+              </list>           
+            </t>
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|      %x14     |    length     |   content type value          /            
++---------------+---------------+---------------+---------------+                          
+]]></artwork>
+            </figure>
+          </section>
+ 
+ 
+          <section anchor="timestamp" title="Content Timestamp (milli-second)">
+            <t>A milli-second timestamp is a big-endian ordered integer
+              of the number of milli-seconds since the epoch in UTC.
+            </t>
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|      %x15     |    length     |                               /            
++---------------+---------------+                               /
+/             milli-seconds (variable length integer)           /
++---------------+---------------+-------------------------------+
+]]></artwork>
+            </figure>
+          </section>
+
+          <section anchor="expiry" title="Content Expiry">
+            <t>The 64-bit UTC time in seconds since the epoch, 
+              at which the object expires and
+            becomes "stale".  A stale content object should never
+            be sent from cache to answer an Interest.  A forwarder
+            is not required to check the expiration time and MAY
+            forward an in-flight Content Object past its expiry time.
+            A content store, cache, repository, or applicaiton SHOULD
+            never respond with an expired content object.</t>
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|      %x05     |    length     |                               /
++---------------+---------------+                               /
+/                       64-bit UTC seconds                      / 
++                               +-------------------------------+
+/                               |
++---------------+---------------+
+]]></artwork>
+            </figure>
+          </section>
+          
+          <section anchor="final_block" title="Final Block ID">
+            <t>The Final Block ID is used to indicate the last
+            segment number of a stream.  If the segment number
+            of the current Content Object equals the Final
+            Block ID, then it is the final segment.</t>
+            
+            <t>An encoder may set a Final Block ID in an
+            earlier segment, and then later extend the
+            stream beyond that estimate.  A Content Object
+            is only the final block if its segment number
+            exactly equals the Final Block ID it carries.</t>
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|      %x06     |    length     |                               /
++---------------+---------------+                               /
+/            Final Block ID (variable length integer)           /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+            </figure>
+          </section>
+          <section anchor="keyname" title="Key Name">
+            <t>A key name type key locator is a mandatory
+            Name TLV followed by an optional Digest (%x10-%x13)
+            key digest.</t>
+            <t>Including the key digest allows a verifying node
+            to see if it has the given digest already in its key
+            cache to expidite lookup.</t>
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|            %x800B             |            length             |
++---------------+---------------+-------------------------------+
+/ Mandatory Name TLV                                            /
++---------------------------------------------------------------+
+/ Optional Cryptographic Digest                                 /
++---------------------------------------------------------------+
+]]></artwork>
+            </figure>
+          </section>
+          <section anchor="key" title="Key">
+            <t>A Key is a DER encoded Subject Publick Key Info
+            block, as in an X509 certificate.</t>
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                 
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
++---------------+---------------+---------------+---------------+
+|            %x800C             |            length             |
++---------------+---------------+---------------+---------------+
+/                      Key (DER encoded SPKI)                   /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+            </figure>
+          </section>
+          <section anchor="certificate" title="Certificate">
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x800D             |            length             |
++---------------+---------------+---------------+---------------+
+/                 Certificate (DER encoded X509)                /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+            </figure>
+          </section>
+          <section anchor="extops" title="Extended Options">
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x800E             |            length             |
++---------------+---------------+---------------+---------------+
+/                            ExtOpts                            /
++---------------+---------------+---------------+---------------+
+
+ExtOpts = *<TLVs>
+]]></artwork>
+            </figure>
+          </section>
+        </section>
+
+        <section anchor="signature" title="Signature">
+          <t>The Signature Block includes the cryptographic
+          signature of the contents and information about
+          how the signature was computed.</t>
+          <t>The Signature Block MUST contain either a
+          Digest Algorithm TLV or a Cipher Suite TLV.  These
+          specify the algorithms used to digest and sign
+          the content object.</t>
+          <t>A Signature Block MUST contain a Signature Bits TLV.</t>
+          <t>A Content Object without a mandatory field that is understood
+          by an implementation, and that verifies, should be silently
+          discarded.</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x8007             |            length             |
++---------------+---------------+---------------+---------------+
+/ Mandatory Digest Algorithm or Cipher Suite TLV                /
++---------------------------------------------------------------+
+/ Optional Witness TLV                                          /
++---------------------------------------------------------------+
+/ Mandatory Signature Bits TLV                                  /
++---------------------------------------------------------------+
+]]></artwork>
+            </figure>
+          
+          <section anchor="signature_bits" title="Signature Bits">
+            <t>The cryptographic signature using the given
+            or implicit Digest Algorithm.</t>
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x8009             |            length             |
++---------------+---------------+---------------+---------------+
+/                           Signature                           /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+            </figure>
+          </section>
+          
+           <section anchor="digest_alg" title="Digest Algorithm">
+             <t>The Digest Algorithm is a UTF-8 null-terminated OID string representing
+             the digest algorithm and encryption used to sign a Content Object.  
+             A typical value is SHA-256 with RSA "1.2.840.113549.1.1.11\x00".
+             </t>
+             <t>It may optionally be two separate OIDs for the digest algorithm
+             followed by the signature algorithm if no combined pair exists.
+             For example, "2.16.840.1.101.3.4.2.1\x001.2.246.530.1.2.15.2.4\x00"
+             is also SHA-256 with RSA encryption.  If specifying two OIDs, neither
+             may be empty</t>
+             <t>If an implementation cannot parse or does not implemented a specified
+             algorithm, it MUST silently discard the content object.</t>
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|      %x16     |    length     |                               /
++---------------+---------------+                               /
+/                       Digest Algorithm(s)                     /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+            </figure>
+           </section>
+ 
+          <section anchor="cipher_suite" title="Cipher Suite">
+            <t>The Cipher Suite is a short notation indicating the digest algorithm
+              and encryption used to sign a Content Object.  The Cipher Suite is
+            a variable-length number evaluated in network-byte order.</t>
+            <t>If an implementation cannot parse or does not implemented a specified
+              algorithm, it MUST silently discard the content object.</t>
+            
+            <t>An implementation may choose which cipher suites, if any.
+            The initial list of Cipher Suites is:</t>
+            
+            <texttable anchor="suites" title="Cipher Suites">
+              <ttcol align="center">Network Byte Order Code</ttcol>
+              <ttcol align="center">Suite</ttcol>              
+              <c>%x00</c>
+              <c>SHA-256 with RSA.</c>
+              <c>%x01</c>
+              <c>SHA-256 with AES-256.</c>            
+              <c>%x02</c>
+              <c>SHA-256 with ECDSA.</c>    
+              <c>%x03</c>
+              <c>SHA-256 with Symmetric Key.</c>    
+             </texttable>
+            
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|      %x07     |    length     |         Cipher Suite          |
++---------------+---------------+---------------+---------------+
+]]></artwork>
+            </figure>
+          </section>
+          
+ 
+          <section anchor="witness" title="Witness">
+            <t>The Witness is a DER encoded PKCS #1 Info element.</t>
+            <figure>
+              <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x8008             |            length             |
++---------------+---------------+---------------+---------------+
+/                            Witness                            /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+          </section>
+        </section>
+        
+        <section anchor="content" title="Content">
+          <t>Opaque content bytes.</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            %x800A             |            length             |
++---------------+---------------+---------------+---------------+
+/                            Content                            /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>
+        
+      </section>
+    </section>
+    <!-- This PI places the pagebreak correctly (before the section title) in the text output. -->
+
+    <?rfc needLines="8" ?>
+
+
+    <section anchor="Acknowledgements" title="Acknowledgements"> </section>
+
+    <!-- Possibly a 'Contributors' section ... -->
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>This memo includes no request to IANA.</t>
+
+      <t>All drafts are required to have an IANA considerations section (see <xref target="RFC5226"
+          >Guidelines for Writing an IANA Considerations Section in RFCs</xref> for a guide). If the
+        draft does not require IANA to do anything, the section contains an explicit statement that
+        this is the case (as above). If there are no requirements for IANA, the section will be
+        removed during conversion into an RFC by the RFC Editor.</t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>All drafts are required to have a security considerations section. See <xref
+          target="RFC3552">RFC 3552</xref> for a guide.</t>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+    1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+    2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+       (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+    Both are cited textually in the same manner: by using xref elements.
+    If you use the PI option, xml2rfc will, by default, try to find included files in the same
+    directory as the including file. You can also define the XML_LIBRARY environment variable
+    with a value containing a set of directories to search.  These can be either in the local
+    filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Normative References">
+      <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+      &RFC2119; </references>
+
+    <references title="Informative References">
+      <!-- Here we use entities that we defined at the beginning. --> &RFC3552; &RFC5226;
+      <!-- A reference written by by an organization not a person. -->
+
+      <reference anchor="CCNx" target="http://www.ccnx.org">
+        <front>
+          <title>CCNx Open Source</title>
+
+          <author>
+            <organization>PARC, Inc.</organization>
+          </author>
+
+          <date year="2007"/>
+        </front>
+      </reference>
+    </references>
+
+  </back>
+</rfc>
