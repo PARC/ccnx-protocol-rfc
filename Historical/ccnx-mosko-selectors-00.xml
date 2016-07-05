@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+    which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+    There has to be one entity for each item to be referenced. 
+    An alternate method (rfc include) is described in the references. -->
+
+<!ENTITY RFC2119 SYSTEM "bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2629 SYSTEM "bibxml/reference.RFC.2629.xml">
+<!ENTITY RFC3552 SYSTEM "bibxml/reference.RFC.3552.xml">
+<!ENTITY RFC5226 SYSTEM "bibxml/reference.RFC.5226.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+    please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+    (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space 
+    (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="no" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+
+<?rfc private="" ?>
+
+<rfc category="exp" docName="ccnx-mosko-selectors-00" ipr="none">
+  <!-- category values: std, bcp, info, exp, and historic
+    ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
+       or pre5378Trust200902
+    you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+    they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the 
+        full title is longer than 39 characters -->
+
+    <title abbrev="CCNx Selectors">CCNx Selector Based Discovery</title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+    <!-- Another author who claims to be an editor -->
+
+    <author fullname="Marc Mosko" initials="M.E." role="editor" surname="Mosko">
+      <organization>PARC</organization>
+
+      <address>
+       <postal>
+         <street/>
+
+         <!-- Reorder these if your country does things differently -->
+
+         <city>Palo Alto</city>
+
+         <region>California</region>
+
+         <code>94304</code>
+
+         <country>USA</country>
+       </postal>
+
+       <phone>+01 650-812-4405</phone>
+
+       <email>marc.mosko@parc.com</email>
+
+       <!-- uri and facsimile elements may also be added -->
+     </address>
+    </author>
+
+    <date year="2014"/>
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
+        in the current day for you. If only the current year is specified, xml2rfc will fill 
+	 in the current day and month for you. If the year is not the current one, it is 
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
+	 specify just the year. -->
+
+    <!-- Meta-data Declarations -->
+
+    <area>General</area>
+
+    <workgroup>Internet Engineering Task Force</workgroup>
+
+    <!-- WG name at the upperleft corner of the doc,
+        IETF is fine for individual submissions.  
+	 If this element is not present, the default is "Network Working Group",
+        which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+    <keyword>Content Centric Networking</keyword>
+
+    <!-- Keywords will be incorporated into HTML output
+        files in a meta tag but they have no effect on text or nroff
+        output. If you submit your draft to the RFC Editor, the
+        keywords will be used for the search engine. -->
+
+    <abstract>
+      <t>CCNx selector based discovery uses exclusions and interest
+      name suffix matching to discover content in the network.  Participating
+      nodes may respond with matching Content Objects from cache using
+      an encapsulation protocol.  This document specifies the available
+      selectors, their encoding in a name path segment, and the encapsulation
+      protocol.</t>
+
+		<t>Copyright (C) 2013-2014, Palo Alto Research Center</t>
+    </abstract>
+  </front>
+
+  <middle>    
+     <section title="Introduction">
+       <t>Content Discovery is an important feature of CCNx.  This document specifies
+       a discovery mechanism that uses a name path segment to encode a discovery query
+       in an Interest.  Participating nodes may reply with a Content Object from cache
+       if it matches the encoded query.  The query uses exclusions to work around
+       incorrect responses.</t>
+       
+       <t>This document specifies a new name label for selector query.  It also specifies
+       a new type of Content Object that encapsulates another Content Object.  The
+       Encapsulation Object is used to return a Content Object with a longer name
+       than in an interest.  It is a standard Content Object, but its signature
+       will not verify.  The encapsulated object's signature should verify.
+       </t>
+       
+       <t>Note that Selector discovery is not needed when asking for a Content Object
+       by its ContentObjectHash, as there should only ever be one match for that.</t>
+       
+      <t>Packets are represented as 32-bit wide words using ASCII art.  Because
+      of the TLV encoding and optional fields or sizes, there is no concise
+      way to represent all possibilities.  We use the convention that ASCII art
+      fields enclosed by vertical bars "|" represent exact bit widths.  Fields
+      with a forward slash "/" are variable bitwidths, which we typically pad
+      out to word alignment for picture readability.</t>
+
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+          NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in <xref target="RFC2119">RFC 2119</xref>.</t>
+      </section>
+    </section>
+
+    <section anchor="protocol" title="Protocol Description">
+      <t>Selector based discovery uses four query variables to discover content. These
+      selectors are encoded as a single name path segment affixed to an Interest name.
+      The selectors operate on the prefix up to, but not including the selector
+      name path segment.</t>
+      
+      <t>The selectors are:
+        <list style="symbols">
+          <t>MinSuffixComponents: the minimum number of additional name path segments a matching
+            Content Object must have in its name, with the Content Object Hash appended
+            as the terminal path segment.  The default value is 0.</t>
+          <t>MaxSuffixComponents: The maximum number of additional name path segments a matching
+          Content Object may have in its name, with the Content Object hash appended as
+          the terminal path segment.  The default value is unlimited.</t>
+          <t>ChildSelector: Answer with the left-most or right-most child.</t>
+          <t>Exclusions: A set of range and singleton exclusions to eliminate Content Objects.
+          The exclusions match against the name path segment that would immediately follow
+          the Interest prefix prior to the Selector path segment.  They are matched against a Content Object name with
+          the Content Object Hash appended as terminal path segment.</t>
+        </list>
+      </t>
+
+      <t>A node using Selector discovery appends a Selector name path segment to the end
+      of the Interest name.  Even if no selectors are used, the Selector path segment
+      is added to the end, which indicates to a participating node that it should apply
+      Selector based matching to the Interest.</t>
+      
+      <t>A node receiving a Selector Interest should match against the Content Store using
+      the selector rules.  Based on the sort order, it should pick the appropriate Content
+      Object, if any, and return it in an Encapsulation Object.  If no Content Objects
+      match, the Interest should be forwarded as normal.</t>
+      
+      <t>An Encapsulation Object is a Content Object that matches the Selector Interest
+      and whose payload is the ``discovered'' Content Object.  
+      The ContentType of an Encapsulation Object is "ENCAP".
+      The discovered content
+      object's name should be a suffix of the Interest name (prior to the
+      selector name path segment).  The KeyId of the Encapsulation Object should
+      be set the same as the discovered object.  The Signature of the Encapsulation
+      Object should be set to zeros.  The Crypto Suite of the Encapsulation Object
+      should be set to the same as the discovered object.</t>
+    </section>
+    
+      <section anchor="types" title="Name Labels and TLV types">
+        <texttable anchor="message_type" title="Selector Name Label">
+        <ttcol align="center">Type</ttcol>
+        <ttcol align="center">Name</ttcol>
+        
+        <c>'Selectors'</c>
+        <c>The value is a binary field of the TLV encoding of the selectors.</c>
+      </texttable>
+      
+      <texttable anchor="name_types" title="CCNx Name Types">
+        <ttcol align="center">Type</ttcol>
+        <ttcol align="center">Symbol</ttcol>
+        <ttcol align="center">Name</ttcol>
+        <ttcol align="left">Description</ttcol>
+        
+        <c>%x0001</c>
+        <c>T_MINSUFFIX</c>
+        <c>Selectors: Min Suffix Components</c>
+        <c>Minimum number of additional name components after given name to match (0
+          default if missing).</c>
+        
+        <c>%x0002</c>
+        <c>T_MAXSUFFIX</c>
+        <c>Selectors: Max Suffix Components</c>
+        <c>Maximum number of additional name components after given name to match (unlimited default
+          is missing).</c>
+        
+        <c>%x0003</c>
+        <c>T_CHILD</c>
+        <c>Selectors: Child Selector</c>
+        <c>0 = left, 1 = right (default)</c>
+        
+        <c>%0004</c>
+        <c>T_EXCLUDES</c>
+        <c>Excludes</c>
+        <c>Encloses ExcludeComponents</c>
+        
+        <c>%x0005</c>
+        <c>T_EX_SINGLE</c>
+        <c>Exclude Singleton</c>
+        <c>Exclude a single name path segment.</c>
+        
+        <c>%x0006</c>
+        <c>T_EX_RANGE</c>
+        <c>Exclude Range</c>
+        <c>Exclude an inclusive range, beginning at this value and continuing through the next
+          Singleton, or to infinity if omitted on the last entry.</c>
+        
+      </texttable>
+      
+      <section anchor="child" title="Child Selector">
+        <t>If there are multiple choices to answer an Interest, the Child Selector
+          specifies the desired ordering of responses.  %x00 = leftmost, %x01 = rightmost.</t>
+        <figure>
+          <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+
+|    T_CHILD    |     length    |   selector    |
++---------------+---------------+---------------+
+]]></artwork>
+        </figure>
+      </section>
+      
+      <section anchor="suffix" title="Interest Min(Max)SuffixComponents">
+        <t>The Min and Max suffix components are encoded as
+          a minimum-length unsigned integer in network byte order number inside the value.
+          A "0" is represented as a single byte %0x00.  A length
+          0 value is interpreted the same as the type not being
+          present.</t>
+        <figure>
+          <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|     type      |     length    |                               /
++---------------+---------------+                               /
+/                      Min(Max)SuffixComponents                /
+/                                                               /
++---------------+---------------+---------------+---------------+
+type = T_MINSUFFIX or T_MAXSUFFIX
+]]></artwork>
+        </figure>
+      </section>
+      
+      <section anchor="excludes" title="Interest Excludes">
+        <t>Interest Excludes specify a set of singletons and
+          ranges to exclude when matching Content Object names
+          to an Interest.  They match the name component
+          immediately following the last component of
+          the Interest name.  The excludes must be sorted
+          in ascending order, using the normal Name sorting
+          rules.</t>
+        
+        <t>The normal name sorting rules use a shortlex
+          algorithm.  A name component A is less than a
+          name component B iff A is fewer bytes, or the
+          byte size being equal, A is lexicographically
+          sorted before B, where the most significant byte
+          is first.</t>
+        
+        <t>The zero-length name component is the minimum
+          name component.  If present, it must be the first
+          Exclude component.</t>
+        
+        <t>An exclude may contain either an Exclude Range type
+          or an Exclude Singleton type.  An Exclude Range type
+          means the given value starts an inclusive exclusion
+          range that ends at the next Singleton or at infinity
+          if it is the last exclude component.  An Exclude Singleton
+          means to exclude the exact value given.</t>
+        
+        <figure>
+          <artwork align="left"><![CDATA[
+                      1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|          T_EXCLUDES           |            length             |
++---------------+---------------+---------------+---------------+
+/ Zero or more exclude-components                               / 
++---------------------------------------------------------------+
+
+exclude-components = *component [start-range-tlv]
+component = (start-range-tlv singleton-tlv) / singleton-tlv
+]]></artwork>
+        </figure>
+        
+        <t>EXAMPLES</t>
+        
+        <section anchor="singleton" title="Exclude Singleton">
+          <t>A singleton exclude component means to exclude
+            a name path segment exactly matching the given value.</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|          T_EX_SINGLE          |            length             |
++---------------+---------------+---------------+---------------+
+/                        TLV name segment                       /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>
+        
+        <section anchor="range" title="Exclude Range">
+          <t>A Range exclude means to exclude the from the
+            given value up to an including the next Singleton.
+            If the Range is the last component in the Exclude,
+            it means to exclude to infinity.</t>
+          <figure>
+            <artwork align="left"><![CDATA[
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|          T_EX_RANGE           |            length             |
++---------------+---------------+---------------+---------------+
+/                        TLV name segment                       /
++---------------+---------------+---------------+---------------+
+]]></artwork>
+          </figure>
+        </section>
+      </section>    
+    </section>
+    
+      
+    
+    <section anchor="Acknowledgements" title="Acknowledgements"> </section>
+
+    <!-- Possibly a 'Contributors' section ... -->
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>This memo includes no request to IANA.</t>
+
+      <t>All drafts are required to have an IANA considerations section (see <xref target="RFC5226"
+          >Guidelines for Writing an IANA Considerations Section in RFCs</xref> for a guide). If the
+        draft does not require IANA to do anything, the section contains an explicit statement that
+        this is the case (as above). If there are no requirements for IANA, the section will be
+        removed during conversion into an RFC by the RFC Editor.</t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>All drafts are required to have a security considerations section. See <xref
+          target="RFC3552">RFC 3552</xref> for a guide.</t>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+    1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+    2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+       (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+    Both are cited textually in the same manner: by using xref elements.
+    If you use the PI option, xml2rfc will, by default, try to find included files in the same
+    directory as the including file. You can also define the XML_LIBRARY environment variable
+    with a value containing a set of directories to search.  These can be either in the local
+    filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Normative References">
+      <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+      &RFC2119; </references>
+
+    <references title="Informative References">
+      <!-- Here we use entities that we defined at the beginning. --> &RFC3552; &RFC5226;
+      <!-- A reference written by by an organization not a person. -->
+
+      <reference anchor="CCNx" target="http://www.ccnx.org">
+        <front>
+          <title>CCNx Open Source</title>
+
+          <author>
+            <organization>PARC, Inc.</organization>
+          </author>
+
+          <date year="2007"/>
+        </front>
+      </reference>
+    </references>
+
+  </back>
+</rfc>

@@ -1,0 +1,728 @@
+
+
+
+Internet Engineering Task Force                            M. Mosko, Ed.
+Internet-Draft                                                      PARC
+Intended status: Experimental                         September 22, 2014
+Expires: March 26, 2015
+
+
+                     CCNx Selector Based Discovery
+                        ccnx-mosko-selectors-00
+
+Abstract
+
+   CCNx selector based discovery uses exclusions and interest name
+   suffix matching to discover content in the network.  Participating
+   nodes may respond with matching Content Objects from cache using an
+   encapsulation protocol.  This document specifies the available
+   selectors, their encoding in a name path segment, and the
+   encapsulation protocol.
+
+   Copyright (C) 2013-2014, Palo Alto Research Center
+
+Status of this Memo
+
+   This document is an Internet-Draft and is NOT offered in accordance
+   with Section 10 of RFC 2026, and the author does not provide the IETF
+   with any rights other than to publish as an Internet-Draft.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on March 26, 2015.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires March 26, 2015                 [Page 1]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+Table of Contents
+
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     1.1.  Requirements Language  . . . . . . . . . . . . . . . . . .  3
+   2.  Protocol Description . . . . . . . . . . . . . . . . . . . . .  4
+   3.  Name Labels and TLV types  . . . . . . . . . . . . . . . . . .  6
+     3.1.  Child Selector . . . . . . . . . . . . . . . . . . . . . .  6
+     3.2.  Interest Min(Max)SuffixComponents  . . . . . . . . . . . .  7
+     3.3.  Interest Excludes  . . . . . . . . . . . . . . . . . . . .  7
+       3.3.1.  Exclude Singleton  . . . . . . . . . . . . . . . . . .  8
+       3.3.2.  Exclude Range  . . . . . . . . . . . . . . . . . . . .  8
+   4.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . .  9
+   5.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 10
+   6.  Security Considerations  . . . . . . . . . . . . . . . . . . . 11
+   7.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+     7.1.  Normative References . . . . . . . . . . . . . . . . . . . 12
+     7.2.  Informative References . . . . . . . . . . . . . . . . . . 12
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 13
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires March 26, 2015                 [Page 2]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+1.  Introduction
+
+   Content Discovery is an important feature of CCNx.  This document
+   specifies a discovery mechanism that uses a name path segment to
+   encode a discovery query in an Interest.  Participating nodes may
+   reply with a Content Object from cache if it matches the encoded
+   query.  The query uses exclusions to work around incorrect responses.
+
+   This document specifies a new name label for selector query.  It also
+   specifies a new type of Content Object that encapsulates another
+   Content Object.  The Encapsulation Object is used to return a Content
+   Object with a longer name than in an interest.  It is a standard
+   Content Object, but its signature will not verify.  The encapsulated
+   object's signature should verify.
+
+   Note that Selector discovery is not needed when asking for a Content
+   Object by its ContentObjectHash, as there should only ever be one
+   match for that.
+
+   Packets are represented as 32-bit wide words using ASCII art.
+   Because of the TLV encoding and optional fields or sizes, there is no
+   concise way to represent all possibilities.  We use the convention
+   that ASCII art fields enclosed by vertical bars "|" represent exact
+   bit widths.  Fields with a forward slash "/" are variable bitwidths,
+   which we typically pad out to word alignment for picture readability.
+
+1.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires March 26, 2015                 [Page 3]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+2.  Protocol Description
+
+   Selector based discovery uses four query variables to discover
+   content.  These selectors are encoded as a single name path segment
+   affixed to an Interest name.  The selectors operate on the prefix up
+   to, but not including the selector name path segment.
+
+   The selectors are:
+
+   o  MinSuffixComponents: the minimum number of additional name path
+      segments a matching Content Object must have in its name, with the
+      Content Object Hash appended as the terminal path segment.  The
+      default value is 0.
+
+   o  MaxSuffixComponents: The maximum number of additional name path
+      segments a matching Content Object may have in its name, with the
+      Content Object hash appended as the terminal path segment.  The
+      default value is unlimited.
+
+   o  ChildSelector: Answer with the left-most or right-most child.
+
+   o  Exclusions: A set of range and singleton exclusions to eliminate
+      Content Objects.  The exclusions match against the name path
+      segment that would immediately follow the Interest prefix prior to
+      the Selector path segment.  They are matched against a Content
+      Object name with the Content Object Hash appended as terminal path
+      segment.
+
+   A node using Selector discovery appends a Selector name path segment
+   to the end of the Interest name.  Even if no selectors are used, the
+   Selector path segment is added to the end, which indicates to a
+   participating node that it should apply Selector based matching to
+   the Interest.
+
+   A node receiving a Selector Interest should match against the Content
+   Store using the selector rules.  Based on the sort order, it should
+   pick the appropriate Content Object, if any, and return it in an
+   Encapsulation Object.  If no Content Objects match, the Interest
+   should be forwarded as normal.
+
+   An Encapsulation Object is a Content Object that matches the Selector
+   Interest and whose payload is the ``discovered'' Content Object.  The
+   ContentType of an Encapsulation Object is "ENCAP".  The discovered
+   content object's name should be a suffix of the Interest name (prior
+   to the selector name path segment).  The KeyId of the Encapsulation
+   Object should be set the same as the discovered object.  The
+   Signature of the Encapsulation Object should be set to zeros.  The
+   Crypto Suite of the Encapsulation Object should be set to the same as
+
+
+
+Mosko                    Expires March 26, 2015                 [Page 4]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+   the discovered object.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires March 26, 2015                 [Page 5]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+3.  Name Labels and TLV types
+
+   +-------------+-----------------------------------------------------+
+   |     Type    |                         Name                        |
+   +-------------+-----------------------------------------------------+
+   | 'Selectors' |  The value is a binary field of the TLV encoding of |
+   |             |                    the selectors.                   |
+   +-------------+-----------------------------------------------------+
+
+                       Table 1: Selector Name Label
+
+   +--------+-------------+------------+-------------------------------+
+   |  Type  |    Symbol   |    Name    | Description                   |
+   +--------+-------------+------------+-------------------------------+
+   | %x0001 | T_MINSUFFIX | Selectors: | Minimum number of additional  |
+   |        |             | Min Suffix | name components after given   |
+   |        |             | Components | name to match (0 default if   |
+   |        |             |            | missing).                     |
+   |        |             |            |                               |
+   | %x0002 | T_MAXSUFFIX | Selectors: | Maximum number of additional  |
+   |        |             | Max Suffix | name components after given   |
+   |        |             | Components | name to match (unlimited      |
+   |        |             |            | default is missing).          |
+   |        |             |            |                               |
+   | %x0003 |   T_CHILD   | Selectors: | 0 = left, 1 = right (default) |
+   |        |             |    Child   |                               |
+   |        |             |  Selector  |                               |
+   |        |             |            |                               |
+   |  %0004 |  T_EXCLUDES |  Excludes  | Encloses ExcludeComponents    |
+   |        |             |            |                               |
+   | %x0005 | T_EX_SINGLE |   Exclude  | Exclude a single name path    |
+   |        |             |  Singleton | segment.                      |
+   |        |             |            |                               |
+   | %x0006 |  T_EX_RANGE |   Exclude  | Exclude an inclusive range,   |
+   |        |             |    Range   | beginning at this value and   |
+   |        |             |            | continuing through the next   |
+   |        |             |            | Singleton, or to infinity if  |
+   |        |             |            | omitted on the last entry.    |
+   +--------+-------------+------------+-------------------------------+
+
+                         Table 2: CCNx Name Types
+
+3.1.  Child Selector
+
+   If there are multiple choices to answer an Interest, the Child
+   Selector specifies the desired ordering of responses. %x00 =
+   leftmost, %x01 = rightmost.
+
+
+
+
+Mosko                    Expires March 26, 2015                 [Page 6]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+
+   |    T_CHILD    |     length    |   selector    |
+   +---------------+---------------+---------------+
+
+3.2.  Interest Min(Max)SuffixComponents
+
+   The Min and Max suffix components are encoded as a minimum-length
+   unsigned integer in network byte order number inside the value.  A
+   "0" is represented as a single byte %0x00.  A length 0 value is
+   interpreted the same as the type not being present.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |     type      |     length    |                               /
+   +---------------+---------------+                               /
+   /                      Min(Max)SuffixComponents                /
+   /                                                               /
+   +---------------+---------------+---------------+---------------+
+   type = T_MINSUFFIX or T_MAXSUFFIX
+
+3.3.  Interest Excludes
+
+   Interest Excludes specify a set of singletons and ranges to exclude
+   when matching Content Object names to an Interest.  They match the
+   name component immediately following the last component of the
+   Interest name.  The excludes must be sorted in ascending order, using
+   the normal Name sorting rules.
+
+   The normal name sorting rules use a shortlex algorithm.  A name
+   component A is less than a name component B iff A is fewer bytes, or
+   the byte size being equal, A is lexicographically sorted before B,
+   where the most significant byte is first.
+
+   The zero-length name component is the minimum name component.  If
+   present, it must be the first Exclude component.
+
+   An exclude may contain either an Exclude Range type or an Exclude
+   Singleton type.  An Exclude Range type means the given value starts
+   an inclusive exclusion range that ends at the next Singleton or at
+   infinity if it is the last exclude component.  An Exclude Singleton
+   means to exclude the exact value given.
+
+
+
+
+
+
+
+Mosko                    Expires March 26, 2015                 [Page 7]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+                         1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |          T_EXCLUDES           |            length             |
+   +---------------+---------------+---------------+---------------+
+   / Zero or more exclude-components                               /
+   +---------------------------------------------------------------+
+
+   exclude-components = *component [start-range-tlv]
+   component = (start-range-tlv singleton-tlv) / singleton-tlv
+
+   EXAMPLES
+
+3.3.1.  Exclude Singleton
+
+   A singleton exclude component means to exclude a name path segment
+   exactly matching the given value.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |          T_EX_SINGLE          |            length             |
+   +---------------+---------------+---------------+---------------+
+   /                        TLV name segment                       /
+   +---------------+---------------+---------------+---------------+
+
+3.3.2.  Exclude Range
+
+   A Range exclude means to exclude the from the given value up to an
+   including the next Singleton.  If the Range is the last component in
+   the Exclude, it means to exclude to infinity.
+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
+   |          T_EX_RANGE           |            length             |
+   +---------------+---------------+---------------+---------------+
+   /                        TLV name segment                       /
+   +---------------+---------------+---------------+---------------+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires March 26, 2015                 [Page 8]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+4.  Acknowledgements
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires March 26, 2015                 [Page 9]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+5.  IANA Considerations
+
+   This memo includes no request to IANA.
+
+   All drafts are required to have an IANA considerations section (see
+   Guidelines for Writing an IANA Considerations Section in RFCs
+   [RFC5226] for a guide).  If the draft does not require IANA to do
+   anything, the section contains an explicit statement that this is the
+   case (as above).  If there are no requirements for IANA, the section
+   will be removed during conversion into an RFC by the RFC Editor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires March 26, 2015                [Page 10]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+6.  Security Considerations
+
+   All drafts are required to have a security considerations section.
+   See RFC 3552 [RFC3552] for a guide.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires March 26, 2015                [Page 11]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+7.  References
+
+7.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+7.2.  Informative References
+
+   [CCNx]     PARC, Inc., "CCNx Open Source", 2007,
+              <http://www.ccnx.org>.
+
+   [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
+              Text on Security Considerations", BCP 72, RFC 3552,
+              July 2003.
+
+   [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
+              IANA Considerations Section in RFCs", BCP 26, RFC 5226,
+              May 2008.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires March 26, 2015                [Page 12]
+
+Internet-Draft               CCNx Selectors               September 2014
+
+
+Author's Address
+
+   Marc Mosko (editor)
+   PARC
+   Palo Alto, California  94304
+   USA
+
+   Phone: +01 650-812-4405
+   Email: marc.mosko@parc.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                    Expires March 26, 2015                [Page 13]
+
