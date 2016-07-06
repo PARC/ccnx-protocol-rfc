@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>CCNx Protocol</title>
+    <meta name="description" content="CCNx Protocol Specifications">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="/ccnx-spec//css/main.css">
+    <link rel="canonical" href="ccnx.org/ccnx-spec//">
+
+    <style>
+            td.RFCbug {
+                    font-size: x-small; text-decoration: none;
+                    width: 30px; height: 30px; padding-top: 2px;
+                    text-align: justify; vertical-align: middle;
+                    background-color: #000;
+            }
+            td.RFCbug span.RFC {
+                    font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                    font-weight: bold; color: #666;
+            }
+            td.RFCbug span.hotText {
+                    font-family: charcoal, monaco, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                    font-weight: normal; text-align: center; color: #FFF;
+            }
+
+            table.TOCbug { width: 30px; height: 15px; }
+            td.TOCbug {
+                    text-align: center; width: 30px; height: 15px;
+                    color: #FFF; background-color: #900;
+            }
+            td.TOCbug a {
+                    font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, sans-serif;
+                    font-weight: bold; font-size: x-small; text-decoration: none;
+                    color: #FFF; background-color: transparent;
+            }
+
+            td.header {
+                    font-family: arial, helvetica, sans-serif; font-size: x-small;
+                    vertical-align: top; width: 33%;
+                    color: #FFF; background-color: #666;
+            }
+            td.author { font-weight: bold; font-size: x-small; margin-left: 4em; }
+            td.author-text { font-size: x-small; }
+
+            /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+            a.info {
+                    /* This is the key. */
+                    position: relative;
+                    z-index: 24;
+                    text-decoration: none;
+            }
+            a.info:hover {
+                    z-index: 25;
+                    color: #FFF; background-color: #900;
+            }
+            a.info span { display: none; }
+            a.info:hover span.info {
+                    /* The span will display just on :hover state. */
+                    display: block;
+                    position: absolute;
+                    font-size: smaller;
+                    top: 2em; left: -5em; width: 15em;
+                    padding: 2px; border: 1px solid #333;
+                    color: #900; background-color: #EEE;
+                    text-align: left;
+            }
+
+            a { font-weight: bold; }
+            a.info:link    { color: #900; background-color: transparent; }
+            a.info:visited { color: #633; background-color: transparent; }
+            a.info:active  { color: #633; background-color: transparent; }
+
+            p { margin-left: 2em; margin-right: 2em; }
+            p.copyright { font-size: x-small; }
+            p.toc { font-size: small; font-weight: bold; margin-left: 3em; }
+            table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
+            td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
+
+            ol.text { margin-left: 2em; margin-right: 2em; }
+            ul.text { margin-left: 2em; margin-right: 2em; }
+            .rfc-text li      { margin-left: 3em; }
+
+            /* RFC-2629 <spanx>s and <artwork>s. */
+            em     { font-style: italic; }
+            strong { font-weight: bold; }
+            dfn    { font-weight: bold; font-style: normal; }
+            cite   { font-weight: normal; font-style: normal; }
+            tt     { color: #036; }
+            tt, pre, pre dfn, pre em, pre cite, pre span {
+                    font-family: "Courier New", Courier, monospace; font-size: small;
+            }
+            pre {
+                    text-align: left; padding: 4px;
+                    color: #000; background-color: #CCC;
+            }
+            pre dfn  { color: #900; }
+            pre em   { color: #66F; background-color: #FFC; font-weight: normal; }
+            pre .key { color: #33C; font-weight: bold; }
+            pre .id  { color: #900; }
+            pre .str { color: #000; background-color: #CFF; }
+            pre .val { color: #066; }
+            pre .rep { color: #909; }
+            pre .oth { color: #000; background-color: #FCF; }
+            pre .err { background-color: #FCC; }
+
+            /* RFC-2629 <texttable>s. */
+            table.all, table.full, table.headers, table.none {
+                    font-size: small; text-align: center; border-width: 2px;
+                    vertical-align: top; border-collapse: collapse;
+            }
+            table.all, table.full { border-style: solid; border-color: black; }
+            table.headers, table.none { border-style: none; }
+            th {
+                    font-weight: bold; border-color: black;
+                    border-width: 2px 2px 3px 2px;
+            }
+            table.all th, table.full th { border-style: solid; }
+            table.headers th { border-style: none none solid none; }
+            table.none th { border-style: none; }
+            table.all td {
+                    border-style: solid; border-color: #333;
+                    border-width: 1px 2px;
+            }
+            table.full td, table.headers td, table.none td { border-style: none; }
+
+            hr { height: 1px; }
+            hr.insert {
+                    width: 80%; border-style: none; border-width: 0;
+                    color: #CCC; background-color: #CCC;
+            }
+    </style>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <!-- <div class="wrapper"> -->
+
+    <!-- <a class="site-title" href="/ccnx-spec//">CCNx Protocol</a> -->
+
+    <!-- <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a> -->
+
+      <!-- <div class="trigger">
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/">Community</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//implementations.html">CCNx Protocol Implementations</a>
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_01062016.html">January 6, 2016</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_01202016.html">January 20, 2016</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_02032016.html">February 3, 2016</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_03022016.html">March 2nd, 2016</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_03162016.html">March 16, 2016</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_03302016.html">March 30, 2016</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_04162016.html">April 16, 2016</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_10212015.html">October 21, 2015</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_10282015.html">October 28, 2015</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_11112015.html">November 11, 2015</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_11252015.html">November 25, 2015</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_12092015.html">December 9, 2015</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/meetings/meeting_12232015.html">December 23, 2015</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//documents/messages.html">CCNx Messages in TLV Format</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//documents/names.html">CCNx URI Scheme</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//publications.html">Related CCNx Papers and Technical Reports</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//documents/semantics.html">CCNx Semantics</a>
+          
+        
+          
+          <a class="page-link" href="/ccnx-spec//community/twg.html">CCNx Technical Working Group</a>
+          
+        
+      </div> -->
+
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/ccnx-spec">CCNx</a>
+          </div>
+
+      <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+              <!-- <ul class="nav nav-pills nav-stacked"> -->
+              <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Documents <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                      <li style="margin: 10px;"><em>Core Protocol</em></li>
+                      <li style="margin: 10px;"><a href="/ccnx-spec/documents/messages.html">CCNx Messages in TLV Format</a></li>
+                      <li style="margin: 10px;"><a href="/ccnx-spec/documents/semantics.html">CCNx Semantics</a></li>
+                      <li style="margin: 10px;"><a href="/ccnx-spec/documents/names.html">CCNx URI Scheme</a></li>
+
+                      <!-- <li role="separator" class="divider"></li> -->
+                      <!-- <li style="margin: 10px;"><em>Others</em></li> -->
+                      <!-- <li style="margin: 10px;"><a href="#" data-toggle="tab" data-target="#">Others</a></li> -->
+                  </ul>
+              </li>
+
+              <li><a href="/ccnx-spec/implementations.html">Implementations</a></li>
+              <li><a href="/ccnx-spec/publications.html">Publications</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Participate <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li style="margin: 10px;"><a href="http://trac.tools.ietf.org/group/irtf/trac/wiki/icnrg">ICNRG IRTF Working Group</a></li>
+                  <li style="margin: 10px;"><a href="/ccnx-spec/community/twg.html">CCNx Technical Working Group</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li style="margin: 10px;"><a href="https://www.ccnx.org/mailman/listinfo/ccnx/">CCNx Mailing list</a></li>
+                  <li style="margin: 10px;"><a href="https://www.ccnx.org/mailman/listinfo/ccnx-announce/">CCNx Announcement Mailing list</a></li>
+                </ul>
+              </li>
+            </ul>
+            <!-- <form class="navbar-form navbar-left" role="search">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search the document...">
+              </div>
+            </form> -->
+        </div><!-- /.navbar-collapse -->
+    </div>
+    </nav>
+
+  <!-- </div> -->
+
+</header>
+
+
+    <div style="margin-top:50px">
+        <div class="document">
+  <div class="container">
+      <!-- <header class="document-header">
+        <h1 class="document-title"></h1>
+      </header> -->
+
+      <div class="col-md-8">
+    <div class="jumbotron">
+        <h1><b>CCNx</b></h1>
+        <p>This is the home page for CCNx, an Information Centric Networking (ICN) protocol
+            driven by PARC and advanced by the IRTF ICN Research Group and other institutions
+            at large.</p>
+    </div>
+</div>
+<div class="col-md-4">
+    <p>
+        <a class="twitter-timeline" href="https://twitter.com/projectccnx" data-widget-id="717193440648372224">Tweets by @projectccnx</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    </p>
+</div>
+
+<div class="col-md-offset-1 col-md-9">
+
+    <div class="alert alert-info" role="alert">
+        <p> <b>4/4/16</b>: The latest version of the CCNx Semantics and CCNx Messages in TLV Format documents
+        have been uploaded to the tracker.</p>
+    </div>
+
+    <h1>What is CCNx?</h1>
+    <p>
+        The vision of CCNx is to develop, promote, and evaluate a new approach to a communication
+        architecture called content-centric networking. We seek to carry out this mission by creating
+        and publishing open protocol specifications and a software reference implementation of those
+        protocols. We provide support for a community of people interested in experimentation, research,
+        and commercialization of this technology.
+    </p>
+
+    <p>
+        See the ICNRG IRTF group for more information about this field as a whole.
+    </p>
+
+    <h1>Specifications</h1>
+    <p>
+        The CCNx protocol is detailed in the following specification documents:
+        <ul>
+            <li><a href="/ccnx-spec/documents/messages.html">CCNx Messages in TLV Format</a></li>
+            <li><a href="/ccnx-spec/documents/semantics.html">CCNx Semantics</a></li>
+            <li><a href="/ccnx-spec/documents/names.html">CCNx URI Scheme</a></li>
+        </ul>
+    </p>
+
+    <h1>Participation</h1>
+    <p>
+        You can participate by joining the ICNRG and CCNx mailing lists
+        and attending any of the meetings.
+
+        The CCNx protocol is driven by the Palo Alto Research Center (PARC) and is
+        based upon the PARC Content-Centric Networking (CCN) architecture, which is the
+        focus of a major, long-term research and development program. There are
+        interesting problems in many areas still to be solved to fully realize and apply
+        the vision, but we believe that enough of an architectural foundation is in
+        place to enable significant experiments to begin. Since this new approach to
+        networking can be deployed through middleware software communicating in an
+        overlay on existing networks, it is possible to start applying it now to solve
+        communication problems in new ways. CCNx is an invitation to join us and participate
+        in this exploration of the frontier of content networking.
+    </p>
+
+    <h1>Implementations</h1>
+    <p>
+        Details about implementations of the CCNx protocol are available <a href="/implementations.html">here</a>.
+    </p>
+</div>
+
+  </div>
+</div>
+
+    </div>
+
+    <div class="container">
+    <footer class="site-footer">
+
+        <div class="wrapper">
+
+        <!-- <h2 class="footer-heading">CCNx Protocol</h2> -->
+        <p>All content copyright © 2016. All rights reserved.</p>
+
+      </div>
+
+  </footer>
+</div>
+
+
+  </body>
+
+</html>

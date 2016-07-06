@@ -1,0 +1,33 @@
+---
+layout: page
+title: CCNx Technical Working Group
+---
+
+<p>
+    The CCNx Technical Working Group (TWG) is a biweekly teleconference where we
+    discuss people, places, and things! It is open to the public. To attend, please
+    use the dial-in information below.
+</p>
+
+<p>
+    <b>Dial-in number</b>: 1-800-268-4017 </br>
+    <b>Participant code</b>: 3768636189
+</p>
+
+<p>
+    Notes from each meeting are recorded and published below for posterity.
+    They are also broadcast to the CCNx and ICNRG mailing lists for visibility.
+</p>
+
+<div row="col-md-4 col-sm-4 col-md-offset-4">
+    <ul class="list-group">
+    {% for page in site.pages %}
+       {% if page.page-category == "TWG" %}
+            <li class="list-group-item">
+                <span class="badge"><a href="{{ page.notes-url }}" style="none;">Notes</a></span>
+                <a href="{{ page.link }}">{{page.title}}</a>
+            </li>
+       {% endif %}
+    {% endfor %}
+    </ul>
+</div>

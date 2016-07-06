@@ -1,0 +1,2565 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>CCNx Specification</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery.min.js"><\/script>')</script>
+
+    <script src="js/bootstrap.min.js"></script>
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+      <nav class="navbar navbar-default navbar-fixed-top">
+          <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">CCNx</a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <!-- <ul class="nav nav-pills nav-stacked"> -->
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Documents <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                      <li style="margin: 10px;"><em>Core Protocol</em></li>
+                      <li style="margin: 10px;"><a href="#messages" data-toggle="tab" data-target="#messages, #messages_content">CCNx Messages in TLV Format</a></li> <!-- class="active" -->
+                      <li style="margin: 10px;"><a href="#semantics" data-toggle="tab" data-target="#semantics, #semantics_content">CCNx Semantics</a></li>
+
+                      <li role="separator" class="divider"></li>
+                      <li style="margin: 10px;"><em>Others</em></li>
+                      <li style="margin: 10px;"><a href="#" data-toggle="tab" data-target="#">Others</a></li>
+                  </ul>
+              </li>
+
+              <!-- </ul> -->
+              <li><a href="#">Implementations</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Participate <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li style="margin: 10px;"><a href="#">ICNRG IRTF Working Group</a></li>
+                  <li style="margin: 10px;"><a href="#">CCNx Technical Working Group</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li style="margin: 10px;"><a href="#">CCNx Mailing list</a></li>
+                </ul>
+              </li>
+            </ul>
+            <!-- <form class="navbar-form navbar-left" role="search">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search the document...">
+              </div>
+            </form> -->
+          </div><!-- /.navbar-collapse -->
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top:60px;">
+
+      <div class="row">
+
+          <div class="col-md-3">
+
+                <div class="tab-content">
+                    <h2>Downloads</h2>
+                    <div class="tab-pane" id="semantics">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li role="presentation"><a class="btn btn-danger" href="https://github.com/PARC/ccnx-semantics/blob/master/draft-irtf-icnrg-ccnxsemantics-01.pdf" role="button">Download PDF</a></li> <!-- class="active" -->
+                            <li role="presentation"><a class="btn btn-danger" href="https://github.com/PARC/ccnx-semantics/blob/master/draft-irtf-icnrg-ccnxsemantics-01.txt" role="button">Download TXT</a></li>
+                            <li role="presentation"><a class="btn btn-danger" href="https://github.com/parc/ccnx-semantics" role="button">View on GitHub</a></li>
+                        </ul>
+                        <hr/>
+                        <h2 id="#toc">Table of Contents</h2>
+                        <p class="toc">
+<a href="#anchor1">1.</a> 
+Introduction<br/>
+    <a href="#anchor2">1.1.</a> 
+Requirements Language<br/>
+<a href="#named_payload">2.</a> 
+Named Payload<br/>
+<a href="#names">3.</a> 
+Names<br/>
+    <a href="#NameExamples">3.1.</a> 
+Name Examples<br/>
+<a href="#Interest">4.</a> 
+Interests<br/>
+<a href="#object">5.</a> 
+Content Objects<br/>
+<a href="#link">6.</a> 
+Link<br/>
+<a href="#hashes">7.</a> 
+Hashes<br/>
+<a href="#signature">8.</a> 
+Validation<br/>
+    <a href="#valalg">8.1.</a> 
+Validation Algorithm<br/>
+<a href="#matching">9.</a> 
+Interest to Content Object matching<br/>
+<a href="#behavior">10.</a> 
+Request/Response Protocol<br/>
+<a href="#anchor3">11.</a> 
+Interest Return<br/>
+    <a href="#MessageFormat">11.1.</a> 
+Message Format<br/>
+    <a href="#TypeDefinitions">11.2.</a> 
+ReturnCode Types<br/>
+    <a href="#Protocol">11.3.</a> 
+Interest Return Protocol<br/>
+        <a href="#NoRoute">11.3.1.</a> 
+No Route<br/>
+        <a href="#HopLimit">11.3.2.</a> 
+HopLimit Exceeded<br/>
+        <a href="#MTU">11.3.3.</a> 
+Interest MTU Too Large<br/>
+        <a href="#NoResources">11.3.4.</a> 
+No Resources<br/>
+        <a href="#PathError">11.3.5.</a> 
+Path Error<br/>
+        <a href="#Prohibited">11.3.6.</a> 
+Prohibited<br/>
+        <a href="#Congestion">11.3.7.</a> 
+Congestion<br/>
+        <a href="#UnsupportedHashAlgorithm">11.3.8.</a> 
+Unsupported Content Object Hash Algorithm<br/>
+        <a href="#MalformedInterest">11.3.9.</a> 
+Malformed Interest<br/>
+<a href="#Acknowledgements">12.</a> 
+Acknowledgements<br/>
+<a href="#IANA">13.</a> 
+IANA Considerations<br/>
+<a href="#Security">14.</a> 
+Security Considerations<br/>
+<a href="#rfc.references1">15.</a> 
+References<br/>
+    <a href="#rfc.references1">15.1.</a> 
+Normative References<br/>
+    <a href="#rfc.references2">15.2.</a> 
+Informative References<br/>
+<a href="#rfc.authors">§</a> 
+Authors' Addresses<br/>
+</p>
+                        <br clear="all" />
+                    </div>
+
+                    <div class="tab-pane active" id="messages">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li role="presentation"><a class="btn btn-danger" href="https://github.com/PARC/ccnx-messages/blob/master/draft-irtf-icnrg-ccnxmessages-01.pdf" role="button">Download PDF</a></li> <!-- class="active" -->
+                            <li role="presentation"><a class="btn btn-danger" href="https://github.com/PARC/ccnx-messages/blob/master/draft-irtf-icnrg-ccnxmessages-01.txt" role="button">Download TXT</a></li>
+                            <li role="presentation"><a class="btn btn-danger" href="https://github.com/parc/ccnx-messages" role="button">View on GitHub</a></li>
+                        </ul>
+                        <hr/>
+                        <h2 id="#toc">Table of Contents</h2>
+                            <p class="toc">
+<a href="#anchor1">1.</a> 
+Introduction<br/>
+    <a href="#anchor2">1.1.</a> 
+Requirements Language<br/>
+<a href="#definitions">2.</a> 
+Definitions<br/>
+<a href="#TLV">3.</a> 
+Type-Length-Value (TLV) Packets<br/>
+    <a href="#packet_format">3.1.</a> 
+Overall packet format<br/>
+    <a href="#header">3.2.</a> 
+Fixed Headers<br/>
+        <a href="#anchor3">3.2.1.</a> 
+Interest Fixed Header<br/>
+            <a href="#hoplimit">3.2.1.1.</a> 
+Interest HopLimit<br/>
+        <a href="#anchor4">3.2.2.</a> 
+Content Object Fixed Header<br/>
+        <a href="#anchor5">3.2.3.</a> 
+InterestReturn Fixed Header<br/>
+            <a href="#InterestReturnHopLimit">3.2.3.1.</a> 
+InterestReturn HopLimit<br/>
+            <a href="#InterestReturnFlags">3.2.3.2.</a> 
+InterestReturn Flags<br/>
+            <a href="#ReturnCode">3.2.3.3.</a> 
+Return Code<br/>
+    <a href="#formats">3.3.</a> 
+Global Formats<br/>
+        <a href="#pad">3.3.1.</a> 
+Pad<br/>
+        <a href="#vendor">3.3.2.</a> 
+Organization Specific TLVs<br/>
+        <a href="#hash_format">3.3.3.</a> 
+Hash Format<br/>
+        <a href="#Link">3.3.4.</a> 
+Link<br/>
+    <a href="#per-hop">3.4.</a> 
+Hop-by-hop TLV headers<br/>
+        <a href="#Lifetime">3.4.1.</a> 
+Interest Lifetime<br/>
+        <a href="#RCT">3.4.2.</a> 
+Recommended Cache Time<br/>
+        <a href="#MH">3.4.3.</a> 
+Message Hash<br/>
+    <a href="#top_level">3.5.</a> 
+Top-Level Types<br/>
+    <a href="#CCNMessage">3.6.</a> 
+CCNx Message<br/>
+        <a href="#names">3.6.1.</a> 
+Name<br/>
+            <a href="#name_segment">3.6.1.1.</a> 
+Name Segments<br/>
+            <a href="#name_ipid">3.6.1.2.</a> 
+Interest Payload ID<br/>
+        <a href="#metadata">3.6.2.</a> 
+Message TLVs<br/>
+            <a href="#IntMeta">3.6.2.1.</a> 
+Interest Message TLVs<br/>
+            <a href="#COmetadata">3.6.2.2.</a> 
+Content Object Message TLVs<br/>
+        <a href="#content">3.6.3.</a> 
+Payload<br/>
+        <a href="#Validation">3.6.4.</a> 
+Validation<br/>
+            <a href="#ValAlg">3.6.4.1.</a> 
+Validation Algorithm<br/>
+            <a href="#ValPayload">3.6.4.2.</a> 
+Validation Payload<br/>
+<a href="#Acknowledgements">4.</a> 
+Acknowledgements<br/>
+<a href="#IANA">5.</a> 
+IANA Considerations<br/>
+<a href="#Security">6.</a> 
+Security Considerations<br/>
+<a href="#rfc.references1">7.</a> 
+References<br/>
+    <a href="#rfc.references1">7.1.</a> 
+Normative References<br/>
+    <a href="#rfc.references2">7.2.</a> 
+Informative References<br/>
+<a href="#rfc.authors">§</a> 
+Authors' Addresses<br/>
+</p>
+                        <br clear="all" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+
+                <div class="tab-content">
+
+                <div class="tab-pane" id="semantics_content">
+                    <ol class="breadcrumb">
+                        <li>Documents</li>
+                        <li>Core Protocol</li>
+                        <li>CCNx Semantics</li>
+                    </ol>
+                    <body>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<table border="0" cellpadding="0" cellspacing="0" summary="layout" width="66%"><tr><td><table border="0" cellpadding="2" cellspacing="1" summary="layout" width="100%">
+<tr><td class="header">ICNRG</td><td class="header">M. Mosko</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">I. Solis</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">C. Wood</td></tr>
+<tr><td class="header">Expires: July 14, 2016</td><td class="header">PARC, Inc.</td></tr>
+<tr><td class="header"> </td><td class="header">January 11, 2016</td></tr>
+</table></td></tr></table>
+<h1><br/>CCNx Semantics<br/>draft-irtf-icnrg-ccnxsemantics-01</h1>
+<h3>Abstract</h3>
+<p>This document describes the core concepts of the CCNx architecture and presents
+        a minimum network protocol based on two messages: Interest and Content Object.
+      It specifies the set of mandatory and optional fields within those messages
+      and describes their behavior and interpretation. This architecture and protocol
+      specification is independent of a specific wire encoding.
+</p>
+<p>The protocol also uses a Control message called an InterestReturn, whereby
+      one system can return an Interest message to the previous hop due to an
+      error condition.  It indicates to the previous hop that the current system will
+      not respond to the Interest.
+</p>
+<h3>Status of this Memo</h3>
+<p>
+This Internet-Draft is submitted  in full
+conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>
+Internet-Drafts are working documents of the Internet Engineering
+Task Force (IETF).  Note that other groups may also distribute
+working documents as Internet-Drafts.  The list of current
+Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>
+Internet-Drafts are draft documents valid for a maximum of six months
+and may be updated, replaced, or obsoleted by other documents at any time.
+It is inappropriate to use Internet-Drafts as reference material or to cite
+them other than as “work in progress.”</p>
+<p>
+This Internet-Draft will expire on July 14, 2016.</p>
+<h3>Copyright Notice</h3>
+<p>
+Copyright (c) 2016 IETF Trust and the persons identified as the
+document authors.  All rights reserved.</p>
+<p>
+This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents
+(http://trustee.ietf.org/license-info) in effect on the date of
+publication of this document.  Please review these documents
+carefully, as they describe your rights and restrictions with respect
+to this document. Code Components extracted from this document must
+include Simplified BSD License text as described in Section 4.e of
+the Trust Legal Provisions and are provided without warranty as
+described in the Simplified BSD License.</p>
+<a name="toc"></a><br/><hr/>
+<br clear="all"/>
+<a name="anchor1"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.1"></a><h3>1. 
+Introduction</h3>
+<p>This document describes the principles of the CCNx architecture. It describes the network protocol
+         based on two message types: Interests and Content Objects.  The description is not
+       dependent on a specific wire format or particular encodings.
+</p>
+<p>CCNx uses subjective names to identify bytes of payload.
+          The Name combines a routable prefix with an arbitrary suffix assigned by the publisher to a piece of content.
+          The result is a "named payload".
+          This is different from other systems that use only self-certifying names, where the payload name is intrinsically
+         derivable from the payload or its realization in a network object
+         (e.g. a SHA-256 hash of the payload or
+         network object).  
+</p>
+<p>The key concept of CCNx is that a subjective name is bound to a fixed payload via
+         cryptographic operations. This implies that the fact that a given publisher bound a certain subjective name to a certain
+         payload can be verified via cryptographic means. For example, a publisher could
+         use a cryptographic hash over the name and
+       payload, sign the hash, and deliver the tuple {Name, Payload, Validation}.
+       Additional information would be included as needed by different
+       validation mechanisms are used.  A typical named payload is thus {Name, Payload, ValidationAlgorithm}.
+       
+</p>
+<p>CCNx specifies a network protocol around Interests (request messages) and Content Objects
+       (response messages) to move named payloads.  An Interest
+       includes the Name, the desired payload, and two optional restrictions to limit responses
+       to a specific publisher or a specific Content Object. The Content Object response carries
+       a matching Name and the specified payload.
+       Matching a Content Object to an Interest is an exact match on the Name.
+       The CCNx network protocol of Interests and
+       Content Objects imposes a restriction on Names: each Name should be hierarchical
+       and is used to route towards an authoritative source.
+       The CCNx Name looks like a URI absolute path and
+       we use URI terminology to describe CCN Names as made up of
+       name segments.  In practice it has a binary encoding, not a text string.
+</p>
+<p>The hierarchy of a CCNx Name is used for routing via the longest matching
+       prefix in a Forwarder.  The longest matching prefix is computed name segment by
+       name segment in the hierarchical path name, where each name segment must
+       be exactly equal to match.
+       There is no requirement that the prefix be globally routable.  Within
+       a deployment any local routing may be used, even one that only uses
+       a single flat (non-hierarchical) name segment.
+       Some Forwarders may use more advanced matching
+       rules that allow both longest matching prefix and shorter prefixes.
+       
+</p>
+<p>Another central concept of CCNx is that there should be flow balance
+          between Interest messages and Content Object messages.  At the network level,
+          an Interest traveling along a single path should elicit no more than one
+          Content Object response.  If some node sends the Interest along more than one
+          path, that node should consolidate the responses such that only one
+          Content Object flows upstream from it to the requester.
+</p>
+<p>There are additional optional attributes in an
+          Interest message that can be used to select between multiple Content Objects with
+          matching Names (it is possible that multiple publishers could
+          issue Content Objects with the same Name).
+          An Interest may carry an optional KeyIdRestriction and / or
+          an optional ContentObjectHashRestriction. If either or both of these are present, a Forwarder
+          must ensure that they exactly match the corresponding KeyId and computed ContentObjectHash in the Content Object.
+          
+</p>
+<p>As an Interest travels the forward path following the Forwarding Information
+       Base (FIB), it leaves behind state at each Forwarder.  This state
+       is stored in the Pending Interest Table (PIT), which tracks the ingress and egress
+       ports as well as
+       the Name, KeyIdRestriction (if one exists), and ContentObjectHashRestriction (if one exists) of each Interest.
+       When a Content Object
+       arrives at the node, it is exactly matched against that tuple to see if it satisfies any
+       Interests in the PIT.  If it does, it is returned along the matching Interest's reverse path.
+       If it does not, the Content Object is dropped.
+       
+</p>
+<p>If multiple Interests with the same tuple {Name, KeyIdRestriction, ContentObjectHashRestriction}
+        arrive at a node before a Content Object matching the first Interest comes back,
+        they are
+        grouped in the same PIT entry and their reverse paths aggregated.  Thus,
+        one Content Object might satisfy multiple pending Interests.
+</p>
+<p>In CCNx, higher-layer protocols often become so-called "name-based protocols" because
+       they operate on the CCNx Name.  For example, a versioning protocol might append additional
+       name segments to convey state about the version of payload.  A content discovery protocol
+       might append certain protocol-specific name segments to a prefix to discover content
+       under that prefix.  Many such protocols may exist and apply their own rules to
+       Names. They may be layered with each protocol encapsulating (to the left) a higher layer's Name prefix.
+</p>
+<p>This document also describes a control message called an InterestReturn.
+          A network element may return an Interest message
+          to a previous hop if there is an error processing the Interest. The returned Interest may be
+          further processed at the previous hop or returned towards the Interest origin.
+          When a node returns an Interest it indicates that the previous hop should not expect a response
+          from that node for the Interest -- i.e. there is no PIT entry left at the returning node for
+          a Content Object to follow.
+</p>
+<p>There are multiple ways to describe larger objects in CCNx.  Some options may use the namespace while
+          others may use a structure such as a Manifest.  This document does not address these options at this time.
+</p>
+<p>The remainder of this document describes a named payload, and the Interest/Content Object
+      network protocol behavior in detail. 
+</p>
+<p>TODO -- we have not adopted the Requirements Language yet.
+</p>
+<a name="anchor2"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.1.1"></a><h3>1.1. 
+Requirements Language</h3>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+          NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in <a class="info" href="#RFC2119">RFC 2119<span> (</span><span class="info">Bradner, S., “Key words for use in RFCs to Indicate Requirement Levels,” March 1997.</span><span>)</span></a> [RFC2119].
+</p>
+<a name="named_payload"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.2"></a><h3>2. 
+Named Payload</h3>
+<p>CCNx supports several cryptographic means to bind a Name to a payload.  Interest and Content Object messages
+        include a section called the ValidationAlgorithm, which specifies the algorithm
+        to use to verify the binding.  Several validation algorithms
+        are supported including specific Message Integrity Checks (MICs), Message Authentication
+        Codes (MACs), and Signature types. These are over specific wire format encodings.
+        Additional
+        schemes could be added in the future. Interest and Content Object messages also include a section called the ValidationPayload which
+        contains the validation output. 
+</p>
+<p>The KeyId is an optional field in the ValidationAlgorithm.  It is an octet string that identifies the key used to sign the
+        Content Object.  It uniquely identifies the publisher. It is similar to a Subject Key
+        Identifier from X509 [RFC 3280, Section 4.2.1.2].
+        It should be derived from the key used to sign, for example SHA-256 hash of the key.  It
+        applies to both public/private key systems and to symmetric key systems using HMAC.
+</p>
+<p>A PublicKeyLocator is an optional field in the ValidationAlgorithm.  It may be one of (a) the signer's public key, (b) the signer's certificate,
+        or (c) a KeyName that points to the location of the signer's key or certificate.
+</p>
+<p>A Key inside a PublicKeyLocator is a public key corresponding to the signer's private key.  Examples
+        would be PEM or DER encodings.  The exact encoding is up to the wire format.
+</p>
+<p>A Certificate is an X.509 certificate of the signer's public key.  Examples would be PEM or
+        DER encodings of the certificate.  The exact encoding is up to the wire format.
+</p>
+<p>A KeyName is a CCNx Name and optional signer's KeyId of that name's publisher.
+        The CCNx Name points to a Key or Certificate.  The KeyName signer KeyId is of the signer of the
+        target name's Content Object, not of the target key or certificate.
+</p>
+<p>A SignatureTime is an optional field in the ValidationAlgorithm.  It may be used as part of the signature validation check to ensure
+        the signature was generated around the expected time.  In particular, if the public key is conveyed in a certificate with a validity period,
+      the verifying system may enforce that the signature came from a corresponding period.  Some verifiers might determine a signature without
+      a SignatureTime to be invalid.
+</p>
+<a name="names"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3"></a><h3>3. 
+Names</h3>
+<p>A CCNx name is a composition of name segments. Each name segment carries a label
+      identifying the purpose of the name segment, and a value.  For example, some
+      name segments are general names and some serve specific purposes, such as carrying
+      version information or the sequencing of many chunks of a large object into smaller,
+      signed Content Objects.
+</p>
+<p>The name segment labels specified in this document are given in the table below.
+        Name Segment is a general name segment, typically occurring in the
+        routable prefix and user-specified content name.  Other segment types are for
+        functional name components that imply a specific purpose.
+      
+</p>
+<p>A forwarding table entry may contain name segments of any type.
+         Routing protocol policy and local system policy may limit what goes into
+         forwarding entries, but there is no restriction at the core level.
+         An Interest routing protocol, for example, may only allow binary name segments.
+         A load balancer or compute cluster
+          may route through additional component types, depending on their services.
+       
+</p><br/><hr class="insert"/>
+<a name="name_types"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="left">
+<tr><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">Name Segment</td>
+<td align="left">A generic name segment that includes arbitrary octets.</td>
+</tr>
+<tr>
+<td align="center">Interest Payload ID</td>
+<td align="left">An octet string that identifies the payload carried in an Interest. As an example, the Payload ID might be a hash of the Interest Payload.
+          This provides a way to differentiate between Interests based on the Payload solely through a Name Segment without having to include
+          all the extra bytes of the payload itself. </td>
+</tr>
+<tr>
+<td align="center">Application Components</td>
+<td align="left">An application-specific payload in a name segment.  An application may apply
+          its own semantics to these components.  A good practice is to identify the
+        application in a Name segment prior to the application component segments.</td>
+</tr>
+</col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 1: CCNx Name Segment Types </b></font><br/></td></tr></table><hr class="insert"/>
+<p>At the lowest level, a Forwarder does not need to understand the semantics
+      of name segments; it need only identify name segment boundaries and
+      be able to compare two name segments (both label and value) for equality.  The Forwarder
+      matches paths segment-by-segment against
+      its forwarding table to determine a next hop.
+</p>
+<a name="NameExamples"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.1"></a><h3>3.1. 
+Name Examples</h3>
+<p>This section uses the Labeled Content Information (<a class="info" href="#LCI">LCI<span> (</span><span class="info">Mosko, M., “Labeled Content Information (Internet draft),” 2015.</span><span>)</span></a> [LCI]) URI representation of CCNx names .
+</p><br/><hr class="insert"/>
+<a name="name_examples"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="left">
+<tr><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">lci:/</td>
+<td align="left">A 0-length name, corresponds to a default route.</td>
+</tr>
+<tr>
+<td align="center">lci:/NAME=</td>
+<td align="left">A name with 1 segment of 0 length, distinct from lci:/.</td>
+</tr>
+<tr>
+<td align="center">lci:/NAME=foo/APP:0=bar</td>
+<td align="left">A 2-segment name, where the first segment is of type NAME and the second
+           segment is of type APP:0.</td>
+</tr>
+</col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 2: CCNx Name Examples </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="Interest"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.4"></a><h3>4. 
+Interests</h3>
+<p>An Interest is composed of the tuple {Name, Metadata, Payload, Validator}.
+        These fields are defined below.  Only the Name is mandatory. Other fields, if missing, should be
+        interpreted as "do not care".
+</p>
+<p>Name is a hierarchical path that identifies the resource.  It is matched as described above.
+</p>
+<p>An Interest may also have a Payload which carries state about the Interest but is not used to match a Content Object.
+        If an Interest contains a payload, the Interest name should contain an Interest Payload ID (IPID).
+        The IPID allows a PIT table entry to correctly multiplex Content Objects in response to a specific Interest with
+        a specific payload ID.  The IPID could be derived from a hash of the payload or could be a GUID or a nonce.
+        An optional Metadata field defines the IPID field so other systems could verify the IPID, such as when it is
+        derived from a hash of the payload.  No system is required to verify the IPID.
+      
+</p>
+<p>An Interest may contain Validation fields including a ValidationAlgorithm section describing the type of
+        validator to use and the ValidationPayload fields containing the output of the validation. Typically this would
+        only be a MIC - a crc, checksum, or digest.
+</p>
+<p>An Interest contains additional fields with information about the query. Two fields - the
+        KeyIdRestriction and ContentObjectHashRestriction - serve as
+        selectors to help identify the specific Content Object that should be returned.
+</p>
+<p>The Interest Lifetime element specifies the maximum number of milliseconds a Forwarder
+        should retain the Interest in its PIT.  A lifetime of "0" means the requester does not expect a
+        response from the Interest - it serves as a type of notification.
+        The lifetime is only a guideline for a Forwarder, which may keep an Interest for a
+        shorter or longer time, based on local conditions and system policy. It may change hop to hop
+        if the Interest is delayed for any signifiant amount of time. It is measured in millisecond
+        resolution, so in fast switching it normally would not need to change.
+        This field does not affect the matching of Content Objects.
+      
+</p>
+<p>The Interest HopLimit element is a counter that is decremented with each hop. It limits the
+        distance an Interest may travel.  The node originating the
+        Interest may put in any value - up to the maximum - in
+        network byte order.  Each node that receives
+        an Interest with a HopLimit decrements the value upon
+        reception.  If the value is 0 after the decrement, the Interest
+        cannot be forwarded off the node. The PIT entry should also track the maximum HopLimit forwarded.  If
+          an Interest with a longer HopLimit arrives, it should be forwarded
+          even if it is identical to a previously forwarded Interest.
+      
+</p>
+<p> Interest looping is not prevented in CCNx. An Interest traversing loops is eventually discarded using the hop-limit field of the Interest, which is decremented at each hop traversed by the Interest.  Other implementations may define additional optional headers, for example Nonces for loop detection,
+        headers for Differentiated Services Code Points (DSCP), or Flow Labels.
+</p>
+<a name="object"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5. 
+Content Objects</h3>
+<p>A Content Object is composed of the same tuple as an Interest: {Name, Metadata, Payload, Validator}.
+        
+</p>
+<p>The Name is an optional field that identifies the contents.  If the name does not exist, then
+      the ContentObject can only be matched by a ContentObjectHashRestriction.
+</p>
+<p>The Payload of a Content Object holds the upper layer payload.  It may be encrypted, based
+        on outside information or a protocol information header.
+</p>
+<p>The optional Metadata PayloadType field identifies the type of Content Object: "DATA" implies an opaque payload;
+        "LINK" is a Content Object with an encoded Link as a payload. "DATA" is the default.
+</p>
+<p>The optional field ExpiryTime is a millisecond timestamp containing
+        the number of milliseconds since the epoch in UTC
+        of when the contents will expire. If it is not present, there is no expiration on the Content Object.
+        The ExpiryTime should be part of the signed information covered by the Validator, if present.
+</p>
+<p>A publisher or upstream node may include a Recommended Cache Time for Content Objects. It is represented as
+        the number of milliseconds since the epoch in UTC as the desired minimum time to keep the content object in cache.
+        This recommendation is a guideline as to the useful lifetime of a Content Object, but may be ignored.
+        The RecommendedCacheTime should not be covered by
+        the Validator, if present, as nodes may change the value based on their caching.
+        The ExpiryTime takes precedence over the RecommendedCacheTime, if both exist.
+</p>
+<p>
+        Other protocols, such as versioning or chunking, could place other kinds of metadata in the Content Object.
+        
+</p>
+<a name="link"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.6"></a><h3>6. 
+Link</h3>
+<p>A Link is the tuple {Name, KeyId, ContentObjectHashRestriction}.  The information in a Link comprises the fields
+        the fields of an Interest which would retrieve the Link target.
+        A Content Object with PayloadType = "Link" is an object whose payload is a Link.
+        This tuple may be used as a KeyName to identify
+        a specific object with the certificate wrapped key.
+      
+</p>
+<a name="hashes"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.7"></a><h3>7. 
+Hashes</h3>
+<p>Several protocol fields use cryptographic hash functions, which must be secure against attack
+        and collisions.  Because these hash functions change over time, which better ones appearing
+        and old ones falling victim to attacks, it is important that a CCNx protocol implementation support
+        hash agility.
+</p>
+<p>In this document, we suggest certain hashes (e.g. SHA-256), but a specific
+        implementation may use what it deems best.  The normative <a class="info" href="#CCNMessages">CCNx Messages<span> (</span><span class="info">Mosko, M. and I. Solis, “CCNx Messages in TLV Format (Internet draft),” 2016.</span><span>)</span></a> [CCNMessages]
+        specification should be taken as the definition of acceptable hash functions and uses.
+      
+</p>
+<a name="signature"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.8"></a><h3>8. 
+Validation</h3>
+<a name="valalg"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.8.1"></a><h3>8.1. 
+Validation Algorithm</h3>
+<p>The Validator consists of a ValidationAlgorithm that specifies how to verify the message
+          and a ValidationPayload containing the validation output. The ValidationAlgorithm
+          section defines the type of algorithm to use and includes any necessary additional information.
+          The validation is calculated from the beginning of the CCNx Message through the end of the
+          ValidationAlgorithm section.  The ValidationPayload is the actual cryptographic bytes, such
+        as a CRC value or an HMAC value or a signature value.
+</p>
+<p>
+        Some Validators contain a KeyId,
+        identifying the publisher authenticating the Content Object. If an Interest carries
+        a KeyIdRestriction, then that KeyIdRestriction MUST exactly match the Content Object's KeyId.
+</p>
+<p>
+        Validation Algorithms fall into three categories: MICs, MACs, and Signatures.  Validators using MIC algorithms
+        do not need to provide any additional information; they may be computed and verified
+        based only on the algorithm (e.g. CRC32C). MAC validators require the use of a KeyId
+        identifying the secret key used by the authenticator. Because MACs are usually used between two parties that
+        have already exchanged secret keys via a key exchange protocol, the KeyId may be any agreed-upon value to
+        identify which key is used.  Signature
+        validators use public key cryptography such as RSA, DSA, or Elliptical Curve (EC). The KeyId field in the
+        ValidationAlgorithm identifies the public key used to verify the signature. A signature may optionally
+        include a KeyLocator, as described above, to bundle a Key or Certificate or KeyName.  MAC and Signature
+        validators may also include a SignatureTime, as described above.
+        
+</p>
+<p>A PublicKeyLocator KeyName points to a Content Object with an X509 certificate
+            in the payload.  In this case, the target KeyId must equal the first object's KeyId.
+            The target KeyLocator must include the public key corresponding to the KeyId.
+            That key must validate the target Signature.
+            The payload is an X.509 certificate whose public key must match the target
+            KeyLocator's key.  It must be issued by a trusted authority, preferably specifying
+            the valid namespace of the key in the distinguished name.
+          
+</p>
+<a name="matching"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.9"></a><h3>9. 
+Interest to Content Object matching</h3>
+<p>A Content Object satisfies an Interest if and only if (a) the Content Object name, if given,
+        exactly matches the Interest name, and (b) the ValidationAlgorithm KeyId of the Content Object
+        exactly equals the Interest KeyIdRestriction, if given, and (c) the computed ContentObjectHash exactly equals the Interest
+        ContentObjectHashRestriction, if given.
+</p>
+<p>The matching rules are given by this predicate, which if it evaluates true means
+          the ContentObject matches the Interest.
+          Ni = Name in Interest (may not be empty), Ki = KeyIdRestriction
+          in the interest (may be empty), Hi = ContentObjectHashRestriction in Interest (may be empty).
+          Likewise, No, Ko, Ho are those properties in the ContentObject, where No and Ko may be empty;
+          Ho always exists.
+          For binary relations, we use &amp; for AND and | for OR.  We use E for the EXISTS (not empty)
+          operator and ! for the NOT EXISTS operator.
+</p>
+<p>As a special case, if the ContentObjectHashRestriction in the Interest specifies an
+            unsupported hash algorithm, then no ContentObject can match the Interest so the
+            system should drop the Interest and MAY send an InterestReturn to the previous hop.
+            In this case, the predicate below will never get executed because the Interest is
+            never forwarded.  If the system is using the optional behavior of having a different system
+            calculate the hash for it, then the system may assume all hash functions are
+            supported and leave it to the other system to accept or reject the Interest.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+(!No | (Ni=No)) &amp; (!Ki | (Ki=Ko)) &amp; (!Hi | (Hi=Ho)) &amp; (E No | E Hi)
+</pre></div>
+<p>As one can see, there are two types of attributes one can match.  The first term
+            depends on the existence of the attribute in the ContentObject while the next two terms
+            depend on the existence of the attribute in the Interest.  The last term
+            is the Nameless Object restriction that if a Content Object does not have a Name, then
+            it must match the Interest on at least the Hash restriction.
+</p>
+<p>If a Content Object does not carry the ContentObjectHash
+      as an expressed field, it must be calculated in network to match against. It is sufficient within an autonomous system to calculate a ContentObjectHash
+      at a border router and carry it via trusted means within the autonomous system. If a Content Object
+      ValidationAlgorithm does not have a KeyId then the Content Object cannot match an Interest with a KeyIdRestriction.
+</p>
+<a name="behavior"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.10"></a><h3>10. 
+Request/Response Protocol</h3>
+<p>As an Interest moves through the network following the FIB table based on
+        longest matching prefix, it leaves state at each forwarding node.  The state
+      is represented in a notional Pending Interest Table (PIT).  The PIT tracks the Name, KeyIdRestriction, and ContentObjectHashRestriction
+      to be matched by a Content Object.  If a second Interest arrives with the same Name and selector values,
+      it may be aggregated with the existing pending Interest.  If the second Interest extends the Lifetime
+      of the pending Interest, it should be forwarded to extend the life of downstream Interests. 
+</p>
+<p>When a Content Object arrives at a Forwarder, it is matched against the Interests in the PIT.
+      For each matching Interest, the Content Object is forwarded along the reverse path of that
+      PIT entry and the PIT entry is removed. A Content Object that does not match any Interest in the PIT is dropped.
+</p>
+<p>A Forwarder may implement a Content Object cache called a Content Store.  At the
+      core protocol level, the Content Store must obey similar rules as the Forwarder.
+      If an Interest specifies a ContentObjectHashRestriction, the Content Store SHOULD NOT respond unless it
+      has verified the hash of the Content Object.  If the Interest carries a KeyIdRestriction then the Content
+      Store MUST cryptographically verify the signature or not respond.
+      
+</p>
+<p>TODO: Specify what to do in case of failure.
+</p>
+<a name="anchor3"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11"></a><h3>11. 
+Interest Return</h3>
+<p>This section describes the process whereby a network element may return an Interest message
+        to a previous hop if there is an error processing the Interest. The returned Interest may be
+        further processed at the previous hop or returned towards the Interest origin.
+        When a node returns an Interest it indicates that the previous hop should not expect a response
+        from that node for the Interest -- i.e. there is no PIT entry left at the returning node.
+</p>
+<p>The returned message maintains compatibility with the existing TLV packet format
+        (a fixed header, optional hop-by-hop headers, and the CCNx message body). The returned Interest
+        packet is modified in only two ways: </p>
+<ul class="text">
+<li>The PacketType is set to InterestReturn to indicate a Feedback message. 
+</li>
+<li>The ReturnCode is set to the appropriate value to signal the reason for the return
+</li>
+</ul><p>
+</p>
+<p>The specific encodings of the Interest Return are specified in <a class="info" href="#CCNMessages">[CCNMessages]<span> (</span><span class="info">Mosko, M. and I. Solis, “CCNx Messages in TLV Format (Internet draft),” 2016.</span><span>)</span></a>.
+</p>
+<p>A Forwarder is not required to send any Interest Return messages.
+</p>
+<p>A Forwarder is not required to process any received Interest Return message.
+        If a Forwarder does not process Interest Return messages, it should silently drop them.
+</p>
+<p>The Interest Return message does not apply to a Content Object or any other message type.
+</p>
+<p>An Interest Return message is a 1-hop message between peers.  It is not propagated
+        multiple hops via the FIB.  An intermediate node that receives an InterestReturn may
+        take corrective actions or may propagate its own InterestReturn to previous hops
+        as indicated in the reverse path of a PIT entry.
+</p>
+<a name="MessageFormat"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.1"></a><h3>11.1. 
+Message Format</h3>
+<p>The Interest Return message looks exactly like the original Interest message with the
+        exception of the two modifications mentioned above.
+        The PacketType is set to indicate the message is an InterestReturn and the reserved
+        byte in the Interest header is used as a Return Code.  The numeric values for the PacketType
+        and ReturnCodes are in <a class="info" href="#CCNMessages">[CCNMessages]<span> (</span><span class="info">Mosko, M. and I. Solis, “CCNx Messages in TLV Format (Internet draft),” 2016.</span><span>)</span></a>.
+</p>
+<a name="TypeDefinitions"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.2"></a><h3>11.2. 
+ReturnCode Types</h3>
+<p>This section defines the InterestReturn ReturnCode introduced in this RFC.
+        The numeric values used in the packet are defined in <a class="info" href="#CCNMessages">[CCNMessages]<span> (</span><span class="info">Mosko, M. and I. Solis, “CCNx Messages in TLV Format (Internet draft),” 2016.</span><span>)</span></a>.
+</p><br/><hr class="insert"/>
+<a name="ReasonCode"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="left"><col align="left">
+<tr><th align="left">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="left"><a class="info" href="#NoRoute">No Route<span> (</span><span class="info">No Route</span><span>)</span></a></td>
+<td align="left">The returning Forwarder has no route to the Interest name.</td>
+</tr>
+<tr>
+<td align="left"><a class="info" href="#HopLimit">HopLimit Exceeded<span> (</span><span class="info">HopLimit Exceeded</span><span>)</span></a></td>
+<td align="left">The HopLimit has decremented to 0 and need to forward the packet.</td>
+</tr>
+<tr>
+<td align="left"><a class="info" href="#MTU">Interest MTU too large<span> (</span><span class="info">Interest MTU Too Large</span><span>)</span></a></td>
+<td align="left">The Interest's MTU does not conform to the required minimum and would require fragmentation.</td>
+</tr>
+<tr>
+<td align="left"><a class="info" href="#NoResources">No Resources<span> (</span><span class="info">No Resources</span><span>)</span></a></td>
+<td align="left">The node does not have the resources to process the Interest.</td>
+</tr>
+<tr>
+<td align="left"><a class="info" href="#PathError">Path error<span> (</span><span class="info">Path Error</span><span>)</span></a></td>
+<td align="left">There was a transmission error when forwarding the Interest along a route (a transient error).</td>
+</tr>
+<tr>
+<td align="left"><a class="info" href="#Prohibited">Prohibited<span> (</span><span class="info">Prohibited</span><span>)</span></a></td>
+<td align="left">An administrative setting prohibits processing this Interest.</td>
+</tr>
+<tr>
+<td align="left"><a class="info" href="#Congestion">Congestion<span> (</span><span class="info">Congestion</span><span>)</span></a></td>
+<td align="left">The Interest was dropped due to congestion (a transient error).</td>
+</tr>
+<tr>
+<td align="left"><a class="info" href="#UnsupportedHashAlgorithm">Unsupported Content Object Hash Algorithm<span> (</span><span class="info">Unsupported Content Object Hash Algorithm</span><span>)</span></a></td>
+<td align="left">The Interest was dropped because it requested a Content Object Hash Restriction using
+          a hash algorithm that cannot be computed.</td>
+</tr>
+<tr>
+<td align="left"><a class="info" href="#MalformedInterest">Malformed Interest<span> (</span><span class="info">Malformed Interest</span><span>)</span></a></td>
+<td align="left">The Interest was dropped because it did not correctly parse.</td>
+</tr>
+</col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 3: Interest Return Reason Codes </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="Protocol"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.3"></a><h3>11.3. 
+Interest Return Protocol</h3>
+<p>This section describes the Forwarder behavior for the various Reason codes for Interest Return.
+        A Forwarder is not required to generate any of the codes, but if it does, it must conform to
+        this specification.
+</p>
+<p>If a Forwarder receives an Interest Return, it SHOULD take these standard corrective actions.
+        A forwarder is allowed to ignore Interest Return messages, in which case its PIT entry would
+        go through normal timeout processes.
+
+        </p>
+<ul class="text">
+<li>Verify that the Interest Return came from a next-hop to which it actually sent the Interest.
+</li>
+<li>If a PIT entry for the corresponding Interest does not exist, the Forwarder should ignore the Interest Return.
+</li>
+<li>If a PIT entry for the corresponding Interest does exist, the Forwarder MAY do one of the following:
+            
+<ul class="text">
+<li>Try a different forwarding path, if one exists, and discard the Interest Return, or
+</li>
+<li>Clear the PIT state and send an Interest Return along the reverse path.
+</li>
+</ul>
+</li>
+</ul><p>
+</p>
+<p>If a forwarder tries alternate routes, it MUST ensure that it does not use
+        same same path multiple times.  For example, it could keep track of which next hops it has
+        tried and not re-use them.
+</p>
+<p>If a forwarder tries an alternate route, it may receive a second InterestReturn, possibly of
+        a different type than the first InterestReturn.  For example, node A sends an Interest to node B,
+        which sends a No Route return.  Node A then tries node C, which sends a Prohibited.  Node A
+        should choose what it thinks is the appropriate code to send back to its previous hop
+</p>
+<p>If a forwarder tries an alternate route, it should decrement the Interest Lifetime to account
+        for the time spent thus far processing the Interest.
+</p>
+<a name="NoRoute"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.3.1"></a><h3>11.3.1. 
+No Route</h3>
+<p>If a Forwarder receives an Interest for which it has no route, or for which the only route is
+          back towards the system that sent the Interest, the Forwarder SHOULD generate a "No Route"
+          Interest Return message.
+</p>
+<p>  How a forwarder manages the FIB table
+          when it receives a No Route message is implementation dependent.
+          In general, receiving a No Route Interest Return should not cause a forwarder to remove
+          a route.  The dynamic routing protocol that installed the route should correct the route or
+          the administrator who created a static route should correct the configuration.  A forwarder could
+          suppress using that next hop for some period of time.
+</p>
+<a name="HopLimit"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.3.2"></a><h3>11.3.2. 
+HopLimit Exceeded</h3>
+<p>A Forwarder MAY choose to send HopLimit Exceeded messages when it receives an Interest that must
+          be forwarded off system and the HopLimit is 0.
+</p>
+<a name="MTU"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.3.3"></a><h3>11.3.3. 
+Interest MTU Too Large</h3>
+<p>If a Forwarder receives an Interest whose MTU exceeds the prescribed minimum, it MAY send
+          an "Interest MTU Too Large" message, or it may silently discard the Interest.
+</p>
+<p>If a Forwarder receives an "Interest MTU Too Large" is SHOULD NOT try alternate paths.
+          It SHOULD propagate the Interest Return to its previous hops.
+</p>
+<a name="NoResources"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.3.4"></a><h3>11.3.4. 
+No Resources</h3>
+<p>If a Forwarder receives an Interest and it cannot process the Interest due to lack of resources,
+          it MAY send an InterestReturn.  A lack of resources could be the PIT table is too large, or some other
+          capacity limit.
+</p>
+<a name="PathError"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.3.5"></a><h3>11.3.5. 
+Path Error</h3>
+<p>If a forwarder detects an error forwarding an Interest, such as over a reliable link, it MAY send
+          a Path Error Interest Return indicating that it was not able to send or repair a forwarding error.
+</p>
+<a name="Prohibited"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.3.6"></a><h3>11.3.6. 
+Prohibited</h3>
+<p>A forwarder may have administrative policies, such as access control lists, that prohibit receiving or
+          forwarding an Interest.  If a forwarder discards an Interest due to a policy, it MAY send a Prohibited
+          InterestReturn to the previous hop. For example, if there is an ACL that says /parc/private can only come from
+        interface e0, but the Forwarder receives one from e1, the Forwarder must have a way to return the Interest with an explanation.
+</p>
+<a name="Congestion"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.3.7"></a><h3>11.3.7. 
+Congestion</h3>
+<p>If a forwarder discards an Interest due to congestion, it MAY send a Congestion InterestReturn to
+          the previous hop.
+</p>
+<a name="UnsupportedHashAlgorithm"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.3.8"></a><h3>11.3.8. 
+Unsupported Content Object Hash Algorithm</h3>
+<p>If a Content Object Hash Restriction specifies a hash algorithm the forwarder cannot verify,
+        the Interest should not be accepted and the forwarder MAY send an InterestReturn to the previous hop.
+</p>
+<a name="MalformedInterest"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.11.3.9"></a><h3>11.3.9. 
+Malformed Interest</h3>
+<p>If a forwarder detects a structural or syntactical error in an Interest, it SHOULD drop
+        the interest and MAY send an InterestReturn to the previous hop.  This does not imply that any
+        router must validate the entire structure of an Interest.
+</p>
+<a name="Acknowledgements"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.12"></a><h3>12. 
+Acknowledgements</h3>
+<a name="IANA"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.13"></a><h3>13. 
+IANA Considerations</h3>
+<p>This memo includes no request to IANA. 
+</p>
+<p>All drafts are required to have an IANA considerations section (see <a class="info" href="#RFC5226">Guidelines for Writing an IANA Considerations Section in RFCs<span> (</span><span class="info">Narten, T. and H. Alvestrand, “Guidelines for Writing an IANA Considerations Section in RFCs,” May 2008.</span><span>)</span></a> [RFC5226] for a guide). If the
+        draft does not require IANA to do anything, the section contains an explicit statement that
+        this is the case (as above). If there are no requirements for IANA, the section will be
+        removed during conversion into an RFC by the RFC Editor.
+</p>
+<a name="Security"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.14"></a><h3>14. 
+Security Considerations</h3>
+<p>The Interest Return message has no authenticator from the previous hop.  Therefore, the payload of the Interest Return
+        should only be used locally to match an Interest.  A node should never forward that Interest payload as an Interest.
+        It should also verify that it send the Interest in the Interest Return to that node and not allow anyone to negate
+        Interest messages.
+</p>
+<p>If two peers require authenticated messaging, they must use an external mechanism.
+</p>
+<a name="rfc.references"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.15"></a><h3>15. 
+References</h3>
+<a name="rfc.references1"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<h3>15.1. Normative References</h3>
+<table border="0" width="99%">
+<tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
+<td class="author-text">Bradner, S., “<a href="http://www.rfc-editor.org/info/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,” BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td></tr>
+</table>
+<a name="rfc.references2"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<h3>15.2. Informative References</h3>
+<table border="0" width="99%">
+<tr><td class="author-text" valign="top"><a name="CCN">[CCN]</a></td>
+<td class="author-text">PARC, Inc., “<a href="http://www.CCNx.org">CCNx Open Source</a>,” 2007.</td></tr>
+<tr><td class="author-text" valign="top"><a name="CCNMessages">[CCNMessages]</a></td>
+<td class="author-text">Mosko, M. and I. Solis, “<a href="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-01">CCNx Messages in TLV Format (Internet draft)</a>,” 2016.</td></tr>
+<tr><td class="author-text" valign="top"><a name="LCI">[LCI]</a></td>
+<td class="author-text">Mosko, M., “<a href="http://tools.ietf.org/html/draft-mosko-icnrg-ccnxlabeledcontent-01">Labeled Content Information (Internet draft)</a>,” 2015.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3552">[RFC3552]</a></td>
+<td class="author-text">Rescorla, E. and B. Korver, “<a href="http://www.rfc-editor.org/info/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>,” BCP 72, RFC 3552, DOI 10.17487/RFC3552, July 2003.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5226">[RFC5226]</a></td>
+<td class="author-text">Narten, T. and H. Alvestrand, “<a href="http://www.rfc-editor.org/info/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>,” BCP 26, RFC 5226, DOI 10.17487/RFC5226, May 2008.</td></tr>
+</table>
+<a name="rfc.authors"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<h3>Authors' Addresses</h3>
+<table border="0" cellpadding="0" cellspacing="0" width="99%">
+<tr><td class="author-text"> </td>
+<td class="author-text">Marc Mosko</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">PARC, Inc.</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">Palo Alto, California  94304</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">USA</td></tr>
+<tr><td align="right" class="author">Phone: </td>
+<td class="author-text">+01 650-812-4405</td></tr>
+<tr><td align="right" class="author">Email: </td>
+<td class="author-text"><a href="mailto:marc.mosko@parc.com">marc.mosko@parc.com</a></td></tr>
+<tr cellpadding="3"><td> </td><td> </td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">Ignacio Solis</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">PARC, Inc.</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">Palo Alto, California  94304</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">USA</td></tr>
+<tr><td align="right" class="author">Phone: </td>
+<td class="author-text">+01 650-812-4405</td></tr>
+<tr><td align="right" class="author">Email: </td>
+<td class="author-text"><a href="mailto:ignacio.solis@parc.com">ignacio.solis@parc.com</a></td></tr>
+<tr cellpadding="3"><td> </td><td> </td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">Christopher Wood</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">PARC, Inc.</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">Palo Alto, California  94304</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">USA</td></tr>
+<tr><td align="right" class="author">Phone: </td>
+<td class="author-text">+01 650-XXX-YYYY</td></tr>
+<tr><td align="right" class="author">Email: </td>
+<td class="author-text"><a href="mailto:christopher.wood@parc.com">christopher.wood@parc.com</a></td></tr>
+</table>
+</body>
+                </div>
+
+                <div class="tab-pane active" id="messages_content">
+                    <ol class="breadcrumb">
+                        <li>Documents</li>
+                        <li>Core Protocol</li>
+                        <li>CCNx Messages in TLV Format</li>
+                    </ol>
+
+                    <body>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<table border="0" cellpadding="0" cellspacing="0" summary="layout" width="66%"><tr><td><table border="0" cellpadding="2" cellspacing="1" summary="layout" width="100%">
+<tr><td class="header">ICNRG</td><td class="header">M. Mosko</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">I. Solis</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">PARC, Inc.</td></tr>
+<tr><td class="header">Expires: July 14, 2016</td><td class="header">January 11, 2016</td></tr>
+</table></td></tr></table>
+<h1><br/>CCNx Messages in TLV Format<br/>draft-irtf-icnrg-ccnxmessages-01</h1>
+<h3>Abstract</h3>
+<p>This document specifies the encoding of CCNx messages using a TLV Packet 
+        specification.
+        CCNx messages follow  the CCNx Semantics specification.
+        This document defines the TLV types
+        used by each message element and the encoding of each value.
+</p>
+<h3>Status of this Memo</h3>
+<p>
+This Internet-Draft is submitted  in full
+conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>
+Internet-Drafts are working documents of the Internet Engineering
+Task Force (IETF).  Note that other groups may also distribute
+working documents as Internet-Drafts.  The list of current
+Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>
+Internet-Drafts are draft documents valid for a maximum of six months
+and may be updated, replaced, or obsoleted by other documents at any time.
+It is inappropriate to use Internet-Drafts as reference material or to cite
+them other than as “work in progress.”</p>
+<p>
+This Internet-Draft will expire on July 14, 2016.</p>
+<h3>Copyright Notice</h3>
+<p>
+Copyright (c) 2016 IETF Trust and the persons identified as the
+document authors.  All rights reserved.</p>
+<p>
+This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents
+(http://trustee.ietf.org/license-info) in effect on the date of
+publication of this document.  Please review these documents
+carefully, as they describe your rights and restrictions with respect
+to this document. Code Components extracted from this document must
+include Simplified BSD License text as described in Section 4.e of
+the Trust Legal Provisions and are provided without warranty as
+described in the Simplified BSD License.</p>
+<a name="toc"></a><br/><hr/>
+<br clear="all"/>
+<a name="anchor1"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.1"></a><h3>1. 
+Introduction</h3>
+<p>This document specifies a Type-Length-Value (TLV) packet format and the TLV type and value encodings for the CCNx network protocol
+         as specified in <a class="info" href="#CCNSemantics">[CCNSemantics]<span> (</span><span class="info">Mosko, M. and I. Solis, “CCNx Semantics (Internet draft),” 2016.</span><span>)</span></a>.  This draft describes the mandatory and common optional
+         fields of Interests and Content Objects.  Several additional protocols specified in their own documents are
+         in use that extend this specification.
+</p>
+<p>A full description of the semantics of CCNx messages, providing an encoding-free description of
+         CCNx messages and message elements, may be found in <a class="info" href="#CCNSemantics">[CCNSemantics]<span> (</span><span class="info">Mosko, M. and I. Solis, “CCNx Semantics (Internet draft),” 2016.</span><span>)</span></a>
+</p>
+<p>This document specifies: </p>
+<ul class="text">
+<li>The TLV packet format.
+</li>
+<li>The overall packet format for CCNx messages.
+</li>
+<li>The TLV types used by CCNx messages.
+</li>
+<li>The encoding of values for each type.
+</li>
+<li>Top level types that exist at the outermost containment.
+</li>
+<li>Interest TLVs that exist within Interest containment.
+</li>
+<li>Content Object TLVs that exist within Content Object containment.
+</li>
+</ul><p>
+</p>
+<p>This document is supplemented by this document:
+      </p>
+<ul class="text">
+<li>Message semantics: see <a class="info" href="#CCNSemantics">[CCNSemantics]<span> (</span><span class="info">Mosko, M. and I. Solis, “CCNx Semantics (Internet draft),” 2016.</span><span>)</span></a> for the protocol operation regarding
+        Interest and Content Object, including the Interest Return protocol.
+</li>
+<li>URI notation: see <a class="info" href="#LCI">[LCI]<span> (</span><span class="info">Mosko, M., “Labeled Content Information (Internet draft),” 2015.</span><span>)</span></a> for the LCI URI notation.
+</li>
+</ul><p>
+</p>
+<p>
+         In the final draft, the type values will be assigned to be compact.  All type values are 
+         relative to their parent containers. It is possible for a TLV to redefine a type value defined by
+         its parent.  For example, each level of a nested TLV structure might define a "type = 1" with
+         a completely different meaning.
+</p>
+<p>Packets are represented as 32-bit wide words using ASCII art.  Due to
+         the nested levels of TLV encoding and the presence of optional fields and variable sizes, 
+         there is no concise way to represent all possibilities.  We use the convention that ASCII art
+         fields enclosed by vertical bars "|" represent exact bit widths.  Fields
+         with a forward slash "/" are variable bit widths, which we typically pad
+         out to word alignment for picture readability.
+</p>
+<p>TODO -- we have not adopted the Requirements Language yet.
+</p>
+<a name="anchor2"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.1.1"></a><h3>1.1. 
+Requirements Language</h3>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+          NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in <a class="info" href="#RFC2119">RFC 2119<span> (</span><span class="info">Bradner, S., “Key words for use in RFCs to Indicate Requirement Levels,” March 1997.</span><span>)</span></a> [RFC2119].
+</p>
+<a name="definitions"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.2"></a><h3>2. 
+Definitions</h3>
+<p>
+</p>
+<ul class="text">
+<li>HSVLI: Hierarchically structured variable length identifier, also called a Name. It is
+            an ordered list of path segments, which may be variable length octet strings. In
+            human-readable form, it is represented in URI format as
+	          lci:/path/part. There is no host or query string.
+</li>
+<li>Name: see HSVLI
+</li>
+<li>Interest: A message requesting a Content Object with a matching Name and other
+            optional selectors to choose from multiple objects with the same Name. Any
+            Content Object with a Name and optional selectors that matches the Name and optional selectors of the 
+            Interest is said to satisfy the Interest.
+</li>
+<li>Content Object: A data object sent in response to an Interest request. It has an HSVLI Name and
+            a content payload that are bound together via cryptographic means. 
+</li>
+</ul><p>
+</p>
+<a name="TLV"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3"></a><h3>3. 
+Type-Length-Value (TLV) Packets</h3>
+<p>We use 16-bit Type and 16-bit Length
+          fields to encode TLV based packets. This provides 64K different possible types and value field lengths 
+          of up to 64KiB.  With 64K possible types, there should be sufficient space for basic protocol types,
+          while also allowing ample room for experimentation, application use, and
+          growth.
+</p>
+<p>Specifically, the TLV types in the range 0x1000 - 0x1FFF are reserved for experimental use.  
+          These type values are reserved in all TLV container contexts.In the event that more space is needed,
+          either for types or for length, a new version of the protocol would be needed.
+</p><br/><hr class="insert"/>
+<a name="reserved_types"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Abbrev</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0FFF</td>
+<td align="center">T_ORG</td>
+<td align="center"><a class="info" href="#vendor">Vendor Specific Information<span> (</span><span class="info">Organization Specific TLVs</span><span>)</span></a></td>
+<td align="left">Information specific to a vendor implementation (see below).</td>
+</tr>
+<tr>
+<td align="center">%x1000-%x1FFF</td>
+<td align="center">n/a</td>
+<td align="center">Experimental</td>
+<td align="left">Experimental use.</td>
+</tr>
+</col></col></col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 1: Reserved TLV Types </b></font><br/></td></tr></table><hr class="insert"/>
+<div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|              Type             |            Length             |
++---------------+---------------+---------------+---------------+
+</pre></div>
+<p>The Length field contains the length of the Value field in octets.  It does
+          not include the length of the Type and Length fields.  A zero length
+          TLV is permissible.
+</p>
+<p>TLV structures are nestable, allowing the Value field of one TLV structure to contain
+          additional TLV structures. The enclosing TLV structure is called the container of the enclosed TLV.
+</p>
+<p>Type values are context-dependent.  Within a TLV container, one may re-use previous type values for
+      new context-dependent purposes.
+</p>
+<a name="packet_format"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.1"></a><h3>3.1. 
+Overall packet format</h3>
+<p>Each packet includes the 8 byte fixed header described below, followed by a set of TLV fields. These fields are
+            optional hop-by-hop headers and the Packet Payload. 
+             
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                    1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|    Version    |  PacketType   |         PacketLength          |
++---------------+---------------+---------------+---------------+
+|           PacketType specific fields          | HeaderLength  |
++---------------+---------------+---------------+---------------+
+/ Optional Hop-by-hop header TLVs                               /
++---------------+---------------+---------------+---------------+
+/ PacketPayload TLVs                                            /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<p>The packet payload is a TLV encoding of the CCNx message, followed by optional
+       Validation TLVs.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                    1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+| CCNx Message TLV                                              /
++---------------+---------------+---------------+---------------+
+/ Optional CCNx ValidationAlgorithm TLV                         /
++---------------+---------------+---------------+---------------+
+/ Optional CCNx ValidationPayload TLV (ValidationAlg required)  /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<p>This document describes the Version "1" TLV encoding.
+</p>
+<p>After discarding the fixed and hop-by-hop headers the remaining PacketPayload
+        should be a valid protocol message.  Therefore, the PacketPayload always begins with
+        a 4 byte TLV defining the protocol message (whether it is an Interest, Content Object, or 
+        other message type) and its total length.
+        The embedding of a self-sufficient protocol data unit inside the fixed
+        and hop-by-hop headers allows a network stack to discard the headers
+        and operate only on the embedded message.
+</p>
+<p>The range of bytes protected by the Validation includes the CCNx Message and the 
+        ValidationAlgorithm.
+</p>
+<p>The ContentObjectHash begins with the CCNx Message 
+        and ends at the tail of the packet.
+</p>
+<a name="header"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.2"></a><h3>3.2. 
+Fixed Headers</h3>
+<p>CCNx messages begin with an 8 byte fixed header (non-TLV format).  
+            The HeaderLength field represents the combined length of the Fixed and Hop-by-hop headers.
+            The PacketLength field represents the entire Packet length.
+          
+</p>
+<p>A specific PacketType may assign meaning to the reserved bytes.
+</p>
+<p>The PacketPayload of a CCNx packet is the protocol message itself. The 
+            Content Object Hash is computed over the PacketPayload only, excluding 
+            the fixed and hop-by-hop headers as those might change from hop to hop.  
+            Signed information or Similarity Hashes should not include any
+            of the fixed or hop-by-hop headers.
+            The PacketPayload should be self-sufficient
+            in the event that the fixed and hop-by-hop headers are removed.
+          
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|    Version    |  PacketType   |         PacketLength          |
++---------------+---------------+---------------+---------------+
+|           PacketType specific fields          | HeaderLength  |
++---------------+---------------+---------------+---------------+
+</pre></div>
+<p>
+</p>
+<ul class="text">
+<li>Version: defines the version of the packet.
+</li>
+<li>HeaderLength: The length of the fixed header (8 bytes) and hop-by-hop headers.
+                  The minimum value is "8".
+</li>
+<li>PacketType: describes forwarder actions to take on the packet.
+</li>
+<li>PacketLength: Total octets of packet including all headers (fixed header
+                  plus hop-by-hop headers) and protocol message.
+</li>
+<li>PacketType Specific Fields: specific PacketTypes define the use of these bits.
+</li>
+</ul><p>
+</p>
+<p>The PacketType field indicates how the forwarder should process the packet.  
+          A Request Packet (Interest) has PacketType 0, a Response (Content Object) has PacketType 1, and an InterestReturn 
+          Packet has PacketType 2.
+        
+</p>
+<p>HeaderLength is the number of octets from the
+          start of the packet (Version) to the end of the hop-by-hop headers.  PacketLength is
+          the number of octets from the start of the packet to the end of the packet.
+</p>
+<p>The PacketType specific fields are reserved bits whose use depends on the
+          PacketType.  They are used for network-level signaling.
+</p>
+<a name="anchor3"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.2.1"></a><h3>3.2.1. 
+Interest Fixed Header</h3>
+<p>If the PacketType in the Fixed Header is "0", it indicates that the PacketPayload should be processed
+            as an Interest message.
+            For this type of packet, the Fixed Header includes a field for a HopLimit as well as Reserved and Flags fields. The Reserved
+            field must be set to 0 in an Interest - this field will be set to a return code in the case of an Interest Return. 
+            There are currently no Flags defined, so this field must also be set to 0.
+           
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|    Version    |       0       |         PacketLength          |
++---------------+---------------+---------------+---------------+
+|   HopLimit    |   Reserved    |     Flags     | HeaderLength  |
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="hoplimit"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.2.1.1"></a><h3>3.2.1.1. 
+Interest HopLimit</h3>
+<p>For an Interest message, the HopLimit is a counter that is decremented with each hop. It limits the
+          distance an Interest may travel on the network.  The node originating the
+          Interest may put in any value - up to the maximum of 255.  Each node that receives
+          an Interest with a HopLimit decrements the value upon 
+          reception.  If the value is 0 after the decrement, the Interest
+          cannot be forwarded off the node.
+</p>
+<p>It is an error to receive an Interest with a 0 hop-limit from a remote node.
+</p>
+<a name="anchor4"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.2.2"></a><h3>3.2.2. 
+Content Object Fixed Header</h3>
+<p>If the PacketType in the Fixed Header is "1", it indicates that the PacketPayload should be processed
+            as a Content Object message.
+            A Content Object defines a Flags field, however there are currently no flags defined, so
+          the Flags field must be set to 0.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|    Version    |       1       |         PacketLength          |
++---------------+---------------+---------------+---------------+
+|            Reserved           |     Flags     | HeaderLength  |
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="anchor5"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.2.3"></a><h3>3.2.3. 
+InterestReturn Fixed Header</h3>
+<p>If the PacketType in the Fixed Header is "2", it indicates that the PacketPayload should be processed
+            as a returned Interest message.
+            The only difference between this InterestReturn message and the original Interest is that the PacketType is changed 
+            to "2" and a ReturnCode is is put into the Reserved octet.  All other
+          fields are unchanged.  The purpose of this encoding is to prevent packet
+          length changes so no additional bytes are needed to return an Interest to
+          the previous hop.  See <a class="info" href="#CCNSemantics">[CCNSemantics]<span> (</span><span class="info">Mosko, M. and I. Solis, “CCNx Semantics (Internet draft),” 2016.</span><span>)</span></a> for a protocol description
+          of this packet type.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|    Version    |       2       |         PacketLength          |
++---------------+---------------+---------------+---------------+
+|   HopLimit    |  ReturnCode   |     Flags     | HeaderLength  |
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="InterestReturnHopLimit"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.2.3.1"></a><h3>3.2.3.1. 
+InterestReturn HopLimit</h3>
+<p>This is the original Interest's HopLimit, as received.  It is the value before being
+            decremented at the current node.
+</p>
+<a name="InterestReturnFlags"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.2.3.2"></a><h3>3.2.3.2. 
+InterestReturn Flags</h3>
+<p>These are the original Flags as set in the Interest.
+</p>
+<a name="ReturnCode"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.2.3.3"></a><h3>3.2.3.3. 
+Return Code</h3>
+<p>The numeric value assigned to the return types is defined below.
+            This value is set by the node creating the Interest Return.
+</p>
+<p>A return code of "0" is not allowed, as it indicates that the returning system
+            did not modify the Return Code field.
+</p><br/><hr class="insert"/>
+<a name="ReturnCodeTable"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="left">
+<tr><th align="center">Value</th><th align="left">Return Type</th></tr>
+<tr>
+<td align="center">1</td>
+<td align="left">No Route</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">Hop Limit Exceeded</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left">No Resources</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="left">Path Error</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="left">Prohibited</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="left">Congested</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="left">MTU too large</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="left">Unsupported ContentObjectHashRestriction</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="left">Malformed Interest</td>
+</tr>
+</col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 2: Return Codes </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="formats"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.3"></a><h3>3.3. 
+Global Formats</h3>
+<p>This section defines global formats that may be nested within other TLVs.
+</p>
+<a name="pad"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.3.1"></a><h3>3.3.1. 
+Pad</h3>
+<p>The pad type may be used by protocols that prefer word-aligned
+            data.  The size of the word may be defined by the protocol.
+            Padding 4-byte words, for example, would use a 1-byte, 2-byte,
+            and 3-byte Length.  Padding 8-byte words would use a (0, 1, 2, 3, 5, 6, 7)-byte
+            Length.
+        
+</p>
+<p>A pad may be inserted after any TLV except within a Name TLV.  In the remainder of
+            this document, we will not show optional pad TLVs.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                    1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|             T_PAD             |             Length            |
++---------------+---------------+---------------+---------------+
+/                 variable length pad MUST be zeros             /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="vendor"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.3.2"></a><h3>3.3.2. 
+Organization Specific TLVs</h3>
+<p>Organizations may request proprietary TLV types in the Hop-By-Hop headers section or
+            other TLV containers.  The organization then has control of the contents of the Value, which may be
+            its own binary field or an encapsulated set of TLVs.  The inner TLVs, because we use a context-dependent
+            TLV scheme, may be fully defined by the organization.
+</p>
+<p>Organization specific TLVs MUST use the T_ORG type. The Length field is the length of the organization
+            specific information plus 3. The Value begins with the 3 byte organization number derived from the last
+            three digits of the <a class="info" href="#EpriseNumbers">IANA Private Enterprise Numbers<span> (</span><span class="info">IANA, “IANA Private Enterprise Numbers,” 2015.</span><span>)</span></a> [EpriseNumbers], followed by the
+            organization specific information.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                    1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|             T_ORG             |     Length (3+value length)   |
++---------------+---------------+---------------+---------------+
+|   PEN[0]      |    PEN[1]     |     PEN[2]    |               /
++---------------+---------------+---------------+               +
+/                  Vendor Specific Value                        /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="hash_format"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.3.3"></a><h3>3.3.3. 
+Hash Format</h3>
+<p>Hash values are used in several fields throughout a packet.  This TLV encoding is commonly embedded inside
+            those fields to specify the specific hash function used and it's value.  Note that the
+            reserved TLV types (%x1000 - %x1FFF) are also reserved here for user-defined experimental functions.
+</p>
+<p>The LENGTH field of the hash value MUST be less than or equal to the hash function length.  If the
+            LENGTH is less than the full length, it is taken as the left LENGTH bytes of the hash function output.
+            Only the specified truncations are allowed.
+</p>
+<p>This nested format is used because it allows binary comparison of hash values for certain fields
+            without a router needing to understand a new hash function.  For example, the KeyIdRestriction is bit-wise
+            compared between an Interest's KeyIdResrcition field and a ContentObject's KeyId field.  This format
+            means the outer field values do not change with differing hash functions so a router can still identify
+            those fields and do a binary comparison of the hash TLV without need to understand the specific
+            hash used.  An alternative approach, such as using T_KEYID_SHA512-256, would require each router
+            keep an up-to-date parser and supporting user-defined hash fucntions here would explode the
+            parsing state-space.
+</p><br/><hr class="insert"/>
+<a name="hash_types"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="center"><col align="center">
+<tr><th align="center">Type</th><th align="center">Abbrev</th><th align="center">Lengths (octets)</th></tr>
+<tr>
+<td align="center">%x0001</td>
+<td align="center">T_SHA-256</td>
+<td align="center">32</td>
+</tr>
+<tr>
+<td align="center">%x0002</td>
+<td align="center">T_SHA-512</td>
+<td align="center">64, 32</td>
+</tr>
+<tr>
+<td align="center">%x1000 - %x1FFF</td>
+<td align="center">n/a</td>
+<td align="center">any</td>
+</tr>
+</col></col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 3: CCNx Hash Functions </b></font><br/></td></tr></table><hr class="insert"/>
+<br/><hr class="insert"/>
+<div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                    1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|             T_FOO             |              36               |
++---------------+---------------+---------------+---------------+
+|           T_SHA512            |               32              |
++---------------+---------------+---------------+---------------+
+/                        32-byte hash value                     /
++---------------+---------------+---------------+---------------+
+</pre></div><table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Example nesting inside type T_FOO </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="Link"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.3.4"></a><h3>3.3.4. 
+Link</h3>
+<p> A Link is the tuple: {CCNx Name, KeyId, ContentObjectHash}.
+            It is a general encoding  that is used in both the payload of a Content Object with
+            PayloadType = "Link" and
+            in the KeyName field in a KeyLocator.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                    1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+/ Mandatory CCNx Name                                           /
++---------------+---------------+-------------------------------+
+/ Optional KeyIdRestriction                                     /
++---------------------------------------------------------------+
+/ Optional ContentObjectHashRestriction                         /
++---------------------------------------------------------------+
+</pre></div>
+<a name="per-hop"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.4"></a><h3>3.4. 
+Hop-by-hop TLV headers</h3>
+<p>Hop-by-hop TLV headers are unordered and no meaning
+          should be attached to their ordering. 
+          Four hop-by-hop headers are described in this document:
+</p><br/><hr class="insert"/>
+<a name="hbh_types"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Abbrev</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0001</td>
+<td align="center">T_INTLIFE</td>
+<td align="center"><a class="info" href="#Lifetime">Interest Lifetime<span> (</span><span class="info">Interest Lifetime</span><span>)</span></a></td>
+<td align="left">The time an Interest should stay pending at an intermediate node.</td>
+</tr>
+<tr>
+<td align="center">%x0002</td>
+<td align="center">T_CACHETIME</td>
+<td align="center"><a class="info" href="#RCT">Recommended Cache Time<span> (</span><span class="info">Recommended Cache Time</span><span>)</span></a></td>
+<td align="left">The Recommended Cache Time for Content Objects.</td>
+</tr>
+<tr>
+<td align="center">%x0003</td>
+<td align="center">T_MSGHASH</td>
+<td align="center"><a class="info" href="#MH">Message Hash<span> (</span><span class="info">Message Hash</span><span>)</span></a></td>
+<td align="left">The hash of the CCNx Message to end of packet using <a class="info" href="#hash_format">Section 3.3.3<span> (</span><span class="info">Hash Format</span><span>)</span></a> format.</td>
+</tr>
+</col></col></col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 4: Hop-by-hop Header Types </b></font><br/></td></tr></table><hr class="insert"/>
+<p>
+          Additional hop-by-hop headers are defined in 
+          higher level specifications such as the fragmentation specification.
+</p>
+<a name="Lifetime"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.4.1"></a><h3>3.4.1. 
+Interest Lifetime</h3>
+<p>The Interest Lifetime is the time
+              that an 
+              Interest should stay pending at an intermediate node.
+              It is expressed in milliseconds as an unsigned,
+              network byte order integer.
+</p>
+<p>A value of 0 (encoded as 1 byte %x00) indicates the
+              Interest does not elicit a Content Object response.  It should still be
+              forwarded, but no reply is expected.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|          T_INTLIFE            |             Length            |
++---------------+---------------+---------------+---------------+
+/                                                               /
+/                      Lifetime (length octets)                 /
+/                                                               /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="RCT"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.4.2"></a><h3>3.4.2. 
+Recommended Cache Time</h3>
+<p>The Recommended Cache Time (RCT) is a measure of the useful lifetime of a Content Object as assigned by a content producer or upstream node. 
+            It serves as a guideline to the Content Store cache in determining how long to keep the Content Object. It is a 
+            recommendation only and may be ignored by the cache.  This is in contrast to the ExpiryTime (described in <a class="info" href="#expiry">Section 3.6.2.2.2<span> (</span><span class="info">ExpiryTime</span><span>)</span></a>)which takes precedence over 
+            the RCT and must be obeyed.
+</p>
+<p>
+            Because the Recommended Cache Time is an optional hop-by-hop header and not a part of the signed message, a content producer 
+            may re-issue a previously signed
+            Content Object with an updated RCT without needing to re-sign the message. There is little ill effect from an attacker 
+            changing the RCT as the RCT serves as a guideline only.
+</p>
+<p>
+            The Recommended Cache Time (a millisecond timestamp) is a network byte ordered unsigned integer of the number of milliseconds 
+            since the epoch in UTC of when the payload expires. It is a 64-bit field.
+            
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|         T_CACHETIME           |               8               |
++---------------+---------------+---------------+---------------+
+/                                                               /
+/                    Recommended Cache Time                     /
+/                                                               /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="MH"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.4.3"></a><h3>3.4.3. 
+Message Hash</h3>
+<p>Within a trusted domain, an operator may calculate the message hash at a border device
+                and insert that value into the hop-by-hop headers of a message.  An egress device
+                should remove the value.  This permits intermediate devices within that trusted domain
+                to match against a ContentObjectHashRestriction without calculating it at every hop.
+</p>
+<p>The message hash is a cryptographic hash from the start of the CCNx Message to the end of
+                the packet.  It is used to match against the <a class="info" href="#COH">ContentObjectHashRestriction<span> (</span><span class="info">ContentObjectHashRestriction</span><span>)</span></a>.
+                The Message Hash may be of longer length than an Interest's restriction, in which case the
+                device should use the left bytes of the Message Hash to check against the Interest's value.
+</p>
+<p>The Message Hash may only carry one hash type and there may only be one Message Hash header.
+</p>
+<p>The Message Hash header is unprotected, so this header is only of practical use within a
+                trusted domain, such as an operator's autonomous system.
+</p><br/><hr class="insert"/>
+<div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                    1                   2                   3
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|          T_MSGHASH            |         (length + 4)          |
++---------------+---------------+---------------+---------------+
+|         (hash type)           |            length             |
++---------------+---------------+---------------+---------------+
+/                           hash value                          /
++---------------+---------------+---------------+---------------+
+</pre></div><table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Message Hash Header </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="top_level"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.5"></a><h3>3.5. 
+Top-Level Types</h3>
+<p>The top-level TLV types listed below exist at the outermost level of a CCNx protocol message.
+</p><br/><hr class="insert"/>
+<a name="top_types"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Abbrev</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0001</td>
+<td align="center">T_INTEREST</td>
+<td align="center"><a class="info" href="#CCNMessage">Interest<span> (</span><span class="info">CCNx Message</span><span>)</span></a></td>
+<td align="left">An Interest MessageType.</td>
+</tr>
+<tr>
+<td align="center">%x0002</td>
+<td align="center">T_OBJECT</td>
+<td align="center"><a class="info" href="#CCNMessage">Content Object<span> (</span><span class="info">CCNx Message</span><span>)</span></a></td>
+<td align="left">A Content Object MessageType</td>
+</tr>
+<tr>
+<td align="center">%x0003</td>
+<td align="center">T_VALIDATION_ALG</td>
+<td align="center"><a class="info" href="#ValAlg">Validation Algorithm<span> (</span><span class="info">Validation Algorithm</span><span>)</span></a></td>
+<td align="left">The method of message verification such as 
+            Message Integrity Check (MIC), a Message Authentication Code (MAC), or a cryptographic signature.
+          </td>
+</tr>
+<tr>
+<td align="center">%x0004</td>
+<td align="center">T_VALIDATION_PAYLOAD</td>
+<td align="center"><a class="info" href="#ValPayload">Validation Payload<span> (</span><span class="info">Validation Payload</span><span>)</span></a></td>
+<td align="left">The validation output, such as the CRC32C code or the RSA signature.</td>
+</tr>
+</col></col></col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 5: CCNx Top Level Types </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="CCNMessage"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6"></a><h3>3.6. 
+CCNx Message</h3>
+<p>This is the format for the CCNx protocol message itself. The CCNx message is the portion of the packet
+            between the hop-by-hop headers and the Validation TLVs. The figure below is an expansion 
+            of the "CCNx Message TLV" depicted in the beginning of <a class="info" href="#TLV">Section 3<span> (</span><span class="info">Type-Length-Value (TLV) Packets</span><span>)</span></a>.           
+            The CCNx message begins with MessageType and runs through the optional Payload. 
+            The same general format is used for both Interest and
+          Content Object messages which are differentiated by
+          the MessageType field. The first enclosed TLV of a CCNx Message is always the 
+          Name TLV.  This is followed by an optional Message TLVs and an optional Payload TLV.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|         MessageType           |         MessageLength         |
++---------------+---------------+---------------+---------------+
+| Name TLV       (Type = T_NAME)                                |
++---------------+---------------+---------------+---------------+
+/ Optional Message TLVs   (Various Types)                       /
++---------------+---------------+---------------+---------------+
+/ Optional Payload TLV  (Type = T_PAYLOAD)                      /
++---------------+---------------+---------------+---------------+
+
+</pre></div><br/><hr class="insert"/>
+<a name="CCNx_types"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Abbrev</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0000</td>
+<td align="center">T_NAME</td>
+<td align="center"><a class="info" href="#names">Name<span> (</span><span class="info">Name</span><span>)</span></a></td>
+<td align="left">The CCNx Name requested in an Interest or published in a Content Object.</td>
+</tr>
+<tr>
+<td align="center">%x0001</td>
+<td align="center">T_PAYLOAD</td>
+<td align="center"><a class="info" href="#content">Payload<span> (</span><span class="info">Payload</span><span>)</span></a></td>
+<td align="left">The message payload.</td>
+</tr>
+</col></col></col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 6: CCNx Message Types </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="names"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.1"></a><h3>3.6.1. 
+Name</h3>
+<p>A Name is a TLV encoded sequence of
+                segments. The table below lists the type values appropriate for these Name
+                segments. A Name MUST NOT include PAD TLVs.
+</p>
+<p>As described in <a class="info" href="#CCNSemantics">CCNx Semantics<span> (</span><span class="info">Mosko, M. and I. Solis, “CCNx Semantics (Internet draft),” 2016.</span><span>)</span></a> [CCNSemantics], using the <a class="info" href="#LCI">LCI<span> (</span><span class="info">Mosko, M., “Labeled Content Information (Internet draft),” 2015.</span><span>)</span></a> [LCI]
+                notation, a T_NAME with 0 length
+              corresponds to lci:/ (the default route) and is distinct from a name with one zero length segment,
+              such as lci:/NAME=.  In the TLV encoding, lci:/ corresponds to T_NAME with 0 length, while lci:/NAME=
+              corresponds to T_NAME with 4 length and T_NAMESEGMENT with 0 length.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            T_NAME             |            Length             |
++---------------+---------------+---------------+---------------+
+/ Name segment TLVs                                             /
++---------------+---------------+---------------+---------------+
+</pre></div><br/><hr class="insert"/>
+<a name="name_types"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Symbolic Name</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0001</td>
+<td align="center">T_NAMESEGMENT</td>
+<td align="center"><a class="info" href="#name_segment">Name segment<span> (</span><span class="info">Name Segments</span><span>)</span></a></td>
+<td align="left">A generic name Segment.</td>
+</tr>
+<tr>
+<td align="center">%x0002</td>
+<td align="center">T_IPID</td>
+<td align="center"><a class="info" href="#name_ipid">Interest Payload ID<span> (</span><span class="info">Interest Payload ID</span><span>)</span></a></td>
+<td align="left">An identifier that represents the Interest Payload field. As an example, the Payload ID might be a hash of the Interest Payload. 
+                This provides a way to differentiate between Interests based on their payloads without having to parse all the bytes of the payload 
+                itself; instead using only this Payload ID Name segment  </td>
+</tr>
+<tr>
+<td align="center">%x1000 - %x1FFF</td>
+<td align="center">T_APP:00 - T_APP:4096</td>
+<td align="center"><a class="info" href="#name_segment">Application Components<span> (</span><span class="info">Name Segments</span><span>)</span></a></td>
+<td align="left">Application-specific payload in a name segment.  An application may apply
+                  its own semantics to the 4096 reserved types.</td>
+</tr>
+</col></col></col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 7: CCNx Name Types </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="name_segment"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.1.1"></a><h3>3.6.1.1. 
+Name Segments</h3>
+<p> Special application payload name segments are in 
+                  the range %x1000 - %1FFF.  These have application
+                  semantics applied to them.  A good convention is to put the
+                  application's identity in the name prior to using these
+                  name segments.
+</p>
+<p>For example, a name like "lci:/foo/bar/yo"
+                  would be encoded as:
+                  </p>
+<div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            (T_NAME)           |           %x14 (20)           |
++---------------+---------------+---------------+---------------+
+|        (T_NAME_SEGMENT)       |           %x03 (3)            |
++---------------+---------------+---------------+---------------+
+|       f                o               o      |(T_NAME_SEGMENT)
++---------------+---------------+---------------+---------------+
+|               |            %x03 (3)           |       b       |
++---------------+---------------+---------------+---------------+
+|      a                r       |           (T_NAME_SEGMENT)   |
++---------------+---------------+---------------+---------------+
+|           %x02 (2)            |        y      |       o       |
++---------------+---------------+---------------+---------------+
+</pre></div><p>
+</p>
+<a name="name_ipid"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.1.2"></a><h3>3.6.1.2. 
+Interest Payload ID</h3>
+<p>The InterestPayloadID is a name segment created by the origin of an Interest to 
+                  represent the Interest Payload.  This allows the proper multiplexing of Interests 
+                  based on their name if they have different payloads. A common representation is to 
+                  use a hash of the Interest Payload as the InterestPayloadID.
+</p>
+<p>
+                  As part of the TLV 'value', the InterestPayloadID contains a one identifier of 
+                  method used to create the InterestPayloadID followed by a variable length octet 
+                  string.   An implementation is not required to implement any of the methods to 
+                  receive an Interest; the InterestPayloadID may be treated only as an opaque octet 
+                  string for purposes of multiplexing Interests with different payloads.  Only a 
+                  device creating an InterestPayloadID name segment or a device verifying such a 
+                  segment need to implement the algorithms.
+</p>
+<p>It uses the <a class="info" href="#hash_format">Section 3.3.3<span> (</span><span class="info">Hash Format</span><span>)</span></a> encoding of hash values.
+</p>
+<p>In normal operations, we recommend displaying the InterestPayloadID as an opaque 
+                    octet string in an LCI scheme, as this is the common denominator for implementation 
+                    parsing.
+</p>
+<p>The InterestPayloadID, even if it is a hash, should not convey any security context.  
+                  If a system requires confirmation that a specific entity created the InterestPayload, 
+                  it should use a cryptographic signature on the Interest via the ValidationAlgorithm and 
+                  ValidationPayload or use its own methods inside the Interest Payload.
+</p>
+<a name="metadata"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.2"></a><h3>3.6.2. 
+Message TLVs</h3>
+<p>Each message type (Interest or Content Object) is associated with a set of 
+           optional Message TLVs.  Additional
+         specification documents may extend the types associated with each.
+</p>
+<a name="IntMeta"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.2.1"></a><h3>3.6.2.1. 
+Interest Message TLVs</h3>
+<p>There are two Message TLVs currently associated with an Interest message: 
+              the KeyIdRestriction selector and the ContentObjectHashRestr selector
+            are used to narrow the universe of acceptable Content Objects 
+            that would satisfy the Interest.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|         MessageType           |         MessageLength         |
++---------------+---------------+---------------+---------------+
+| Name TLV                                                      |
++---------------+---------------+---------------+---------------+
+/ Optional KeyIdRestriction TLV                                 /
++---------------------------------------------------------------+
+/ Optional ContentObjectHashRestriction TLV                     /
++---------------------------------------------------------------+
+</pre></div><br/><hr class="insert"/>
+<a name="InterestMD_types"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Abbrev</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0002</td>
+<td align="center">T_KEYIDRESTR</td>
+<td align="center"><a class="info" href="#KeyIdRes">KeyIdRestriction<span> (</span><span class="info">KeyIdRestriction</span><span>)</span></a></td>
+<td align="left">A <a class="info" href="#hash_format">Section 3.3.3<span> (</span><span class="info">Hash Format</span><span>)</span></a> representation of the KeyId</td>
+</tr>
+<tr>
+<td align="center">%x0003</td>
+<td align="center">T_OBJHASHRESTR</td>
+<td align="center"><a class="info" href="#COH">ContentObjectHashRestriction<span> (</span><span class="info">ContentObjectHashRestriction</span><span>)</span></a></td>
+<td align="left">A <a class="info" href="#hash_format">Section 3.3.3<span> (</span><span class="info">Hash Format</span><span>)</span></a> representation of the hash of the
+                specific Content Object that would satisfy the Interest.</td>
+</tr>
+</col></col></col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 8: CCNx Interest Message TLV Types </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="KeyIdRes"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.2.1.1"></a><h3>3.6.2.1.1. 
+KeyIdRestriction</h3>
+<p>An Interest may include a KeyIdRestriction selector.
+                This ensures that only Content Objects with matching KeyIds will
+                satisfy the Interest. See <a class="info" href="#KeyId">Section 3.6.4.1.4.1<span> (</span><span class="info">KeyId</span><span>)</span></a> for the format of a KeyId.
+</p>
+<a name="COH"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.2.1.2"></a><h3>3.6.2.1.2. 
+ContentObjectHashRestriction</h3>
+<p>An Interest may also contain a ContentObjectHashRestriction selector. This is
+                the hash of the Content Object - the
+                self-certifying name restriction that must be verified in the network, if an
+                Interest carried this restriction.
+                It is calculated from the beginning of the CCNx Message to the end of the packet.
+                The LENGTH must be from one of the allowed values for that hash 
+                (see <a class="info" href="#hash_format">Section 3.3.3<span> (</span><span class="info">Hash Format</span><span>)</span></a>).
+</p>
+<p>The ContentObjectHashRestriction SHOULD use at least 32 bytes of hash length.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|        T_OBJHASHRESTR         |            LENGTH+4           |
++---------------+---------------+---------------+---------------+
+|          &lt;hash type&gt;          |             LENGTH            |
++---------------+---------------+---------------+---------------+
+/                     LENGTH octets of hash                     /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="COmetadata"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.2.2"></a><h3>3.6.2.2. 
+Content Object Message TLVs</h3>
+<p>The following message TLVs are currently defined for Content Objects: 
+              PayloadType (optional) and ExpiryTime (optional). 
+              
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                      1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|         MessageType           |         MessageLength         |
++---------------+---------------+---------------+---------------+
+| Name TLV                                                      |
++---------------+---------------+---------------+---------------+
+/ Optional PayloadType TLV                                      /
++---------------------------------------------------------------+
+/ Optional ExpiryTime TLV                                       /
++---------------------------------------------------------------+
+
+</pre></div><br/><hr class="insert"/>
+<a name="objectMD_types"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Abbrev</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0005</td>
+<td align="center">T_PAYLDTYPE</td>
+<td align="center"><a class="info" href="#payload_type">PayloadType<span> (</span><span class="info">PayloadType</span><span>)</span></a></td>
+<td align="left">Indicates the type of Payload contents.</td>
+</tr>
+<tr>
+<td align="center">%x0006</td>
+<td align="center">T_EXPIRY</td>
+<td align="center"><a class="info" href="#expiry">ExpiryTime<span> (</span><span class="info">ExpiryTime</span><span>)</span></a></td>
+<td align="left">The time at which the Payload expires, as expressed in the number of milliseconds since the epoch in UTC.
+                If missing, 
+                Content Object may be used as long as desired.</td>
+</tr>
+</col></col></col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 9: CCNx Content Object Message TLV Types </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="payload_type"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.2.2.1"></a><h3>3.6.2.2.1. 
+PayloadType</h3>
+<p>The PayloadType is a network byte order integer representing
+                the general type of the Payload TLV.
+                </p>
+<ul class="text">
+<li>0: Data (possibly encrypted)
+</li>
+<li>1: Key
+</li>
+<li>2: Link
+</li>
+<li>3: Manifest
+</li>
+</ul><p>    
+                The Data type indicate that the Payload of the ContentObject 
+                is opaque application bytes. The Key type indicates that the Payload is a 
+                DER encoded public key. The Link type indicates that the Payload is a 
+                <a class="info" href="#Link">Link<span> (</span><span class="info">Link</span><span>)</span></a>. If this field is missing, a "Data" type is assumed. 
+                A Manifest type indicates that the Payload is a Manifest (format TBD).
+              
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            T_PAYLDTYPE        |            Length             |
++---------------+---------------+---------------+---------------+
+|  PayloadType  /
++---------------+
+</pre></div>
+<a name="expiry"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.2.2.2"></a><h3>3.6.2.2.2. 
+ExpiryTime</h3>
+<p> The ExpiryTime is the time at which the Payload expires, as expressed by a timestamp containing the number of milliseconds since the epoch in UTC.         
+                It is a network byte order unsigned integer in a 64-bit field. A cache or end system should not respond with a Content Object past its ExpiryTime.
+                Routers forwarding a Content Object do not need to check the ExpiryTime.
+                If the ExpiryTime field is missing, the Content Object has no expressed expiration and a cache or end system may use the 
+                Content Object for as long as desired.
+              
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|           T_EXPIRY            |               8               |
++---------------+---------------+---------------+---------------+
+/                          ExpiryTime                           /
+/                                                               /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="content"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.3"></a><h3>3.6.3. 
+Payload</h3>
+<p>The Payload TLV contains the content of the packet.  It is permissible to have a "0" length.
+              If a packet does not have any payload, this field may be omitted, rather than carrying a "0" length.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|           T_PAYLOAD           |            Length             |
++---------------+---------------+---------------+---------------+
+/                        Payload Contents                       /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="Validation"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4"></a><h3>3.6.4. 
+Validation</h3>
+<p>Both Interests and Content Objects have the option to include information about how to 
+            validate the CCNx message. 
+            This information is contained in two TLVs: the 
+          ValidationAlgorithm TLV and the ValidationPayload TLV.
+          The ValidationAlgorithm TLV specifies the mechanism to be used to verify the CCNx message. Examples include verification with a 
+          Message Integrity Check (MIC), a Message Authentication Code (MAC), or a cryptographic signature.
+          The ValidationPayload TLV contains the validation output, such as the CRC32C code or the RSA signature.
+          
+</p>
+<p>An Interest would most likely only use a MIC type of validation - a crc, checksum, or digest.
+</p>
+<a name="ValAlg"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.1"></a><h3>3.6.4.1. 
+Validation Algorithm</h3>
+<p>The ValidationAlgorithm is a set of nested TLVs containing all of the information needed to verify the message.
+              The outermost container has type = T_VALIDATION_ALG. 
+              The first nested TLV defines the specific type of validation
+            to be performed on the message. The type is identified with the "ValidationType" as shown in
+            the figure below and elaborated in the table below.
+            Nested within that container are the TLVs for any ValidationType 
+            dependent data, for example a Key Id, Key Locator etc.
+</p>
+<p>Complete examples of several types may be found in <a class="info" href="#valexamples">Section 3.6.4.1.5<span> (</span><span class="info">Validation Examples</span><span>)</span></a>
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|       T_VALIDATION_ALG        |      ValidationAlgLength      |
++---------------+---------------+---------------+---------------+
+|        ValidationType         |            Length             |
++---------------+---------------+---------------+---------------+
+/ ValidationType dependent data                                 /
++---------------+---------------+---------------+---------------+
+</pre></div><br/><hr class="insert"/>
+<a name="validator_types"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Abbrev</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0002</td>
+<td align="center">T_CRC32C</td>
+<td align="center"><a class="info" href="#MIC">CRC32C<span> (</span><span class="info">Message Integrity Checks</span><span>)</span></a></td>
+<td align="left">Castagnoli CRC32 (iSCSI, ext4, etc.), with normal form polynomial 0x1EDC6F41.</td>
+</tr>
+<tr>
+<td align="center">%x0004</td>
+<td align="center">T_HMAC-SHA256</td>
+<td align="center"><a class="info" href="#MAC">HMAC-SHA256<span> (</span><span class="info">Message Authentication Checks</span><span>)</span></a></td>
+<td align="left">HMAC (RFC 2104) using SHA256 hash.</td>
+</tr>
+<tr>
+<td align="center">%x0005</td>
+<td align="center">T_VMAC-128</td>
+<td align="center"><a class="info" href="#MAC">VMAC-128<span> (</span><span class="info">Message Authentication Checks</span><span>)</span></a></td>
+<td align="left">VMAC with 128bit tags <a class="info" href="#VMAC">[VMAC]<span> (</span><span class="info">Krovertz, T. and W. Dai, “VMAC: Message Authentication Code using Universal Hashing,” 2007.</span><span>)</span></a></td>
+</tr>
+<tr>
+<td align="center">%x0006</td>
+<td align="center">T_RSA-SHA256</td>
+<td align="center"><a class="info" href="#signature_val">RSA-SHA256<span> (</span><span class="info">Signature</span><span>)</span></a></td>
+<td align="left">RSA public key signature using SHA256 digest.</td>
+</tr>
+<tr>
+<td align="center">%x0007</td>
+<td align="center">EC-SECP-256K1</td>
+<td align="center"><a class="info" href="#signature_val">SECP-256K1<span> (</span><span class="info">Signature</span><span>)</span></a></td>
+<td align="left">Elliptic Curve signature with SECP-256K1 parameters 
+                (see <a class="info" href="#ECC">[ECC]<span> (</span><span class="info">Certicom Research, “SEC 2: Recommended Elliptic Curve Domain Parameters,” 2010.</span><span>)</span></a>).</td>
+</tr>
+<tr>
+<td align="center">%x0008</td>
+<td align="center">EC-SECP-384R1</td>
+<td align="center"><a class="info" href="#signature_val">SECP-384R1<span> (</span><span class="info">Signature</span><span>)</span></a></td>
+<td align="left">Elliptic Curve signature with SECP-384R1 parameters 
+                (see <a class="info" href="#ECC">[ECC]<span> (</span><span class="info">Certicom Research, “SEC 2: Recommended Elliptic Curve Domain Parameters,” 2010.</span><span>)</span></a>).</td>
+</tr>
+</col></col></col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 10: CCNx Validation Types </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="MIC"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.1.1"></a><h3>3.6.4.1.1. 
+Message Integrity Checks</h3>
+<p>MICs do not require additional data in order to perform the verification. An example is 
+             CRC32C that has a "0" length value. 
+</p>
+<a name="MAC"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.1.2"></a><h3>3.6.4.1.2. 
+Message Authentication Checks</h3>
+<p>MACs are useful for communication between two trusting parties who have already shared private keys.
+              Examples include an RSA signature of a SHA256 digest or others.
+              They rely on a KeyId. Some MACs might use more than a KeyId, 
+              but those would be defined in the future. 
+</p>
+<a name="signature_val"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.1.3"></a><h3>3.6.4.1.3. 
+Signature</h3>
+<p>Signature type Validators specify a digest mechanism and a signing algorithm to verify the message.
+                Examples include RSA signature og a SHA256 digest, an
+                Elliptic Curve signature with SECP-256K1 parameters, etc. These Validators require a KeyId and 
+              a mechanism for locating the publishers public key (a KeyLocator) - 
+              optionally a PublicKey or Certificate or KeyName.
+</p>
+<a name="vdd"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.1.4"></a><h3>3.6.4.1.4. 
+Validation Dependent Data</h3>
+<p>Different Validation Algorithms require access to different pieces of data contained in the ValidationAlgorithm
+                TLV. 
+              As described above, Key Ids, Key Locators, Public Keys, Certificates, Links and Key Names all play a role
+              in different Validation Algorithms.
+</p>
+<p>Following is a table of CCNx ValidationType dependent data types:
+</p><br/><hr class="insert"/>
+<a name="vddtypes"></a>
+<table align="center" border="0" cellpadding="2" cellspacing="2" class="full">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Abbrev</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">%x0009</td>
+<td align="center">T_KEYID</td>
+<td align="center"><a class="info" href="#KeyId">SignerKeyId<span> (</span><span class="info">KeyId</span><span>)</span></a></td>
+<td align="left">An identifier of the shared secret or public key associated with a MAC or Signature.</td>
+</tr>
+<tr>
+<td align="center">%x000B</td>
+<td align="center">T_PUBLICKEY</td>
+<td align="center"><a class="info" href="#PubKey">Public Key<span> (</span><span class="info">Public Key</span><span>)</span></a></td>
+<td align="left">DER encoded public key.</td>
+</tr>
+<tr>
+<td align="center">%x000C</td>
+<td align="center">T_CERT</td>
+<td align="center"><a class="info" href="#Cert">Certificate<span> (</span><span class="info">Certificate</span><span>)</span></a></td>
+<td align="left">DER encoded X509 certificate.</td>
+</tr>
+<tr>
+<td align="center">%x000E</td>
+<td align="center">T_KEYNAME</td>
+<td align="center"><a class="info" href="#KeyName">KeyName<span> (</span><span class="info">KeyName</span><span>)</span></a></td>
+<td align="left">A CCNx Link object. </td>
+</tr>
+<tr>
+<td align="center">%x000F</td>
+<td align="center">T_SIGTIME</td>
+<td align="center"><a class="info" href="#SigTime">SignatureTime<span> (</span><span class="info">SignatureTime</span><span>)</span></a></td>
+<td align="left">A millsecond timestamp indicating the time when the signature was created. </td>
+</tr>
+</col></col></col></col></table>
+<br clear="all"/>
+<table align="center" border="0" cellpadding="0" cellspacing="2"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b> Table 11: CCNx Validation Dependent Data Types </b></font><br/></td></tr></table><hr class="insert"/>
+<a name="KeyId"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.1.4.1"></a><h3>3.6.4.1.4.1. 
+KeyId</h3>
+<p>The KeyId is the publisher key identifier. It is similar to a Subject Key Identifier from X509 [RFC 5280, Section 4.2.1.2].
+                It should be derived from the key used to sign, such as from the SHA-256 hash of the key.  It
+                applies to both public/private key systems and to symmetric key systems.
+</p>
+<p>The KeyId is represented using the <a class="info" href="#hash_format">Section 3.3.3<span> (</span><span class="info">Hash Format</span><span>)</span></a>.  If a protocol uses a non-hash
+                identifier, it should use one of the reserved values (e.g. %x1000).
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            T_KEYID            |            LENGTH+4           |
++---------------+---------------+---------------+---------------+
+|          &lt;hash type&gt;          |             LENGTH            |
++---------------+---------------+---------------+---------------+
+/                     LENGTH octets of hash                     /
++---------------+---------------+---------------+---------------+
+
+</pre></div>
+<a name="PubKey"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.1.4.2"></a><h3>3.6.4.1.4.2. 
+Public Key</h3>
+<p>A Public Key is a DER encoded Subject Public Key Info
+                block, as in an X509 certificate.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
++---------------+---------------+---------------+---------------+
+|          T_PUBLICKEY          |            Length             |
++---------------+---------------+---------------+---------------+
+/                Public Key (DER encoded SPKI)                  /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="Cert"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.1.4.3"></a><h3>3.6.4.1.4.3. 
+Certificate</h3>
+<div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|            T_CERT             |            Length             |
++---------------+---------------+---------------+---------------+
+/                 Certificate (DER encoded X509)                /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="KeyName"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.1.4.4"></a><h3>3.6.4.1.4.4. 
+KeyName</h3>
+<p>A KeyName type KeyLocator is a Link.
+</p>
+<p>The KeyName digest is the publisher digest of
+                the Content Object identified by KeyName.  It may be
+                included on an Interest's digest restriction. A KeyName is a mandatory Name and an optional KeyId.  The KeyId inside the KeyLocator
+                  may be included in an Interest's KeyId to retrieve only the specified key.
+              
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|          T_KEYNAME            |            Length             |
++---------------+---------------+-------------------------------+
+/ Link                                                          /
++---------------------------------------------------------------+
+</pre></div>
+<a name="SigTime"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.1.4.5"></a><h3>3.6.4.1.4.5. 
+SignatureTime</h3>
+<p>The SignatureTime is a millisecond timestamp indicating the time at which a signature was created.  The signer sets this
+                field to the current time when creating a signature. A verifier may use this time to determine whether or not
+                the signature was created during the validity period of a key, or if it occurred in a reasonable sequence
+                with other associated signatures. The SignatureTime is unrelated to any time associated with the actual CCNx Message, 
+                which could have been created long before the signature. The default behavior is to always include a SignatureTime when creating
+                an authenticated message (e.g. HMAC or RSA).
+</p>
+<p>SignatureTime is a network byte ordered unsigned integer of the number of milliseconds since the epoch
+                in UTC of when the signature was created.  It is a fixed 64-bit field.
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+-------------------------------+
+|           T_SIGTIME           |               8               |
++---------------+---------------+-------------------------------+
+/                         SignatureTime                         /
++---------------------------------------------------------------+
+</pre></div>
+<a name="valexamples"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.1.5"></a><h3>3.6.4.1.5. 
+Validation Examples</h3>
+<p>As an example of a MIC type validation, the encoding for CRC32 validation would be:
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|      T_VALIDATION_ALG         |               4               |
++---------------+---------------+---------------+---------------+
+|            T_CRC32            |               0               |
++---------------+---------------+---------------+---------------+
+</pre></div>
+<p>As an example of a MAC type validation, the encoding for an HMAC using a SHA256 hash would be:
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|       T_VALIDATION_ALG        |               40              |
++---------------+---------------+---------------+---------------+
+|        T_HMAC-SHA256          |               36              |
++---------------+---------------+---------------+---------------+
+|             T_KEYID           |               32              |
++---------------+---------------+---------------+---------------+
+/                            KeyId                              /
+/---------------+---------------+-------------------------------+
+</pre></div>
+<p>As an example of a Signature type validation, the encoding for an RSA public key
+              signing using a SHA256 digest and Public Key would be:
+</p><div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|       T_VALIDATION_ALG        |      44 + Variable Length     |
++---------------+---------------+---------------+---------------+
+|          T_RSA-SHA256         |      40 + Variable Length     |
++---------------+---------------+---------------+---------------+
+|             T_KEYID           |               32              |
++---------------+---------------+---------------+---------------+
+/                            KeyId                              /
+/---------------+---------------+-------------------------------+
+|          T_PUBLICKEY          |   Variable Length (~ 160)     |
++---------------+---------------+---------------+---------------+
+/                Public Key (DER encoded SPKI)                  /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="ValPayload"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.3.6.4.2"></a><h3>3.6.4.2. 
+Validation Payload</h3>
+<div style="display: table; width: 0; margin-left: 3em; margin-right: auto"><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|     T_VALIDATION_PAYLOAD      |  ValidationPayloadLength      |
++---------------+---------------+---------------+---------------+
+/ Type-dependent data                                           /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<p>The ValidationPayload contains the validation output, such as the CRC32C code or the RSA signature.
+</p>
+<a name="Acknowledgements"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.4"></a><h3>4. 
+Acknowledgements</h3>
+<a name="IANA"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5. 
+IANA Considerations</h3>
+<p>TODO: Work with IANA to define the type space for: Top level types, Hop-by-hop header types, Name segment
+      types, CCNx messages types, Interest message TLV types, Content Object TLV message types,  Validation types,
+      and Validation dependent data types.
+</p>
+<p>All drafts are required to have an IANA considerations section (see <a class="info" href="#RFC5226">Guidelines for Writing an IANA Considerations Section in RFCs<span> (</span><span class="info">Narten, T. and H. Alvestrand, “Guidelines for Writing an IANA Considerations Section in RFCs,” May 2008.</span><span>)</span></a> [RFC5226] for a guide). If the
+        draft does not require IANA to do anything, the section contains an explicit statement that
+        this is the case (as above). If there are no requirements for IANA, the section will be
+        removed during conversion into an RFC by the RFC Editor.
+</p>
+<a name="Security"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.6"></a><h3>6. 
+Security Considerations</h3>
+<p>All drafts are required to have a security considerations section. See <a class="info" href="#RFC3552">RFC 3552<span> (</span><span class="info">Rescorla, E. and B. Korver, “Guidelines for Writing RFC Text on Security Considerations,” July 2003.</span><span>)</span></a> [RFC3552] for a guide.
+</p>
+<a name="rfc.references"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<a name="rfc.section.7"></a><h3>7. 
+References</h3>
+<a name="rfc.references1"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<h3>7.1. Normative References</h3>
+<table border="0" width="99%">
+<tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
+<td class="author-text">Bradner, S., “<a href="http://www.rfc-editor.org/info/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,” BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td></tr>
+</table>
+<a name="rfc.references2"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<h3>7.2. Informative References</h3>
+<table border="0" width="99%">
+<tr><td class="author-text" valign="top"><a name="CCN">[CCN]</a></td>
+<td class="author-text">PARC, Inc., “<a href="http://www.CCNx.org">CCNx Open Source</a>,” 2007.</td></tr>
+<tr><td class="author-text" valign="top"><a name="CCNSemantics">[CCNSemantics]</a></td>
+<td class="author-text">Mosko, M. and I. Solis, “<a href="http://tools.ietf.org/html/draft-mosko-icnrg-ccnxsemantics-01">CCNx Semantics (Internet draft)</a>,” 2016.</td></tr>
+<tr><td class="author-text" valign="top"><a name="ECC">[ECC]</a></td>
+<td class="author-text">Certicom Research, “<a href="http://www.secg.org/sec2-v2.pdf">SEC 2: Recommended Elliptic Curve Domain Parameters</a>,” 2010.</td></tr>
+<tr><td class="author-text" valign="top"><a name="EpriseNumbers">[EpriseNumbers]</a></td>
+<td class="author-text">IANA, “<a href="http://www.iana.org/assignments/enterprise-numbers/enterprise-numbers">IANA Private Enterprise Numbers</a>,” 2015.</td></tr>
+<tr><td class="author-text" valign="top"><a name="LCI">[LCI]</a></td>
+<td class="author-text">Mosko, M., “<a href="http://tools.ietf.org/html/draft-mosko-icnrg-ccnxlabeledcontent-01">Labeled Content Information (Internet draft)</a>,” 2015.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3552">[RFC3552]</a></td>
+<td class="author-text">Rescorla, E. and B. Korver, “<a href="http://www.rfc-editor.org/info/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>,” BCP 72, RFC 3552, DOI 10.17487/RFC3552, July 2003.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5226">[RFC5226]</a></td>
+<td class="author-text">Narten, T. and H. Alvestrand, “<a href="http://www.rfc-editor.org/info/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>,” BCP 26, RFC 5226, DOI 10.17487/RFC5226, May 2008.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5280">[RFC5280]</a></td>
+<td class="author-text">Cooper, D., Santesson, S., Farrell, S., Boeyen, S., Housley, R., and W. Polk, “<a href="http://www.rfc-editor.org/info/rfc5280">Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile</a>,” RFC 5280, DOI 10.17487/RFC5280, May 2008.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC6920">[RFC6920]</a></td>
+<td class="author-text">Farrell, S., Kutscher, D., Dannewitz, C., Ohlman, B., Keranen, A., and P. Hallam-Baker, “<a href="http://www.rfc-editor.org/info/rfc6920">Naming Things with Hashes</a>,” RFC 6920, DOI 10.17487/RFC6920, April 2013.</td></tr>
+<tr><td class="author-text" valign="top"><a name="VMAC">[VMAC]</a></td>
+<td class="author-text">Krovertz, T. and W. Dai, “<a href="http://www.fastcrypto.org/vmac/draft-krovetz-vmac-01.txt">VMAC: Message Authentication Code using Universal Hashing</a>,” 2007.</td></tr>
+</table>
+<a name="rfc.authors"></a><br/><hr/>
+<table align="right" cellpadding="0" cellspacing="2" class="TOCbug" summary="layout"><tr><td class="TOCbug"><a href="#toc"> TOC </a></td></tr></table>
+<h3>Authors' Addresses</h3>
+<table border="0" cellpadding="0" cellspacing="0" width="99%">
+<tr><td class="author-text"> </td>
+<td class="author-text">Marc Mosko</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">PARC, Inc.</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">Palo Alto, California  94304</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">USA</td></tr>
+<tr><td align="right" class="author">Phone: </td>
+<td class="author-text">+01 650-812-4405</td></tr>
+<tr><td align="right" class="author">Email: </td>
+<td class="author-text"><a href="mailto:marc.mosko@parc.com">marc.mosko@parc.com</a></td></tr>
+<tr cellpadding="3"><td> </td><td> </td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">Ignacio Solis</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">PARC, Inc.</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">Palo Alto, California  94304</td></tr>
+<tr><td class="author-text"> </td>
+<td class="author-text">USA</td></tr>
+<tr><td align="right" class="author">Phone: </td>
+<td class="author-text">+01 650-812-4405</td></tr>
+<tr><td align="right" class="author">Email: </td>
+<td class="author-text"><a href="mailto:marc.mosko@parc.com">marc.mosko@parc.com</a></td></tr>
+</table>
+</body>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    </div>
+    <footer class="footer">
+      <p>PARC, Inc.</p>
+      <p>
+        <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+</html>
