@@ -1,0 +1,740 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en"><head><title>CCNx Selector Based Discovery</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="CCNx Selector Based Discovery">
+<meta name="keywords" content="Content Centric Networking">
+<meta name="generator" content="xml2rfc v1.35dev (http://xml.resource.org/)">
+<style type='text/css'><!--
+        body {
+                font-family: verdana, charcoal, helvetica, arial, sans-serif;
+                font-size: small; color: #000; background-color: #FFF;
+                margin: 2em;
+        }
+        h1, h2, h3, h4, h5, h6 {
+                font-family: helvetica, monaco, "MS Sans Serif", arial, sans-serif;
+                font-weight: bold; font-style: normal;
+        }
+        h1 { color: #900; background-color: transparent; text-align: right; }
+        h3 { color: #333; background-color: transparent; }
+
+        td.RFCbug {
+                font-size: x-small; text-decoration: none;
+                width: 30px; height: 30px; padding-top: 2px;
+                text-align: justify; vertical-align: middle;
+                background-color: #000;
+        }
+        td.RFCbug span.RFC {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: bold; color: #666;
+        }
+        td.RFCbug span.hotText {
+                font-family: charcoal, monaco, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: normal; text-align: center; color: #FFF;
+        }
+
+        table.TOCbug { width: 30px; height: 15px; }
+        td.TOCbug {
+                text-align: center; width: 30px; height: 15px;
+                color: #FFF; background-color: #900;
+        }
+        td.TOCbug a {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, sans-serif;
+                font-weight: bold; font-size: x-small; text-decoration: none;
+                color: #FFF; background-color: transparent;
+        }
+
+        td.header {
+                font-family: arial, helvetica, sans-serif; font-size: x-small;
+                vertical-align: top; width: 33%;
+                color: #FFF; background-color: #666;
+        }
+        td.author { font-weight: bold; font-size: x-small; margin-left: 4em; }
+        td.author-text { font-size: x-small; }
+
+        /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+        a.info {
+                /* This is the key. */
+                position: relative;
+                z-index: 24;
+                text-decoration: none;
+        }
+        a.info:hover {
+                z-index: 25;
+                color: #FFF; background-color: #900;
+        }
+        a.info span { display: none; }
+        a.info:hover span.info {
+                /* The span will display just on :hover state. */
+                display: block;
+                position: absolute;
+                font-size: smaller;
+                top: 2em; left: -5em; width: 15em;
+                padding: 2px; border: 1px solid #333;
+                color: #900; background-color: #EEE;
+                text-align: left;
+        }
+
+        a { font-weight: bold; }
+        a:link    { color: #900; background-color: transparent; }
+        a:visited { color: #633; background-color: transparent; }
+        a:active  { color: #633; background-color: transparent; }
+
+        p { margin-left: 2em; margin-right: 2em; }
+        p.copyright { font-size: x-small; }
+        p.toc { font-size: small; font-weight: bold; margin-left: 3em; }
+        table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
+        td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
+
+        ol.text { margin-left: 2em; margin-right: 2em; }
+        ul.text { margin-left: 2em; margin-right: 2em; }
+        li      { margin-left: 3em; }
+
+        /* RFC-2629 <spanx>s and <artwork>s. */
+        em     { font-style: italic; }
+        strong { font-weight: bold; }
+        dfn    { font-weight: bold; font-style: normal; }
+        cite   { font-weight: normal; font-style: normal; }
+        tt     { color: #036; }
+        tt, pre, pre dfn, pre em, pre cite, pre span {
+                font-family: "Courier New", Courier, monospace; font-size: small;
+        }
+        pre {
+                text-align: left; padding: 4px;
+                color: #000; background-color: #CCC;
+        }
+        pre dfn  { color: #900; }
+        pre em   { color: #66F; background-color: #FFC; font-weight: normal; }
+        pre .key { color: #33C; font-weight: bold; }
+        pre .id  { color: #900; }
+        pre .str { color: #000; background-color: #CFF; }
+        pre .val { color: #066; }
+        pre .rep { color: #909; }
+        pre .oth { color: #000; background-color: #FCF; }
+        pre .err { background-color: #FCC; }
+
+        /* RFC-2629 <texttable>s. */
+        table.all, table.full, table.headers, table.none {
+                font-size: small; text-align: center; border-width: 2px;
+                vertical-align: top; border-collapse: collapse;
+        }
+        table.all, table.full { border-style: solid; border-color: black; }
+        table.headers, table.none { border-style: none; }
+        th {
+                font-weight: bold; border-color: black;
+                border-width: 2px 2px 3px 2px;
+        }
+        table.all th, table.full th { border-style: solid; }
+        table.headers th { border-style: none none solid none; }
+        table.none th { border-style: none; }
+        table.all td {
+                border-style: solid; border-color: #333;
+                border-width: 1px 2px;
+        }
+        table.full td, table.headers td, table.none td { border-style: none; }
+
+        hr { height: 1px; }
+        hr.insert {
+                width: 80%; border-style: none; border-width: 0;
+                color: #CCC; background-color: #CCC;
+        }
+--></style>
+</head>
+<body>
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tr><td class="header">ICNRG</td><td class="header">M. Mosko</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">PARC, Inc.</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">July 29, 2016</td></tr>
+<tr><td class="header">Expires: January 30, 2017</td><td class="header">&nbsp;</td></tr>
+</table></td></tr></table>
+<h1><br />CCNx Selector Based Discovery<br />draft-mosko-icnrg-selectors-00</h1>
+
+<h3>Abstract</h3>
+
+<p>CCNx selector based discovery uses exclusions and interest
+      name suffix matching to discover content in the network.  Participating
+      nodes may respond with matching Content Objects from cache using
+      an encapsulation protocol.  This document specifies the available
+      selectors, their encoding in a name path segment, and the encapsulation
+      protocol.
+</p>
+<p>Copyright (C) 2013-2016, Palo Alto Research Center
+</p>
+<h3>Status of this Memo</h3>
+<p>
+This document is an Internet-Draft and is
+NOT offered in accordance with Section&nbsp;10 of RFC&nbsp;2026,
+and the author does not provide the IETF with any rights other
+than to publish as an Internet-Draft.</p>
+<p>
+Internet-Drafts are working documents of the Internet Engineering
+Task Force (IETF).  Note that other groups may also distribute
+working documents as Internet-Drafts.  The list of current
+Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>
+Internet-Drafts are draft documents valid for a maximum of six months
+and may be updated, replaced, or obsoleted by other documents at any time.
+It is inappropriate to use Internet-Drafts as reference material or to cite
+them other than as &ldquo;work in progress.&rdquo;</p>
+<p>
+This Internet-Draft will expire on January 30, 2017.</p>
+<a name="toc"></a><br /><hr />
+<h3>Table of Contents</h3>
+<p class="toc">
+<a href="#anchor1">1.</a>&nbsp;
+Introduction<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor2">1.1.</a>&nbsp;
+Requirements Language<br />
+<a href="#protocol">2.</a>&nbsp;
+Protocol Description<br />
+<a href="#types">3.</a>&nbsp;
+Name Labels and TLV types<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#child">3.1.</a>&nbsp;
+Child Selector<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#suffix">3.2.</a>&nbsp;
+Interest Min(Max)SuffixComponents<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#excludes">3.3.</a>&nbsp;
+Name Excludes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#singleton">3.3.1.</a>&nbsp;
+Exclude Singleton<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#range">3.3.2.</a>&nbsp;
+Exclude Range<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#exclude_examples">3.3.3.</a>&nbsp;
+Examples<br />
+<a href="#caching">4.</a>&nbsp;
+Content Store and Caching<br />
+<a href="#Acknowledgements">5.</a>&nbsp;
+Acknowledgements<br />
+<a href="#IANA">6.</a>&nbsp;
+IANA Considerations<br />
+<a href="#Security">7.</a>&nbsp;
+Security Considerations<br />
+<a href="#rfc.references1">8.</a>&nbsp;
+References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">8.1.</a>&nbsp;
+Normative References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">8.2.</a>&nbsp;
+Informative References<br />
+<a href="#rfc.authors">&#167;</a>&nbsp;
+Author's Address<br />
+</p>
+<br clear="all" />
+
+<a name="anchor1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1"></a><h3>1.&nbsp;
+Introduction</h3>
+
+<p>Content Discovery is an important feature of CCNx.  This document specifies
+       a discovery mechanism that uses a name path segment to encode a discovery query
+       in an Interest.  Participating nodes may reply with a Content Object
+       if it matches the encoded query.  The query uses exclusions to work around
+       incorrect responses.
+</p>
+<p>This document specifies a new name label for selector query.  It also specifies
+       a new type of Content Object that encapsulates another Content Object.  The
+       Encapsulation Object is used to return a Content Object with a longer name
+       than in an interest.  The encapsulated object's signature should verify.
+       
+</p>
+<p>Not all nodes along the Interest path need to participate in the discovery
+         process.  A non-participating node should forward the Interest and encapsulating
+       Content Object as normal per <a class='info' href='#CCNSemantics'>[CCNSemantics]<span> (</span><span class='info'>Mosko, M., Solis, I., and C. Wood, &ldquo;CCNx Semantics (Internet draft),&rdquo; 2016.</span><span>)</span></a>.  A participating
+       node should verify that the encapsulated Content Object matches the selector query
+       in the PIT entry.
+</p>
+<p>Note that Selector discovery is not needed when asking for a Content Object
+       by its ContentObjectHash, as there should only ever be one match for that.
+</p>
+<p>Note that Selector discovery in CCNx 1.0 differs slightly from the current
+         NDN and prior CCNx 0.x selector discovery.  First, CCNx 1.0 uses a distinguished
+         field for the ContentObjectHashRestriction.  It is not appended to the name to
+         form the so-called "full name."  This means that there is no implicit digest
+         name component.  Thus, using a MinSuffixComponents and MaxSuffixComponents
+         of 0 will match the exact name in the Interest without needing to add
+         one extra component to account for the implicit digest.  Second,
+         there is a HashExcludes field that lists ContentObjectHashRestrictions to
+         exclude instead of appending them as an implicit name component.
+         Third, the encoding of Excludes differs from prior encodings and uses a simpler formulation
+         with the same expressiveness that also takes in to consideration
+         that name segments in CCNx 1.0 have TLV types associated with them.
+</p>
+<p>CCNx 1.0 allows Content Objects to have no name and be retrieved by hash only.
+       As they have no name, they are not discoverable via name-based selector discovery.
+</p>
+<p>Packets are represented as 32-bit wide words using ASCII art.  Because
+      of the TLV encoding and optional fields or sizes, there is no concise
+      way to represent all possibilities.  We use the convention that ASCII art
+      fields enclosed by vertical bars "|" represent exact bit widths.  Fields
+      with a forward slash "/" are variable bitwidths, which we typically pad
+      out to word alignment for picture readability.
+</p>
+<a name="anchor2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1.1"></a><h3>1.1.&nbsp;
+Requirements Language</h3>
+
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+          NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in <a class='info' href='#RFC2119'>RFC 2119<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a> [RFC2119].
+</p>
+<a name="protocol"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2"></a><h3>2.&nbsp;
+Protocol Description</h3>
+
+<p>Selector based discovery uses six query variables to discover content. These
+      selectors are encoded as a single name path segment affixed to an Interest name.
+      The selectors operate on the prefix up to, but not including the selector
+      name path segment.
+</p>
+<p>The selectors are:
+        </p>
+<ul class="text">
+<li>MinSuffixComponents: the minimum number of additional name path segments a matching
+            Content Object must have in its name, with the Content Object Hash appended
+            as the terminal path segment.  The default value is 0.
+</li>
+<li>MaxSuffixComponents: The maximum number of additional name path segments a matching
+          Content Object may have in its name, with the Content Object hash appended as
+          the terminal path segment.  The default value is unlimited.
+</li>
+<li>ChildSelector: Answer with the left-most or right-most child.
+</li>
+<li>NameExcludes: A set of range and singleton exclusions to eliminate Content Objects.
+          The exclusions match against the name path segment that would immediately follow
+          the Interest prefix prior to the Selector path segment.  They are matched against a Content Object name with
+          the Content Object Hash appended as terminal path segment.
+</li>
+<li>InnerKeyId: Matches the KeyId of the encapsulated object.
+</li>
+<li>HashExcludes: A list of ContentObjectHashRestrictions to exclude, regardless of the name.
+</li>
+</ul><p>
+      
+</p>
+<p>A node using Selector discovery appends a Selector name path segment to the end
+      of the Interest name.  Even if no selectors are used, the Selector path segment
+      is added to the end, which indicates to a participating node that it should apply
+      Selector based matching to the Interest.   In this case, the default values -- if any -- of
+      each selector are used.
+</p>
+<p>A node receiving a Selector Interest should match against the Content Store using
+      the selector rules.  Based on the sort order, it should pick the appropriate Content
+      Object, if any, and return it in an Encapsulation Object.  If no Content Objects
+      match, the Interest should be forwarded or NACKed as normal.
+</p>
+<p>An Encapsulation Object is a Content Object that matches the Selector Interest
+      and whose payload is the ``discovered'' Content Object.  
+      The ContentType of an Encapsulation Object is "ENCAP".
+      The outer name matches the Selector Interest name.  The Inner Content Object
+      name matches the Selector discovery.
+</p>
+<p>
+      The KeyIdRestriction of the Interest matches the outer KeyId of the outer Content Object,
+      as normal.  This allows a responding cache or producer to sign (or MAC or MIC) the response.
+      The InnerKeyId of the Selector matches the inner ContentObject in the same way.  This allows
+      the selector to discriminate discovery including the inner KeyId.
+      
+</p>
+<p>
+        The HashExcludes eliminate any Content Objects whose ContentObjectHash matches any of
+        the listed values.  They are encoded the same way as the ContentObjectHashRestriction in
+        an Interest.  Note that this Selector does not exist in NDN or CCNx 0.x.  We use
+        an explicit set of HashExcludes rather than constructing a full name with the implicit
+        digest component at the end.
+      
+</p>
+<p>
+        If an authoritative producer receives a Selector discovery, it SHOULD generate the inner
+        Content Object as normal and encapsulate it as normal.  It MAY also respond with an Interest Return
+        or not respond at all.
+        At the present, responding directly to the Selector Interest with data without encapsulating
+        it is not supported.
+      
+</p>
+<p>Normally, the outer Content Object does not have a Validation section.  A responding
+      node MAY include a CRC32C or other integrity check.  Signing or MACing an outer Content Object
+      is possible, but should only be used in specialized environments where that degree of trust
+      is necessary.  Signing the outer Content Object in no way replaces the signature (if any) of
+      the inner Content Object.  The outer signature only identifies the responding cache (or producer).
+      
+</p>
+<a name="types"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3"></a><h3>3.&nbsp;
+Name Labels and TLV types</h3>
+
+<p>The Selector name component T_SELECTOR has type %x0010.
+</p>
+<p>The PayloadType of T_PAYLOADTYPE_ENCAP has the value 8.
+</p><br /><hr class="insert" />
+<a name="selector_types"></a>
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="center"><col align="center"><col align="center"><col align="left">
+<tr><th align="center">Type</th><th align="center">Symbol</th><th align="center">Name</th><th align="left">Description</th></tr>
+<tr>
+<td align="center">1</td>
+<td align="center">T_MINSUFFIX</td>
+<td align="center">Selectors: Min Suffix Components</td>
+<td align="left">Minimum number of additional name components after given name to match (0
+          default if missing).</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">T_MAXSUFFIX</td>
+<td align="center">Selectors: Max Suffix Components</td>
+<td align="left">Maximum number of additional name components after given name to match (unlimited default
+          is missing).</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">T_CHILD</td>
+<td align="center">Selectors: Child Selector</td>
+<td align="left">0 = left, 1 = right (default)</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">T_NAME_EXCLUDES</td>
+<td align="center">Name Excludes</td>
+<td align="left">Encloses ExcludeComponents</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">T_EX_SINGLE</td>
+<td align="center">Exclude Singleton</td>
+<td align="left">Exclude a single name path segment.</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">T_EX_RANGE</td>
+<td align="center">Exclude Range</td>
+<td align="left">Exclude an half-open range, beginning at this value and continuing up to the next
+          Singleton, or to infinity if omitted on the last entry.</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">T_INNER_KEYID</td>
+<td align="center">Inner KeyId</td>
+<td align="left">A restriction on the inner keyid.  If present, it must match the KeyId of the
+        inner Content Object in the encapsulated response.</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">T_HASH_EXCLUDES</td>
+<td align="center">Hash Excludes</td>
+<td align="left">Excludes a set of ContentObjectHash from the allowed responses.  Each
+        restriction is encoded using its Hash Function Type Registry type
+        (e.g. T_SHA-256) from <a class='info' href='#CCNMessages'>[CCNMessages]<span> (</span><span class='info'>Mosko, M., Solis, I., and C. Wood, &ldquo;CCNx Messages in TLV Format (Internet draft),&rdquo; 2016.</span><span>)</span></a>.</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Table 1: Selector Types&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+
+<a name="child"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
+Child Selector</h3>
+
+<p>If there are multiple choices to answer an Interest, the Child Selector
+          specifies the desired ordering of responses.  %x00 = leftmost, %x01 = rightmost.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+
+|    T_CHILD    |       1       |   selector    |
++---------------+---------------+---------------+
+</pre></div>
+<a name="suffix"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
+Interest Min(Max)SuffixComponents</h3>
+
+<p>The Min and Max suffix components are encoded as
+          a minimum-length unsigned integer in network byte order number inside the value.
+          A "0" is represented as a single byte %0x00.  A length
+          0 value is interpreted the same as the type not being
+          present.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|     type      |     length    |                               /
++---------------+---------------+                               /
+/                      Min(Max)SuffixComponents                 /
++---------------+---------------+---------------+---------------+
+type = T_MINSUFFIX or T_MAXSUFFIX
+</pre></div>
+<a name="excludes"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.3"></a><h3>3.3.&nbsp;
+Name Excludes</h3>
+
+<p>Interest Excludes specify a set of singletons and
+          ranges to exclude when matching Content Object names
+          to an Interest.  They match the name component
+          immediately following the last component of
+          the Interest name (not including the Selector TLV).  
+          The excludes must be sorted
+          in ascending order, using the normal Name sorting
+          rules.
+</p>
+<p>A name exclusion is the full TLV expression of
+        a name component, not just it's value.
+</p>
+<p>An exclusion value A is less than
+        B iff the TLV type of A is less than the TLV type of
+        B, or being equal, the TLV value of A is shortlex less
+        than the TLV value of B.  A shortlex comparison means
+        that X is less than Y is X is shorter than Y or the
+        lengths being equal, X lexicagraphically sorts before Y.
+</p>
+<p>A zero-length exclusion is the minimum exclusion
+        and must appear before any other exclusion.  Note that
+        a zero-length exlcusion has no TLV type for the
+        name component, so it will match any name segment
+        TLV type.  It is equivalent to minus infinity.
+</p>
+<p>The zero-length name component is the minimum
+          name component of that name component type (e.g.T_NAMESEGMENT).
+        
+</p>
+<p>An exclude may contain either an Exclude Range type
+          or an Exclude Singleton type.  An Exclude Range type
+          means the given value starts a half-open exclusion
+          range that begins inclusive of the Range value and
+          ends open at the next Singleton or at infinity
+          if it is the last exclude component.  An Exclude Singleton
+          means to exclude the exact value given.
+</p>
+<p>Note that this syntax does not require the "ANY" exclude
+        component that is part of the NDN and CCNx 0.x syntax.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                      1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|          T_EXCLUDES           |            length             |
++---------------+---------------+---------------+---------------+
+/ Zero or more exclude-components                               /
++---------------------------------------------------------------+
+
+exclude-components = *component [start-range-tlv]
+component = (start-range-tlv singleton-tlv) / singleton-tlv
+</pre></div>
+<p>The ABNF of the exclude-component allows for zero or more components
+        followed by an option start-range-tlv.  A component is either a half-open
+        range (start-range-tlv singleton-tlv) or a singleton-tlv.
+</p>
+<p>The optional final start-range-tlv has no terminating singleton-tlv.
+        This means it extends out to plus infinity.
+</p>
+<p>Note that to exclude from negative infinity to some value "foo", we
+        do not need to include an ANY element because the zero-length name
+        component is, by definition, the minimum element and we use inclusive
+        range start.  Therefore, begining an exlcusion with the zero-length range
+        effectively excludes from minus infinity.
+</p>
+<a name="singleton"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.3.1"></a><h3>3.3.1.&nbsp;
+Exclude Singleton</h3>
+
+<p>A singleton exclude component means to exclude
+            a name path segment exactly matching the given value.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|          T_EX_SINGLE          |            length             |
++---------------+---------------+---------------+---------------+
+/                        TLV name segment                       /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="range"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.3.2"></a><h3>3.3.2.&nbsp;
+Exclude Range</h3>
+
+<p>A Range exclude means to exclude the from the
+            given value up to but not including the next Singleton.
+            If the Range is the last component in the Exclude,
+            it means to exclude to infinity.
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                     1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|          T_EX_RANGE           |            length             |
++---------------+---------------+---------------+---------------+
+/                        TLV name segment                       /
++---------------+---------------+---------------+---------------+
+</pre></div>
+<a name="exclude_examples"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.3.3"></a><h3>3.3.3.&nbsp;
+Examples</h3>
+
+<p>In these examples, we will use the notation S[foo] to
+            represent a singleton exclusion "foo" and R[foo] to represent a range exclusion
+            beginning at "foo."  In the column Range, we use standard open (parenthesis) and closed
+            (square bracket) interval notation.  We assume all TLV name types of T_NAMESEGMENT
+            if there is no explicit name segment type given.
+            In our notation, something like S[VER=bar] would exclude a TLV type Version and
+            value "bar".
+          
+</p><br /><hr class="insert" />
+<a name="example_table"></a>
+<table class="full" align="center" border="0" cellpadding="2" cellspacing="2">
+<col align="left"><col align="left">
+<tr><th align="left">Exclude Pattern</th><th align="left">Range</th></tr>
+<tr>
+<td align="left">S[ace]</td>
+<td align="left">NAME=ace</td>
+</tr>
+<tr>
+<td align="left">S[ace] R[bat]</td>
+<td align="left">NAME=ace, [NAME=bat, infty)</td>
+</tr>
+<tr>
+<td align="left">R[ace] S[bat]</td>
+<td align="left">[NAME=ace, NAME=bat)</td>
+</tr>
+<tr>
+<td align="left">R[CHUNK=0] S[CHUNK=20]</td>
+<td align="left">[CHUNK=0, CHUNK=20)</td>
+</tr>
+<tr>
+<td align="left">R[] S[ace]</td>
+<td align="left">(-infty, NAME=ace), matches any preceeding TLV types using
+            a zero-length Range exclude</td>
+</tr>
+<tr>
+<td align="left">R[NAME=] S[ace]</td>
+<td align="left">[NAME=, NAME=ace)</td>
+</tr>
+<tr>
+<td align="left">R[]</td>
+<td align="left">(-infty, +infty)</td>
+</tr>
+<tr>
+<td align="left">S[zoo] S[ape]</td>
+<td align="left">Invalid range, not sorted</td>
+</tr>
+<tr>
+<td align="left">R[NAME=ace] S[CHUNK=0]</td>
+<td align="left">[NAME=ace, CHUNK=0), this will span TLV ranges type between T_NAMESEGMENT and T_CHUNK</td>
+</tr>
+<tr>
+<td align="left">R[CHUNK=] S[CHUNK+1=]</td>
+<td align="left">[CHUNK=, CHUNK+1=), excludes all CHUNK TLV possibilities</td>
+</tr>
+</table>
+<br clear="all" />
+<table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Table 2: CCNx Name Types&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
+
+<a name="caching"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4"></a><h3>4.&nbsp;
+Content Store and Caching</h3>
+
+<p>The encapsulated responses to discovery are cachable, like all Content Objects.
+        A participating forwarder MAY cache the inner Content Object separately from the outer
+        Content Object assuming it passes the selector tests.  A non-participating forwarder
+        MAY only cache the outer Content Object (encapsulating the inner).
+      
+</p>
+<p>A participating content store MUST obey both the outer and inner cache control
+      directives: ExpiryTime and RecommendedCacheTime.  Thus, a responding cache can reduce or
+      prevent the response being cached by setting a short or zero ExpiryTime independently
+      of the caching behavior of the encapsulated inner Content Object.
+</p>
+<p>A non-participating content store MUST objey the outer cache control directives,
+      as normal.  The inner content object is opaque data to it.
+</p>
+<p>It is RECOMMENDED that a participating node
+      creating the encapsulated response set a short RecommendedCacheTime and MAY set
+      an ExpirtyTime.
+</p>
+<p>Note that cached respones are, in general, not a problem for the discovery process.  Participating
+      nodes will always do a full selector match, so a consumer can work around incorrect responses
+      as normal.  Because Selector interests with differnent Exclude blocks will result in different
+      names, prior responses will not match in the caches of non-participating nodes, esepcially if
+      the RecommendedCacheTime (or ExpireTime) is set to 0.
+</p>
+<a name="Acknowledgements"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5.&nbsp;
+Acknowledgements</h3>
+
+<a name="IANA"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6"></a><h3>6.&nbsp;
+IANA Considerations</h3>
+
+<p>This memo includes no request to IANA.
+</p>
+<a name="Security"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7"></a><h3>7.&nbsp;
+Security Considerations</h3>
+
+<p>Because respones use encapsulation, there is size expansion in the response from the
+      original Content Object.  The expansion will be the length of the encapsulating Selector
+      name plus the size of any validation uses on the outer Content Object (e.g. a CRC32C),
+      plus framing overhead.  This means that one cannot respond with a Content Object that is
+      too close to the maximum packet size.
+</p>
+<p>Participating nodes should be able to filter incorrect responses just as they
+      do in NDN or CCNx 0.x.  If all node participate, then one hash equivalent filtering
+      behavior as those other protocols.
+</p>
+<p>If the outer Content Object is signed, the consumer should, as normal, verify
+      the signature for accuracy.  However, the trust of the outer signature is normally
+      not important, especially if the inner Content Object has its own signature.
+</p>
+<a name="rfc.references"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8"></a><h3>8.&nbsp;
+References</h3>
+
+<a name="rfc.references1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>8.1.&nbsp;Normative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
+<td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997 (<a href="http://www.rfc-editor.org/rfc/rfc2119.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2119.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2119.xml">XML</a>).</td></tr>
+</table>
+
+<a name="rfc.references2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>8.2.&nbsp;Informative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="CCNMessages">[CCNMessages]</a></td>
+<td class="author-text">Mosko, M., Solis, I., and C. Wood, &ldquo;<a href="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-03">CCNx Messages in TLV Format (Internet draft)</a>,&rdquo; 2016.</td></tr>
+<tr><td class="author-text" valign="top"><a name="CCNSemantics">[CCNSemantics]</a></td>
+<td class="author-text">Mosko, M., Solis, I., and C. Wood, &ldquo;<a href="http://tools.ietf.org/html/draft-mosko-icnrg-ccnxsemantics-03">CCNx Semantics (Internet draft)</a>,&rdquo; 2016.</td></tr>
+<tr><td class="author-text" valign="top"><a name="CCNx">[CCNx]</a></td>
+<td class="author-text">PARC, Inc., &ldquo;<a href="http://www.ccnx.org">CCNx Open Source</a>,&rdquo; 2007.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3552">[RFC3552]</a></td>
+<td class="author-text">Rescorla, E. and B. Korver, &ldquo;<a href="http://tools.ietf.org/html/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>,&rdquo; BCP&nbsp;72, RFC&nbsp;3552, July&nbsp;2003 (<a href="http://www.rfc-editor.org/rfc/rfc3552.txt">TXT</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5226">[RFC5226]</a></td>
+<td class="author-text">Narten, T. and H. Alvestrand, &ldquo;<a href="http://tools.ietf.org/html/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>,&rdquo; BCP&nbsp;26, RFC&nbsp;5226, May&nbsp;2008 (<a href="http://www.rfc-editor.org/rfc/rfc5226.txt">TXT</a>).</td></tr>
+</table>
+
+<a name="rfc.authors"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>Author's Address</h3>
+<table width="99%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Marc Mosko</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">PARC, Inc.</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Palo Alto, California  94304</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">USA</td></tr>
+<tr><td class="author" align="right">Phone:&nbsp;</td>
+<td class="author-text">+01 650-812-4405</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:marc.mosko@parc.com">marc.mosko@parc.com</a></td></tr>
+</table>
+</body></html>
