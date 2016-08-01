@@ -144,8 +144,8 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">ICNRG</td><td class="header">M. Mosko</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">PARC, Inc.</td></tr>
-<tr><td class="header">Intended status: Experimental</td><td class="header">July 29, 2016</td></tr>
-<tr><td class="header">Expires: January 30, 2017</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">August 1, 2016</td></tr>
+<tr><td class="header">Expires: February 2, 2017</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
 <h1><br />CCNx Selector Based Discovery<br />draft-mosko-icnrg-selectors-00</h1>
 
@@ -158,14 +158,10 @@
       selectors, their encoding in a name path segment, and the encapsulation
       protocol.
 </p>
-<p>Copyright (C) 2013-2016, Palo Alto Research Center
-</p>
 <h3>Status of this Memo</h3>
 <p>
-This document is an Internet-Draft and is
-NOT offered in accordance with Section&nbsp;10 of RFC&nbsp;2026,
-and the author does not provide the IETF with any rights other
-than to publish as an Internet-Draft.</p>
+This Internet-Draft is submitted  in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.</p>
 <p>
 Internet-Drafts are working documents of the Internet Engineering
 Task Force (IETF).  Note that other groups may also distribute
@@ -177,7 +173,22 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on January 30, 2017.</p>
+This Internet-Draft will expire on February 2, 2017.</p>
+
+<h3>Copyright Notice</h3>
+<p>
+Copyright (c) 2016 IETF Trust and the persons identified as the
+document authors.  All rights reserved.</p>
+<p>
+This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents
+(http://trustee.ietf.org/license-info) in effect on the date of
+publication of this document.  Please review these documents
+carefully, as they describe your rights and restrictions with respect
+to this document. Code Components extracted from this document must
+include Simplified BSD License text as described in Section 4.e of
+the Trust Legal Provisions and are provided without warranty as
+described in the Simplified BSD License.</p>
 <a name="toc"></a><br /><hr />
 <h3>Table of Contents</h3>
 <p class="toc">
@@ -203,8 +214,8 @@ Exclude Range<br />
 Examples<br />
 <a href="#caching">4.</a>&nbsp;
 Content Store and Caching<br />
-<a href="#Acknowledgements">5.</a>&nbsp;
-Acknowledgements<br />
+<a href="#Annex_A">5.</a>&nbsp;
+Annex A: Examples<br />
 <a href="#IANA">6.</a>&nbsp;
 IANA Considerations<br />
 <a href="#Security">7.</a>&nbsp;
@@ -231,26 +242,26 @@ Introduction</h3>
        if it matches the encoded query.  The query uses exclusions to work around
        incorrect responses.
 </p>
-<p>This document specifies a new name label for selector query.  It also specifies
-       a new type of Content Object that encapsulates another Content Object.  The
-       Encapsulation Object is used to return a Content Object with a longer name
-       than in an interest.  The encapsulated object's signature should verify.
+<p>This document specifies a new name TLV type, T_SELECTOR, for selector query.  It also specifies
+       a new Content Object PayloadType that encapsulates another Content Object.  The
+       inner Content Object is used to return a Content Object with a longer name
+       than in an interest.  The inner object's signature should verify.
        
 </p>
 <p>Not all nodes along the Interest path need to participate in the discovery
          process.  A non-participating node should forward the Interest and encapsulating
        Content Object as normal per <a class='info' href='#CCNSemantics'>[CCNSemantics]<span> (</span><span class='info'>Mosko, M., Solis, I., and C. Wood, &ldquo;CCNx Semantics (Internet draft),&rdquo; 2016.</span><span>)</span></a>.  A participating
-       node should verify that the encapsulated Content Object matches the selector query
+       node should verify that the inner Content Object matches the selector query
        in the PIT entry.
 </p>
 <p>Note that Selector discovery is not needed when asking for a Content Object
        by its ContentObjectHash, as there should only ever be one match for that.
 </p>
-<p>Note that Selector discovery in CCNx 1.0 differs slightly from the current
+<p>Selector discovery in CCNx 1.0 differs in three ways from the current
          NDN and prior CCNx 0.x selector discovery.  First, CCNx 1.0 uses a distinguished
          field for the ContentObjectHashRestriction.  It is not appended to the name to
          form the so-called "full name."  This means that there is no implicit digest
-         name component.  Thus, using a MinSuffixComponents and MaxSuffixComponents
+         name segment.  Thus, using a MinSuffixComponents and MaxSuffixComponents
          of 0 will match the exact name in the Interest without needing to add
          one extra component to account for the implicit digest.  Second,
          there is a HashExcludes field that lists ContentObjectHashRestrictions to
@@ -286,29 +297,26 @@ Protocol Description</h3>
 <p>Selector based discovery uses six query variables to discover content. These
       selectors are encoded as a single name path segment affixed to an Interest name.
       The selectors operate on the prefix up to, but not including the selector
-      name path segment.
+      name path segment.  The selector name path segment should be the last path segment.
 </p>
 <p>The selectors are:
         </p>
 <ul class="text">
 <li>MinSuffixComponents: the minimum number of additional name path segments a matching
-            Content Object must have in its name, with the Content Object Hash appended
-            as the terminal path segment.  The default value is 0.
+            Content Object must have in its name.  The default value is 0.
 </li>
 <li>MaxSuffixComponents: The maximum number of additional name path segments a matching
-          Content Object may have in its name, with the Content Object hash appended as
-          the terminal path segment.  The default value is unlimited.
+          Content Object may have in its name.  The default value is unlimited.
 </li>
 <li>ChildSelector: Answer with the left-most or right-most child.
 </li>
 <li>NameExcludes: A set of range and singleton exclusions to eliminate Content Objects.
           The exclusions match against the name path segment that would immediately follow
-          the Interest prefix prior to the Selector path segment.  They are matched against a Content Object name with
-          the Content Object Hash appended as terminal path segment.
+          the Interest name prefix up to but not including the Selector path segment.
 </li>
 <li>InnerKeyId: Matches the KeyId of the encapsulated object.
 </li>
-<li>HashExcludes: A list of ContentObjectHashRestrictions to exclude, regardless of the name.
+<li>HashExcludes: A list of ContentObjectHashRestrictions to exclude.
 </li>
 </ul><p>
       
@@ -325,9 +333,9 @@ Protocol Description</h3>
       match, the Interest should be forwarded or NACKed as normal.
 </p>
 <p>An Encapsulation Object is a Content Object that matches the Selector Interest
-      and whose payload is the ``discovered'' Content Object.  
+      and whose payload is the discovered Content Object.  
       The ContentType of an Encapsulation Object is "ENCAP".
-      The outer name matches the Selector Interest name.  The Inner Content Object
+      The outer name matches the Selector Interest name.  The inner Content Object
       name matches the Selector discovery.
 </p>
 <p>
@@ -339,7 +347,10 @@ Protocol Description</h3>
 </p>
 <p>
         The HashExcludes eliminate any Content Objects whose ContentObjectHash matches any of
-        the listed values.  They are encoded the same way as the ContentObjectHashRestriction in
+        the listed values.  It should not matter if matching objects are discarded before name prefix selector
+        matching or after.  A Content Object must always pass both the HashExcludes filter and
+        the name prefix selector filters, wether it is done first or last does not matter.
+        HashExcludes are encoded the same way as a ContentObjectHashRestriction value in
         an Interest.  Note that this Selector does not exist in NDN or CCNx 0.x.  We use
         an explicit set of HashExcludes rather than constructing a full name with the implicit
         digest component at the end.
@@ -351,11 +362,14 @@ Protocol Description</h3>
         or not respond at all.
         At the present, responding directly to the Selector Interest with data without encapsulating
         it is not supported.
+        Note that an application is NOT REQUIRED to implement Selector discovery; if the application wishes
+        to make use of this mechanism, then it must implement it, if it does not use this mechanism then
+        it does not need to implement it.
       
 </p>
 <p>Normally, the outer Content Object does not have a Validation section.  A responding
       node MAY include a CRC32C or other integrity check.  Signing or MACing an outer Content Object
-      is possible, but should only be used in specialized environments where that degree of trust
+      is possible, but should only be used in environments where that degree of trust
       is necessary.  Signing the outer Content Object in no way replaces the signature (if any) of
       the inner Content Object.  The outer signature only identifies the responding cache (or producer).
       
@@ -365,7 +379,7 @@ Protocol Description</h3>
 <a name="rfc.section.3"></a><h3>3.&nbsp;
 Name Labels and TLV types</h3>
 
-<p>The Selector name component T_SELECTOR has type %x0010.
+<p>The Selector name segment type T_SELECTOR has type %x0010.
 </p>
 <p>The PayloadType of T_PAYLOADTYPE_ENCAP has the value 8.
 </p><br /><hr class="insert" />
@@ -660,17 +674,21 @@ Content Store and Caching</h3>
       names, prior responses will not match in the caches of non-participating nodes, esepcially if
       the RecommendedCacheTime (or ExpireTime) is set to 0.
 </p>
-<a name="Acknowledgements"></a><br /><hr />
+<a name="Annex_A"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.5"></a><h3>5.&nbsp;
-Acknowledgements</h3>
+Annex A: Examples</h3>
 
+<p>TODO: Provide complete examples of Interests and responses.
+</p>
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6"></a><h3>6.&nbsp;
 IANA Considerations</h3>
 
-<p>This memo includes no request to IANA.
+<p>This memo includes no request to IANA.  TODO: If this document is submitted as an official
+        draft, this section must be updated to reflect the IANA registries described in <a class='info' href='#CCNMessages'>[CCNMessages]<span> (</span><span class='info'>Mosko, M., Solis, I., and C. Wood, &ldquo;CCNx Messages in TLV Format (Internet draft),&rdquo; 2016.</span><span>)</span></a>
+      
 </p>
 <a name="Security"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -684,12 +702,13 @@ Security Considerations</h3>
       too close to the maximum packet size.
 </p>
 <p>Participating nodes should be able to filter incorrect responses just as they
-      do in NDN or CCNx 0.x.  If all node participate, then one hash equivalent filtering
+      do in NDN or CCNx 0.x.  If all node participate, then one has equivalent in-network filtering
       behavior as those other protocols.
 </p>
 <p>If the outer Content Object is signed, the consumer should, as normal, verify
       the signature for accuracy.  However, the trust of the outer signature is normally
-      not important, especially if the inner Content Object has its own signature.
+      not important and usually reflects operation in a specific environment.  An outer Validation
+      section is usually used only for integrity checks.
 </p>
 <a name="rfc.references"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>

@@ -3,8 +3,8 @@
 
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
-Intended status: Experimental                              July 29, 2016
-Expires: January 30, 2017
+Intended status: Experimental                             August 1, 2016
+Expires: February 2, 2017
 
 
                      CCNx Selector Based Discovery
@@ -19,13 +19,10 @@ Abstract
    selectors, their encoding in a name path segment, and the
    encapsulation protocol.
 
-   Copyright (C) 2013-2016, Palo Alto Research Center
-
 Status of this Memo
 
-   This document is an Internet-Draft and is NOT offered in accordance
-   with Section 10 of RFC 2026, and the author does not provide the IETF
-   with any rights other than to publish as an Internet-Draft.
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
 
    Internet-Drafts are working documents of the Internet Engineering
    Task Force (IETF).  Note that other groups may also distribute
@@ -37,24 +34,30 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 30, 2017.
+   This Internet-Draft will expire on February 2, 2017.
+
+Copyright Notice
+
+   Copyright (c) 2016 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-Mosko                   Expires January 30, 2017                [Page 1]
+Mosko                   Expires February 2, 2017                [Page 1]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
+
+
+   described in the Simplified BSD License.
 
 
 Table of Contents
@@ -70,7 +73,7 @@ Table of Contents
        3.3.2.  Exclude Range  . . . . . . . . . . . . . . . . . . . . 10
        3.3.3.  Examples . . . . . . . . . . . . . . . . . . . . . . . 10
    4.  Content Store and Caching  . . . . . . . . . . . . . . . . . . 12
-   5.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 13
+   5.  Annex A: Examples  . . . . . . . . . . . . . . . . . . . . . . 13
    6.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 14
    7.  Security Considerations  . . . . . . . . . . . . . . . . . . . 15
    8.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 16
@@ -105,12 +108,9 @@ Table of Contents
 
 
 
-
-
-
-Mosko                   Expires January 30, 2017                [Page 2]
+Mosko                   Expires February 2, 2017                [Page 2]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
 1.  Introduction
@@ -121,28 +121,27 @@ Internet-Draft               CCNx Selectors                    July 2016
    reply with a Content Object if it matches the encoded query.  The
    query uses exclusions to work around incorrect responses.
 
-   This document specifies a new name label for selector query.  It also
-   specifies a new type of Content Object that encapsulates another
-   Content Object.  The Encapsulation Object is used to return a Content
-   Object with a longer name than in an interest.  The encapsulated
-   object's signature should verify.
+   This document specifies a new name TLV type, T_SELECTOR, for selector
+   query.  It also specifies a new Content Object PayloadType that
+   encapsulates another Content Object.  The inner Content Object is
+   used to return a Content Object with a longer name than in an
+   interest.  The inner object's signature should verify.
 
    Not all nodes along the Interest path need to participate in the
    discovery process.  A non-participating node should forward the
    Interest and encapsulating Content Object as normal per
-   [CCNSemantics].  A participating node should verify that the
-   encapsulated Content Object matches the selector query in the PIT
-   entry.
+   [CCNSemantics].  A participating node should verify that the inner
+   Content Object matches the selector query in the PIT entry.
 
    Note that Selector discovery is not needed when asking for a Content
    Object by its ContentObjectHash, as there should only ever be one
    match for that.
 
-   Note that Selector discovery in CCNx 1.0 differs slightly from the
-   current NDN and prior CCNx 0.x selector discovery.  First, CCNx 1.0
-   uses a distinguished field for the ContentObjectHashRestriction.  It
-   is not appended to the name to form the so-called "full name."  This
-   means that there is no implicit digest name component.  Thus, using a
+   Selector discovery in CCNx 1.0 differs in three ways from the current
+   NDN and prior CCNx 0.x selector discovery.  First, CCNx 1.0 uses a
+   distinguished field for the ContentObjectHashRestriction.  It is not
+   appended to the name to form the so-called "full name."  This means
+   that there is no implicit digest name segment.  Thus, using a
    MinSuffixComponents and MaxSuffixComponents of 0 will match the exact
    name in the Interest without needing to add one extra component to
    account for the implicit digest.  Second, there is a HashExcludes
@@ -161,15 +160,14 @@ Internet-Draft               CCNx Selectors                    July 2016
    concise way to represent all possibilities.  We use the convention
    that ASCII art fields enclosed by vertical bars "|" represent exact
    bit widths.  Fields with a forward slash "/" are variable bitwidths,
-
-
-
-Mosko                   Expires January 30, 2017                [Page 3]
-
-Internet-Draft               CCNx Selectors                    July 2016
-
-
    which we typically pad out to word alignment for picture readability.
+
+
+
+Mosko                   Expires February 2, 2017                [Page 3]
+
+Internet-Draft               CCNx Selectors                  August 2016
+
 
 1.1.  Requirements Language
 
@@ -220,9 +218,11 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-Mosko                   Expires January 30, 2017                [Page 4]
+
+
+Mosko                   Expires February 2, 2017                [Page 4]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
 2.  Protocol Description
@@ -230,33 +230,29 @@ Internet-Draft               CCNx Selectors                    July 2016
    Selector based discovery uses six query variables to discover
    content.  These selectors are encoded as a single name path segment
    affixed to an Interest name.  The selectors operate on the prefix up
-   to, but not including the selector name path segment.
+   to, but not including the selector name path segment.  The selector
+   name path segment should be the last path segment.
 
    The selectors are:
 
    o  MinSuffixComponents: the minimum number of additional name path
-      segments a matching Content Object must have in its name, with the
-      Content Object Hash appended as the terminal path segment.  The
+      segments a matching Content Object must have in its name.  The
       default value is 0.
 
    o  MaxSuffixComponents: The maximum number of additional name path
-      segments a matching Content Object may have in its name, with the
-      Content Object hash appended as the terminal path segment.  The
+      segments a matching Content Object may have in its name.  The
       default value is unlimited.
 
    o  ChildSelector: Answer with the left-most or right-most child.
 
    o  NameExcludes: A set of range and singleton exclusions to eliminate
       Content Objects.  The exclusions match against the name path
-      segment that would immediately follow the Interest prefix prior to
-      the Selector path segment.  They are matched against a Content
-      Object name with the Content Object Hash appended as terminal path
-      segment.
+      segment that would immediately follow the Interest name prefix up
+      to but not including the Selector path segment.
 
    o  InnerKeyId: Matches the KeyId of the encapsulated object.
 
-   o  HashExcludes: A list of ContentObjectHashRestrictions to exclude,
-      regardless of the name.
+   o  HashExcludes: A list of ContentObjectHashRestrictions to exclude.
 
    A node using Selector discovery appends a Selector name path segment
    to the end of the Interest name.  Even if no selectors are used, the
@@ -272,18 +268,18 @@ Internet-Draft               CCNx Selectors                    July 2016
    should be forwarded or NACKed as normal.
 
    An Encapsulation Object is a Content Object that matches the Selector
-   Interest and whose payload is the ``discovered'' Content Object.  The
-
-
-
-Mosko                   Expires January 30, 2017                [Page 5]
-
-Internet-Draft               CCNx Selectors                    July 2016
-
-
+   Interest and whose payload is the discovered Content Object.  The
    ContentType of an Encapsulation Object is "ENCAP".  The outer name
-   matches the Selector Interest name.  The Inner Content Object name
+   matches the Selector Interest name.  The inner Content Object name
    matches the Selector discovery.
+
+
+
+
+Mosko                   Expires February 2, 2017                [Page 5]
+
+Internet-Draft               CCNx Selectors                  August 2016
+
 
    The KeyIdRestriction of the Interest matches the outer KeyId of the
    outer Content Object, as normal.  This allows a responding cache or
@@ -293,8 +289,12 @@ Internet-Draft               CCNx Selectors                    July 2016
    KeyId.
 
    The HashExcludes eliminate any Content Objects whose
-   ContentObjectHash matches any of the listed values.  They are encoded
-   the same way as the ContentObjectHashRestriction in an Interest.
+   ContentObjectHash matches any of the listed values.  It should not
+   matter if matching objects are discarded before name prefix selector
+   matching or after.  A Content Object must always pass both the
+   HashExcludes filter and the name prefix selector filters, wether it
+   is done first or last does not matter.  HashExcludes are encoded the
+   same way as a ContentObjectHashRestriction value in an Interest.
    Note that this Selector does not exist in NDN or CCNx 0.x.  We use an
    explicit set of HashExcludes rather than constructing a full name
    with the implicit digest component at the end.
@@ -303,15 +303,19 @@ Internet-Draft               CCNx Selectors                    July 2016
    generate the inner Content Object as normal and encapsulate it as
    normal.  It MAY also respond with an Interest Return or not respond
    at all.  At the present, responding directly to the Selector Interest
-   with data without encapsulating it is not supported.
+   with data without encapsulating it is not supported.  Note that an
+   application is NOT REQUIRED to implement Selector discovery; if the
+   application wishes to make use of this mechanism, then it must
+   implement it, if it does not use this mechanism then it does not need
+   to implement it.
 
    Normally, the outer Content Object does not have a Validation
    section.  A responding node MAY include a CRC32C or other integrity
    check.  Signing or MACing an outer Content Object is possible, but
-   should only be used in specialized environments where that degree of
-   trust is necessary.  Signing the outer Content Object in no way
-   replaces the signature (if any) of the inner Content Object.  The
-   outer signature only identifies the responding cache (or producer).
+   should only be used in environments where that degree of trust is
+   necessary.  Signing the outer Content Object in no way replaces the
+   signature (if any) of the inner Content Object.  The outer signature
+   only identifies the responding cache (or producer).
 
 
 
@@ -328,18 +332,14 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-
-
-
-
-Mosko                   Expires January 30, 2017                [Page 6]
+Mosko                   Expires February 2, 2017                [Page 6]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
 3.  Name Labels and TLV types
 
-   The Selector name component T_SELECTOR has type %x0010.
+   The Selector name segment type T_SELECTOR has type %x0010.
 
    The PayloadType of T_PAYLOADTYPE_ENCAP has the value 8.
 
@@ -388,9 +388,9 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-Mosko                   Expires January 30, 2017                [Page 7]
+Mosko                   Expires February 2, 2017                [Page 7]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
    |   6  | T_HASH_EXCLUDES |    Hash    | Excludes a set of           |
@@ -444,9 +444,9 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-Mosko                   Expires January 30, 2017                [Page 8]
+Mosko                   Expires February 2, 2017                [Page 8]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
    A name exclusion is the full TLV expression of a name component, not
@@ -500,9 +500,9 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-Mosko                   Expires January 30, 2017                [Page 9]
+Mosko                   Expires February 2, 2017                [Page 9]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
    range start.  Therefore, begining an exlcusion with the zero-length
@@ -556,9 +556,9 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-Mosko                   Expires January 30, 2017               [Page 10]
+Mosko                   Expires February 2, 2017               [Page 10]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
    +---------------+---------------------------------------------------+
@@ -612,9 +612,9 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-Mosko                   Expires January 30, 2017               [Page 11]
+Mosko                   Expires February 2, 2017               [Page 11]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
 4.  Content Store and Caching
@@ -668,17 +668,14 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-Mosko                   Expires January 30, 2017               [Page 12]
+Mosko                   Expires February 2, 2017               [Page 12]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
-5.  Acknowledgements
+5.  Annex A: Examples
 
-
-
-
-
+   TODO: Provide complete examples of Interests and responses.
 
 
 
@@ -724,14 +721,19 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-Mosko                   Expires January 30, 2017               [Page 13]
+
+
+
+Mosko                   Expires February 2, 2017               [Page 13]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
 6.  IANA Considerations
 
-   This memo includes no request to IANA.
+   This memo includes no request to IANA.  TODO: If this document is
+   submitted as an official draft, this section must be updated to
+   reflect the IANA registries described in [CCNMessages]
 
 
 
@@ -778,11 +780,9 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-
-
-Mosko                   Expires January 30, 2017               [Page 14]
+Mosko                   Expires February 2, 2017               [Page 14]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
 7.  Security Considerations
@@ -795,13 +795,14 @@ Internet-Draft               CCNx Selectors                    July 2016
    Object that is too close to the maximum packet size.
 
    Participating nodes should be able to filter incorrect responses just
-   as they do in NDN or CCNx 0.x.  If all node participate, then one
-   hash equivalent filtering behavior as those other protocols.
+   as they do in NDN or CCNx 0.x.  If all node participate, then one has
+   equivalent in-network filtering behavior as those other protocols.
 
    If the outer Content Object is signed, the consumer should, as
    normal, verify the signature for accuracy.  However, the trust of the
-   outer signature is normally not important, especially if the inner
-   Content Object has its own signature.
+   outer signature is normally not important and usually reflects
+   operation in a specific environment.  An outer Validation section is
+   usually used only for integrity checks.
 
 
 
@@ -835,10 +836,9 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-
-Mosko                   Expires January 30, 2017               [Page 15]
+Mosko                   Expires February 2, 2017               [Page 15]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
 8.  References
@@ -892,9 +892,9 @@ Internet-Draft               CCNx Selectors                    July 2016
 
 
 
-Mosko                   Expires January 30, 2017               [Page 16]
+Mosko                   Expires February 2, 2017               [Page 16]
 
-Internet-Draft               CCNx Selectors                    July 2016
+Internet-Draft               CCNx Selectors                  August 2016
 
 
 Author's Address
@@ -948,5 +948,5 @@ Author's Address
 
 
 
-Mosko                   Expires January 30, 2017               [Page 17]
+Mosko                   Expires February 2, 2017               [Page 17]
 
