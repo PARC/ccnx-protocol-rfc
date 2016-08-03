@@ -39,7 +39,7 @@
 
 <?rfc private="" ?>
 
-<rfc category="exp" docName="draft-mosko-icnrg-selectors-00" ipr="trust200902">
+<rfc category="exp" docName="draft-mosko-icnrg-selectors-01" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
        or pre5378Trust200902
@@ -175,7 +175,7 @@
     </section>
 
     <section anchor="protocol" title="Protocol Description">
-      <t>Selector based discovery uses six query variables to discover content. These
+      <t>Selector based discovery uses seven query variables to discover content. These
       selectors are encoded as a single name path segment affixed to an Interest name.
       The selectors operate on the prefix up to, but not including the selector
       name path segment.  The selector name path segment should be the last path segment.</t>
@@ -192,6 +192,7 @@
           the Interest name prefix up to but not including the Selector path segment.</t>
           <t>InnerKeyId: Matches the KeyId of the encapsulated object.</t>
           <t>HashExcludes: A list of ContentObjectHashRestrictions to exclude.</t>
+          <t>SelectorNonce: A number to make the query unique.</t>
         </list>
       </t>
 
@@ -228,6 +229,17 @@
         an Interest.  Note that this Selector does not exist in NDN or CCNx 0.x.  We use
         an explicit set of HashExcludes rather than constructing a full name with the implicit
         digest component at the end.
+      </t>
+      
+      <t>A consumer MAY include a SelectorNonce.  This nonce is to make the query unqiue to bypass
+      cached reponses to the same Selectors at non-participating nodes.  A conumser SHOULD use this field
+      if it receives an non-conforming response in an encapsulated ContentObject and cannot further exclude
+      that response.  If an attacker were able to inject an incorrect response into a non-participating cache
+      then that non-participating node cannot determine that the response it is serving from cache is
+      correct or not.  Therefore, a consumer can use the SelectorNonce to make its requrest name different
+      from the cached name.  Note that if all nodes are participating, then this field has no effect as it
+      is not processed by them.  The SelectorNone is not used for loop detection and may be as few bytes
+      as needed to avoid a cached response.
       </t>
       
       <t>
@@ -349,18 +361,24 @@ type = T_MINSUFFIX or T_MAXSUFFIX
           immediately following the last component of
           the Interest name (not including the Selector TLV).  
           The excludes must be sorted
-          in ascending order, using the normal Name sorting
-          rules.</t>
+          in ascending order, using the Exclude sorting
+          rules below.</t>
         
         <t>A name exclusion is the full TLV expression of
         a name component, not just it's value.</t>
         
-        <t>An exclusion value A is less than
+        <t>Exclude Sorting: An exclusion value A is less than
         B iff the TLV type of A is less than the TLV type of
         B, or being equal, the TLV value of A is shortlex less
         than the TLV value of B.  A shortlex comparison means
         that X is less than Y is X is shorter than Y or the
         lengths being equal, X lexicagraphically sorts before Y.</t>
+        
+        <t>Using the normal 2+2 TLV encoding of <xref target="CCNMessages"></xref>,
+        the Exclude Sorting can be done by a byte-by-byte memcmp() of two
+        TLVs.  This is because the fixed length Type ensures correct type
+        sorting and fixed length Length ensures correct shortlex length sorting.
+        This will not necessarily be true of other encodings.</t>
         
         <t>A zero-length exclusion is the minimum exclusion
         and must appear before any other exclusion.  Note that
@@ -505,22 +523,27 @@ component = (start-range-tlv singleton-tlv) / singleton-tlv
       </t>
       
       <t>A participating content store MUST obey both the outer and inner cache control
-      directives: ExpiryTime and RecommendedCacheTime.  Thus, a responding cache can reduce or
-      prevent the response being cached by setting a short or zero ExpiryTime independently
-      of the caching behavior of the encapsulated inner Content Object.</t>
+      directives: ExpiryTime and RecommendedCacheTime.  At a participating node, the outer and
+      inner Content Objects are independent and cached independently.  This is allowed because
+      a participating node has verified that the inner ContentObject comes from an on-path direction
+      of the routing prefix, so it cannot be an off-path injection of bad content.</t>
       
-      <t>A non-participating content store MUST objey the outer cache control directives,
+      <t>A non-participating content store must obey the outer cache control directives,
       as normal.  The inner content object is opaque data to it.</t>
       
       <t>It is RECOMMENDED that a participating node
-      creating the encapsulated response set a short RecommendedCacheTime and MAY set
-      an ExpirtyTime.</t>
+      creating the encapsulated response set a short ExpiryTime and MAY set a 0 ExpiryTime (to prevent all caching).
+      This is desirable because non-participating nodes only look at the outer ExpiryTime and cannot determine
+      if the inner ContentObject actually satisfies the Selector query.  Note that a consumer can also use
+      a SelectorNonce to avoid bad cache entries at non-participating nodes, so it is not necessary for
+      correctness to use a 0 ExpiryTime.</t>
       
       <t>Note that cached respones are, in general, not a problem for the discovery process.  Participating
       nodes will always do a full selector match, so a consumer can work around incorrect responses
       as normal.  Because Selector interests with differnent Exclude blocks will result in different
       names, prior responses will not match in the caches of non-participating nodes, esepcially if
-      the RecommendedCacheTime (or ExpireTime) is set to 0.</t>
+      the ExpiryTime is set to 0.
+      </t>
     </section>
       
     <section anchor="Annex_A" title="Annex A: Examples">

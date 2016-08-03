@@ -144,10 +144,10 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">ICNRG</td><td class="header">M. Mosko</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">PARC, Inc.</td></tr>
-<tr><td class="header">Intended status: Experimental</td><td class="header">August 1, 2016</td></tr>
-<tr><td class="header">Expires: February 2, 2017</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">August 3, 2016</td></tr>
+<tr><td class="header">Expires: February 4, 2017</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
-<h1><br />CCNx Selector Based Discovery<br />draft-mosko-icnrg-selectors-00</h1>
+<h1><br />CCNx Selector Based Discovery<br />draft-mosko-icnrg-selectors-01</h1>
 
 <h3>Abstract</h3>
 
@@ -173,7 +173,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on February 2, 2017.</p>
+This Internet-Draft will expire on February 4, 2017.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -294,7 +294,7 @@ Requirements Language</h3>
 <a name="rfc.section.2"></a><h3>2.&nbsp;
 Protocol Description</h3>
 
-<p>Selector based discovery uses six query variables to discover content. These
+<p>Selector based discovery uses seven query variables to discover content. These
       selectors are encoded as a single name path segment affixed to an Interest name.
       The selectors operate on the prefix up to, but not including the selector
       name path segment.  The selector name path segment should be the last path segment.
@@ -317,6 +317,8 @@ Protocol Description</h3>
 <li>InnerKeyId: Matches the KeyId of the encapsulated object.
 </li>
 <li>HashExcludes: A list of ContentObjectHashRestrictions to exclude.
+</li>
+<li>SelectorNonce: A number to make the query unique.
 </li>
 </ul><p>
       
@@ -354,6 +356,17 @@ Protocol Description</h3>
         an Interest.  Note that this Selector does not exist in NDN or CCNx 0.x.  We use
         an explicit set of HashExcludes rather than constructing a full name with the implicit
         digest component at the end.
+      
+</p>
+<p>A consumer MAY include a SelectorNonce.  This nonce is to make the query unqiue to bypass
+      cached reponses to the same Selectors at non-participating nodes.  A conumser SHOULD use this field
+      if it receives an non-conforming response in an encapsulated ContentObject and cannot further exclude
+      that response.  If an attacker were able to inject an incorrect response into a non-participating cache
+      then that non-participating node cannot determine that the response it is serving from cache is
+      correct or not.  Therefore, a consumer can use the SelectorNonce to make its requrest name different
+      from the cached name.  Note that if all nodes are participating, then this field has no effect as it
+      is not processed by them.  The SelectorNone is not used for loop detection and may be as few bytes
+      as needed to avoid a cached response.
       
 </p>
 <p>
@@ -490,18 +503,24 @@ Name Excludes</h3>
           immediately following the last component of
           the Interest name (not including the Selector TLV).  
           The excludes must be sorted
-          in ascending order, using the normal Name sorting
-          rules.
+          in ascending order, using the Exclude sorting
+          rules below.
 </p>
 <p>A name exclusion is the full TLV expression of
         a name component, not just it's value.
 </p>
-<p>An exclusion value A is less than
+<p>Exclude Sorting: An exclusion value A is less than
         B iff the TLV type of A is less than the TLV type of
         B, or being equal, the TLV value of A is shortlex less
         than the TLV value of B.  A shortlex comparison means
         that X is less than Y is X is shorter than Y or the
         lengths being equal, X lexicagraphically sorts before Y.
+</p>
+<p>Using the normal 2+2 TLV encoding of <a class='info' href='#CCNMessages'>[CCNMessages]<span> (</span><span class='info'>Mosko, M., Solis, I., and C. Wood, &ldquo;CCNx Messages in TLV Format (Internet draft),&rdquo; 2016.</span><span>)</span></a>,
+        the Exclude Sorting can be done by a byte-by-byte memcmp() of two
+        TLVs.  This is because the fixed length Type ensures correct type
+        sorting and fixed length Length ensures correct shortlex length sorting.
+        This will not necessarily be true of other encodings.
 </p>
 <p>A zero-length exclusion is the minimum exclusion
         and must appear before any other exclusion.  Note that
@@ -657,22 +676,27 @@ Content Store and Caching</h3>
       
 </p>
 <p>A participating content store MUST obey both the outer and inner cache control
-      directives: ExpiryTime and RecommendedCacheTime.  Thus, a responding cache can reduce or
-      prevent the response being cached by setting a short or zero ExpiryTime independently
-      of the caching behavior of the encapsulated inner Content Object.
+      directives: ExpiryTime and RecommendedCacheTime.  At a participating node, the outer and
+      inner Content Objects are independent and cached independently.  This is allowed because
+      a participating node has verified that the inner ContentObject comes from an on-path direction
+      of the routing prefix, so it cannot be an off-path injection of bad content.
 </p>
-<p>A non-participating content store MUST objey the outer cache control directives,
+<p>A non-participating content store must obey the outer cache control directives,
       as normal.  The inner content object is opaque data to it.
 </p>
 <p>It is RECOMMENDED that a participating node
-      creating the encapsulated response set a short RecommendedCacheTime and MAY set
-      an ExpirtyTime.
+      creating the encapsulated response set a short ExpiryTime and MAY set a 0 ExpiryTime (to prevent all caching).
+      This is desirable because non-participating nodes only look at the outer ExpiryTime and cannot determine
+      if the inner ContentObject actually satisfies the Selector query.  Note that a consumer can also use
+      a SelectorNonce to avoid bad cache entries at non-participating nodes, so it is not necessary for
+      correctness to use a 0 ExpiryTime.
 </p>
 <p>Note that cached respones are, in general, not a problem for the discovery process.  Participating
       nodes will always do a full selector match, so a consumer can work around incorrect responses
       as normal.  Because Selector interests with differnent Exclude blocks will result in different
       names, prior responses will not match in the caches of non-participating nodes, esepcially if
-      the RecommendedCacheTime (or ExpireTime) is set to 0.
+      the ExpiryTime is set to 0.
+      
 </p>
 <a name="Annex_A"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>

@@ -6,7 +6,7 @@
 
 FILES += draft-irtf-icnrg-ccnxmessages-03
 FILES += draft-irtf-icnrg-ccnxsemantics-03
-FILES += draft-mosko-icnrg-selectors-00
+FILES += draft-mosko-icnrg-selectors-01
 
 FILES += draft-mosko-icnrg-beginendfragment-01
 FILES += draft-mosko-icnrg-ccnxchunking-02
