@@ -14,6 +14,7 @@ FILES += draft-mosko-icnrg-ccnxuri-03
 FILES += draft-mosko-icnrg-ccnxfragmentation-01
 FILES += draft-mosko-icnrg-ccnxserialversion-01
 FILES += draft-mosko-icnrg-ccnxtimeversion-02
+FILES += draft-mosko-icnrg-cachecontrol-00
 
 #FILES += draft-wood-icnrg-ccnxoverudp
 
