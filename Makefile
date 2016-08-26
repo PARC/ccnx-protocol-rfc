@@ -4,8 +4,8 @@
 ## NB: they will appear in the combined PDF
 ##     in the order listed.
 
-FILES += draft-irtf-icnrg-ccnxmessages-03
-FILES += draft-irtf-icnrg-ccnxsemantics-03
+FILES += draft-irtf-icnrg-ccnxmessages-04
+FILES += draft-irtf-icnrg-ccnxsemantics-04
 FILES += draft-mosko-icnrg-selectors-01
 
 FILES += draft-mosko-icnrg-beginendfragment-01
