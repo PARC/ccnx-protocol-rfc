@@ -8,7 +8,7 @@ FILES += draft-irtf-icnrg-ccnxmessages-04
 FILES += draft-irtf-icnrg-ccnxsemantics-04
 FILES += draft-mosko-icnrg-selectors-01
 
-FILES += draft-mosko-icnrg-beginendfragment-01
+FILES += draft-mosko-icnrg-beginendfragment-02
 FILES += draft-mosko-icnrg-ccnxchunking-02
 FILES += draft-mosko-icnrg-ccnxuri-03
 FILES += draft-mosko-icnrg-ccnxfragmentation-01

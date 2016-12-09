@@ -1212,13 +1212,13 @@ Internet-Draft                  CCNx TLV                    October 2013
 
    Interest Excludes specify a set of singletons and ranges to exclude
    when matching content object names to an Interest.  They match the
-   name component immediately following the last componnet of the
+   name component immediately following the last component of the
    Interest name.  The excludes must be sorted in ascending order, using
    the normal Name sorting rules.
 
-   The normal name sorting rules use a shortlex alogrithm.  A name
+   The normal name sorting rules use a shortlex algorithm.  A name
    component A is less than a name component B iff A is fewer bytes, or
-   the byte size being equal, A is lexicagraphically sorted before B,
+   the byte size being equal, A is lexicographically sorted before B,
    where the most significant byte is first.
 
    The zero-length name component is the minimum name component.  If
@@ -1267,7 +1267,7 @@ Internet-Draft                  CCNx TLV                    October 2013
 7.4.6.2.  Exclude Range
 
    A Range exclude means to exclude the from the given value up to an
-   including the next Singleton.  If the Range is the last componet in
+   including the next Singleton.  If the Range is the last component in
    the Exclude, it means to exclude to infinity.
 
                         1                   2                   3
