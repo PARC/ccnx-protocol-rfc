@@ -4,8 +4,8 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                      PARC
 Intended status: Experimental                                C. Tschudin
-Expires: June 12, 2017                               University of Basel
-                                                        December 9, 2016
+Expires: June 16, 2017                               University of Basel
+                                                       December 13, 2016
 
 
                 ICN "Begin-End" Hop by Hop Fragmentation
@@ -34,7 +34,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 12, 2017.
+   This Internet-Draft will expire on June 16, 2017.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                 [Page 1]
+Mosko & Tschudin          Expires June 16, 2017                 [Page 1]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -83,11 +83,10 @@ Table of Contents
      7.1.  CCNx Packet Type Registry  . . . . . . . . . . . . . . . . 27
      7.2.  CCNx Message Registry  . . . . . . . . . . . . . . . . . . 27
    8.  Security Considerations  . . . . . . . . . . . . . . . . . . . 28
-   9.  Reset Pseudocode . . . . . . . . . . . . . . . . . . . . . . . 29
-   10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 32
-     10.1. Normative References . . . . . . . . . . . . . . . . . . . 32
-     10.2. Informative References . . . . . . . . . . . . . . . . . . 32
-   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 33
+   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+     9.1.  Normative References . . . . . . . . . . . . . . . . . . . 29
+     9.2.  Informative References . . . . . . . . . . . . . . . . . . 29
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 31
 
 
 
@@ -108,7 +107,8 @@ Table of Contents
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                 [Page 2]
+
+Mosko & Tschudin          Expires June 16, 2017                 [Page 2]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -164,7 +164,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                 [Page 3]
+Mosko & Tschudin          Expires June 16, 2017                 [Page 3]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -220,7 +220,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                 [Page 4]
+Mosko & Tschudin          Expires June 16, 2017                 [Page 4]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -276,7 +276,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                 [Page 5]
+Mosko & Tschudin          Expires June 16, 2017                 [Page 5]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -332,7 +332,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                 [Page 6]
+Mosko & Tschudin          Expires June 16, 2017                 [Page 6]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -342,9 +342,13 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
    10.  Upon receiving a valid RESETACK that matches a node's N_LOCAL,
         the RESET timeout is set back to RESET_TIMEOUT.
 
-   Figures 1 - 3 show the reset state machine.  Section Section 9
-   provides pseudocode for the same state machine.  In the figures, we
-   use short abbreviations for compactness.  N_L is N_LOCAL, N_R is
+   The ccnx-beginendfragment-sim [python-sim] software package is a
+   Python simulator of the sequence number reset algorithm.  It uses
+   simple discrete event simulator to validate the reset algorithm under
+   various conditions of delay and packet loss and node reboots.
+
+   Figures 1 - 3 show the reset state machine.  In the figures, we use
+   short abbreviations for compactness.  N_L is N_LOCAL, N_R is
    N_REMOTE, FSN_L is FSN_LOCAL, FSN_R is FSN_REMOTE.  We also
    abbreviate RESET as RST and RESTACK as RSTACK.  Double line boxes
    indicate a potentially blocking state that responds to external
@@ -384,11 +388,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-
-
-
-
-Mosko & Tschudin          Expires June 12, 2017                 [Page 7]
+Mosko & Tschudin          Expires June 16, 2017                 [Page 7]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -444,14 +444,14 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                 [Page 8]
+Mosko & Tschudin          Expires June 16, 2017                 [Page 8]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
-  .....................        +-------------------+
-  :        X1         : ---->  |  Send RST(N_L)    | <--------+
-  .....................        +-------------------+          |
+                 ......        +-------------------+
+                 : X1 : ---->  |  Send RST(N_L)    | <--------+
+                 :....:        +-------------------+          |
                                        |                      |
                                        v                      |
                                +-------------------+   +--------------+
@@ -464,9 +464,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
   +-------------------+        #===================#
         |                              | recv(RSTACK N,M)
         v                              v
-  .....................        +-------------------+  no    +----------+
-  :       To X4       :        |     If N=N_L      | -----> |   Drop   |
-  :...................:        +-------------------+        +----------+
+     .........                 +-------------------+  no    +----------+
+     : To X4 :                 |     If N=N_L      | -----> |   Drop   |
+     :.......:                 +-------------------+        +----------+
                                        | yes
                                        v
                                +-------------------+
@@ -481,17 +481,15 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
                                | RSTACK(N_R, N_L)  | <+
                                +-------------------+  |
                                         |             | yes
-                     recv RSTACK(N, M)  v             |
-    +-------------------+      #===================#  |
- +- | If N=N_L && M=N_R | <--- H      OK, OK       H <+------+
- |  +-------------------+      #===================#  |      |
- |    | no                              | recv RST(M) |      |
- |    v                                 v             |      |
- |  .....................  no  +-------------------+  |      | yes
- |  :       To X3       : <--- |     If M=N_R      | -+      |
- |  :...................:      +-------------------+         |
- |                                                           |
- +-----------------------------------------------------------+
+                  recv RSTACK(N, M)     v             |
+                .........      #===================#  |
+                : To X6 : <--- H      OK, OK       H  |
+                :.......:      #===================#  |
+                                        | recv RST(M) |
+                                        v             |
+                .........  no  +-------------------+  |
+                : To X3 : <--- |     If M=N_R      | -+
+                :.......:      +-------------------+
 
                           Figure 2: Master State
 
@@ -500,14 +498,16 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                 [Page 9]
+
+
+Mosko & Tschudin          Expires June 16, 2017                 [Page 9]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
- ...........       +-------------------+
- :   X2    : ----> |       N_R=M       | <----+
- :.........:       +-------------------+      |
+    ........       +-------------------+
+    :  X2  : ----> |       N_R=M       | <----+
+    :......:       +-------------------+      |
                        |                      | recv (RST M)
                        v                      |
                    +-------------------+    #===================#
@@ -520,18 +520,18 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
                 |  |    Start Timer    | <------------------------+
                 |  +-------------------+                          |
                 |    |                                            |
-                |    v                                            |
-                |  #====================================#  recv   |
+                |    v                                     recv   |
+                |  #====================================# (RST M) |
   +-------------+> H            Sync, OK                H --------+---+
-  |             |  #====================================# (RST M) |   |
+  |             |  #====================================#         |   |
   |             |      | recv (RSTAK N,M)   | timeout             |   |
   |             |      v                    |                     |   |
-  |  +------+   |    +-----------------+    |      +---------------+  |
-  |  | Drop | <-+--- |   If N=N_L      |    +----> | Inc. Timeout  |  |
-  |  +------+   |no  +-----------------+           +---------------+  |
-  |             |     | yes                   recv (RST M) +----------+
-  |             |     v                                    v
-  |             |  +-------------------+           +---------------+
+  |  ........   |    +-----------------+    |      +---------------+  |
+  |  :  X6  : --+--> |   If N=N_L      |    +----> | Inc. Timeout  |  |
+  |  :......:   |no  +-----------------+           +---------------+  |
+  |  +------+   |     | no        | yes                    +----------+
+  |  | Drop | <-+-----+           v                        v
+  |  +------+   |  +-------------------+           +---------------+
   |             |  |   Cancel Timer    |           | If M=N_REMOTE | yes
   |             |  |   Reset Timeout   |           |               | -+
   |             |  +-------------------+           +---------------+  |
@@ -539,13 +539,13 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
   |  .........  |      v                             v                |
   |  :   To  :  |    +-----------------+           +---------------+  |
   |  : OK,OK :<-+--- |  If M=M_REMOTE  |           | Cancel Timer  |  |
-  |  .........  |yes +-----------------+           +---------------+  |
+  |  :.......:  |yes +-----------------+           +---------------+  |
   |             |      | no                          |                |
   |             |      v                             |                |
   |             |  +-------------------+             |                |
   |  ........   +- |      N_R=M,       | <-----------+                |
   |  :  X3  : ---> |   FSN_R=FSN_L=0   |                              |
-  |  ........      +-------------------+                              |
+  |  :......:      +-------------------+                              |
   +--------------------- +    +-------------------+                   |
                ........  +--< |       Send        |                   |
                :  X4  : ----> |  RSTAK(N_R, N_L)  | <-----------------+
@@ -556,7 +556,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 10]
+Mosko & Tschudin          Expires June 16, 2017                [Page 10]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -612,7 +612,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 11]
+Mosko & Tschudin          Expires June 16, 2017                [Page 11]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -625,11 +625,11 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
    |   |     |     |     |                        |     |     |     |
    | 2 |     |     |     | <---------{RESET, 7}-< | I I | 7 0 | 0 0 |
    | 3 |   OK| 5 7 | 0 0 |                        |     |     |     |
-   | 4 |     |     |     | >-{RESET_ACK, 7}-----> |     |     |     |
+   | 4 |     |     |     | >-{RESET_ACK, 7, 5}--> |     |     |     |
    | 5 |     |     |     |                        |OK   | 7 0 | 0 0 |
    | 6 |     |     |     | >-{RESET, 5}---------> |     |     |     |
    | 7 |     |     |     |                        |   OK|   5 | 0 0 |
-   | 8 |     |     |     | <-----{RESET_ACK, 5}-< |     |     |     |
+   | 8 |     |     |     | <---{RESET_ACK, 5,7}-< |     |     |     |
    | 9 |OK   |     |     | <-------------{data}-< |     |     |     |
    | 10|     |     |     | >-{data}-------------> |     |     |     |
    |---|-----|-----|-----|                        |-----|-----|-----|
@@ -668,7 +668,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 12]
+Mosko & Tschudin          Expires June 16, 2017                [Page 12]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -724,7 +724,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 13]
+Mosko & Tschudin          Expires June 16, 2017                [Page 13]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -780,7 +780,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 14]
+Mosko & Tschudin          Expires June 16, 2017                [Page 14]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -836,7 +836,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 15]
+Mosko & Tschudin          Expires June 16, 2017                [Page 15]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -892,7 +892,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 16]
+Mosko & Tschudin          Expires June 16, 2017                [Page 16]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -948,7 +948,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 17]
+Mosko & Tschudin          Expires June 16, 2017                [Page 17]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1004,7 +1004,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 18]
+Mosko & Tschudin          Expires June 16, 2017                [Page 18]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1060,7 +1060,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 19]
+Mosko & Tschudin          Expires June 16, 2017                [Page 19]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1116,7 +1116,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 20]
+Mosko & Tschudin          Expires June 16, 2017                [Page 20]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1172,7 +1172,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 21]
+Mosko & Tschudin          Expires June 16, 2017                [Page 21]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1228,7 +1228,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 22]
+Mosko & Tschudin          Expires June 16, 2017                [Page 22]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1284,7 +1284,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 23]
+Mosko & Tschudin          Expires June 16, 2017                [Page 23]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1340,7 +1340,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 24]
+Mosko & Tschudin          Expires June 16, 2017                [Page 24]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1396,7 +1396,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 25]
+Mosko & Tschudin          Expires June 16, 2017                [Page 25]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1452,7 +1452,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 26]
+Mosko & Tschudin          Expires June 16, 2017                [Page 26]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1508,7 +1508,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 27]
+Mosko & Tschudin          Expires June 16, 2017                [Page 27]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1564,189 +1564,21 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 28]
+Mosko & Tschudin          Expires June 16, 2017                [Page 28]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
-9.  Reset Pseudocode
+9.  References
 
-
-   Procedure Reboot()
-      N_LOCAL = (random number)
-      N_REMOTE = FSN_LOCAL = FSN_REMOTE = 0
-      State = (Init, Init)
-      Send RESET(N_LOCAL)
-      Start Timer
-      state = (Sync, Init)
-
-                                 Figure 5
-
-
-   Procedure ClearState(reset_num)
-           N_REMOTE = reset_num
-           FSN_LOCAL = 0
-           FSN_REMOTE = 0
-           Send RESETACK(N_REMOTE, N_LOCAL)
-
-                                 Figure 6
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko & Tschudin          Expires June 12, 2017                [Page 29]
-
-Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
-
-
-   Procedure ReceiveReset(reset_num)
-      switch state
-      case (Init, Init):
-      case (Init, OK):
-         N_REMOTE = reset_num
-         Send RESETACK(N_REMOTE, N_LOCAL)
-         break
-
-      case (Sync, OK):
-         If reset_num = N_REMOTE
-            Send RESETACK(N_REMOTE, N_LOCAL)
-         else
-            Cancel Timer
-            ClearState(reset_num)
-            state = (Init, OK)
-            break
-
-      case (Sync, Init):
-         N_REMOTE = reset_num
-         Send RESETACK(N_REMOTE, N_LOCAL)
-         state = (Sync, OK)
-         break
-
-      case (OK, OK):
-         if reset_num = N_REMOTE
-            Send RESETACK(N_REMOTE, N_LOCAL)
-         else
-            ClearState(reset_num)
-            state = (Init, OK)
-         break
-
-      default:
-         # Drop
-
-                                 Figure 7
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko & Tschudin          Expires June 12, 2017                [Page 30]
-
-Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
-
-
-   Procedure ReceiveResetAck(ack_num, reset_num)
-      switch state
-      case (Sync, OK):
-         if ack_num = N_LOCAL
-            Cancel Timer
-            Reset Timeout
-            If reset_num = N_REMOTE
-               State = (OK, OK)
-            else
-               ClearState()
-               State = (Init, OK)
-         break
-
-      case (Sync, Init):
-         If ack_num = N_LOCAL
-            Cancel Timer
-            Reset Timeout
-            N_REMOTE = reset_num
-            Send RESETACK(N_REMOTE, N_LOCAL)
-            State = (OK, OK)
-         break
-
-      case (OK, OK):
-         if ack_num = N_LOCAL
-            if reset_num != N_REMOTE
-               ClearState()
-               State = (Init, OK)
-         break
-
-      default:
-         # Drop
-
-                                 Figure 8
-
-
-   Procedure Timeout()
-      switch state:
-      case (Sync, OK):
-      case (Sync, Init):
-         Increase Timeout
-         Send RESET(N_LOCAL)
-         Start Timer
-         break
-      default:
-         # Ignore
-
-                                 Figure 9
-
-
-
-
-Mosko & Tschudin          Expires June 12, 2017                [Page 31]
-
-Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
-
-
-10.  References
-
-10.1.  Normative References
+9.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
               RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
 
-10.2.  Informative References
+9.2.  Informative References
 
    [CCNLite]  Mosko, M., Plass, M., and C. Tschudin, "CCN-Lite
               fragmentation", Summer 2012, <http://ccn-lite.net>.
@@ -1788,7 +1620,63 @@ Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 32]
+Mosko & Tschudin          Expires June 16, 2017                [Page 29]
+
+Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
+
+
+   [python-sim]
+              "ccnx-beginendfragment-sim", December 2016,
+              <https://github.com/PARC/ccnx-beginendfragment-sim>.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko & Tschudin          Expires June 16, 2017                [Page 30]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation          December 2016
 
@@ -1844,5 +1732,5 @@ Authors' Addresses
 
 
 
-Mosko & Tschudin          Expires June 12, 2017                [Page 33]
+Mosko & Tschudin          Expires June 16, 2017                [Page 31]
 

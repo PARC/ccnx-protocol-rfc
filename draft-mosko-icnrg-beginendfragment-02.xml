@@ -330,9 +330,13 @@ FragData       = <Continuous octets (portion of Packet)>
           </list>
         </t>
         
+        <t>The <xref target="python-sim">ccnx-beginendfragment-sim</xref> software package is a Python
+            simulator of the sequence number reset algorithm.  It uses simple discrete event simulator
+            to validate the reset algorithm under various conditions of delay and packet loss and
+            node reboots.</t>
+        
         <t>
-        Figures 1 - 3 show the reset state machine.  Section <xref target="pseudocode"/> provides
-        pseudocode for the same state machine.  In the figures, we use short abbreviations for
+        Figures 1 - 3 show the reset state machine. In the figures, we use short abbreviations for
         compactness.  N_L is N_LOCAL, N_R is N_REMOTE, FSN_L is FSN_LOCAL, FSN_R is FSN_REMOTE.
         We also abbreviate RESET as RST and RESTACK as RSTACK.  Double line boxes indicate
         a potentially blocking state that responds to external events (timeouts or packet
@@ -390,9 +394,9 @@ FragData       = <Continuous octets (portion of Packet)>
 </figure>   
 <figure anchor="fig-x1" title="Master State">
 <artwork align="left"><![CDATA[
- .....................        +-------------------+
- :        X1         : ---->  |  Send RST(N_L)    | <--------+
- .....................        +-------------------+          |
+                ......        +-------------------+
+                : X1 : ---->  |  Send RST(N_L)    | <--------+
+                :....:        +-------------------+          |
                                       |                      |
                                       v                      |
                               +-------------------+   +--------------+
@@ -405,9 +409,9 @@ FragData       = <Continuous octets (portion of Packet)>
  +-------------------+        #===================#            
        |                              | recv(RSTACK N,M)
        v                              v
- .....................        +-------------------+  no    +----------+
- :       To X4       :        |     If N=N_L      | -----> |   Drop   |
- :...................:        +-------------------+        +----------+
+    .........                 +-------------------+  no    +----------+
+    : To X4 :                 |     If N=N_L      | -----> |   Drop   |
+    :.......:                 +-------------------+        +----------+
                                       | yes
                                       v
                               +-------------------+
@@ -422,26 +426,24 @@ FragData       = <Continuous octets (portion of Packet)>
                               | RSTACK(N_R, N_L)  | <+
                               +-------------------+  |
                                        |             | yes
-                    recv RSTACK(N, M)  v             |
-   +-------------------+      #===================#  |
-+- | If N=N_L && M=N_R | <--- H      OK, OK       H <+------+
-|  +-------------------+      #===================#  |      |
-|    | no                              | recv RST(M) |      |
-|    v                                 v             |      |
-|  .....................  no  +-------------------+  |      | yes
-|  :       To X3       : <--- |     If M=N_R      | -+      |
-|  :...................:      +-------------------+         |
-|                                                           |
-+-----------------------------------------------------------+
+                 recv RSTACK(N, M)     v             |
+               .........      #===================#  |
+               : To X6 : <--- H      OK, OK       H  |
+               :.......:      #===================#  |
+                                       | recv RST(M) |
+                                       v             |
+               .........  no  +-------------------+  |
+               : To X3 : <--- |     If M=N_R      | -+
+               :.......:      +-------------------+
 ]]></artwork>
 </figure>   
 
 <figure anchor="fig-x2" title="Slave State">
 <artwork align="left"><![CDATA[
 
- ...........       +-------------------+
- :   X2    : ----> |       N_R=M       | <----+
- :.........:       +-------------------+      |
+    ........       +-------------------+
+    :  X2  : ----> |       N_R=M       | <----+
+    :......:       +-------------------+      |
                        |                      | recv (RST M)
                        v                      |
                    +-------------------+    #===================#
@@ -454,18 +456,18 @@ FragData       = <Continuous octets (portion of Packet)>
                 |  |    Start Timer    | <------------------------+
                 |  +-------------------+                          |
                 |    |                                            |
-                |    v                                            |
-                |  #====================================#  recv   |
+                |    v                                     recv   |
+                |  #====================================# (RST M) |
   +-------------+> H            Sync, OK                H --------+---+
-  |             |  #====================================# (RST M) |   |
+  |             |  #====================================#         |   |
   |             |      | recv (RSTAK N,M)   | timeout             |   |
   |             |      v                    |                     |   |
-  |  +------+   |    +-----------------+    |      +---------------+  |
-  |  | Drop | <-+--- |   If N=N_L      |    +----> | Inc. Timeout  |  |
-  |  +------+   |no  +-----------------+           +---------------+  |
-  |             |     | yes                   recv (RST M) +----------+
-  |             |     v                                    v               
-  |             |  +-------------------+           +---------------+
+  |  ........   |    +-----------------+    |      +---------------+  |
+  |  :  X6  : --+--> |   If N=N_L      |    +----> | Inc. Timeout  |  |
+  |  :......:   |no  +-----------------+           +---------------+  |
+  |  +------+   |     | no        | yes                    +----------+
+  |  | Drop | <-+-----+           v                        v               
+  |  +------+   |  +-------------------+           +---------------+
   |             |  |   Cancel Timer    |           | If M=N_REMOTE | yes
   |             |  |   Reset Timeout   |           |               | -+
   |             |  +-------------------+           +---------------+  |
@@ -473,13 +475,13 @@ FragData       = <Continuous octets (portion of Packet)>
   |  .........  |      v                             v                |
   |  :   To  :  |    +-----------------+           +---------------+  |
   |  : OK,OK :<-+--- |  If M=M_REMOTE  |           | Cancel Timer  |  |
-  |  .........  |yes +-----------------+           +---------------+  |
+  |  :.......:  |yes +-----------------+           +---------------+  |
   |             |      | no                          |                |
   |             |      v                             |                |
   |             |  +-------------------+             |                |
   |  ........   +- |      N_R=M,       | <-----------+                |
   |  :  X3  : ---> |   FSN_R=FSN_L=0   |                              |
-  |  ........      +-------------------+                              |
+  |  :......:      +-------------------+                              |
   +--------------------- +    +-------------------+                   |
                ........  +--< |       Send        |                   |
                :  X4  : ----> |  RSTAK(N_R, N_L)  | <-----------------+
@@ -549,11 +551,11 @@ FragData       = <Continuous octets (portion of Packet)>
 |   |     |     |     |                        |     |     |     |
 | 2 |     |     |     | <---------{RESET, 7}-< | I I | 7 0 | 0 0 |
 | 3 |   OK| 5 7 | 0 0 |                        |     |     |     |
-| 4 |     |     |     | >-{RESET_ACK, 7}-----> |     |     |     |
+| 4 |     |     |     | >-{RESET_ACK, 7, 5}--> |     |     |     |
 | 5 |     |     |     |                        |OK   | 7 0 | 0 0 |
 | 6 |     |     |     | >-{RESET, 5}---------> |     |     |     |
 | 7 |     |     |     |                        |   OK|   5 | 0 0 | 
-| 8 |     |     |     | <-----{RESET_ACK, 5}-< |     |     |     |
+| 8 |     |     |     | <---{RESET_ACK, 5,7}-< |     |     |     |
 | 9 |OK   |     |     | <-------------{data}-< |     |     |     |
 | 10|     |     |     | >-{data}-------------> |     |     |     |
 |---|-----|-----|-----|                        |-----|-----|-----|
@@ -1186,119 +1188,6 @@ Value    CCNx Message Type               Definition
       protocol, such as 802.1AE (MacSec) to prevent such attacks.</t>
     </section>
 
-	<section anchor="pseudocode" title="Reset Pseudocode">
-<t>
-<figure anchor="Reboot">
-<artwork align="left"><![CDATA[
-Procedure Reboot()
-   N_LOCAL = (random number)
-   N_REMOTE = FSN_LOCAL = FSN_REMOTE = 0
-   State = (Init, Init)
-   Send RESET(N_LOCAL)
-   Start Timer
-   state = (Sync, Init)
-]]></artwork>
-</figure>   
-      
-<figure anchor="ClearState">
-<artwork align="left"><![CDATA[
-Procedure ClearState(reset_num)
-	N_REMOTE = reset_num
-	FSN_LOCAL = 0
-	FSN_REMOTE = 0
-	Send RESETACK(N_REMOTE, N_LOCAL)
-]]></artwork>
-      </figure>
-<figure anchor="ReceiveReset">
-<artwork align="left"><![CDATA[
-Procedure ReceiveReset(reset_num)
-   switch state
-   case (Init, Init):
-   case (Init, OK):
-      N_REMOTE = reset_num
-      Send RESETACK(N_REMOTE, N_LOCAL)
-      break
-						
-   case (Sync, OK):
-      If reset_num = N_REMOTE
-         Send RESETACK(N_REMOTE, N_LOCAL)
-      else
-         Cancel Timer
-         ClearState(reset_num)
-         state = (Init, OK)
-         break
-			
-   case (Sync, Init):
-      N_REMOTE = reset_num
-      Send RESETACK(N_REMOTE, N_LOCAL)
-      state = (Sync, OK)
-      break
-			
-   case (OK, OK):
-      if reset_num = N_REMOTE
-         Send RESETACK(N_REMOTE, N_LOCAL)
-      else
-         ClearState(reset_num)
-         state = (Init, OK)
-      break
-			
-   default:
-      # Drop
-]]></artwork>
-      </figure>  
-      
-<figure anchor="ReceiveResetAck">
-<artwork align="left"><![CDATA[
-Procedure ReceiveResetAck(ack_num, reset_num)
-   switch state
-   case (Sync, OK):
-      if ack_num = N_LOCAL
-         Cancel Timer
-         Reset Timeout
-         If reset_num = N_REMOTE
-            State = (OK, OK)
-         else
-            ClearState()
-            State = (Init, OK)
-      break
-            
-   case (Sync, Init):
-      If ack_num = N_LOCAL
-         Cancel Timer
-         Reset Timeout
-         N_REMOTE = reset_num
-         Send RESETACK(N_REMOTE, N_LOCAL)
-         State = (OK, OK)
-      break
-      
-   case (OK, OK):
-      if ack_num = N_LOCAL
-         if reset_num != N_REMOTE
-            ClearState()
-            State = (Init, OK)
-      break
-   
-   default:
-      # Drop
-]]></artwork>
-      </figure>    
-      
-<figure anchor="Timeout">
-<artwork align="left"><![CDATA[
-Procedure Timeout()
-   switch state:
-   case (Sync, OK):
-   case (Sync, Init):
-      Increase Timeout
-      Send RESET(N_LOCAL)
-      Start Timer
-      break
-   default:
-      # Ignore
-]]></artwork>
-</figure>         
-	</t>
-	</section>
   </middle>
 
   <!--  *****BACK MATTER ***** -->
@@ -1358,6 +1247,14 @@ Procedure Timeout()
         
         <date year="Summer 2012"/>
       </front>
+    </reference>
+    
+    <reference anchor="python-sim" target="https://github.com/PARC/ccnx-beginendfragment-sim">
+        <front>
+            <title>ccnx-beginendfragment-sim</title>
+            <author fullname="Marc Mosko"/>
+            <date month="December" year="2016"/>
+        </front>
     </reference>
     
       <reference anchor="NDN" target="http://www.named-data.net/wp-content/uploads/2013/11/packetformat.pdf">
