@@ -144,8 +144,8 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">ICNRG</td><td class="header">M. Mosko</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">PARC, Inc.</td></tr>
-<tr><td class="header">Intended status: Experimental</td><td class="header">May 9, 2016</td></tr>
-<tr><td class="header">Expires: November 10, 2016</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">June 1, 2016</td></tr>
+<tr><td class="header">Expires: December 3, 2016</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
 <h1><br />CCNx Content Object Chunking<br />draft-mosko-icnrg-ccnxchunking-02</h1>
 
@@ -153,8 +153,8 @@
 
 <p>This document specifies a chunking protocol for dividing a user payload 
       into CCNx Content Objects. This includes specification for the naming convention to use for
-      the chunked payload, the metadata convention used to store information about the chunked object,
-      and the field added to a Content Object to represent the last chunk of an object.  
+      the chunked payload
+      and a field added to a Content Object to represent the last chunk of an object.  
 </p>
 <h3>Status of this Memo</h3>
 <p>
@@ -171,7 +171,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on November 10, 2016.</p>
+This Internet-Draft will expire on December 3, 2016.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -200,31 +200,27 @@ Chunking<br />
 Cryptographic material<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#examples">2.2.</a>&nbsp;
 Examples<br />
-<a href="#metadata">3.</a>&nbsp;
-Chunking Metadata<br />
-<a href="#types">4.</a>&nbsp;
+<a href="#types">3.</a>&nbsp;
 TLV Types<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#names">4.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#names">3.1.</a>&nbsp;
 Name Types<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#seg">4.1.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#seg">3.1.1.</a>&nbsp;
 Chunk Number<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#metaname">4.1.2.</a>&nbsp;
-Chunk Metadata Name Component<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#signed_info">4.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#signed_info">3.2.</a>&nbsp;
 Protocol Information<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#end_seg">4.2.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#end_seg">3.2.1.</a>&nbsp;
 EndChunkNumber<br />
-<a href="#Acknowledgements">5.</a>&nbsp;
+<a href="#Acknowledgements">4.</a>&nbsp;
 Acknowledgements<br />
-<a href="#IANA">6.</a>&nbsp;
+<a href="#IANA">5.</a>&nbsp;
 IANA Considerations<br />
-<a href="#Security">7.</a>&nbsp;
+<a href="#Security">6.</a>&nbsp;
 Security Considerations<br />
-<a href="#rfc.references1">8.</a>&nbsp;
+<a href="#rfc.references1">7.</a>&nbsp;
 References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">8.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">7.1.</a>&nbsp;
 Normative References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">8.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">7.2.</a>&nbsp;
 Informative References<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Author's Address<br />
@@ -244,7 +240,8 @@ Introduction</h3>
        the Name and in an optional field within the Content Object.  A chunked object may also have
        an external metadata content object that describes the original pre-chunked object.
 </p>
-<p>CCNx uses two types of messages: Interests and Content Objects <a class='info' href='#CCNSemantics'>[CCNSemantics]<span> (</span><span class='info'>Mosko, M., Solis, I., and C. Wood, &ldquo;CCNx Semantics (Internet draft),&rdquo; 2016.</span><span>)</span></a>. An Interest carries the
+<p>CCNx uses two types of messages: Interests and Content Objects <a class='info' href='#CCNSemantics'>[CCNSemantics]<span> (</span><span class='info'>Mosko, M., Solis, I., and C. Wood, &ldquo;CCNx Semantics (Internet draft),&rdquo; 2016.</span><span>)</span></a>. 
+        An Interest carries the
         hierarchically structured variable-length identifier (HSVLI), or Name, of a
         Content Object and serves as a request for that object. If a network element sees multiple
         Interests for the same name, it may aggregate those Interests. A network element along the
@@ -253,7 +250,7 @@ Introduction</h3>
         the Interest. A Content Object contains the Name, the object's Payload, and the cryptographic
         information used to bind the Name to the payload. 
 </p>
-<p>This specification adds a new segment to the Name TLV and a new field to the Metadata TLV. 
+<p>This specification adds a new segment to the Name TLV for conveying the chunk number. 
         It updates <a class='info' href='#CCNMessages'>[CCNMessages]<span> (</span><span class='info'>Mosko, M., Solis, I., and C. Wood, &ldquo;CCNx Messages in TLV Format (Internet draft),&rdquo; 2016.</span><span>)</span></a>.
        It also provides guidelines for the usage of the Key Locator in chunked objects.
 </p>
@@ -279,9 +276,10 @@ Requirements Language</h3>
 Chunking</h3>
 
 <p>Chunking, as used in this specification, means serializing user data
-      into one or more chunks, each encapsulated in a CCNx Content Object.  One
-      segment in the Name of that Content Object represents the current chunk number.  A field in the
-      Content Object's Metadata - only mandatory in the final chunk - represents the end of
+        into one or more chunks, each encapsulated in a CCNx Content Object.  
+        A chunk is a contiguous byte range within the user data.
+        One segment in the Name of that Content Object represents the chunk number.  
+        A field in the Content Object - only mandatory in the final chunk - represents the end of
       the stream.  Chunks are denoted
       by a serial counter, beginning at 0 and incrementing by 1 for each 
       contiguous chunk.  The chunking ends at the final chunk.  No valid
@@ -291,35 +289,26 @@ Chunking</h3>
 <p>Chunking MUST use a fixed block size, where only the final chunk MAY
         use a smaller block size.  This is required to allow a reader to seek
         to a specific byte offset once it knows the block size.
-        The blocksize may be inferred from the size of the first chunk of user data
-        or from an external metadata content object.  The first chunk of user
+        The blocksize may be inferred from the size of the first chunk of user data.
+        The first chunk of user
         data may not be chunk 0.
 </p>
-<p>Because of the requirement for a fixed block size, including certain cryptographic
+<p>Because of the requirement for a fixed block size, the inclusion of certain cryptographic
       fields in the same content objects as user data would throw off the ability to seek.
       Therefore, it is RECOMMENDED that all required cryptographic data, such as public keys
       or key name links, be included in the leading chunks before the first byte of user data.
       User data SHOULD then run continuously and with the same block size through the remainder
       of the content objects.
 </p>
-<p>This draft introduces two new Name path segment TLV types.
-        The first is the ChunkNumber name segment, which indicates the serial order
-        of the chunk.  The second is a Meta name segment, which indicates that the
-        Content Object carries metadata information about the Name prefix up to
-        but not including the Meta name segment.
-</p>
-<p>The ChunkNumber name segment is the serial order of the chunks.  It MUST begin at 0
-        and MUST be incremented by 1 for each contiguous chunk.
+<p>This draft introduces a new Name path segment TLV type, called
+        the ChunkNumber name segment.  
+        The ChunkNumber name segment is the serial order of the chunks.  It MUST begin at 0
+        and MUST be incremented by 1.
       The ChunkNumber name segment is appended to the base name of the
       user data, and is usually the last name segment.
 </p>
-<p>The Meta name segment indicates that the Content Object carries metadata information
-      about the name up to but not including the Meta name segment.  For example, the
-      ane "ccnx:/name=foo/version=3/meta=chunking/version=0" names a Content Object that
-      carries metadata information about how the name "ccnx:/name=foo/version=3" is chunked.
-</p>
-<p>The new Metadata field is the EndChunkNumber.
-      It MUST be included in the Content Object which is the last chunk of an object, but SHOULD be 
+<p>The new Content Object field is the EndChunkNumber.
+      It MUST be included in the Content Object which is the last chunk of user data, but SHOULD be 
       present at the earliest time it is known.  The value of the EndChunkNumber
       should be the network byte order value of the last ChunkNumber.
       For example, if 3000 bytes of user data is split with a 1200 byte block size,
@@ -344,8 +333,7 @@ Cryptographic material</h3>
         
 </p>
 <p>The rationel for putting all cryptographic data up front is because the
-        protocol requires using a fixed BlockSize for all user data to enable seeking
-        in the chunked stream.  Because user data 
+        protocol requires using a fixed block size for all user data to enable seeking in the chunked stream.
 </p>
 <a name="examples"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -380,62 +368,16 @@ ccnx:/Name=parc/Name=talk.wav/Chunk=4  EndChunkNumber=3
 ccnx:/Name=parc/Name=talk.wav/Chunk=5  EndChunkNumber=3
 ccnx:/Name=parc/Name=talk.wav/Chunk=6  EndChunkNumber=3
 </pre></div>
-<a name="metadata"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.3"></a><h3>3.&nbsp;
-Chunking Metadata</h3>
-
-<p>Chunking metadata MAY be saved in a separate Content Object. If
-	       Chunking metadata is saved it SHOULD be saved using a Meta labeled
-	       path chunk with the value of "chunking."
-</p>
-<p>An example name using SerialNumber versioning is 
-        "ccnx:/Name=parc/Name=picture.jpg/SerialNumber=1/Meta=chunking/SerialNumber=0".
-        This name means there is an object named "ccnx:/Name=parc/Name=picture.jpg/SerialNumber=1" that conforms
-        to the Chunking protocol.  The chunking metadata is stored in a separate Content Object with
-        the example name.
-      
-</p>
-<p>The Chunking Metadata is a JSON Content Object whose content adheres to
-	the following schema.
-        The BlockSize is used for all Chunks of user data except the last.  The EndChunkNumber is optional
-        at the time the header is written, if it is not known.  Once a chunking is finished a new header could
-	be written with the correct EndChunk.
-</p>
-<p>The optional Digest key is over the entire user contents.  It must specify the
-        algorithm used for the digest in OID form and express the digest in Hexadecimal.
-</p>
-<p>The TotalBytes field is the total user bytes, if known.  If it is only known at a later
-        time, the metadata object may be updated with a new SerialNumber when the value is known.
-</p>
-<p>The metadata content object MUST have the same KeyId -- and be signed by the same key -- as the Content Object 
-        to which it refers.  In the specific case of chunked data, the metadata object MUST be signed
-        by the same key as chunk 0.
-</p>
-<p>Because the first few chunks may include cryptographic data, the field FirstDataChunk includes
-      the chunk number of byte 0 of the user data.  All subsequent chunks contain the serialized data
-      using BlockSize.
-</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-{ "chunking" :
-  { "BlockSize"  : &lt;blocksize&gt;
-    [, "FileName"   : &lt;original file name, if known&gt;]
-    [, "EndChunkNumber" : &lt;end Chunk, if known&gt;]
-    [, "FirstDataChunk": &lt;chunk number for first user data chunk&gt;]
-    [, "TotalBytes" : &lt;total bytes of all Chunks, if known&gt;]
-    [, "Digest"   : { "ALGORITHM"=&lt;OID&gt;, "DIGEST"=&lt;hexadecimal value&gt; }]
-  }
-}
-</pre></div>
 <a name="types"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4"></a><h3>4.&nbsp;
+<a name="rfc.section.3"></a><h3>3.&nbsp;
 TLV Types</h3>
 
 <p>This section specifies the TLV types used by CCNx chunking.
 </p>
 <a name="names"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
+<a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
 Name Types</h3>
 
 <p>CCNx chunking uses two new Name types:  Chunk Number and Chunk Metadata.
@@ -452,19 +394,13 @@ Name Types</h3>
           in network byte order without leading zeros.  The value
           of zero is represented as the single byte %x00.</td>
 </tr>
-<tr>
-<td align="center">%x0011</td>
-<td align="center">T_META</td>
-<td align="center"><a class='info' href='#seg'>Metadata<span> (</span><span class='info'>Chunk Number</span><span>)</span></a></td>
-<td align="left">Identifies the Content Object on metadata for the prior Name segments.</td>
-</tr>
 </table>
 <br clear="all" />
 <table border="0" cellpadding="0" cellspacing="2" align="center"><tr><td align="center"><font face="monaco, MS Sans Serif" size="1"><b>&nbsp;Table 1: Name Types&nbsp;</b></font><br /></td></tr></table><hr class="insert" />
 
 <a name="seg"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.1.1"></a><h3>4.1.1.&nbsp;
+<a name="rfc.section.3.1.1"></a><h3>3.1.1.&nbsp;
 Chunk Number</h3>
 
 <p>The current chunk number, as an unsigned integer
@@ -481,26 +417,9 @@ Chunk Number</h3>
 |     variable length integer   /
 +---------------+---------------+
 </pre></div>
-<a name="metaname"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.1.2"></a><h3>4.1.2.&nbsp;
-Chunk Metadata Name Component</h3>
-
-<p>A name component that identifies the content object provides chunk metadata about
-            the left-encapsulated name prefix, as described in <a class='info' href='#metadata'>Section&nbsp;3<span> (</span><span class='info'>Chunking Metadata</span><span>)</span></a>.
-          
-</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-                     1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+---------------+---------------+---------------+--------------+
-|        T_META                 |               8              |
-+---------------+---------------+---------------+--------------+
-/   "chunking"  /
-+---------------+
-</pre></div>
 <a name="signed_info"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
+<a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
 Protocol Information</h3>
 
 <p>CCNx chunking introduces one new TLV for use in a Content Object.
@@ -523,7 +442,7 @@ Protocol Information</h3>
 
 <a name="end_seg"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2.1"></a><h3>4.2.1.&nbsp;
+<a name="rfc.section.3.2.1"></a><h3>3.2.1.&nbsp;
 EndChunkNumber</h3>
 
 <p>The ending chunk number, as an unsigned integer
@@ -540,12 +459,12 @@ EndChunkNumber</h3>
 </pre></div>
 <a name="Acknowledgements"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5"></a><h3>5.&nbsp;
+<a name="rfc.section.4"></a><h3>4.&nbsp;
 Acknowledgements</h3>
 
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6"></a><h3>6.&nbsp;
+<a name="rfc.section.5"></a><h3>5.&nbsp;
 IANA Considerations</h3>
 
 <p>The draft adds new types to the CCNx Name Segment Types registry and the CCNx
@@ -553,27 +472,19 @@ IANA Considerations</h3>
 </p>
 <a name="Security"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7"></a><h3>7.&nbsp;
+<a name="rfc.section.6"></a><h3>6.&nbsp;
 Security Considerations</h3>
 
-<p>This draft introduces a side-by-side Content Object for holding metadata.  The metadata
-     Content Object for the base name "ccnx:/name=foo" is "ccnx:/name=foo/Meta=chunking" and the chunked
-     user data is in Content Objects named "ccnx:/name=foo/ChunkNumber=N".  To ensure that the
-     metadata was published by the same author as the chunked data, this draft REQUIRES that the
-     KeyId fields of Chunk 0 and the Metadata be the same and they are signed by the same key.
-     
-</p>
 <p>This draft does not put any requirements on how chunked data is signed or validated.
-      It is RECOMMENDED 
 </p>
 <a name="rfc.references"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.8"></a><h3>8.&nbsp;
+<a name="rfc.section.7"></a><h3>7.&nbsp;
 References</h3>
 
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>8.1.&nbsp;Normative References</h3>
+<h3>7.1.&nbsp;Normative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
 <td class="author-text">Bradner, S., &ldquo;<a href="http://www.rfc-editor.org/info/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, DOI&nbsp;10.17487/RFC2119, March&nbsp;1997.</td></tr>
@@ -581,7 +492,7 @@ References</h3>
 
 <a name="rfc.references2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>8.2.&nbsp;Informative References</h3>
+<h3>7.2.&nbsp;Informative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="CCNMessages">[CCNMessages]</a></td>
 <td class="author-text">Mosko, M., Solis, I., and C. Wood, &ldquo;<a href="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-02">CCNx Messages in TLV Format (Internet draft)</a>,&rdquo; 2016.</td></tr>

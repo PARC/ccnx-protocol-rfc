@@ -1,14 +1,15 @@
 
 
 
+
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
-Intended status: Experimental                               June 1, 2016
-Expires: December 3, 2016
+Intended status: Experimental                              February 2016
+Expires: August 4, 2016
 
 
                       CCNx Content Object Chunking
-                   draft-mosko-icnrg-ccnxchunking-02
+                 draft-mosko-icnrg-ccnxchunking-XX
 
 Abstract
 
@@ -17,7 +18,7 @@ Abstract
    the naming convention to use for the chunked payload and a field
    added to a Content Object to represent the last chunk of an object.
 
-Status of this Memo
+Status of This Memo
 
    This Internet-Draft is submitted in full conformance with the
    provisions of BCP 78 and BCP 79.
@@ -32,7 +33,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 3, 2016.
+   This Internet-Draft will expire on August 4, 2016.
 
 Copyright Notice
 
@@ -52,66 +53,30 @@ Copyright Notice
 
 
 
-Mosko                   Expires December 3, 2016                [Page 1]
+Mosko                    Expires August 4, 2016                 [Page 1]
 
-Internet-Draft                CCNx chunking                    June 2016
+Internet-Draft                CCNx chunking                February 2016
 
 
 Table of Contents
 
-   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
-     1.1.  Requirements Language  . . . . . . . . . . . . . . . . . .  3
-   2.  Chunking . . . . . . . . . . . . . . . . . . . . . . . . . . .  4
-     2.1.  Cryptographic material . . . . . . . . . . . . . . . . . .  5
-     2.2.  Examples . . . . . . . . . . . . . . . . . . . . . . . . .  5
-   3.  TLV Types  . . . . . . . . . . . . . . . . . . . . . . . . . .  6
-     3.1.  Name Types . . . . . . . . . . . . . . . . . . . . . . . .  6
-       3.1.1.  Chunk Number . . . . . . . . . . . . . . . . . . . . .  6
-     3.2.  Protocol Information . . . . . . . . . . . . . . . . . . .  6
-       3.2.1.  EndChunkNumber . . . . . . . . . . . . . . . . . . . .  7
-   4.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . .  8
-   5.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . .  9
-   6.  Security Considerations  . . . . . . . . . . . . . . . . . . . 10
-   7.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 11
-     7.1.  Normative References . . . . . . . . . . . . . . . . . . . 11
-     7.2.  Informative References . . . . . . . . . . . . . . . . . . 11
-   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 12
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko                   Expires December 3, 2016                [Page 2]
-
-Internet-Draft                CCNx chunking                    June 2016
-
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+     1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   3
+   2.  Chunking  . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+     2.1.  Cryptographic material  . . . . . . . . . . . . . . . . .   4
+     2.2.  Examples  . . . . . . . . . . . . . . . . . . . . . . . .   4
+   3.  TLV Types . . . . . . . . . . . . . . . . . . . . . . . . . .   5
+     3.1.  Name Types  . . . . . . . . . . . . . . . . . . . . . . .   5
+       3.1.1.  Chunk Number  . . . . . . . . . . . . . . . . . . . .   5
+     3.2.  Protocol Information  . . . . . . . . . . . . . . . . . .   6
+       3.2.1.  EndChunkNumber  . . . . . . . . . . . . . . . . . . .   6
+   4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   6
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .   7
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   7
 
 1.  Introduction
 
@@ -141,6 +106,14 @@ Internet-Draft                CCNx chunking                    June 2016
    the chunk number.  It updates [CCNMessages].  It also provides
    guidelines for the usage of the Key Locator in chunked objects.
 
+
+
+
+Mosko                    Expires August 4, 2016                 [Page 2]
+
+Internet-Draft                CCNx chunking                February 2016
+
+
    Packets are represented as 32-bit wide words using ASCII art.
    Because of the TLV encoding and optional fields or sizes, there is no
    concise way to represent all possibilities.  We use the convention
@@ -153,21 +126,6 @@ Internet-Draft                CCNx chunking                    June 2016
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in RFC 2119 [RFC2119].
-
-
-
-
-
-
-
-
-
-
-
-Mosko                   Expires December 3, 2016                [Page 3]
-
-Internet-Draft                CCNx chunking                    June 2016
-
 
 2.  Chunking
 
@@ -204,6 +162,14 @@ Internet-Draft                CCNx chunking                    June 2016
 
    The new Content Object field is the EndChunkNumber.  It MUST be
    included in the Content Object which is the last chunk of user data,
+
+
+
+Mosko                    Expires August 4, 2016                 [Page 3]
+
+Internet-Draft                CCNx chunking                February 2016
+
+
    but SHOULD be present at the earliest time it is known.  The value of
    the EndChunkNumber should be the network byte order value of the last
    ChunkNumber.  For example, if 3000 bytes of user data is split with a
@@ -216,14 +182,6 @@ Internet-Draft                CCNx chunking                    June 2016
    reaching the End Chunk, it should publish empty Content Objects to
    fill out to the maximum EndChunkNumber ever published.  These padding
    chunks MUST contain the true EndChunkNumber.
-
-
-
-
-Mosko                   Expires December 3, 2016                [Page 4]
-
-Internet-Draft                CCNx chunking                    June 2016
-
 
 2.1.  Cryptographic material
 
@@ -258,6 +216,16 @@ Internet-Draft                CCNx chunking                    June 2016
    the maximum ChunkNumber, stating the correct EndChunkNumber.  Chunks
    4, 5, and 6 do not contain any new user data.
 
+
+
+
+
+
+Mosko                    Expires August 4, 2016                 [Page 4]
+
+Internet-Draft                CCNx chunking                February 2016
+
+
    ccnx:/Name=parc/Name=talk.wav/Chunk=0  --
    ccnx:/Name=parc/Name=talk.wav/Chunk=1  EndChunkNumber=6
    ccnx:/Name=parc/Name=talk.wav/Chunk=2  --
@@ -265,21 +233,6 @@ Internet-Draft                CCNx chunking                    June 2016
    ccnx:/Name=parc/Name=talk.wav/Chunk=4  EndChunkNumber=3
    ccnx:/Name=parc/Name=talk.wav/Chunk=5  EndChunkNumber=3
    ccnx:/Name=parc/Name=talk.wav/Chunk=6  EndChunkNumber=3
-
-
-
-
-
-
-
-
-
-
-
-Mosko                   Expires December 3, 2016                [Page 5]
-
-Internet-Draft                CCNx chunking                    June 2016
-
 
 3.  TLV Types
 
@@ -319,23 +272,19 @@ Internet-Draft                CCNx chunking                    June 2016
    |     variable length integer   /
    +---------------+---------------+
 
+
+
+
+
+
+Mosko                    Expires August 4, 2016                 [Page 5]
+
+Internet-Draft                CCNx chunking                February 2016
+
+
 3.2.  Protocol Information
 
    CCNx chunking introduces one new TLV for use in a Content Object.
-
-
-
-
-
-
-
-
-
-
-Mosko                   Expires December 3, 2016                [Page 6]
-
-Internet-Draft                CCNx chunking                    June 2016
-
 
    +--------+------------+-----------------+---------------------------+
    |  Type  |   Abbrev   |       Name      | Description               |
@@ -365,145 +314,12 @@ Internet-Draft                CCNx chunking                    June 2016
    |     variable length integer   /
    +---------------+---------------+
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko                   Expires December 3, 2016                [Page 7]
-
-Internet-Draft                CCNx chunking                    June 2016
-
-
 4.  Acknowledgements
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko                   Expires December 3, 2016                [Page 8]
-
-Internet-Draft                CCNx chunking                    June 2016
-
 
 5.  IANA Considerations
 
    The draft adds new types to the CCNx Name Segment Types registry and
    the CCNx Content Object Types registry.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko                   Expires December 3, 2016                [Page 9]
-
-Internet-Draft                CCNx chunking                    June 2016
-
 
 6.  Security Considerations
 
@@ -517,48 +333,9 @@ Internet-Draft                CCNx chunking                    June 2016
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko                   Expires December 3, 2016               [Page 10]
+Mosko                    Expires August 4, 2016                 [Page 6]
 
-Internet-Draft                CCNx chunking                    June 2016
+Internet-Draft                CCNx chunking                February 2016
 
 
 7.  References
@@ -566,16 +343,17 @@ Internet-Draft                CCNx chunking                    June 2016
 7.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
-              RFC2119, March 1997,
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
 
 7.2.  Informative References
 
    [CCNMessages]
               Mosko, M., Solis, I., and C. Wood, "CCNx Messages in TLV
-              Format (Internet draft)", 2016, <http://tools.ietf.org/
-              html/draft-irtf-icnrg-ccnxmessages-02>.
+              Format (Internet draft)", 2016,
+              <http://tools.ietf.org/html/
+              draft-irtf-icnrg-ccnxmessages-02>.
 
    [CCNSemantics]
               Mosko, M., Solis, I., and C. Wood, "CCNx Semantics
@@ -587,8 +365,8 @@ Internet-Draft                CCNx chunking                    June 2016
 
    [RFC2616]  Fielding, R., Gettys, J., Mogul, J., Frystyk, H.,
               Masinter, L., Leach, P., and T. Berners-Lee, "Hypertext
-              Transfer Protocol -- HTTP/1.1", RFC 2616, DOI 10.17487/
-              RFC2616, June 1999,
+              Transfer Protocol -- HTTP/1.1", RFC 2616,
+              DOI 10.17487/RFC2616, June 1999,
               <http://www.rfc-editor.org/info/rfc2616>.
 
    [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
@@ -601,23 +379,20 @@ Internet-Draft                CCNx chunking                    June 2016
               DOI 10.17487/RFC5226, May 2008,
               <http://www.rfc-editor.org/info/rfc5226>.
 
-
-
-
-
-
-
-
-
-
-
-
-Mosko                   Expires December 3, 2016               [Page 11]
-
-Internet-Draft                CCNx chunking                    June 2016
-
-
 Author's Address
+
+
+
+
+
+
+
+
+
+Mosko                    Expires August 4, 2016                 [Page 7]
+
+Internet-Draft                CCNx chunking                February 2016
+
 
    Marc Mosko
    PARC, Inc.
@@ -668,5 +443,6 @@ Author's Address
 
 
 
-Mosko                   Expires December 3, 2016               [Page 12]
-
+
+
+Mosko                    Expires August 4, 2016                 [Page 8]

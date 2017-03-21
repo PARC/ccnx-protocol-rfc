@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+    which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+    There has to be one entity for each item to be referenced. 
+    An alternate method (rfc include) is described in the references. -->
+
+<!ENTITY RFC2119 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2629 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2629.xml">
+<!ENTITY RFC3552 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3552.xml">
+  <!ENTITY RFC5226 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5226.xml">  
+
+  <!ENTITY RFC3339 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3339.xml">
+
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs), 
+    please see http://xml.resource.org/authoring/README.html. -->      
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+    (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space 
+    (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="no" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+
+<?rfc private="" ?>   
+
+<rfc category="exp" docName="draft-mosko-icnrg-ccnxtimeversion-latest" ipr="trust200902">
+  <!-- category values: std, bcp, info, exp, and historic
+    ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
+       or pre5378Trust200902
+    you can add the attributes updates="NNNN" and obsoletes="NNNN" 
+    they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the 
+        full title is longer than 39 characters -->
+
+    <title abbrev="CCNx TLV">CCNx Publisher Clock Time Versioning</title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+    <!-- Another author who claims to be an editor -->
+
+    <author fullname="Marc Mosko" initials="M.E." surname="Mosko">
+      <organization>PARC</organization>
+
+      <address>
+       <postal>
+         <street/>
+
+         <!-- Reorder these if your country does things differently -->
+
+         <city>Palo Alto</city>
+
+         <region>California</region>
+
+         <code>94304</code>
+
+         <country>USA</country>
+       </postal>
+
+       <phone>+01 650-812-4405</phone>
+
+       <email>marc.mosko@parc.com</email>
+
+       <!-- uri and facsimile elements may also be added -->
+     </address>
+    </author>
+
+    <date year="2016"/>
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
+        in the current day for you. If only the current year is specified, xml2rfc will fill 
+	 in the current day and month for you. If the year is not the current one, it is 
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
+	 specify just the year. -->
+
+    <!-- Meta-data Declarations -->
+
+    <area>General</area>
+
+    <workgroup>ICNRG</workgroup>
+
+    <!-- WG name at the upperleft corner of the doc,
+        IETF is fine for individual submissions.  
+	 If this element is not present, the default is "Network Working Group",
+        which is used by the RFC Editor as a nod to the history of the IETF. -->
+
+    <keyword>Content Centric Networking</keyword>
+
+    <!-- Keywords will be incorporated into HTML output
+        files in a meta tag but they have no effect on text or nroff
+        output. If you submit your draft to the RFC Editor, the
+        keywords will be used for the search engine. -->
+
+    <abstract>
+      <t>This document specifies the use of a timestamp as a name segment
+      in a CCNx Name as a versioning specifier.  It defines the name segment
+      label, encoding, and semantics.   </t>
+    </abstract>
+  </front>
+
+  <middle> 
+     <section title="Introduction">
+      <t>This document specifies the use of a subset of <xref target="RFC3339">RFC 3339</xref> UTC timestamp 
+        in a CCNx Name as a version identifier.  We restrict the use of RFC 3339 to only using
+        UTC time with the 'Z' notation, not relative offsets from UTC.</t> 
+    
+      <t>This document updates <xref target="CCNMessages">CCNx Messages in TLV Format</xref>.  It introduces
+      a new CCNx Name Segment TLV type.</t>
+       
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
+          NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+          described in <xref target="RFC2119">RFC 2119</xref>.</t>
+      </section>
+    </section>
+
+    <section anchor="protocol" title="Protocol Description">
+      <t>A timestamp in a CCNx Name name segment indicates an ordering on names based
+        on the UTC timestamp.  The timestamp is encoded as an RFC3339 UTC 
+        string in the 'date-time' format, for example
+        "1985-04-12T23:20:50.52Z". This format allows a memcmp() of two strings to 
+        determine their time ordering (see <xref target="Comparing"/>). </t>
+      
+      <t>The timestamp MUST use the format of RFC 3339 Sections 5.6-5.7 with the restriction
+        that it MUST use the 'Z' UTC signifier and MUST NOT use the 'time-numoffset' format.</t>
+      
+      <t>The timestamp MAY have fractions of a second, as per RFC3339.  The fractions
+        MUST use the '.' separator, as specified in RFC 3339 Section 5.6.  This restriction
+        is to ensure that memcmp() ordering is maintained.</t>
+             
+       <t>The use of a timestamp in a Name to denote
+        a version SHOULD NOT assume global time coordination and
+        SHOULD NOT be used to denote ordering or causation between multiple
+        publishers.</t>
+      
+      <t>If multiple publishers -- with different clocks -- write to the same
+        namespace, the name SHOULD include a name segment prior to the timestamp
+        that indicates the publisher.  For example, one could include the publisher's
+        KeyId, or any globally unique string between the publishers.</t>
+      
+      <t>A name segment timestamp MUST use the UTC 'Z' notation, not a '+' or '-' offset
+        (the 'time-numoffset' token in RFC 3339).
+        This restriction is to ensure that timestamps may be ordered simply by a direct comparison
+        (see <xref target="Comparing"/>).</t>
+      
+      <t>An example Name using this format is 
+        "ccnx:/Name=parc/Name=file.pdf/Time=1985-04-12T23:20:50.52Z".</t>
+      
+      <t>A publisher assigns a timestamp to indicate the time ordering of the prior Name
+      name segments.  It does not imply any specific temporal meaning such as the time of content creation
+        or the time of Content Object signature.  It is simply used to order a set of objects. 
+        An application MAY adopt such a semantic to the timestamp as an
+      application-specific specification.</t>
+      
+      <texttable anchor="message_type" title="Name Segment Label">
+        <ttcol align="center">Type</ttcol>
+        <ttcol align="center">Name</ttcol>
+        
+        <c>'Time'</c>
+        <c>UTC Timestamp, in RFC 3339 human-readable format.</c>
+      </texttable>
+      
+      <texttable anchor="name_types" title="CCNx Name Types">
+        <ttcol align="center">Type</ttcol>
+        <ttcol align="center">Symbol</ttcol>
+        <ttcol align="center">Name</ttcol>
+        <ttcol align="left">Description</ttcol>
+        
+        <c>%x0012</c>
+        <c>T_TIME</c>
+        <c>UTC Timestamp</c>
+        <c>UTC timestamp RFC 3339 'Z' format.</c>
+       </texttable>
+    </section>
+    
+    <section anchor="Comparing" title="Comparing timestamps">
+      <t>The TLV length of the timestamp MUST be at least 20 octets to be compliant
+         with RFC 3339, and thus with this specification.</t>
+      
+      <t>As per RFC 3339, the string format for two timestamps MAY be compared via
+        memcmp() up to the minimum string length minus 1 (to trim the terminal 'Z').
+        If the two timestamps are equal, up to
+        the minimum length, then the shorter string is less than the longer string.
+        Because we require UTC time zone with the 'Z' notation, the only time two strings
+        may be of different lengths is when one includes milliseconds, so the
+        rule here is correct.</t>      
+    </section>
+    
+    <section anchor="Acknowledgements" title="Acknowledgements"> </section>
+
+    <!-- Possibly a 'Contributors' section ... -->
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>This memo includes no request to IANA.</t>
+
+      <t>This draft introduces a new value in the CCNx Name Segment type registry.</t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>An entity parsing a T_TIME name segment is not required to parse the segment
+        for validity in formatting to only compute ordering.  Because the format allows
+        a direct memcmp() and
+        the length of the string is available via the TLV length, there should be no
+        vulnerability to mis-formatted values.  Other uses of the timestamp should
+        ensure the format conforms to RFC 3339 'Z' format.</t>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+    1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+    2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+       (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+    Both are cited textually in the same manner: by using xref elements.
+    If you use the PI option, xml2rfc will, by default, try to find included files in the same
+    directory as the including file. You can also define the XML_LIBRARY environment variable
+    with a value containing a set of directories to search.  These can be either in the local
+    filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Normative References">
+      <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+      &RFC2119; </references>
+
+    <references title="Informative References">
+      <!-- Here we use entities that we defined at the beginning. --> 
+      &RFC3339;
+      &RFC3552; 
+      &RFC5226;
+      <!-- A reference written by by an organization not a person. -->
+
+      <reference anchor="CCNx" target="http://www.ccnx.org">
+        <front>
+          <title>CCNx Open Source</title>
+
+          <author>
+            <organization>PARC, Inc.</organization>
+          </author>
+
+          <date year="2007"/>
+        </front>
+      </reference>
+      
+      
+     <reference anchor="CCNMessages" target="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-03">
+        <front>
+          <title>CCNx Messages in TLV Format (Internet draft)</title>
+
+          <author initials='M.' surname='Mosko' fullname='Marc Mosko'>
+            <organization>PARC, Inc.</organization>
+          </author>
+          <author initials='I.' surname='Solis' fullname='Ignacio Solis'>
+            <organization>PARC, Inc.</organization>
+          </author>
+          <author initials='C.' surname='Wood' fullname='Christopher Wood'>
+            <organization>PARC, Inc.</organization>
+          </author>
+          <date year="2016"/>
+        </front>
+      </reference>
+      
+    </references>
+
+  </back>
+</rfc>
