@@ -1,4 +1,12 @@
-# coreo-spec
+---
+layout: document
+---
+
+# CCNx Protocol Specification
+
+This website houses the latest CCNx specification documents. They form the basis
+for the Community ICN project. More information for this project can be found
+<a href="https://wiki.fd.io/view/Cicn">here</a>.
 
 - <a href="build/draft-irtf-icnrg-ccnxmessages.html">draft-irtf-icnrg-ccnxmessages.html</a>
 - <a href="build/draft-irtf-icnrg-ccnxsemantics.html">draft-irtf-icnrg-ccnxsemantics.html</a>
