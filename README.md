@@ -6,6 +6,8 @@ These are the protocol specifications related to the [Community ICN](https://wik
 The draft sources are in the `src/` directory and the built draft output is in the `build/` directory.  The
 drafts are also available on the gh-pages site.
 
+Please also see the [CCNx pages](http://mmosko.github.io/ccnx-protocol-rfc/) site related to this github project.
+
 # Editing
 
 Inside each draft, you should use the suffix '-latest' in the draft name, for example:
