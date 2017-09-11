@@ -4,8 +4,8 @@
 
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
-Intended status: Experimental                             March 21, 2017
-Expires: September 22, 2017
+Intended status: Experimental                         September 11, 2017
+Expires: March 15, 2018
 
 
                      CCNx Selector Based Discovery
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 22, 2017.
+   This Internet-Draft will expire on March 15, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Mosko                  Expires September 22, 2017               [Page 1]
+Mosko                    Expires March 15, 2018                 [Page 1]
 
-Internet-Draft               CCNx Selectors                   March 2017
+Internet-Draft               CCNx Selectors               September 2017
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Mosko                  Expires September 22, 2017               [Page 2]
+Mosko                    Expires March 15, 2018                 [Page 2]
 
-Internet-Draft               CCNx Selectors                   March 2017
+Internet-Draft               CCNx Selectors               September 2017
 
 
    Selector discovery in CCNx 1.0 differs in three ways from the current
@@ -165,9 +165,9 @@ Internet-Draft               CCNx Selectors                   March 2017
 
 
 
-Mosko                  Expires September 22, 2017               [Page 3]
+Mosko                    Expires March 15, 2018                 [Page 3]
 
-Internet-Draft               CCNx Selectors                   March 2017
+Internet-Draft               CCNx Selectors               September 2017
 
 
    o  ChildSelector: Answer with the left-most or right-most child.
@@ -221,9 +221,9 @@ Internet-Draft               CCNx Selectors                   March 2017
 
 
 
-Mosko                  Expires September 22, 2017               [Page 4]
+Mosko                    Expires March 15, 2018                 [Page 4]
 
-Internet-Draft               CCNx Selectors                   March 2017
+Internet-Draft               CCNx Selectors               September 2017
 
 
    explicit set of HashExcludes rather than constructing a full name
@@ -277,9 +277,9 @@ Internet-Draft               CCNx Selectors                   March 2017
 
 
 
-Mosko                  Expires September 22, 2017               [Page 5]
+Mosko                    Expires March 15, 2018                 [Page 5]
 
-Internet-Draft               CCNx Selectors                   March 2017
+Internet-Draft               CCNx Selectors               September 2017
 
 
    +------+-----------------+------------+-----------------------------+
@@ -333,9 +333,9 @@ Internet-Draft               CCNx Selectors                   March 2017
 
 
 
-Mosko                  Expires September 22, 2017               [Page 6]
+Mosko                    Expires March 15, 2018                 [Page 6]
 
-Internet-Draft               CCNx Selectors                   March 2017
+Internet-Draft               CCNx Selectors               September 2017
 
 
 3.1.  Child Selector
@@ -389,9 +389,9 @@ Internet-Draft               CCNx Selectors                   March 2017
 
 
 
-Mosko                  Expires September 22, 2017               [Page 7]
+Mosko                    Expires March 15, 2018                 [Page 7]
 
-Internet-Draft               CCNx Selectors                   March 2017
+Internet-Draft               CCNx Selectors               September 2017
 
 
    length Length ensures correct shortlex length sorting.  This will not
@@ -445,9 +445,9 @@ Internet-Draft               CCNx Selectors                   March 2017
 
 
 
-Mosko                  Expires September 22, 2017               [Page 8]
+Mosko                    Expires March 15, 2018                 [Page 8]
 
-Internet-Draft               CCNx Selectors                   March 2017
+Internet-Draft               CCNx Selectors               September 2017
 
 
 3.3.1.  Exclude Singleton
@@ -501,9 +501,9 @@ Internet-Draft               CCNx Selectors                   March 2017
 
 
 
-Mosko                  Expires September 22, 2017               [Page 9]
+Mosko                    Expires March 15, 2018                 [Page 9]
 
-Internet-Draft               CCNx Selectors                   March 2017
+Internet-Draft               CCNx Selectors               September 2017
 
 
    +---------------+---------------------------------------------------+
@@ -557,9 +557,9 @@ Internet-Draft               CCNx Selectors                   March 2017
 
 
 
-Mosko                  Expires September 22, 2017              [Page 10]
+Mosko                    Expires March 15, 2018                [Page 10]
 
-Internet-Draft               CCNx Selectors                   March 2017
+Internet-Draft               CCNx Selectors               September 2017
 
 
    A non-participating content store must obey the outer cache control
@@ -613,9 +613,9 @@ Internet-Draft               CCNx Selectors                   March 2017
 
 
 
-Mosko                  Expires September 22, 2017              [Page 11]
+Mosko                    Expires March 15, 2018                [Page 11]
 
-Internet-Draft               CCNx Selectors                   March 2017
+Internet-Draft               CCNx Selectors               September 2017
 
 
    operation in a specific environment.  An outer Validation section is
@@ -627,8 +627,8 @@ Internet-Draft               CCNx Selectors                   March 2017
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <http://www.rfc-editor.org/info/rfc2119>.
+              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
+              editor.org/info/rfc2119>.
 
 8.2.  Informative References
 
@@ -648,13 +648,13 @@ Internet-Draft               CCNx Selectors                   March 2017
 
    [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
               Text on Security Considerations", BCP 72, RFC 3552,
-              DOI 10.17487/RFC3552, July 2003,
-              <http://www.rfc-editor.org/info/rfc3552>.
+              DOI 10.17487/RFC3552, July 2003, <https://www.rfc-
+              editor.org/info/rfc3552>.
 
    [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
-              IANA Considerations Section in RFCs", BCP 26, RFC 5226,
-              DOI 10.17487/RFC5226, May 2008,
-              <http://www.rfc-editor.org/info/rfc5226>.
+              IANA Considerations Section in RFCs", RFC 5226,
+              DOI 10.17487/RFC5226, May 2008, <https://www.rfc-
+              editor.org/info/rfc5226>.
 
 Author's Address
 
@@ -669,4 +669,4 @@ Author's Address
 
 
 
-Mosko                  Expires September 22, 2017              [Page 12]
+Mosko                    Expires March 15, 2018                [Page 12]

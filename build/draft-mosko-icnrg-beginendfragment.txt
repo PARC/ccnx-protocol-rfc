@@ -5,8 +5,8 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                      PARC
 Intended status: Experimental                                C. Tschudin
-Expires: September 22, 2017                          University of Basel
-                                                          March 21, 2017
+Expires: March 15, 2018                              University of Basel
+                                                      September 11, 2017
 
 
                 ICN "Begin-End" Hop by Hop Fragmentation
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 22, 2017.
+   This Internet-Draft will expire on March 15, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Mosko & Tschudin       Expires September 22, 2017               [Page 1]
+Mosko & Tschudin         Expires March 15, 2018                 [Page 1]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Mosko & Tschudin       Expires September 22, 2017               [Page 2]
+Mosko & Tschudin         Expires March 15, 2018                 [Page 2]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
    over an existing Layer 3 protocol, such as IP, the Information
@@ -165,9 +165,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017               [Page 3]
+Mosko & Tschudin         Expires March 15, 2018                 [Page 3]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
 2.  Abstract Description of the Begin-End-Fragment Protocol
@@ -221,9 +221,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017               [Page 4]
+Mosko & Tschudin         Expires March 15, 2018                 [Page 4]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
    lost.  Moreover, as a possible extension of the protocol, this allows
@@ -277,9 +277,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017               [Page 5]
+Mosko & Tschudin         Expires March 15, 2018                 [Page 5]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
         it sends {RESET, N_LOCAL} again and starts a reset timer with
@@ -333,9 +333,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017               [Page 6]
+Mosko & Tschudin         Expires March 15, 2018                 [Page 6]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
      +-------------------------+
@@ -389,9 +389,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017               [Page 7]
+Mosko & Tschudin         Expires March 15, 2018                 [Page 7]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
                  ......        +-------------------+
@@ -445,9 +445,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017               [Page 8]
+Mosko & Tschudin         Expires March 15, 2018                 [Page 8]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
     ........       +-------------------+
@@ -501,9 +501,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017               [Page 9]
+Mosko & Tschudin         Expires March 15, 2018                 [Page 9]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
 2.1.1.  Examples
@@ -557,9 +557,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 10]
+Mosko & Tschudin         Expires March 15, 2018                [Page 10]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
    |---|-----|-----|-----|                        |-----|-----|-----|
@@ -613,9 +613,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 11]
+Mosko & Tschudin         Expires March 15, 2018                [Page 11]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
    3.  Discard fragments until a 'B' fragment is received.  Store the
@@ -669,9 +669,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 12]
+Mosko & Tschudin         Expires March 15, 2018                [Page 12]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
    We describe a basic hop-by-hop fragmentation header, using bits in
@@ -725,9 +725,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 13]
+Mosko & Tschudin         Expires March 15, 2018                [Page 13]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
                         1                   2                   3
@@ -781,9 +781,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 14]
+Mosko & Tschudin         Expires March 15, 2018                [Page 14]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
    allows for variable length sequence numbers.  In the example shown
@@ -837,9 +837,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 15]
+Mosko & Tschudin         Expires March 15, 2018                [Page 15]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
                         1                   2                   3
@@ -893,9 +893,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 16]
+Mosko & Tschudin         Expires March 15, 2018                [Page 16]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
                         1                   2                   3
@@ -949,9 +949,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 17]
+Mosko & Tschudin         Expires March 15, 2018                [Page 17]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
                         1                   2                   3
@@ -1005,9 +1005,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 18]
+Mosko & Tschudin         Expires March 15, 2018                [Page 18]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
                         1                   2                   3
@@ -1061,9 +1061,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 19]
+Mosko & Tschudin         Expires March 15, 2018                [Page 19]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
                        1                   2                   3
@@ -1117,9 +1117,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 20]
+Mosko & Tschudin         Expires March 15, 2018                [Page 20]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
    small Interests queued back-to-back, they could be encapsulated in a
@@ -1173,9 +1173,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 21]
+Mosko & Tschudin         Expires March 15, 2018                [Page 21]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
    fragment.  The field's value is 1 to 8 bytes long and consists of 2
@@ -1229,9 +1229,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 22]
+Mosko & Tschudin         Expires March 15, 2018                [Page 22]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
    o  FragSequenceNumber: a 22-bit sequence number to identify the
@@ -1285,9 +1285,9 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 23]
+Mosko & Tschudin         Expires March 15, 2018                [Page 23]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
 9.  References
@@ -1296,8 +1296,8 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <http://www.rfc-editor.org/info/rfc2119>.
+              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
+              editor.org/info/rfc2119>.
 
 9.2.  Informative References
 
@@ -1326,30 +1326,30 @@ Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
               <https://github.com/PARC/ccnx-beginendfragment-sim>.
 
    [RFC1982]  Elz, R. and R. Bush, "Serial Number Arithmetic", RFC 1982,
-              DOI 10.17487/RFC1982, August 1996,
-              <http://www.rfc-editor.org/info/rfc1982>.
+              DOI 10.17487/RFC1982, August 1996, <https://www.rfc-
+              editor.org/info/rfc1982>.
 
    [RFC1990]  Sklower, K., Lloyd, B., McGregor, G., Carr, D., and T.
               Coradetti, "The PPP Multilink Protocol (MP)", RFC 1990,
-              DOI 10.17487/RFC1990, August 1996,
-              <http://www.rfc-editor.org/info/rfc1990>.
+              DOI 10.17487/RFC1990, August 1996, <https://www.rfc-
+              editor.org/info/rfc1990>.
 
    [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
               Text on Security Considerations", BCP 72, RFC 3552,
-              DOI 10.17487/RFC3552, July 2003,
-              <http://www.rfc-editor.org/info/rfc3552>.
+              DOI 10.17487/RFC3552, July 2003, <https://www.rfc-
+              editor.org/info/rfc3552>.
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 24]
+Mosko & Tschudin         Expires March 15, 2018                [Page 24]
 
-Internet-Draft         ICN-BeginEnd-Fragmentation             March 2017
+Internet-Draft         ICN-BeginEnd-Fragmentation         September 2017
 
 
    [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
-              IANA Considerations Section in RFCs", BCP 26, RFC 5226,
-              DOI 10.17487/RFC5226, May 2008,
-              <http://www.rfc-editor.org/info/rfc5226>.
+              IANA Considerations Section in RFCs", RFC 5226,
+              DOI 10.17487/RFC5226, May 2008, <https://www.rfc-
+              editor.org/info/rfc5226>.
 
 Authors' Addresses
 
@@ -1397,4 +1397,4 @@ Authors' Addresses
 
 
 
-Mosko & Tschudin       Expires September 22, 2017              [Page 25]
+Mosko & Tschudin         Expires March 15, 2018                [Page 25]

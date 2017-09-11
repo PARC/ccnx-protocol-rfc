@@ -4,8 +4,8 @@
 
 ICNRG                                                           M. Mosko
 Internet-Draft                                                      PARC
-Intended status: Experimental                             March 21, 2017
-Expires: September 22, 2017
+Intended status: Experimental                         September 11, 2017
+Expires: March 15, 2018
 
 
                     CCNx Publisher Serial Versioning
@@ -33,7 +33,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 22, 2017.
+   This Internet-Draft will expire on March 15, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Mosko                  Expires September 22, 2017               [Page 1]
+Mosko                    Expires March 15, 2018                 [Page 1]
 
-Internet-Draft                  CCNx TLV                      March 2017
+Internet-Draft                  CCNx TLV                  September 2017
 
 
 Table of Contents
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Mosko                  Expires September 22, 2017               [Page 2]
+Mosko                    Expires March 15, 2018                 [Page 2]
 
-Internet-Draft                  CCNx TLV                      March 2017
+Internet-Draft                  CCNx TLV                  September 2017
 
 
    A "GONE" PayloadType means that this version is a terminal version.
@@ -165,15 +165,15 @@ Internet-Draft                  CCNx TLV                      March 2017
 
 
 
-Mosko                  Expires September 22, 2017               [Page 3]
+Mosko                    Expires March 15, 2018                 [Page 3]
 
-Internet-Draft                  CCNx TLV                      March 2017
+Internet-Draft                  CCNx TLV                  September 2017
 
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <http://www.rfc-editor.org/info/rfc2119>.
+              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
+              editor.org/info/rfc2119>.
 
 6.2.  Informative References
 
@@ -182,13 +182,13 @@ Internet-Draft                  CCNx TLV                      March 2017
 
    [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
               Text on Security Considerations", BCP 72, RFC 3552,
-              DOI 10.17487/RFC3552, July 2003,
-              <http://www.rfc-editor.org/info/rfc3552>.
+              DOI 10.17487/RFC3552, July 2003, <https://www.rfc-
+              editor.org/info/rfc3552>.
 
    [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
-              IANA Considerations Section in RFCs", BCP 26, RFC 5226,
-              DOI 10.17487/RFC5226, May 2008,
-              <http://www.rfc-editor.org/info/rfc5226>.
+              IANA Considerations Section in RFCs", RFC 5226,
+              DOI 10.17487/RFC5226, May 2008, <https://www.rfc-
+              editor.org/info/rfc5226>.
 
 Author's Address
 
@@ -221,4 +221,4 @@ Author's Address
 
 
 
-Mosko                  Expires September 22, 2017               [Page 4]
+Mosko                    Expires March 15, 2018                 [Page 4]
