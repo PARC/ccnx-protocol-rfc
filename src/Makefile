@@ -31,6 +31,6 @@ else
 endif
 
 up: lib/main.mk
-	rm -rf ../build/*
-	mv *.html ../build
-	mv *.txt ../build
+	rm -rf ../docs/build/*
+	mv *.html ../docs/build
+	mv *.txt ../docs/build

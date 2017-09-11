@@ -1,0 +1,64 @@
+<head>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width initial-scale=1" />
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+                    <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
+                        <meta name="description" content="{{ site.description }}">
+
+                            <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+
+                                <style>
+    <style>
+*,
+:before,
+:after {
+    box-sizing: border-box;
+}
+html,
+body {
+    height: 100%;
+}
+body {
+    display: flex;
+        flex-direction: column;
+            font: 14px arial, sans-serif;
+                line-height: 1.45;
+                    margin: 0;
+                        padding: 0;
+}
+footer {
+    color: #666;
+        font-size: .9em;
+            padding: 1em 1em 2em;
+                text-align: center;
+}
+main {
+    flex: 1;
+        padding: 0 1em;
+}
+.container {
+    margin: 0 auto;
+        max-width: 50em;
+}
+.homeLink:link,
+.homeLink:visited {
+    color: #000;
+        text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+table{
+    border-collapse: collapse;
+        width: 100%;
+}
+td {
+    border: 1px solid #666;
+        padding: .25em .45em;
+}
+
+    </style>
+        </style>
+</head>

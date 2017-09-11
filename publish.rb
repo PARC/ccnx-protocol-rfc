@@ -26,6 +26,6 @@ File.readlines('versions').each do |line|
     oldname = basename + "-latest"
     newname = basename + "-" + tagged[1].strip!
 
-    `cat build/#{basename}.html | sed -e 's/#{oldname}/#{newname}/' > build/#{newname}.html`
-    `cat build/#{basename}.txt | sed -e 's/#{oldname}/#{newname}/' > build/#{newname}.txt`
+    `cat docs/build/#{basename}.html | sed -e 's/#{oldname}/#{newname}/' > docs/build/#{newname}.html`
+    `cat docs/build/#{basename}.txt | sed -e 's/#{oldname}/#{newname}/' > docs/build/#{newname}.txt`
 end
