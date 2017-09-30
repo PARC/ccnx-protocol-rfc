@@ -253,7 +253,7 @@
         </figure>
 
         <t>The Length field contains the length of the Value field in octets.  It does
-          not include the length of the Type and Length fields.  They length MAY be zero.
+          not include the length of the Type and Length fields.  The length MAY be zero.
         </t>
         <t>TLV structures are nestable, allowing the Value field of one TLV structure to contain
           additional TLV structures. The enclosing TLV structure is called the container of the enclosed TLV.
@@ -652,8 +652,8 @@
         <section anchor="RCT" title="Recommended Cache Time">
           <t>The Recommended Cache Time (RCT) is a measure of the useful lifetime of a Content Object as assigned by a content producer or upstream node.
             It serves as a guideline to the Content Store cache in determining how long to keep the Content Object. It is a
-            recommendation only and may be ignored by the cache.  This is in contrast to the ExpiryTime (described in <xref target="expiry" />)which takes precedence over
-            the RCT and must be obeyed.</t>
+            recommendation only and may be ignored by the cache.  This is in contrast to the ExpiryTime (described in <xref target="expiry" />)
+            which takes precedence over the RCT and must be obeyed.</t>
            <t>
             Because the Recommended Cache Time is an optional hop-by-hop header and not a part of the signed message, a content producer
             may re-issue a previously signed
