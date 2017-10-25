@@ -244,7 +244,7 @@
           which entries it satisfies.  For each such entry, at most one copy of the
           Content Object is sent to each listed last hop in the PIT entries.
         </t>
-        <t>If multiple Interests with the same {Name, KeyIdRestr, Content ObjectHashRestriction} tuple
+        <t>If multiple Interests with the same {Name, KeyIdRestr, ContentObjectHashRestr} tuple
           arrive at a node before a Content Object matching the first Interest comes back,
           they are grouped in the same PIT entry and their last hops aggregated (see <xref target="aggregation"/>).
           Thus, one Content Object might satisfy multiple pending Interests in a PIT.
@@ -370,9 +370,9 @@
 
        <figure anchor="abnfgrammar">
         <artwork align="left"><![CDATA[
-Message       := Interest / Content Object / InterestReturn
+Message       := Interest / ContentObject / InterestReturn
 Interest      := HopLimit [Lifetime] BodyName [Validation]
-Content Object := [CacheTime / ConObjHash] BodyOptName [Validation]
+ContentObject := [CacheTime / ConObjHash] BodyOptName [Validation]
 InterestReturn:= ReturnCode Interest
 BodyName      := Name Common
 BodyOptName   := [Name] Common
@@ -530,14 +530,14 @@ SigTime       := AbsTime
         <t>A forwarder routes Interest messages based on a Forwarding Information Base (FIB),
           returns Content Objects that match Interests to the Interest's previous hop, and
           processes InterestReturn control messages.  It may also keep a cache of Content Objects
-          in the notional ContentStore table.  This document does not specify the internal behavior
+          in the notional Content Store table.  This document does not specify the internal behavior
           of a forwarder -- only these and other external behaviors.
         </t>
         <t>In this document, we will use two processing pipelines, one for Interests
           and one for Content Objects.  Interest processing is made up of checking for
           duplicate Interests in the PIT (see <xref target="aggregation"/>), checking
-            for a cached Content Object in the ContentStore (see <xref target="contentstore"/>),
-            and forwarding an Interest via the FIB.  ContentStore processing is made up
+            for a cached Content Object in the Content Store (see <xref target="contentstore"/>),
+            and forwarding an Interest via the FIB.  Content Store processing is made up
             of checking for matching Interests in the PIT and forwarding to those previous hops.
         </t>
         <section anchor="hoplimit" title="Interest HopLimit">
@@ -552,7 +552,7 @@ SigTime       := AbsTime
             at least 1 before it is forwarded.
           </t>
           <t>If the HopLimit equals 0, the Interest MUST NOT be forwarded to another forwarder;
-            it MAY be sent to a publisher application or serviced from a local ContentStore.
+            it MAY be sent to a publisher application or serviced from a local Content Store.
           </t>
         </section>
 
@@ -605,28 +605,28 @@ SigTime       := AbsTime
 
         </section>
 
-        <section anchor="contentstore" title="ContentStore Behavior">
-          <t>The ContentStore is a special cache that sits on the fast path of a CCNx forwarder.
+        <section anchor="contentstore" title="Content Store Behavior">
+          <t>The Content Store is a special cache that sits on the fast path of a CCNx forwarder.
             It is an optional component.  It serves to repair lost packets and handle flash requests
             for popular content.  It could be pre-populated or use opportunistic caching.
-            Because the ContentStore could serve to amplify an attach via cache poisoning, there
-            are special rules about how a ContentStore behaves.
+            Because the Content Store could serve to amplify an attach via cache poisoning, there
+            are special rules about how a Content Store behaves.
             <list style="numbers">
-              <t>A forwarder MAY implement a ContentStore.  If it does, the ContentStore
+              <t>A forwarder MAY implement a Content Store.  If it does, the Content Store
                 matches a Content Object to an Interest via the normal matching rules (see <xref target="matching"/>).
               </t>
-              <t>If an Interest has a KeyIdRestr, then the ContentStore MUST NOT reply unless it knows
+              <t>If an Interest has a KeyIdRestr, then the Content Store MUST NOT reply unless it knows
                 the signature on the matching Content Object is correct.  It may do this by external knowledge
                 (i.e., in a managed network or system with pre-populated caches) or by having the public key and
                 cryptographically verifying the signature.  If the public key is provided in the Content Object
-                itself (i.e., in the PublicKey field) or in the Interest, the ContentStore MUST verify that
+                itself (i.e., in the PublicKey field) or in the Interest, the Content Store MUST verify that
                 the public key's SHA-256 hash is equal to the KeyId and that it verifies the signature.
-                A ContentStore MAY verify the digital signature of a Content Object before it is cached, but
+                A Content Store MAY verify the digital signature of a Content Object before it is cached, but
                 it is not required to do so.
-                A ContentStore SHOULD NOT fetch keys over the network.  If it cannot or has not yet verified
+                A Content Store SHOULD NOT fetch keys over the network.  If it cannot or has not yet verified
                 the signature, it should treat the Interest as a cache miss.
               </t>
-              <t>If an Interest has an ContentObjectHashRestr, then the ContentStore MUST NOT reply unless it
+              <t>If an Interest has an ContentObjectHashRestr, then the Content Store MUST NOT reply unless it
                 knows the the matching Content Object has the correct hash.  If it cannot verify the
                 hash, then it should treat the Interest as a cache miss.
               </t>
@@ -644,10 +644,10 @@ SigTime       := AbsTime
               <t>Determine if the Interest can be aggregated, as per <xref target="aggregation"/>.  If
                 it can be, aggregate and do not forward the Interest.
               </t>
-              <t>If forwarding the Interest, check for a hit in the ContentStore, as
+              <t>If forwarding the Interest, check for a hit in the Content Store, as
                 per <xref target="contentstore"/>.  If a matching
                 Content Object is found, return it to the Interest's previous hop.  This
-                injects the ContentStore as per <xref target="object_pipe"/>.
+                injects the Content Store as per <xref target="object_pipe"/>.
               </t>
               <t>Lookup the Interest in the FIB.  Longest prefix match (LPM) is performed
                 name segment by name segment (not byte or bit).  It SHOULD exclude the
@@ -679,7 +679,7 @@ SigTime       := AbsTime
                 the same content object multiple times on the same interface, such as Ethernet,
                 if it is going to different previous hops.
               </t>
-              <t>A Content Object SHOULD only be put in the ContentStore if it satisfied
+              <t>A Content Object SHOULD only be put in the Content Store if it satisfied
                 an Interest (and passed rule #1 above).  This is to reduce the chances
                 of cache poisoning.
               </t>
@@ -762,7 +762,7 @@ SigTime       := AbsTime
 
     <section anchor="cachecontrol" title="Cache Control">
       <t>CCNx supports two fields that affect cache control.  These determine how a
-        cache or ContentStore handles a Content Object.  They are not used in the fast path,
+        cache or Content Store handles a Content Object.  They are not used in the fast path,
         but only to determine if a Content Object can be injected on to the fast path in response
         to an Interest.
       </t>
@@ -860,16 +860,16 @@ SigTime       := AbsTime
       <t>A Content Object satisfies an Interest if and only if (a) the Content Object name, if present,
         exactly matches the Interest name, and (b) the ValidationAlgorithm KeyId of the Content Object
         exactly equals the Interest KeyIdRestr, if present, and (c) the computed Content ObjectHash exactly equals the Interest
-        Content ObjectHashRestriction, if present.</t>
+        ContentObjectHashRestr, if present.</t>
       <t>The matching rules are given by this predicate, which if it evaluates true means
         the Content Object matches the Interest.
         Ni = Name in Interest (may not be empty), Ki = KeyIdRestr
-        in the interest (may be empty), Hi = Content ObjectHashRestriction in Interest (may be empty).
+        in the interest (may be empty), Hi = ContentObjectHashRestr in Interest (may be empty).
         Likewise, No, Ko, Ho are those properties in the Content Object, where No and Ko may be empty;
         Ho always exists.
         For binary relations, we use &amp; for AND and | for OR.  We use E for the EXISTS (not empty)
         operator and ! for the NOT EXISTS operator.</t>
-      <t>As a special case, if the Content ObjectHashRestriction in the Interest specifies an
+      <t>As a special case, if the ContentObjectHashRestr in the Interest specifies an
         unsupported hash algorithm, then no Content Object can match the Interest so the
         system should drop the Interest and MAY send an InterestReturn to the previous hop.
         In this case, the predicate below will never get executed because the Interest is
@@ -1059,7 +1059,7 @@ SigTime       := AbsTime
           digital signatures requires a public key operation in the data plane.
           This can be abused as a denial-of-service vector against caching nodes.
           Therefore, it is recommended that caching routers only cache Content Objects
-          which can be verified by an Interest Content ObjectHashRestriction.</t>
+          which can be verified by an Interest ContentObjectHashRestr.</t>
       <t>If two adjacent peers require authenticated messaging, they must use an external mechanism such as MACSEC.</t>
     </section>
   </middle>
