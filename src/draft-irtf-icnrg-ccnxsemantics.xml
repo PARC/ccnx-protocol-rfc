@@ -129,6 +129,8 @@
         one system can return an Interest message to the previous hop due to an
         error condition.  This indicates to the previous hop that the current system will
         not respond to the Interest.</t>
+      <t>This document is a product of the Information Centric Networking 
+         research group (ICNRG).</t>
     </abstract>
   </front>
   <middle>
@@ -139,6 +141,50 @@
         the main concepts of CCNx, which are further elaborated in the remainder of
         the document.
       </t>
+      
+      <t>The CCNx protocols derive from the early ICN work by <xref target="nnc">Jacobson et al.</xref>.
+      Jacobson's version of CCNx is known as the 0.x version ("CCNx 0.x") and the present work is known
+      as the 1.0 version ("CCNx 1.0").
+      In the current form presented here, there are two active implementations.
+      The most complete implementation is <xref target="cicn">Community ICN (CINC)</xref> hosted at fd.io.
+      Another active implementation is <xref target="ccnlite">CCN-lite</xref>, 
+      with support for IoT systems and the
+      RIOT operating system.  There have been other implementations, less widely used,
+      such as <xref target="mini-ccnx">Mini-CCNx</xref>.
+      </t>
+      <t>
+      The original work by Jacobson formed the basis of the <xref target="ndn">Named Data Networking</xref>
+      (NDN) university work, though the present specification diverges from NDN in a few
+      significant areas.  As CCNx 0.x is no longer under development whereas NDN is an
+      active project, we will only consider differences with NDN.
+      In both NDN and CCNx 1.0, a forwarder uses a longest prefix
+      match of a request name against the forwarding information base (FIB) to send
+      the request through the network.  A forwarder must then match a response's name
+      to a request's name to determine if a response satisfies a request.  Here is
+      the main difference.
+      NDN performs, at the network layer, content discovery via controlled flooding of a request
+      through the network until it finds a feasible response whose name at least partially
+      matches the request's name via a set of matching rules.
+      On a match, the network returns the entire response (e.g. several kilobytes
+      to megabytes of data).  The requestor may then use that response or issue a new
+      request that excludes the unwanted result via a type of interval filter on
+      one component of a hierarchical name.  CCNx 1.0 does not include search at
+      the network level, but uses search on top of it's layer 3 protocol.  The main
+      ramification of this change is that in CCNx 1.0 the name in a response must
+      exactly match the name in a request. 
+      </t>
+      
+      <t>The document represents the consensus of the ICN RG.  It is the first
+		ICN protocol from the RG, created from the early CCNx protocol [cite early paper]
+		with significant revision and input from the ICN community and
+		RG members.  The draft has received critical reading by several members
+		of the ICN community and the RG.  The authors and RG chairs
+		approve of the contents.  The document is sponsored under the
+		IRTF and is not issued by the IETF and is not an IETF standard.
+		This is an experimental protocol and may not be suitable for any
+		specific application and the specification may change in the future.
+		</t>
+
       <section title="Requirements Language">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
           NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
@@ -1108,7 +1154,46 @@ SigTime       := AbsTime
           </front>
       </reference>
 
+		<reference anchor="mini-ccnx" target="http://dx.doi.org/10.1145/2491224.2491236">
+			<front>
+				<title>Mini-CCNx: fast prototyping for named data networking</title>
+				<author initials="C.M.S." surname="Cabral" fullname="Carlos M.S. Cabral"></author>
+				<author initials="C.E." surname="Rothenberg" fullname="Christian Esteve Rothenberg"></author>
+				<author initials="M.F." surname="Magalhaes" fullname="Maurício Ferreira Magalhaes"></author>
+				<date year="2013">
+			</front>
+		</reference>
 
+      <reference anchor="ccnlite" target="https://github.com/cn-uofbasel/ccn-lite">
+      	<front>
+      		<title>CCNx Open Source</title>
+      		<author><organization>University of Basel</organization></author>
+      		<date year="2018"/>
+      	</front>
+      </reference>
+
+      <reference anchor="cicn" target="https://wiki.fd.io/view/Cicn">
+      	<front>
+      		<title>Community ICN (CICN)</title>
+      		<author initials="L." surname="Muscariello" fullname="Luca Muscariello"><organization>Cisco Systems</organization></author>
+      		<date year="2018"/>
+      	</front>
+      </reference>
+      
+      <reference anchor="nnc" target="http://dx.doi.org/10.1145/1658939.1658941">
+      	<front>
+      		<title>Networking Named Content</title>
+      		<author initials="V." surname="Jacobson" fullname="Van Jacobson"><organization>Palo Alto Research Center</organization></author>
+      		<author initials="D.K." surname="Smetters" fullname="Diana K. Smetters"><organization>Palo Alto Research Center</organization></author>
+      		<author initials="J.D." surname="Thornton" fullname="James D. Thornton"><organization>Palo Alto Research Center</organization></author>
+      		<author initials="M.F." surname="Plass" fullname="Michael F. Plass"><organization>Palo Alto Research Center</organization></author>
+      		<author initials="N.H." surname="Briggs" fullname="Nicholas H. Briggs"><organization>Palo Alto Research Center</organization></author>
+      		<author initials="R.L." surname="Braynard" fullname="Rebecca L. Braynard"><organization>Palo Alto Research Center</organization></author>
+      		<date year="2009"/>
+      	</front>
+      </reference>
+      
+      
     </references>
 
 
