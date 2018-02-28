@@ -12,7 +12,7 @@ Expires: September 1, 2018                                      LinkedIn
 
 
                       CCNx Messages in TLV Format
-                  draft-irtf-icnrg-ccnxmessages-06
+                  draft-irtf-icnrg-ccnxmessages-07
 
 Abstract
 

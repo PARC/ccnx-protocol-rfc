@@ -12,7 +12,7 @@ Expires: September 1, 2018                                      LinkedIn
 
 
                              CCNx Semantics
-                 draft-irtf-icnrg-ccnxsemantics-06
+                 draft-irtf-icnrg-ccnxsemantics-07
 
 Abstract
 
