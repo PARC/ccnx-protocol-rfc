@@ -19,20 +19,25 @@
 }
 
 @media screen and (min-width: 1024px) {
-  ul.toc, #rfc\.toc {
+  body>ul.toc, body>#rfc\.toc {
     position: fixed;
     bottom: 0;
     right: 0;
-    right: calc(50vw - 525px);
+    right: calc(50vw - 550px);
     width: 300px;
     z-index: 1;
   }
   #rfc\.toc {
-    top: 15px;
-  }
-  ul.toc {
-    top: 80px;
+    top: 55px;
     overflow: auto;
+    overscroll-behavior: contain;
+  }
+  ul.toc, #rfc\.toc {
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  body>ul.toc {
+    top: 140px;
   }
 
   body {
@@ -41,11 +46,11 @@
 }
 
 body {
-  font: 15px "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font: 16px "Helvetica Neue",Helvetica,Arial,sans-serif;
   color: #333;
   font-size-adjust: 0.5;
-  line-height: 130%;
-  margin: 25px auto;
+  line-height: 24px;
+  margin: 75px auto;
   max-width: 724px;
 }
 
@@ -58,7 +63,7 @@ body {
   margin: 0.8em 0 0.3em;
 }
 .title { font-size: 36px; }
-h1 { font-size: 30px; }
+h1 { font-size: 36px; }
 h2 { font-size: 24px; }
 h3, h4 { font-size: 18px; }
 h1 a[href], h2 a[href], h3 a[href], h4 a[href] {
@@ -121,10 +126,9 @@ table.header td {
   height: auto;
   line-height: 100%;
 }
-#rfc\.abstract+p {
-  font-size: 20px;
-  font-weight: 300;
-  line-height: 130%;
+#rfc\.abstract+p, #rfc\.abstract p {
+  font-size: 18px;
+  line-height: 27px%;
 }
 
 samp, tt, code, pre {
@@ -192,6 +196,9 @@ ul.empty li {
 hr {
   border: 0;
   border-top: 1px solid #eee;
+}
+hr.noprint {
+  display: none;
 }
 
 a {
@@ -320,12 +327,12 @@ address {
 <link href="#rfc.authors" rel="Chapter"/>
 
 
-  <meta name="generator" content="xml2rfc version 2.5.2 - http://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.5.1 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Mosko, M., Solis, I., and C. Wood" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-irtf-icnrg-ccnxsemantics-06" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-10-29" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-2-28" />
   <meta name="dct.abstract" content="This document describes the core concepts of the CCNx architecture and presents a minimum network protocol based on two messages: Interests and Content Objects.  It specifies the set of mandatory and optional fields within those messages and describes their behavior and interpretation. This architecture and protocol specification is independent of a specific wire encoding." />
   <meta name="description" content="This document describes the core concepts of the CCNx architecture and presents a minimum network protocol based on two messages: Interests and Content Objects.  It specifies the set of mandatory and optional fields within those messages and describes their behavior and interpretation. This architecture and protocol specification is independent of a specific wire encoding." />
 
@@ -349,7 +356,7 @@ address {
   <td class="right">I. Solis</td>
 </tr>
 <tr>
-  <td class="left">Expires: May 2, 2018</td>
+  <td class="left">Expires: September 1, 2018</td>
   <td class="right">LinkedIn</td>
 </tr>
 <tr>
@@ -362,7 +369,7 @@ address {
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">October 29, 2017</td>
+  <td class="right">February 28, 2018</td>
 </tr>
 
     	
@@ -377,17 +384,18 @@ address {
 </h1>
 <p>This document describes the core concepts of the CCNx architecture and presents a minimum network protocol based on two messages: Interests and Content Objects.  It specifies the set of mandatory and optional fields within those messages and describes their behavior and interpretation. This architecture and protocol specification is independent of a specific wire encoding.</p>
 <p>The protocol also uses a Control message called an InterestReturn, whereby one system can return an Interest message to the previous hop due to an error condition.  This indicates to the previous hop that the current system will not respond to the Interest.</p>
+<p>This document is a product of the Information Centric Networking research group (ICNRG).</p>
 <h1 id="rfc.status">
   <a href="#rfc.status">Status of This Memo</a>
 </h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on May 2, 2018.</p>
+<p>This Internet-Draft will expire on September 1, 2018.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
-<p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
@@ -443,7 +451,11 @@ address {
   </ul>
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
-<p id="rfc.section.1.p.1">This document describes the principles of the CCNx architecture. It describes the network protocol based on two message types: Interests and Content Objects.  The description is not dependent on a specific wire format or particular encodings.  This section introduces the main concepts of CCNx, which are further elaborated in the remainder of the document.  </p>
+<p id="rfc.section.1.p.1">This document describes the principles of the CCNx architecture. It describes the network protocol based on two message types: Interests and Content Objects.  The description is not dependent on a specific wire format or particular encodings.  This section introduces the main concepts of CCNx, which are further elaborated in the remainder of the document.  The <a href="#CCNMessages">CCNx Messages</a> <cite title="NONE">[CCNMessages]</cite> document describes a type-lenth-value (TLV) write protocol.  </p>
+<p id="rfc.section.1.p.2">The CCNx protocols derive from the early ICN work by <a href="#nnc">Jacobson et al.</a> <cite title="NONE">[nnc]</cite>.  Jacobson's version of CCNx is known as the 0.x version ("CCNx 0.x") and the present work is known as the 1.0 version ("CCNx 1.0").  In the current form presented here, there are two active implementations.  The most complete implementation is <a href="#cicn">Community ICN (CINC)</a> <cite title="NONE">[cicn]</cite> hosted at fd.io.  Another active implementation is <a href="#ccnlite">CCN-lite</a> <cite title="NONE">[ccnlite]</cite>, with support for IoT systems and the RIOT operating system.  There have been other implementations, less widely used, such as <a href="#mini-ccnx">Mini-CCNx</a> <cite title="NONE">[mini-ccnx]</cite>.  </p>
+<p id="rfc.section.1.p.3">The original work by Jacobson formed the basis of the <a href="#ndn">Named Data Networking</a> <cite title="NONE">[ndn]</cite> (NDN) university work, though the present specification diverges from NDN in a few significant areas.  As CCNx 0.x is no longer under development whereas NDN is an active project, we will only consider differences with NDN.  In both NDN and CCNx 1.0, a forwarder uses a longest prefix match of a request name against the forwarding information base (FIB) to send the request through the network.  A forwarder must then match a response's name to a request's name to determine if a response satisfies a request, and herein lies the main difference between NDN and CCNx 1.0.  </p>
+<p id="rfc.section.1.p.4">NDN performs, at the network layer, content discovery via controlled flooding of a request through the network until it finds a feasible response whose name at least partially matches the request's name via a set of matching rules.  On a match, the network returns the entire response (e.g. several kilobytes to megabytes of data).  The requestor may then use that response or issue a new request that excludes the unwanted result via a type of interval filter on one component of a hierarchical name.  CCNx 1.0 does not include search at the network level, but uses search on top of it's layer 3 protocol.  The main ramification of this change is that in CCNx 1.0 the name in a response must exactly match the name in a request.  </p>
+<p id="rfc.section.1.p.5">The document represents the consensus of the ICN RG.  It is the first ICN protocol from the RG, created from the early CCNx protocol [cite early paper] with significant revision and input from the ICN community and RG members.  The draft has received critical reading by several members of the ICN community and the RG.  The authors and RG chairs approve of the contents.  The document is sponsored under the IRTF and is not issued by the IETF and is not an IETF standard.  This is an experimental protocol and may not be suitable for any specific application and the specification may change in the future.  </p>
 <h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
 <p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">RFC 2119</a> <cite title="NONE">[RFC2119]</cite>.</p>
 <h1 id="rfc.section.1.2"><a href="#rfc.section.1.2">1.2.</a> Protocol Overview</h1>
@@ -462,8 +474,9 @@ address {
 <p id="rfc.section.1.2.p.13">If multiple Interests with the same {Name, KeyIdRestr, ContentObjectHashRestr} tuple arrive at a node before a Content Object matching the first Interest comes back, they are grouped in the same PIT entry and their last hops aggregated (see <a href="#aggregation">Section 2.4.2</a>).  Thus, one Content Object might satisfy multiple pending Interests in a PIT.  </p>
 <p id="rfc.section.1.2.p.14">In CCNx, higher-layer protocols often become so-called "name-based protocols" because they operate on the CCNx Name.  For example, a versioning protocol might append additional name segments to convey state about the version of payload.  A content discovery protocol might append certain protocol-specific name segments to a prefix to discover content under that prefix.  Many such protocols may exist and apply their own rules to Names. They may be layered with each protocol encapsulating (to the left) a higher layer's Name prefix.  </p>
 <p id="rfc.section.1.2.p.15">This document also describes a control message called an InterestReturn.  A network element may return an Interest message to a previous hop if there is an error processing the Interest. The returned Interest may be further processed at the previous hop or returned towards the Interest origin.  When a node returns an Interest it indicates that the previous hop should not expect a response from that node for the Interest, i.e., there is no PIT entry left at the returning node for a Content Object to follow.  </p>
-<p id="rfc.section.1.2.p.16">There are multiple ways to describe larger objects in CCNx.  Some options may use the namespace while others may use a structure such as a Manifest.  This document does not address these options at this time.  </p>
-<p id="rfc.section.1.2.p.17">The remainder of this document describes a named payload as well as the Interest and Content Object network protocol behavior in detail.  </p>
+<p id="rfc.section.1.2.p.16">There are multiple ways to describe larger objects in CCNx.  Aggregating layer-3 content objects in to larger objects is beyond the scope of this document.  One proposed method, <a href="#flic">FLIC</a> <cite title="NONE">[flic]</cite>, uses a manifest to enumerate the pieces of a larger object.  Manifests are, themselves, Content Objects.  Another option is to use a convention in the Content Object name, as in the <a href="#chunking">CCNx Chunking</a> <cite title="NONE">[chunking]</cite> protocol where a large object is broken in to small chunks and each chunk receives a special name component indicating its serial order.  </p>
+<p id="rfc.section.1.2.p.17">At the sematic level, described in this document, we do not address fragmentation.  One experimental fragmentation protocol, <a href="#befrags">BeginEnd Fragments</a> <cite title="NONE">[befrags]</cite> uses a multipoint-PPP style technique  for use over layer-2 interfaces with the <a href="#CCNMessages">CCNx Messages</a> <cite title="NONE">[CCNMessages]</cite> TLV wire forman specification.  </p>
+<p id="rfc.section.1.2.p.18">The remainder of this document describes a named payload as well as the Interest and Content Object network protocol behavior in detail.  </p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#protocol" id="protocol">Protocol</a></h1>
 <p id="rfc.section.2.p.1">CCNx is a request and response protocol. A request is called an Interest and a response is called a Content Object.  CCNx also uses a 1-hop control message called InterestReturn.  These are, as a group, called CCNx Messages.</p>
 <h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#grammar" id="grammar">Message Grammar</a></h1>
@@ -827,9 +840,11 @@ SigTime       := AbsTime
 <p id="rfc.section.12.p.1">This memo includes no request to IANA. </p>
 <p id="rfc.section.12.p.2">TO_INTERESTLIFETIME = 2 seconds.</p>
 <h1 id="rfc.section.13"><a href="#rfc.section.13">13.</a> <a href="#Security" id="Security">Security Considerations</a></h1>
-<p id="rfc.section.13.p.1">The Interest Return message has no authenticator from the previous hop.  Therefore, the payload of the Interest Return should only be used locally to match an Interest.  A node should never forward that Interest payload as an Interest.  It should also verify that it sent the Interest in the Interest Return to that node and not allow anyone to negate Interest messages.</p>
-<p id="rfc.section.13.p.2">Caching nodes must take caution when processing content objects. Verifying digital signatures requires a public key operation in the data plane.  This can be abused as a denial-of-service vector against caching nodes.  Therefore, it is recommended that caching routers only cache Content Objects which can be verified by an Interest ContentObjectHashRestr.</p>
-<p id="rfc.section.13.p.3">If two adjacent peers require authenticated messaging, they must use an external mechanism such as MACSEC.</p>
+<p id="rfc.section.13.p.1">The CCNx protocol is a layer 3 network protocol or may operate as an overlay using other transports, such as UDP or other tunnels.  It includes intrinsic support for message authentication via a signature (e.g. RSA or elliptic curve) or message authentication code (e.g. HMAC).  In lieu of an authenticator, it may instead use a message integrity check (e.g. SHA or CRC).  CCNx does not specify an encryption envelope, that function is left to a high-layer protocol.</p>
+<p id="rfc.section.13.p.2">As a layer 3 protocol, this document does not describe how one arrives at keys or how one trusts keys.  One key exchange specification is <a href="#ccnxke">CCNxKE</a> <cite title="NONE">[ccnxke]</cite>, which is similar to the TLS 1.3 key exchange except it is over the CCNx layer 3 messages.  </p>
+<p id="rfc.section.13.p.3">The Interest Return message has no authenticator from the previous hop.  Therefore, the payload of the Interest Return should only be used locally to match an Interest.  A node should never forward that Interest payload as an Interest.  It should also verify that it sent the Interest in the Interest Return to that node and not allow anyone to negate Interest messages.</p>
+<p id="rfc.section.13.p.4">Caching nodes must take caution when processing content objects. Verifying digital signatures requires a public key operation in the data plane.  This can be abused as a denial-of-service vector against caching nodes.  Therefore, it is recommended that caching routers only cache Content Objects which can be verified by an Interest ContentObjectHashRestr.</p>
+<p id="rfc.section.13.p.5">If two adjacent peers require authenticated messaging, they must use an external mechanism such as MACSEC.</p>
 <h1 id="rfc.references"><a href="#rfc.references">14.</a> References</h1>
 <h1 id="rfc.references.1"><a href="#rfc.references.1">14.1.</a> Normative References</h1>
 <table>
@@ -847,21 +862,75 @@ SigTime       := AbsTime
   <tbody>
     <tr>
       <td class="reference">
+        <b id="befrags">[befrags]</b>
+      </td>
+      <td class="top"><a title="PARC, Inc.">Mosko, M.</a> and <a title="University of Basel">C. Tschudin</a>, "<a href="https://www.ietf.org/archive/id/draft-mosko-icnrg-beginendfragment-02.txt">ICN "Begin-End" Hop by Hop Fragmentation</a>", 2017.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="CCN">[CCN]</b>
       </td>
       <td class="top"><a>PARC, Inc.</a>, "<a href="http://www.CCNx.org">CCNx Open Source</a>", 2007.</td>
     </tr>
     <tr>
       <td class="reference">
+        <b id="ccnlite">[ccnlite]</b>
+      </td>
+      <td class="top"><a>University of Basel</a>, "<a href="https://github.com/cn-uofbasel/ccn-lite">CCNx Open Source</a>", 2018.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="CCNMessages">[CCNMessages]</b>
       </td>
-      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, <a title="LinkedIn">Solis, I.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a href="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-04">CCNx Messages in TLV Format (Internet draft)</a>", 2017.</td>
+      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, <a title="LinkedIn">Solis, I.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a href="https://www.ietf.org/id/draft-irtf-icnrg-ccnxmessages-07.txt">CCNx Messages in TLV Format (Internet draft)</a>", 2018.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="ccnxke">[ccnxke]</b>
+      </td>
+      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, <a title="PARC, Inc.">Uzun, E.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a href="https://www.ietf.org/archive/id/draft-wood-icnrg-ccnxkeyexchange-02.txt">CCNx Key Exchange Protocol Version 1.0</a>", 2017.</td>
     </tr>
     <tr>
       <td class="reference">
         <b id="CCNxURI">[CCNxURI]</b>
       </td>
       <td class="top"><a title="PARC, Inc.">Mosko, M.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a href="http://tools.ietf.org/html/draft-mosko-icnrg-ccnxuri-02">The CCNx URI Scheme (Internet draft)</a>", 2017.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="chunking">[chunking]</b>
+      </td>
+      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, "<a href="https://www.ietf.org/archive/id/draft-mosko-icnrg-ccnxchunking-02.txt">CCNx Content Object Chunking</a>", 2016.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="cicn">[cicn]</b>
+      </td>
+      <td class="top"><a title="Cisco Systems">Muscariello, L.</a>, "<a href="https://wiki.fd.io/view/Cicn">Community ICN (CICN)</a>", 2018.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="flic">[flic]</b>
+      </td>
+      <td class="top"><a title="University of Basel">Tschudin, C.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a href="https://www.ietf.org/archive/id/draft-tschudin-icnrg-flic-03.txt">File-Like ICN Collection (FLIC)</a>", 2017.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="mini-ccnx">[mini-ccnx]</b>
+      </td>
+      <td class="top"><a>Cabral, C.</a>, <a>Rothenberg, C.</a> and <a>M. Magalhaes</a>, "<a href="http://dx.doi.org/10.1145/2491224.2491236">Mini-CCNx: fast prototyping for named data networking</a>", 2013.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="ndn">[ndn]</b>
+      </td>
+      <td class="top"><a>UCLA</a>, "<a href="http://www.named-data.net">Named Data Networking</a>", 2007.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="nnc">[nnc]</b>
+      </td>
+      <td class="top"><a title="Palo Alto Research Center">Jacobson, V.</a>, <a title="Palo Alto Research Center">Smetters, D.</a>, <a title="Palo Alto Research Center">Thornton, J.</a>, <a title="Palo Alto Research Center">Plass, M.</a>, <a title="Palo Alto Research Center">Briggs, N.</a> and <a title="Palo Alto Research Center">R. Braynard</a>, "<a href="http://dx.doi.org/10.1145/1658939.1658941">Networking Named Content</a>", 2009.</td>
     </tr>
     <tr>
       <td class="reference">

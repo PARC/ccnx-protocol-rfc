@@ -139,7 +139,8 @@
         based on two message types: Interests and Content Objects.  The description is not
         dependent on a specific wire format or particular encodings.  This section introduces
         the main concepts of CCNx, which are further elaborated in the remainder of
-        the document.
+        the document.  The <xref target="CCNMessages">CCNx Messages</xref> document
+        describes a type-lenth-value (TLV) write protocol.
       </t>
       
       <t>The CCNx protocols derive from the early ICN work by <xref target="nnc">Jacobson et al.</xref>.
@@ -160,8 +161,10 @@
       In both NDN and CCNx 1.0, a forwarder uses a longest prefix
       match of a request name against the forwarding information base (FIB) to send
       the request through the network.  A forwarder must then match a response's name
-      to a request's name to determine if a response satisfies a request.  Here is
-      the main difference.
+      to a request's name to determine if a response satisfies a request, and herein lies
+      the main difference between NDN and CCNx 1.0.
+      </t>
+      <t>
       NDN performs, at the network layer, content discovery via controlled flooding of a request
       through the network until it finds a feasible response whose name at least partially
       matches the request's name via a set of matching rules.
@@ -310,8 +313,16 @@
           from that node for the Interest, i.e., there is no PIT entry left at the returning node for
           a Content Object to follow.
         </t>
-        <t>There are multiple ways to describe larger objects in CCNx.  Some options may use the namespace while
-          others may use a structure such as a Manifest.  This document does not address these options at this time.
+        <t>There are multiple ways to describe larger objects in CCNx.  Aggregating layer-3 content objects in to
+        larger objects is beyond the scope of this document.  One proposed method, <xref target="flic">FLIC</xref>,
+        uses a manifest to enumerate the pieces of a larger object.  Manifests are, themselves, Content Objects.
+        Another option is to use a convention in the Content Object name, as in the <xref target="chunking">CCNx Chunking</xref>
+        protocol where a large object is broken in to small chunks and each chunk receives a special name component
+        indicating its serial order.
+        </t>
+        <t>At the sematic level, described in this document, we do not address fragmentation.  One experimental
+        fragmentation protocol, <xref target="befrags">BeginEnd Fragments</xref> uses a multipoint-PPP style
+        technique  for use over layer-2 interfaces with the <xref target="CCNMessages">CCNx Messages</xref> TLV wire forman specification.
         </t>
         <t>The remainder of this document describes a named payload as well as the Interest and Content Object
           network protocol behavior in detail.
@@ -1097,6 +1108,16 @@ SigTime       := AbsTime
       <t>TO_INTERESTLIFETIME = 2 seconds.</t>
     </section>
     <section anchor="Security" title="Security Considerations">
+		<t>The CCNx protocol is a layer 3 network protocol or may operate as an overlay using other
+		transports, such as UDP or other tunnels.  It includes intrinsic support for message authentication
+		via a signature (e.g. RSA or elliptic curve) or message authentication code (e.g. HMAC).  In lieu
+		of an authenticator, it may instead use a message integrity check (e.g. SHA or CRC).  CCNx does not specify
+		an encryption envelope, that function is left to a high-layer protocol.</t>
+		<t>As a layer 3 protocol, this document does not describe how one arrives at keys or how one trusts keys.
+		One key exchange specification is <xref target="ccnxke">CCNxKE</xref>, which is similar to the
+		TLS 1.3 key exchange except it is over the CCNx layer 3 messages.
+		</t>
+    		
       <t>The Interest Return message has no authenticator from the previous hop.  Therefore, the payload of the Interest Return
         should only be used locally to match an Interest.  A node should never forward that Interest payload as an Interest.
         It should also verify that it sent the Interest in the Interest Return to that node and not allow anyone to negate
@@ -1135,11 +1156,49 @@ SigTime       := AbsTime
 
       <reference anchor="CCN" target="http://www.CCNx.org"><front><title>CCNx Open Source</title><author><organization>PARC, Inc.</organization></author><date year="2007"/></front></reference>
 
-      <reference anchor="CCNMessages" target="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-04">
+      <reference anchor="ndn" target="http://www.named-data.net"><front><title>Named Data Networking</title><author><organization>UCLA</organization></author><date year="2007"/></front></reference>
+
+      <reference anchor="CCNMessages" target="https://www.ietf.org/id/draft-irtf-icnrg-ccnxmessages-07.txt">
           <front>
               <title>CCNx Messages in TLV Format (Internet draft)</title>
               <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
               <author initials="I." surname="Solis" fullname="Ignacio Solis"><organization>LinkedIn</organization></author>
+              <author initials="C." surname="Wood" fullname="Christopher A. Wood"><organization>University of California, Irvine</organization></author>
+              <date year="2018"/>
+          </front>
+      </reference>
+
+     <reference anchor="ccnxke" target="https://www.ietf.org/archive/id/draft-wood-icnrg-ccnxkeyexchange-02.txt">
+          <front>
+              <title>CCNx Key Exchange Protocol Version 1.0</title>
+              <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
+              <author initials="E." surname="Uzun" fullname="Ersin Uzun"><organization>PARC, Inc.</organization></author>
+              <author initials="C." surname="Wood" fullname="Christopher A. Wood"><organization>University of California, Irvine</organization></author>
+              <date year="2017"/>
+          </front>
+      </reference>
+
+     <reference anchor="chunking" target="https://www.ietf.org/archive/id/draft-mosko-icnrg-ccnxchunking-02.txt">
+          <front>
+              <title>CCNx Content Object Chunking</title>
+              <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
+              <date year="2016"/>
+          </front>
+      </reference>
+
+     <reference anchor="befrags" target="https://www.ietf.org/archive/id/draft-mosko-icnrg-beginendfragment-02.txt">
+          <front>
+              <title>ICN "Begin-End" Hop by Hop Fragmentation</title>
+              <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
+              <author initials="C." surname="Tschudin" fullname="Christian Tschudin"><organization>University of Basel</organization></author>
+              <date year="2017"/>
+          </front>
+      </reference>
+
+     <reference anchor="flic" target="https://www.ietf.org/archive/id/draft-tschudin-icnrg-flic-03.txt">
+          <front>
+              <title>File-Like ICN Collection (FLIC)</title>
+              <author initials="C." surname="Tschudin" fullname="Christian Tschudin"><organization>University of Basel</organization></author>
               <author initials="C." surname="Wood" fullname="Christopher A. Wood"><organization>University of California, Irvine</organization></author>
               <date year="2017"/>
           </front>
@@ -1159,8 +1218,8 @@ SigTime       := AbsTime
 				<title>Mini-CCNx: fast prototyping for named data networking</title>
 				<author initials="C.M.S." surname="Cabral" fullname="Carlos M.S. Cabral"></author>
 				<author initials="C.E." surname="Rothenberg" fullname="Christian Esteve Rothenberg"></author>
-				<author initials="M.F." surname="Magalhaes" fullname="Maurício Ferreira Magalhaes"></author>
-				<date year="2013">
+				<author initials="M.F." surname="Magalhaes" fullname="Mauricio Ferreira Magalhaes"></author>
+				<date year="2013"/>
 			</front>
 		</reference>
 

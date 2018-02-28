@@ -4,8 +4,8 @@
 
 ICNRG                                                           M. Mosko
 Internet-Draft                                                      PARC
-Intended status: Experimental                           October 29, 2017
-Expires: May 2, 2018
+Intended status: Experimental                          February 28, 2018
+Expires: September 1, 2018
 
 
                   CCNx Publisher Clock Time Versioning
@@ -32,11 +32,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 2, 2018.
+   This Internet-Draft will expire on September 1, 2018.
 
 Copyright Notice
 
-   Copyright (c) 2017 IETF Trust and the persons identified as the
+   Copyright (c) 2018 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Mosko                      Expires May 2, 2018                  [Page 1]
+Mosko                   Expires September 1, 2018               [Page 1]
 
-Internet-Draft                  CCNx TLV                    October 2017
+Internet-Draft                  CCNx TLV                   February 2018
 
 
 Table of Contents
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Mosko                      Expires May 2, 2018                  [Page 2]
+Mosko                   Expires September 1, 2018               [Page 2]
 
-Internet-Draft                  CCNx TLV                    October 2017
+Internet-Draft                  CCNx TLV                   February 2018
 
 
    The use of a timestamp in a Name to denote a version SHOULD NOT
@@ -165,9 +165,9 @@ Internet-Draft                  CCNx TLV                    October 2017
 
 
 
-Mosko                      Expires May 2, 2018                  [Page 3]
+Mosko                   Expires September 1, 2018               [Page 3]
 
-Internet-Draft                  CCNx TLV                    October 2017
+Internet-Draft                  CCNx TLV                   February 2018
 
 
    As per RFC 3339, the string format for two timestamps MAY be compared
@@ -221,9 +221,9 @@ Internet-Draft                  CCNx TLV                    October 2017
 
 
 
-Mosko                      Expires May 2, 2018                  [Page 4]
+Mosko                   Expires September 1, 2018               [Page 4]
 
-Internet-Draft                  CCNx TLV                    October 2017
+Internet-Draft                  CCNx TLV                   February 2018
 
 
    [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
@@ -277,4 +277,4 @@ Author's Address
 
 
 
-Mosko                      Expires May 2, 2018                  [Page 5]
+Mosko                   Expires September 1, 2018               [Page 5]
