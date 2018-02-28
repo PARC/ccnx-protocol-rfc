@@ -318,12 +318,11 @@ address {
 <link href="#rfc.section.10.3.7" rel="Chapter" title="10.3.7 Congestion"/>
 <link href="#rfc.section.10.3.8" rel="Chapter" title="10.3.8 Unsupported Content Object Hash Algorithm"/>
 <link href="#rfc.section.10.3.9" rel="Chapter" title="10.3.9 Malformed Interest"/>
-<link href="#rfc.section.11" rel="Chapter" title="11 Acknowledgements"/>
-<link href="#rfc.section.12" rel="Chapter" title="12 IANA Considerations"/>
-<link href="#rfc.section.13" rel="Chapter" title="13 Security Considerations"/>
-<link href="#rfc.references" rel="Chapter" title="14 References"/>
-<link href="#rfc.references.1" rel="Chapter" title="14.1 Normative References"/>
-<link href="#rfc.references.2" rel="Chapter" title="14.2 Informative References"/>
+<link href="#rfc.section.11" rel="Chapter" title="11 IANA Considerations"/>
+<link href="#rfc.section.12" rel="Chapter" title="12 Security Considerations"/>
+<link href="#rfc.references" rel="Chapter" title="13 References"/>
+<link href="#rfc.references.1" rel="Chapter" title="13.1 Normative References"/>
+<link href="#rfc.references.2" rel="Chapter" title="13.2 Informative References"/>
 <link href="#rfc.authors" rel="Chapter"/>
 
 
@@ -439,23 +438,23 @@ address {
 <li>10.3.7.   <a href="#rfc.section.10.3.7">Congestion</a></li>
 <li>10.3.8.   <a href="#rfc.section.10.3.8">Unsupported Content Object Hash Algorithm</a></li>
 <li>10.3.9.   <a href="#rfc.section.10.3.9">Malformed Interest</a></li>
-</ul></ul><li>11.   <a href="#rfc.section.11">Acknowledgements</a></li>
-<li>12.   <a href="#rfc.section.12">IANA Considerations</a></li>
-<li>13.   <a href="#rfc.section.13">Security Considerations</a></li>
-<li>14.   <a href="#rfc.references">References</a></li>
-<ul><li>14.1.   <a href="#rfc.references.1">Normative References</a></li>
-<li>14.2.   <a href="#rfc.references.2">Informative References</a></li>
+</ul></ul><li>11.   <a href="#rfc.section.11">IANA Considerations</a></li>
+<li>12.   <a href="#rfc.section.12">Security Considerations</a></li>
+<li>13.   <a href="#rfc.references">References</a></li>
+<ul><li>13.1.   <a href="#rfc.references.1">Normative References</a></li>
+<li>13.2.   <a href="#rfc.references.2">Informative References</a></li>
 </ul><li><a href="#rfc.authors">Authors' Addresses</a></li>
 
 
   </ul>
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
-<p id="rfc.section.1.p.1">This document describes the principles of the CCNx architecture. It describes the network protocol based on two message types: Interests and Content Objects.  The description is not dependent on a specific wire format or particular encodings.  This section introduces the main concepts of CCNx, which are further elaborated in the remainder of the document.  The <a href="#CCNMessages">CCNx Messages</a> <cite title="NONE">[CCNMessages]</cite> document describes a type-lenth-value (TLV) write protocol.  </p>
-<p id="rfc.section.1.p.2">The CCNx protocols derive from the early ICN work by <a href="#nnc">Jacobson et al.</a> <cite title="NONE">[nnc]</cite>.  Jacobson's version of CCNx is known as the 0.x version ("CCNx 0.x") and the present work is known as the 1.0 version ("CCNx 1.0").  In the current form presented here, there are two active implementations.  The most complete implementation is <a href="#cicn">Community ICN (CINC)</a> <cite title="NONE">[cicn]</cite> hosted at fd.io.  Another active implementation is <a href="#ccnlite">CCN-lite</a> <cite title="NONE">[ccnlite]</cite>, with support for IoT systems and the RIOT operating system.  There have been other implementations, less widely used, such as <a href="#mini-ccnx">Mini-CCNx</a> <cite title="NONE">[mini-ccnx]</cite>.  </p>
+<p id="rfc.section.1.p.1">This document describes the principles of the CCNx architecture. It describes the network protocol that uses a heirarchical name to forward messages and match responses to requests.  It is based on two message types: Interests and Content Objects.  This document concerns the semantics of the protocl and is not dependent on a specific wire format or particular encodings.  This section introduces the main concepts of CCNx, which are further elaborated in the remainder of the document.  The <a href="#CCNMessages">CCNx Messages</a> <cite title="NONE">[CCNMessages]</cite> document describes a type-length-value (TLV) wire protocol encoding.  The CCNx protocol fits within the broader framework of Information Centric Networking (ICN) protocol <a href="#RFC7927">[RFC7927]</a>.  </p>
+<p id="rfc.section.1.p.2">The CCNx protocols derive from the early ICN work by <a href="#nnc">Jacobson et al.</a> <cite title="NONE">[nnc]</cite>.  Jacobson's version of CCNx is known as the 0.x version ("CCNx 0.x") and the present work is known as the 1.0 version ("CCNx 1.0").  In the current form, there are two active implementations.  The most complete implementation is <a href="#cicn">Community ICN (CINC)</a> <cite title="NONE">[cicn]</cite> hosted at fd.io.  Another active implementation is <a href="#ccnlite">CCN-lite</a> <cite title="NONE">[ccnlite]</cite>, with support for IoT systems and the RIOT operating system.  </p>
 <p id="rfc.section.1.p.3">The original work by Jacobson formed the basis of the <a href="#ndn">Named Data Networking</a> <cite title="NONE">[ndn]</cite> (NDN) university work, though the present specification diverges from NDN in a few significant areas.  As CCNx 0.x is no longer under development whereas NDN is an active project, we will only consider differences with NDN.  In both NDN and CCNx 1.0, a forwarder uses a longest prefix match of a request name against the forwarding information base (FIB) to send the request through the network.  A forwarder must then match a response's name to a request's name to determine if a response satisfies a request, and herein lies the main difference between NDN and CCNx 1.0.  </p>
-<p id="rfc.section.1.p.4">NDN performs, at the network layer, content discovery via controlled flooding of a request through the network until it finds a feasible response whose name at least partially matches the request's name via a set of matching rules.  On a match, the network returns the entire response (e.g. several kilobytes to megabytes of data).  The requestor may then use that response or issue a new request that excludes the unwanted result via a type of interval filter on one component of a hierarchical name.  CCNx 1.0 does not include search at the network level, but uses search on top of it's layer 3 protocol.  The main ramification of this change is that in CCNx 1.0 the name in a response must exactly match the name in a request.  </p>
-<p id="rfc.section.1.p.5">The document represents the consensus of the ICN RG.  It is the first ICN protocol from the RG, created from the early CCNx protocol [cite early paper] with significant revision and input from the ICN community and RG members.  The draft has received critical reading by several members of the ICN community and the RG.  The authors and RG chairs approve of the contents.  The document is sponsored under the IRTF and is not issued by the IETF and is not an IETF standard.  This is an experimental protocol and may not be suitable for any specific application and the specification may change in the future.  </p>
+<p id="rfc.section.1.p.4">NDN performs, at the network layer, content discovery via controlled flooding of a request through the network until it finds a feasible response whose name at least partially matches the request's name via a set of matching rules.  NDN supports several different content discovery strategies: some use single path forwarding, some use multi-copy forwarding, some use limited broadcast.  On a match, the network returns the entire response (e.g. several kilobytes to megabytes of data).  The requestor may then use that response or issue a new request that excludes the unwanted result via a type of interval filter on one component of a hierarchical name.  CCNx 1.0 does not include discovery at the network level, but uses search on top of it's layer 3 protocol.  The main ramification of this change is that in CCNx 1.0 the name in a response must exactly match the name in a request.  </p>
+<p><a href="#selectors">CCNx Selectors</a> <cite title="NONE">[selectors]</cite> is an example of using a higher-layer protocol on top of the CCNx 1.0 layer-3 to perform content discovery.  The selector protocol uses a method similar to the original CCNx 0.x and the current NDN techniques without requiring partial name matches in the forwarder.</p>
+<p id="rfc.section.1.p.6">The document represents the consensus of the ICN RG.  It is the first ICN protocol from the RG, created from the early CCNx protocol [cite early paper] with significant revision and input from the ICN community and RG members.  The draft has received critical reading by several members of the ICN community and the RG.  The authors and RG chairs approve of the contents.  The document is sponsored under the IRTF and is not issued by the IETF and is not an IETF standard.  This is an experimental protocol and may not be suitable for any specific application and the specification may change in the future.  </p>
 <h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
 <p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">RFC 2119</a> <cite title="NONE">[RFC2119]</cite>.</p>
 <h1 id="rfc.section.1.2"><a href="#rfc.section.1.2">1.2.</a> Protocol Overview</h1>
@@ -835,18 +834,20 @@ SigTime       := AbsTime
 <p id="rfc.section.10.3.8.p.1">If a Content Object Hash Restriction specifies a hash algorithm the forwarder cannot verify, the Interest should not be accepted and the forwarder MAY send an InterestReturn to the previous hop.</p>
 <h1 id="rfc.section.10.3.9"><a href="#rfc.section.10.3.9">10.3.9.</a> <a href="#MalformedInterest" id="MalformedInterest">Malformed Interest</a></h1>
 <p id="rfc.section.10.3.9.p.1">If a forwarder detects a structural or syntactical error in an Interest, it SHOULD drop the interest and MAY send an InterestReturn to the previous hop.  This does not imply that any router must validate the entire structure of an Interest.</p>
-<h1 id="rfc.section.11"><a href="#rfc.section.11">11.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a></h1>
-<h1 id="rfc.section.12"><a href="#rfc.section.12">12.</a> <a href="#IANA" id="IANA">IANA Considerations</a></h1>
-<p id="rfc.section.12.p.1">This memo includes no request to IANA. </p>
-<p id="rfc.section.12.p.2">TO_INTERESTLIFETIME = 2 seconds.</p>
-<h1 id="rfc.section.13"><a href="#rfc.section.13">13.</a> <a href="#Security" id="Security">Security Considerations</a></h1>
-<p id="rfc.section.13.p.1">The CCNx protocol is a layer 3 network protocol or may operate as an overlay using other transports, such as UDP or other tunnels.  It includes intrinsic support for message authentication via a signature (e.g. RSA or elliptic curve) or message authentication code (e.g. HMAC).  In lieu of an authenticator, it may instead use a message integrity check (e.g. SHA or CRC).  CCNx does not specify an encryption envelope, that function is left to a high-layer protocol.</p>
-<p id="rfc.section.13.p.2">As a layer 3 protocol, this document does not describe how one arrives at keys or how one trusts keys.  One key exchange specification is <a href="#ccnxke">CCNxKE</a> <cite title="NONE">[ccnxke]</cite>, which is similar to the TLS 1.3 key exchange except it is over the CCNx layer 3 messages.  </p>
-<p id="rfc.section.13.p.3">The Interest Return message has no authenticator from the previous hop.  Therefore, the payload of the Interest Return should only be used locally to match an Interest.  A node should never forward that Interest payload as an Interest.  It should also verify that it sent the Interest in the Interest Return to that node and not allow anyone to negate Interest messages.</p>
-<p id="rfc.section.13.p.4">Caching nodes must take caution when processing content objects. Verifying digital signatures requires a public key operation in the data plane.  This can be abused as a denial-of-service vector against caching nodes.  Therefore, it is recommended that caching routers only cache Content Objects which can be verified by an Interest ContentObjectHashRestr.</p>
-<p id="rfc.section.13.p.5">If two adjacent peers require authenticated messaging, they must use an external mechanism such as MACSEC.</p>
-<h1 id="rfc.references"><a href="#rfc.references">14.</a> References</h1>
-<h1 id="rfc.references.1"><a href="#rfc.references.1">14.1.</a> Normative References</h1>
+<h1 id="rfc.section.11"><a href="#rfc.section.11">11.</a> <a href="#IANA" id="IANA">IANA Considerations</a></h1>
+<p id="rfc.section.11.p.1">This memo includes no request to IANA. </p>
+<p id="rfc.section.11.p.2">TO_INTERESTLIFETIME = 2 seconds.</p>
+<h1 id="rfc.section.12"><a href="#rfc.section.12">12.</a> <a href="#Security" id="Security">Security Considerations</a></h1>
+<p id="rfc.section.12.p.1">The CCNx protocol is a layer 3 network protocol, which may also operate as an overlay using other transports, such as UDP or other tunnels.  It includes intrinsic support for message authentication via a signature (e.g. RSA or elliptic curve) or message authentication code (e.g. HMAC).  In lieu of an authenticator, it may instead use a message integrity check (e.g. SHA or CRC).  CCNx does not specify an encryption envelope, that function is left to a high-layer protocol (e.g. <a href="#esic">[esic]</a>).</p>
+<p id="rfc.section.12.p.2">As a layer 3 protocol, this document does not describe how one arrives at keys or how one trusts keys.  The CCNx content object may include a public key embedded in the object or may use the PublicKeyLocator field to point to a public key (or public key certificate) that authenticates the message.  One key exchange specification is <a href="#ccnxke">CCNxKE</a> <cite title="NONE">[ccnxke]</cite>, which is similar to the TLS 1.3 key exchange except it is over the CCNx layer 3 messages.  Trust is beyond the scope of a layer-3 protocol protocol and left to applications or application frameworks.  </p>
+<p id="rfc.section.12.p.3">The specific encoding of messages will have security implications.  <a href="#CCNMessages">[CCNMessages]</a> uses a type-length-value (TLV) encoding.  We chose to compromise between extensibility and unambiguous encodings of types and lengths.  Some TLVs use variable length T and variable length L fields to accomodate a wide gamut of values while trying to be byte-efficient.  Our TLV encoding uses a fixed length 2-byte T and 2-byte L.  Using a fixed-length T and L field solves two problems.  The first is aliases.  If one is able to encode the same value, such as 0x2 and 0x02, in different byte lengths then one must decide if they mean the same thing, if they are different, or if one is illegal.  If they are different, then one must always compare on the buffers not the integer equivalents.  If one is illegal, then one must validate the TLV encoding -- every field of every packet at every hop.  If they are the same, then one has the second problem: how to specify packet filters.  For example, if a name has 6 name components, then there are 7 T's and 7 L's, each of which might have up to 4 representations of the same value.  That would be 14 fields with 4 encodings each, or 1001 combinations.  It also means that one cannot compare, for example, a name via a memory function as one needs to consider that any embedded T or L might have a different format.</p>
+<p id="rfc.section.12.p.4">The Interest Return message has no authenticator from the previous hop.  Therefore, the payload of the Interest Return should only be used locally to match an Interest.  A node should never forward that Interest payload as an Interest.  It should also verify that it sent the Interest in the Interest Return to that node and not allow anyone to negate Interest messages.</p>
+<p id="rfc.section.12.p.5">Caching nodes must take caution when processing content objects.  It is essential that the Content Store obey the rules outlined in <a href="#contentstore">Section 2.4.3</a> to avoid certain types of attacks.  Unlike NDN, CCNx 1.0 has no mechanism to work around an undesired result from the network (there are no "exlcudes"), so if a cache becomes poisoned with bad content it might cause problems retrieving content.   There are three types of access to content from a content store: unrestricted, signature restricted, and hash restricted.  If an Interest has no restrictions, then the requester is not particular about what they get back, so any matching cached object is OK.  In the hash restricted case, the requester is very specific about what they want and the content store (and every forward hop) can easily verify that the content matches the request.  In the signature verified case (often used for inital manifest discovery), the requester only knows the keyid that signed the content.  It is this case that requires the closest attention in the content store to avoid amplifying bad data.  The content store must only respond with a content object if it can verify the signature -- this means either the content object carries the public key inside it or the Interest carries the public key in addition to the keyid.  If that is not the case, then the content store should treat the Interest as a cache miss and let an endpoint respond.  </p>
+<p id="rfc.section.12.p.6">A user-level cache could perform full signature verification by fetching a public key according to the PublicKeyLocator.  That is not, however, a burden we wish to impose on the forwarder.  A user-level cache could also rely on out-of-band attestation, such as the cache operator only inserting content that it knows has the correct signature.</p>
+<p id="rfc.section.12.p.7">The CCNx grammar allows for hash algorithm agility via the HashType.  It specifies a short list of acceptable hash algorithms that should be implemented at each forwarder.  Some hash values only apply to end systems, so updating the hash algorithm does not affect forwarders -- they would simply match the buffer that includs the type-length-hash buffer.  Some fields, such as the ConObjHash, must be verified at each hop, so a forwarder (or related system) must know the hash algorithm and it could cause backward compatability problems if the hash type is updated.  <a href="#CCNMessages">[CCNMessages]</a> is the authoritative source for per-field allowed hash types in that encoding.</p>
+<p id="rfc.section.12.p.8">For a more general introduction to ICN-related security concerns and approaches, see <a href="#RFC7927">[RFC7927]</a> and <a href="#RFC7945">[RFC7945]</a></p>
+<h1 id="rfc.references"><a href="#rfc.references">13.</a> References</h1>
+<h1 id="rfc.references.1"><a href="#rfc.references.1">13.1.</a> Normative References</h1>
 <table>
   <tbody>
     <tr>
@@ -857,7 +858,7 @@ SigTime       := AbsTime
     </tr>
   </tbody>
 </table>
-<h1 id="rfc.references.2"><a href="#rfc.references.2">14.2.</a> Informative References</h1>
+<h1 id="rfc.references.2"><a href="#rfc.references.2">13.2.</a> Informative References</h1>
 <table>
   <tbody>
     <tr>
@@ -910,6 +911,12 @@ SigTime       := AbsTime
     </tr>
     <tr>
       <td class="reference">
+        <b id="esic">[esic]</b>
+      </td>
+      <td class="top"><a title="PARC, Inc.">Mosko, M.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a href="https://www.ietf.org/id/draft-wood-icnrg-esic-01.txt">Encrypted Sessions In CCNx (ESIC)</a>", 2017.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="flic">[flic]</b>
       </td>
       <td class="top"><a title="University of Basel">Tschudin, C.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a href="https://www.ietf.org/archive/id/draft-tschudin-icnrg-flic-03.txt">File-Like ICN Collection (FLIC)</a>", 2017.</td>
@@ -949,6 +956,24 @@ SigTime       := AbsTime
         <b id="RFC5234">[RFC5234]</b>
       </td>
       <td class="top"><a>Crocker, D.</a> and <a>P. Overell</a>, "<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>", STD 68, RFC 5234, DOI 10.17487/RFC5234, January 2008.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7927">[RFC7927]</b>
+      </td>
+      <td class="top"><a title="NEC">Kutscher, D.</a>, <a title="Osaka University">Eum, S.</a>, <a title="Travelping">Pentikousis, K.</a>, <a title="UCL">Psaras, I.</a>, <a title="Universidade de Aveiro">Corujo, D.</a>, <a title="INRIA">Saucez, D.</a>, <a title="HAW Hamburg">Schmidt, T.</a> and <a title="FU Berlin">M. Waehlisch</a>, "<a href="https://trac.tools.ietf.org/html/rfc7927">Information-Centric Networking (ICN) Research Challenges</a>", 2016.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7945">[RFC7945]</b>
+      </td>
+      <td class="top"><a title="Travelping">Pentikousis, K.</a>, <a title="Ericsson">Ohlman, B.</a>, <a title="Trinity College Dublin">Davies, E.</a>, <a title="Intracom Telecom">Spirou, S.</a> and <a title="Politecnico di Bari">G. Boggia</a>, "<a href="https://trac.tools.ietf.org/html/rfc7945">Information-Centric Networking: Evaluation and Security Considerations</a>", 2016.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="selectors">[selectors]</b>
+      </td>
+      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, "<a href="https://raw.githubusercontent.com/mmosko/ccnx-protocol-rfc/master/docs/build/draft-mosko-icnrg-selectors-01.txt">CCNx Selector Based Discovery</a>", 2017.</td>
     </tr>
   </tbody>
 </table>
