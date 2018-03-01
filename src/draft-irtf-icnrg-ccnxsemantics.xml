@@ -120,66 +120,77 @@
          output. If you submit your draft to the RFC Editor, the
          keywords will be used for the search engine. -->
     <abstract>
-      <t>This document describes the core concepts of the CCNx architecture and presents
-        a minimum network protocol based on two messages: Interests and Content Objects.
+      <t>This document describes the core concepts of the Content Centric Networking (CCNx) architecture and presents
+        a network protocol based on two messages: Interests and Content Objects.
         It specifies the set of mandatory and optional fields within those messages
         and describes their behavior and interpretation. This architecture and protocol
         specification is independent of a specific wire encoding.</t>
+        
       <t>The protocol also uses a Control message called an InterestReturn, whereby
         one system can return an Interest message to the previous hop due to an
         error condition.  This indicates to the previous hop that the current system will
         not respond to the Interest.</t>
+        
       <t>This document is a product of the Information Centric Networking 
          research group (ICNRG).</t>
     </abstract>
   </front>
   <middle>
     <section title="Introduction">
-      <t>This document describes the principles of the CCNx architecture. It describes the network protocol
-        that uses a heirarchical name to forward messages and match responses
-        to requests.  It is based on two message types: Interests and Content Objects.  
-        This document concerns the semantics of the protocl and is not
-        dependent on a specific wire format or particular encodings.  This section introduces
-        the main concepts of CCNx, which are further elaborated in the remainder of
-        the document.  The <xref target="CCNMessages">CCNx Messages</xref> document
-        describes a type-length-value (TLV) wire protocol encoding.
+      <t>This document describes the principles of the CCNx architecture. It describes a network protocol
+        that uses a heirarchical name to forward requests and to match responses
+        to requests.  It does not use endpoint addresses, such as Internet Protocol.
+        Restrictions in a request can limit the response by the public key of the response's signer or
+        the cryptographic has of the response.  Every CCNx forwarder along the path
+        does the name matching and restriction checking.
         The CCNx protocol fits within the broader framework of Information Centric Networking
-        (ICN) protocol <xref target="RFC7927"/>.
+        (ICN) protocols <xref target="RFC7927"/>.
+        This document concerns the semantics of the protocol and is not
+        dependent on a specific wire format encoding.
+        The <xref target="CCNMessages">CCNx Messages</xref> document
+        describes a type-length-value (TLV) wire protocol encoding.
+        This section introduces the main concepts of CCNx, which are further elaborated in the remainder of
+        the document.  
       </t>
       
-      <t>The CCNx protocols derive from the early ICN work by <xref target="nnc">Jacobson et al.</xref>.
+      <t>The CCNx protocol derives from the early ICN work by <xref target="nnc">Jacobson et al.</xref>.
       Jacobson's version of CCNx is known as the 0.x version ("CCNx 0.x") and the present work is known
       as the 1.0 version ("CCNx 1.0").
-      In the current form, there are two active implementations.
-      The most complete implementation is <xref target="cicn">Community ICN (CINC)</xref> hosted at fd.io.
+      There are two active implementations of CCNx 1.0.
+      The most complete implementation is <xref target="cicn">Community ICN (CINC)</xref>, a Linux Foundation
+      project hosted at fd.io.
       Another active implementation is <xref target="ccnlite">CCN-lite</xref>, 
-      with support for IoT systems and the
-      RIOT operating system.
+      with support for IoT systems and the RIOT operating system.
       </t>
       <t>
       The original work by Jacobson formed the basis of the <xref target="ndn">Named Data Networking</xref>
       (NDN) university work, though the present specification diverges from NDN in a few
-      significant areas.  As CCNx 0.x is no longer under development whereas NDN is an
-      active project, we will only consider differences with NDN.
+      significant areas.  As CCNx 0.x is no longer under development,
+      we will only describe some of the differences with NDN.
       In both NDN and CCNx 1.0, a forwarder uses a longest prefix
       match of a request name against the forwarding information base (FIB) to send
-      the request through the network.  A forwarder must then match a response's name
-      to a request's name to determine if a response satisfies a request, and herein lies
-      the main difference between NDN and CCNx 1.0.
+      the request through the network to a system that can issue a response.  
+      A forwarder must then match a response's name
+      to a request's name to determine the reverse path and deliver the
+      response to the requester.  Herein lies the main difference between NDN and CCNx 1.0.
       </t>
       <t>
       NDN performs, at the network layer, content discovery via controlled flooding of a request
       through the network until it finds a feasible response whose name at least partially
-      matches the request's name via a set of matching rules.  NDN supports several different
-      content discovery strategies: some use single path forwarding, some use multi-copy
-      forwarding, some use limited broadcast.
-      On a match, the network returns the entire response (e.g. several kilobytes
-      to megabytes of data).  The requestor may then use that response or issue a new
+      matches the request's name via a set of discovery rules.  NDN supports several different
+      content discovery strategies that differ in their load on the network and the state
+      maintained at each hop.
+      On a match, a forwarder returns the entire response (e.g. several kilobytes
+      to megabytes of data) hop-by-hop to the requester.  
+      The requestor may then use that response or issue a new
       request that excludes the unwanted result via a type of interval filter on
-      one component of a hierarchical name.  CCNx 1.0 does not include discovery at
-      the network level, but uses search on top of it's layer 3 protocol.  The main
+      the last name component of the request's name.  CCNx 1.0 does not include discovery at
+      the network level, but uses a protocol on top of it's layer 3 protocol.  
+      In CCNx 1.0, not every forwarder needs to implement discovery and the network
+      could support multiple discovery protocols.  The main
       ramification of this change is that in CCNx 1.0 the name in a response must
-      exactly match the name in a request. 
+      always exactly match the name in a request (see <xref target="matching"/> for the
+      exact details).
       </t>
       
       <t><xref target="selectors">CCNx Selectors</xref> is an example of using
@@ -204,7 +215,83 @@
           NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
           described in <xref target="RFC2119">RFC 2119</xref>.</t>
       </section>
+      <section title="Architecture">
+      <t>We describe the architecture of the network in which CCNx operates and introduce
+      certain terminology from <xref target="terminology"/>.  The detailed behavior
+      of each component and message grammars are in <xref target="protocol"/>.</t>
+      
+      <t>A producer (also called a publisher) is an endpoint that encapsualtes content in
+      Content Objects for transport in the CCNx network.  A producer has a public/private
+      keypair and signs (directly or indirectly) the content objects.  Usually,
+      the producer's keyid (hash of the public key) is well-known or may be
+      derived from the producer's namespace via standard means.</t>
+      
+      <t>A producer operates within one or more namespaces.  A namespace
+      is a name prefix that is represented in the forwarding information base (FIB).
+      This allows a request to reach the producer and fetch a response (if one exists).</t>
+      
+      <t>The forwarding information base (FIB) is a table that tells a forwarder
+      where to send a request.  It may point to a local application, a local
+      cache or content store, or to a remote system.  If there is no matching
+      entry in the FIB, a forwarder cannot process a request.  The detailed rules
+      on name matching to the FIB are given in <xref target="interest_pipe"/>.
+      An endpoint has a FIB, though it may be a simple default route.  An intermediate
+      system (i.e. a router) typically has a much larger FIB.  A core CCNx forwarder,
+      for example, would know all the global routes.
+      </t>
+      
+      <t>A consumer is an endpoint that requests a name.  It is beyond the scope of
+      this document to describe how a consumer learns of a name or publisher keyid --
+      higher layer protocols build on top of CCNx handle those tasks, such as
+      search engines or lookup services or well known names.  The consumer
+      constructs a request, called an Interest, and forwards it via the endpoint's FIB.
+      The consumer should get back either a response, called a Content Object, that
+      matches the Interest or a control message, called an InterestReturn, that indicates
+      the network cannot handle the request.</t>
+      
+      <t>There are three ways to detect errors in Interest handling.  An InterestReturn
+      is a network control message that indicates a low-level error like no route or
+      out of resources.  If an Interest arrives at a producer, but the producer
+      does not have the requested content, the producer should send an application-specific
+      error message (e.g. a not found message).  Finally, a consumer may not receive
+      anything, in which case it should timeout and, depending on the application,
+      retry the request or return an error to the application.</t>
+      </section>
+      
       <section title="Protocol Overview">
+      	<t>The goal of CCNx is to name content and retrieve the content from the network
+      	without binding it to a specific network endpoint.  A routing system (specified
+      	separately) populates the forwarding information base (FIB) tables at each CCNx router
+      	with hierarchical name prefixes that point towards the content producers under that
+      	prefix.  A request finds matching content along those paths, in which case a
+      	response carries the data, or if no match is found a control message indicates
+      	the failure.  A request may further refine acceptable responses with a restriction
+      	on the response's signer and the cryptographic hash of the response.  The details
+      	of these restrictions are described below.
+      	</t>
+      	
+      	<t>The CCNx name is a heirarchical series of path segments.  Each path segment
+      	has a type and zero or more bytes.  Matching two names is done as a binary comparison
+      	of the type and value, segment by segment.  The human-readable form is defined
+      	under a URI scheme <xref target="CCNxURI">"ccnx:"</xref>, though the canonical
+      	encoding of a name is a series of (type, octet string) pairs.  
+      	There is no requirement that any path segment be
+      	human readable or UTF-8.  The first few segments in a name will matched against the FIB
+      	and a routing protocol may put its own restrictions on the routable name
+      	components (e.g. a maximum length or character encoding rules).  In principle,
+      	path segments and names have unbounded length, though in practice they are limited
+      	by the wire format encoding and practical considerations imposed by a routing protocol.
+      	Note that in CCNx path semgents use binary comparison whereas in a URI the
+      	authority uses case-insensitive hostname (due to DNS).</t>
+      	
+      	<t>The CCNx name, as used by the forwarder, is purposefully
+      	left as a general octet-encoded type and value without any requirements
+      	on human readability and character encoding.  The reason for this is
+      	that we are concerned with how a forwarder processes names.  We expect that
+      	applications, routing protocols, or other higher layers will apply their
+      	own conventions and restrictions on the allowed path segment types
+      	and path segment values.</t>
+      
         <t>CCNx is a request and response protocol to fetch chunks of data using
        a name. The integrity of each chunk may be directly asserted through a digital
        signature or Message Authentication Code (MAC), or, alternatively,
@@ -217,54 +304,35 @@
        does not rely on the data transmission channel. There are several options
        for data confidentiality, discussed later.
         </t>
-        <t>As a request and response protocol, CCNx may be carried over many different transports.  In
-          use today are Ethernet, TCP, UDP, 802.15.4, GTP, GRE, DTLS, and TLS, among others.  While the
-          specific wire format of CCNx may vary to some extent based on transport, the core principles and
-          behaviors of CCNx outlined in this document should remain fixed.
-        </t>
-        <t>CCNx uses hierarchical names to identify bytes of payload.
-          The Name combines a routable prefix with an arbitrary application-dependent
-          suffix assigned by the publisher to a piece of content.
-          The result is a "named payload."
-          In human-readable form, we represent names as a <xref target="CCNxURI">"ccnx:"</xref>
-          scheme URI <xref target="RFC3986"/>,
-          though the canonical encoding should be octet strings.  In this respect, we speak of
-          a name being made up of hierarchical path segments, which is the URI terminology.
-        </t>
         <t>This document only defines the general properties of CCNx names.
           In some isolated environments, CCNx users may be able to use any name they choose and
           either inject that name (or prefix) into a routing protocol or use other information foraging techniques.
           In the Internet environment, there will be policies around the formats of names and assignments of names
           to publishers, though those are not specified here.
         </t>
-        <t>The key concept of CCNx is that a subjective name is (cryptographically)
-           bound to a fixed payload. These (publisher-generated) bindings can
-           therefore be (cryptographically) verified. For example, a
-           publisher could compute a cryptographic hash over the name and payload,
-           sign the hash, and deliver the tuple {Name, Payload, Validation}.
+        <t>The key concept of CCNx is that a subjective name is cryptographically
+           bound to a fixed payload. These publisher-generated bindings can
+           therefore be cryptographically verified. 
+           A named payload is thus the tuple {{Name, ExtraFields, Payload, ValidationAlgorithm}, ValidationPayload},
+          	where all fields in the inner tuple are covered by the validation payload (e.g. signature).
            Consumers of this data can check the binding integrity by re-computing
            the same cryptographic hash and verifying the digital signature in Validation.
-           Additional information would be included as needed by specific
-           validation mechanisms.  Therefore, we divide Validation into a
-           ValidationAlgorithm and a ValidationPayload.  The ValidationAlgorithm
-           has information about the crypto suite and parameters.  In
-           particular, the ValidationAlgorithm usually has a field called KeyId
-           which identifies the public key used by the validation, when
-           applicable.  The ValidationPayload is the output of the validation
-           algorithm, such as a CRC value, HMAC output, or RSA signature.
+           </t>
+       <t>
+           In addition to digital signatures (e.g. RSA), we also support message authenication
+           codes (e.g. HMAC) and message integrity codes (e.g. SHA-256 or CRC).  To maintain
+           the cryptographic binding, there should be an object with a signature or authentication
+           code, but not all objects require it.  For example, a first object with a signature
+           could refer to other objects via a hash chain, a Merkle tree, or a signed manifest.
+           The later objects may not have any validation and rely purely on the references.
+           The use of an integrity code (e.g. CRC) is intended for protecting Interests in
+           the network from accidental corruption.
        </t>
-        <t>In addition to the essential Name, Payload, and Validation sections, a CCNx user may need
-          to include some other signaling information.  This could include a hint about the type of
-          Payload (e.g., application data, a cryptographic key, etc.) or cache control directives, etc.
-          We will call this extra signaling information ExtraFields.
-        </t>
-        <t>A named payload is thus the tuple {{Name, ExtraFields, Payload, ValidationAlgorithm}, ValidationPayload},
-          where all fields in the inner tuple are covered by the validation algorithm.</t>
 
         <t>CCNx specifies a network protocol around Interests (request messages) and Content Objects
           (response messages) to move named payloads.  An Interest
           includes the Name -- which identifies the desired response -- and optional matching restrictions.
-          Restrictions limit the possible maching Content Objects. Two restrictions exist:
+          Restrictions limit the possible matching Content Objects. Two restrictions exist:
           KeyIdRestr and ContentObjectHashRestr. The first restriction on the KeyId
           limits responses to those signed with a ValidationAlgorithm KeyId field equal to the restriction.
           The second is the Content ObjectHash restriction, which limits the response to one where the
@@ -294,8 +362,7 @@
           response can trace its way back to the original requester(s) without the
           requester needing to include a routable return address.
           We use the notional Pending Interest Table (PIT) as a method to store state that
-          facilitates the return of a Content Object.  The PIT table is not mandated by
-          the specification.
+          facilitates the return of a Content Object.
         </t>
         <t>The notional PIT table stores the last hop of an Interest plus its Name
           and optional restrictions.  This is the data required to match a Content Object
@@ -304,12 +371,19 @@
           which entries it satisfies.  For each such entry, at most one copy of the
           Content Object is sent to each listed last hop in the PIT entries.
         </t>
+        
+        <t>An actual PIT table is not mandated by the specification.  An implementation may
+        use any technique that gives the same external behavior.  There are, for example,
+        reseach papers that use techniques like label switching in some parts of the nework
+        to reduce the per-node state incurred by the PIT table.  Some implementations store
+        the PIT state in the FIB, so there is not a second table.</t>
+        
         <t>If multiple Interests with the same {Name, KeyIdRestr, ContentObjectHashRestr} tuple
           arrive at a node before a Content Object matching the first Interest comes back,
           they are grouped in the same PIT entry and their last hops aggregated (see <xref target="aggregation"/>).
           Thus, one Content Object might satisfy multiple pending Interests in a PIT.
         </t>
-        <t>In CCNx, higher-layer protocols often become so-called "name-based protocols" because
+        <t>In CCNx, higher-layer protocols are often called "name-based protocols" because
           they operate on the CCNx Name.  For example, a versioning protocol might append additional
           name segments to convey state about the version of payload.  A content discovery protocol
           might append certain protocol-specific name segments to a prefix to discover content
@@ -335,8 +409,8 @@
         fragmentation protocol, <xref target="befrags">BeginEnd Fragments</xref> uses a multipoint-PPP style
         technique  for use over layer-2 interfaces with the <xref target="CCNMessages">CCNx Messages</xref> TLV wire forman specification.
         </t>
-        <t>The remainder of this document describes a named payload as well as the Interest and Content Object
-          network protocol behavior in detail.
+        <t>With these concepts, the remainder of the document specifies the behavior of a forwarder
+        in processing Interest, Content Object, and InterestReturn messages.
         </t>
       </section>
     </section>
@@ -1134,6 +1208,20 @@ SigTime       := AbsTime
 		a layer-3 protocol protocol and left to applications or application frameworks.
 		</t>
 		
+		<t>
+		The combination of an ephemeral key exchange (e.g. <xref target="ccnxke">CCNxKE</xref>) and an
+		encapsulating encryption (e.g. <xref target="esic"/>) provides the equivalent of a TLS tunnel.
+		Intermediate nodes may forward the Interests and Content Objects, but have no visibility
+		inside.  It also completely hides the internal names in those used by the encryption layer.
+		This type of tunneling encryption is useful for content that has little or no cacheability
+		as it can only be used by someone with the ephemeral key.  Short term caching may help with
+		lossly links or mobility, but long term caching is usually not of interest.
+		</t>
+		
+		<t>Broadcast encryption or proxy re-encryption may be useful for content with multiple uses
+		over time or many consumers.  There is currently no recommendation for this form of encryption.
+		</t>
+		
 		<t>The specific encoding of messages will have security implications.  <xref target="CCNMessages"/>
 		uses a type-length-value (TLV) encoding.  We chose to compromise between extensibility and unambiguous
 		encodings of types and lengths.  Some TLVs use variable length T and variable length L fields to accomodate
@@ -1185,6 +1273,15 @@ SigTime       := AbsTime
       cause backward compatability problems if the hash type is updated.
       <xref target="CCNMessages"/> is the authoritative source for per-field allowed hash
       types in that encoding.</t>
+      
+      <t>A CCNx name uses binary matching whereas a URI uses a case insensitive hostname.  Some
+      systems may also use case insensitve matching of the URI path to a resource.  An implication
+      of this is that human-entered CCNx names will likely have case or non-ASCII symbol mismatches
+      unless one uses a consistent URI normalization to the CCNx name.  It also means that
+      an entity that registers a CCNx routable prefix, say ccnx:/example.com, would need
+      separate registrations for simple variations like ccnx:/Example.com.  Unless this is
+      address in URI normalization and routing protocol conventions, there could be
+      phising attacks.</t>
           
        <t>For a more general introduction to ICN-related security concerns and approaches,
        see <xref target="RFC7927"/> and <xref target="RFC7945"/></t>
@@ -1353,6 +1450,19 @@ SigTime       := AbsTime
        		<author initials="T." surname="Schmidt"><organization>HAW Hamburg</organization></author>       		
       		<author initials="M." surname="Waehlisch"><organization>FU Berlin</organization></author>
       		<date year="2016"/>
+      	</front>
+      </reference>
+
+      <reference anchor="terminology" target="https://www.ietf.org/id/draft-irtf-icnrg-terminology-00.txt">
+      	<front>
+      		<title>Information-Centric Networking (ICN): CCN and NDN Terminology</title>
+      		<author initials="B." surname="Wissingh"><organization>TNO</organization></author>
+      		<author initials="C." surname="Wood"><organization>University of California Irvine</organization></author>
+      		<author initials="A." surname="Afanasyev"><organization>UCLA</organization></author>
+      		<author initials="L." surname="Zhang"><organization>UCLA</organization></author>
+      		<author initials="D." surname="Oran"><organization>Network Systems Research &amp; Design</organization></author>
+      		<author initials="C." surname="Tschudin"><organization>University of Basel</organization></author>
+      		<date year="2017"/>
       	</front>
       </reference>
       
