@@ -141,7 +141,7 @@
         that uses a hierarchical name to forward requests and to match responses
         to requests.  It does not use endpoint addresses, such as Internet Protocol.
         Restrictions in a request can limit the response by the public key of the response's signer or
-        the cryptographic has of the response.  Every CCNx forwarder along the path
+        the cryptographic hash of the response.  Every CCNx forwarder along the path
         does the name matching and restriction checking.
         The CCNx protocol fits within the broader framework of Information Centric Networking
         (ICN) protocols <xref target="RFC7927"/>.

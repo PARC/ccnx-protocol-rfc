@@ -134,7 +134,7 @@ Internet-Draft               CCNx Semantics                   March 2018
    requests and to match responses to requests.  It does not use
    endpoint addresses, such as Internet Protocol.  Restrictions in a
    request can limit the response by the public key of the response's
-   signer or the cryptographic has of the response.  Every CCNx
+   signer or the cryptographic hash of the response.  Every CCNx
    forwarder along the path does the name matching and restriction
    checking.  The CCNx protocol fits within the broader framework of
    Information Centric Networking (ICN) protocols [RFC7927].  This
@@ -197,13 +197,13 @@ Internet-Draft               CCNx Semantics                   March 2018
    in the forwarder.
 
    The document represents the consensus of the ICN RG.  It is the first
-   ICN protocol from the RG, created from the early CCNx protocol [cite
-   early paper] with significant revision and input from the ICN
-   community and RG members.  The draft has received critical reading by
-   several members of the ICN community and the RG.  The authors and RG
-   chairs approve of the contents.  The document is sponsored under the
-   IRTF and is not issued by the IETF and is not an IETF standard.  This
-   is an experimental protocol and may not be suitable for any specific
+   ICN protocol from the RG, created from the early CCNx protocol [nnc]
+   with significant revision and input from the ICN community and RG
+   members.  The draft has received critical reading by several members
+   of the ICN community and the RG.  The authors and RG chairs approve
+   of the contents.  The document is sponsored under the IRTF and is not
+   issued by the IETF and is not an IETF standard.  This is an
+   experimental protocol and may not be suitable for any specific
    application and the specification may change in the future.
 
 1.1.  Requirements Language
