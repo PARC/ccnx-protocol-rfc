@@ -1200,10 +1200,27 @@ SigTime       := AbsTime
 		of an authenticator, it may instead use a message integrity check (e.g. SHA or CRC).  CCNx does not specify
 		an encryption envelope, that function is left to a high-layer protocol (e.g. <xref target="esic"/>).</t>
 		
+		<t>
+        The CCNx message format includes the ability to attach MICs (e.g. SHA-256 or CRC), MACs (e.g. HMAC), 
+        and Signatures (e.g. RSA or ECDSA) to
+        all packet types.  This does not mean that it is a good idea to use an arbitrary
+        ValidationAlgorithm, nor to include computationally expensive algorithms in Interest
+        packets, as that could lead to computational DoS attacks.  Applications should
+        use an explicit protocol to guide their use of packet signatures.  As a general guideline,
+        an application might use a MIC on an Interest to detect unintentionally corrupted packets.  
+        If one wishes to secure an Interest, one should
+        consider using an encrypted wrapper and a protocol that prevents replay attacks, especially if
+        the Interest is being used as an actuator.  Simply using
+        an authentication code or signature does not make an Interests secure.
+        There are several examples in the literature on how to secure ICN-style messaging <xref target="mobile"/>
+        <xref target="ace"/>.
+        </t>		
+		
 		<t>As a layer 3 protocol, this document does not describe how one arrives at keys or how one trusts keys.
 		The CCNx content object may include a public key embedded in the object or may use the PublicKeyLocator
 		field to point to a public key (or public key certificate) that authenticates the message.
-		One key exchange specification is <xref target="ccnxke">CCNxKE</xref>, which is similar to the
+		One key exchange specification is <xref target="ccnxke">CCNxKE</xref> <xref target="mobile"/>, 
+		which is similar to the
 		TLS 1.3 key exchange except it is over the CCNx layer 3 messages.  Trust is beyond the scope of
 		a layer-3 protocol protocol and left to applications or application frameworks.
 		</t>
@@ -1334,6 +1351,31 @@ SigTime       := AbsTime
           </front>
       </reference>
 
+     <reference anchor="mobile" target="http://dl.ifip.org/db/conf/networking/networking2017/1570334964.pdf">
+          <front>
+              <title>Mobile Sessions in Content-Centric Networks</title>
+              <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
+              <author initials="E." surname="Uzun" fullname="Ersin Uzun"><organization>PARC, Inc.</organization></author>
+              <author initials="C." surname="Wood" fullname="Christopher A. Wood"><organization>University of California, Irvine</organization></author>
+              <date year="2017"/>
+          </front>
+          <seriesInfo name="IFIP Networking"/>
+      </reference>
+
+     <reference anchor="ace" target="http://new.named-data.net/wp-content/uploads/2015/12/ndn-0036-1-ndn-ace.pdf">
+          <front>
+              <title>NDN-ACE: Access control for constrained environments over named data networking</title>
+              <author initials="W." surname="Shang"><organization>University of California, Los Angeles</organization></author>
+              <author initials="Y." surname="Yu" fullname="Ersin Uzun"><organization>University of California, Los Angeles</organization></author>
+              <author initials="T." surname="Liang"<organization>University of Arizona</organization></author>
+              <author initials="B." surname="Zhang"<organization>University of Arizona</organization></author>
+              <author initials="L." surname="Zhang"><organization>University of California, Los Angeles</organization></author>
+              <date year="2015"/>
+          </front>
+          <seriesInfo name="NDN Technical Report" value="NDN-0036"/>
+      </reference>
+
+
      <reference anchor="ccnxke" target="https://www.ietf.org/archive/id/draft-wood-icnrg-ccnxkeyexchange-02.txt">
           <front>
               <title>CCNx Key Exchange Protocol Version 1.0</title>
@@ -1396,20 +1438,10 @@ SigTime       := AbsTime
           </front>
       </reference>
 
-		<reference anchor="mini-ccnx" target="http://dx.doi.org/10.1145/2491224.2491236">
-			<front>
-				<title>Mini-CCNx: fast prototyping for named data networking</title>
-				<author initials="C.M.S." surname="Cabral" fullname="Carlos M.S. Cabral"></author>
-				<author initials="C.E." surname="Rothenberg" fullname="Christian Esteve Rothenberg"></author>
-				<author initials="M.F." surname="Magalhaes" fullname="Mauricio Ferreira Magalhaes"></author>
-				<date year="2013"/>
-			</front>
-		</reference>
-
-      <reference anchor="ccnlite" target="https://github.com/cn-uofbasel/ccn-lite">
+      <reference anchor="ccnlite" target="http://www.ccn-lite.net/">
       	<front>
-      		<title>CCNx Open Source</title>
-      		<author><organization>University of Basel</organization></author>
+      		<title>CCN-Lite V2</title>
+      		<author initials="C." surname="Tschudin"><organization>University of Basel</organization></author>
       		<date year="2018"/>
       	</front>
       </reference>
