@@ -165,6 +165,16 @@
            The CCNx protocol fits within the broader framework of Information Centric Networking
 			(ICN) protocols <xref target="RFC7927"/>.
            </t>
+           
+    <t>This document describes a TLV scheme using a fixed 2-byte T and a fixed 2-byte L field.
+    The rational for this choice is described in the <xref target="security"/> section.
+    Briefly, this choice is to avoid multiple encodings of the same value (aliases) and
+    reduce the work of a validator to ensure compliance.  Unlike some uses of TLV in networking,
+    the use here must be evaluated at each network hop, so even small validation latencies
+    could add to a large packet forwarding delay.  For very small packets or low
+    throughput links, where the extra bytes may become a concern, one may use a
+    TLV compression protocol, for example <xref target="compress"/>.
+    </t>
 
       <t>This document specifies: <list style="symbols">
         <t>The TLV packet format.</t>
@@ -197,6 +207,17 @@
          with a forward slash "/" are variable bit widths, which we typically pad
          out to word alignment for picture readability.</t>
 
+      <t>The document represents the consensus of the ICN RG.  It is the first
+		ICN protocol from the RG, created from the early CCNx protocol <xref target="nnc"/>
+		with significant revision and input from the ICN community and
+		RG members.  The draft has received critical reading by several members
+		of the ICN community and the RG.  The authors and RG chairs
+		approve of the contents.  The document is sponsored under the
+		IRTF and is not issued by the IETF and is not an IETF standard.
+		This is an experimental protocol and may not be suitable for any
+		specific application and the specification may change in the future.
+		</t>
+\
       <section title="Requirements Language">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD
           NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
@@ -2076,6 +2097,15 @@
       &RFC5280;
       <!-- A reference written by by an organization not a person. -->
 
+     <reference anchor="compress" target="https://datatracker.ietf.org/meeting/interim-2016-icnrg-02/materials/slides-interim-2016-icnrg-2-7">
+          <front>
+              <title>Header Compression for TLV-based Packets</title>
+              <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
+              <date year="2016"/>
+          </front>
+      </reference>
+
+
       <reference anchor="CCN" target="http://www.CCNx.org">
         <front>
           <title>CCNx Open Source</title>
@@ -2114,6 +2144,19 @@
 
           <date year="2015"/>
         </front>
+      </reference>
+
+      <reference anchor="nnc" target="http://dx.doi.org/10.1145/1658939.1658941">
+      	<front>
+      		<title>Networking Named Content</title>
+      		<author initials="V." surname="Jacobson" fullname="Van Jacobson"><organization>Palo Alto Research Center</organization></author>
+      		<author initials="D.K." surname="Smetters" fullname="Diana K. Smetters"><organization>Palo Alto Research Center</organization></author>
+      		<author initials="J.D." surname="Thornton" fullname="James D. Thornton"><organization>Palo Alto Research Center</organization></author>
+      		<author initials="M.F." surname="Plass" fullname="Michael F. Plass"><organization>Palo Alto Research Center</organization></author>
+      		<author initials="N.H." surname="Briggs" fullname="Nicholas H. Briggs"><organization>Palo Alto Research Center</organization></author>
+      		<author initials="R.L." surname="Braynard" fullname="Rebecca L. Braynard"><organization>Palo Alto Research Center</organization></author>
+      		<date year="2009"/>
+      	</front>
       </reference>
 
       <reference anchor="ECC" target="http://www.secg.org/sec2-v2.pdf">

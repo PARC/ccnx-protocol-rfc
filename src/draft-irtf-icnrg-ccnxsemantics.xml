@@ -200,7 +200,7 @@
 		matches in the forwarder.</t>
       
       <t>The document represents the consensus of the ICN RG.  It is the first
-		ICN protocol from the RG, created from the early CCNx protocol [cite early paper]
+		ICN protocol from the RG, created from the early CCNx protocol <xref target="nnc"/>
 		with significant revision and input from the ICN community and
 		RG members.  The draft has received critical reading by several members
 		of the ICN community and the RG.  The authors and RG chairs
