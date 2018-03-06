@@ -138,7 +138,7 @@
   <middle>
     <section title="Introduction">
       <t>This document describes the principles of the CCNx architecture. It describes a network protocol
-        that uses a heirarchical name to forward requests and to match responses
+        that uses a hierarchical name to forward requests and to match responses
         to requests.  It does not use endpoint addresses, such as Internet Protocol.
         Restrictions in a request can limit the response by the public key of the response's signer or
         the cryptographic has of the response.  Every CCNx forwarder along the path
@@ -270,7 +270,7 @@
       	of these restrictions are described below.
       	</t>
       	
-      	<t>The CCNx name is a heirarchical series of path segments.  Each path segment
+      	<t>The CCNx name is a hierarchical series of path segments.  Each path segment
       	has a type and zero or more bytes.  Matching two names is done as a binary comparison
       	of the type and value, segment by segment.  The human-readable form is defined
       	under a URI scheme <xref target="CCNxURI">"ccnx:"</xref>, though the canonical
@@ -281,7 +281,7 @@
       	components (e.g. a maximum length or character encoding rules).  In principle,
       	path segments and names have unbounded length, though in practice they are limited
       	by the wire format encoding and practical considerations imposed by a routing protocol.
-      	Note that in CCNx path semgents use binary comparison whereas in a URI the
+      	Note that in CCNx path segments use binary comparison whereas in a URI the
       	authority uses case-insensitive hostname (due to DNS).</t>
       	
       	<t>The CCNx name, as used by the forwarder, is purposefully
@@ -319,7 +319,7 @@
            the same cryptographic hash and verifying the digital signature in Validation.
            </t>
        <t>
-           In addition to digital signatures (e.g. RSA), we also support message authenication
+           In addition to digital signatures (e.g. RSA), we also support message authentication
            codes (e.g. HMAC) and message integrity codes (e.g. SHA-256 or CRC).  To maintain
            the cryptographic binding, there should be an object with a signature or authentication
            code, but not all objects require it.  For example, a first object with a signature
@@ -374,8 +374,8 @@
         
         <t>An actual PIT table is not mandated by the specification.  An implementation may
         use any technique that gives the same external behavior.  There are, for example,
-        reseach papers that use techniques like label switching in some parts of the nework
-        to reduce the per-node state incurred by the PIT table.  Some implementations store
+        research papers that use techniques like label switching in some parts of the network
+        to reduce the per-node state incurred by the PIT table <xref target="dart"/>.  Some implementations store
         the PIT state in the FIB, so there is not a second table.</t>
         
         <t>If multiple Interests with the same {Name, KeyIdRestr, ContentObjectHashRestr} tuple
@@ -405,7 +405,7 @@
         protocol where a large object is broken in to small chunks and each chunk receives a special name component
         indicating its serial order.
         </t>
-        <t>At the sematic level, described in this document, we do not address fragmentation.  One experimental
+        <t>At the semantic level, described in this document, we do not address fragmentation.  One experimental
         fragmentation protocol, <xref target="befrags">BeginEnd Fragments</xref> uses a multipoint-PPP style
         technique  for use over layer-2 interfaces with the <xref target="CCNMessages">CCNx Messages</xref> TLV wire forman specification.
         </t>
@@ -465,7 +465,7 @@
             </t>
             <t>KeyId: An identifier for the key used in the ValidationAlg.  For public key systems,
               this should be the SHA-256 hash of the public key.  For symmetric key systems, it
-              should be an identifer agreed upon by the parties.
+              should be an identifier agreed upon by the parties.
             </t>
             <t>KeyLink: A Link (see <xref target="link"/>) that names how to retrieve the key
               used to verify the ValidationPayload.  A message SHOULD NOT have both a KeyLink
@@ -942,7 +942,7 @@ SigTime       := AbsTime
       </section>
 
     <section anchor="link" title="Link">
-      <t>A Link is the tuple {Name, [KeyIdRestr], [Content ObjectHashRestr]}.  The information
+      <t>A Link is the tuple {Name, [KeyIdRestr], [ContentObjectHashRestr]}.  The information
           in a Link comprises the fields of an Interest which would retrieve the Link target.
         A Content Object with PayloadType = "Link" is an object whose payload is one or more Links.
         This tuple may be used as a KeyLink to identify
@@ -1213,9 +1213,9 @@ SigTime       := AbsTime
 		encapsulating encryption (e.g. <xref target="esic"/>) provides the equivalent of a TLS tunnel.
 		Intermediate nodes may forward the Interests and Content Objects, but have no visibility
 		inside.  It also completely hides the internal names in those used by the encryption layer.
-		This type of tunneling encryption is useful for content that has little or no cacheability
+		This type of tunneling encryption is useful for content that has little or no cache-ability
 		as it can only be used by someone with the ephemeral key.  Short term caching may help with
-		lossly links or mobility, but long term caching is usually not of interest.
+		lossy links or mobility, but long term caching is usually not of interest.
 		</t>
 		
 		<t>Broadcast encryption or proxy re-encryption may be useful for content with multiple uses
@@ -1244,18 +1244,18 @@ SigTime       := AbsTime
       <t>Caching nodes must take caution when processing content objects. 
       	It is essential that the Content Store obey the rules outlined in <xref target="contentstore"/>
       	to avoid certain types of attacks.  Unlike NDN, CCNx 1.0 has no mechanism to work around
-      	an undesired result from the network (there are no "exlcudes"), so if a cache becomes poisoned
+      	an undesired result from the network (there are no "excludes"), so if a cache becomes poisoned
       	with bad content it might cause problems retrieving content.   There are three types of access
       	to content from a content store: unrestricted, signature restricted, and hash restricted.
       	If an Interest has no restrictions, then the requester is not particular about what they get
       	back, so any matching cached object is OK.  In the hash restricted case, the requester
       	is very specific about what they want and the content store (and every forward hop) can
       	easily verify that the content matches the request.  In the signature verified case
-      	(often used for inital manifest discovery), the requester only knows the keyid that signed
+      	(often used for initial manifest discovery), the requester only knows the KeyId that signed
       	the content.  It is this case that requires the closest attention in the content store to avoid
       	amplifying bad data.  The content store must only respond with a content object if it can
       	verify the signature -- this means either the content object carries the public key inside it
-      	or the Interest carries the public key in addition to the keyid.  If that is not the case,
+      	or the Interest carries the public key in addition to the KeyId.  If that is not the case,
       	then the content store should treat the Interest as a cache miss and let an endpoint respond.
       	</t>
       	
@@ -1268,20 +1268,20 @@ SigTime       := AbsTime
       It specifies a short list of acceptable hash algorithms that should be implemented at
       each forwarder.  Some hash values only apply to end systems, so updating
       the hash algorithm does not affect forwarders -- they would simply match the buffer
-      that includs the type-length-hash buffer.  Some fields, such as the ConObjHash, must be verified
+      that includes the type-length-hash buffer.  Some fields, such as the ConObjHash, must be verified
       at each hop, so a forwarder (or related system) must know the hash algorithm and it could
-      cause backward compatability problems if the hash type is updated.
+      cause backward compatibility problems if the hash type is updated.
       <xref target="CCNMessages"/> is the authoritative source for per-field allowed hash
       types in that encoding.</t>
       
       <t>A CCNx name uses binary matching whereas a URI uses a case insensitive hostname.  Some
-      systems may also use case insensitve matching of the URI path to a resource.  An implication
+      systems may also use case insensitive matching of the URI path to a resource.  An implication
       of this is that human-entered CCNx names will likely have case or non-ASCII symbol mismatches
       unless one uses a consistent URI normalization to the CCNx name.  It also means that
       an entity that registers a CCNx routable prefix, say ccnx:/example.com, would need
       separate registrations for simple variations like ccnx:/Example.com.  Unless this is
       address in URI normalization and routing protocol conventions, there could be
-      phising attacks.</t>
+      phishing attacks.</t>
           
        <t>For a more general introduction to ICN-related security concerns and approaches,
        see <xref target="RFC7927"/> and <xref target="RFC7945"/></t>
@@ -1310,6 +1310,15 @@ SigTime       := AbsTime
       &RFC3552;
       &RFC5234;
       <!-- A reference written by by an organization not a person. -->
+
+      <reference anchor="dart" target="https://arxiv.org/pdf/1603.06044.pdf">
+          <front>
+              <title>A Light-Weight Forwarding Plane for Content-Centric Networks</title>
+              <author initials="J.J." surname="Garcia-Luna-Aceves"><organization>PARC, Inc.</organization></author>
+              <author initials="M." surname="Mirzazad-Barijough"><organization>University of California, Santa Cruz</organization></author>
+              <date year="2016"/>
+          </front>
+      </reference>
 
       <reference anchor="CCN" target="http://www.CCNx.org"><front><title>CCNx Open Source</title><author><organization>PARC, Inc.</organization></author><date year="2007"/></front></reference>
 
