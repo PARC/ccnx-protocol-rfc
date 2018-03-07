@@ -5,8 +5,8 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
 Intended status: Experimental                                    C. Wood
-Expires: September 7, 2018               University of California Irvine
-                                                           March 6, 2018
+Expires: September 8, 2018               University of California Irvine
+                                                           March 7, 2018
 
 
                           The CCNx URI Scheme
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 7, 2018.
+   This Internet-Draft will expire on September 8, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Mosko & Wood            Expires September 7, 2018               [Page 1]
+Mosko & Wood            Expires September 8, 2018               [Page 1]
 
 Internet-Draft                CCNxURIScheme                   March 2018
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Mosko & Wood            Expires September 7, 2018               [Page 2]
+Mosko & Wood            Expires September 8, 2018               [Page 2]
 
 Internet-Draft                CCNxURIScheme                   March 2018
 
@@ -165,7 +165,7 @@ Internet-Draft                CCNxURIScheme                   March 2018
 
 
 
-Mosko & Wood            Expires September 7, 2018               [Page 3]
+Mosko & Wood            Expires September 8, 2018               [Page 3]
 
 Internet-Draft                CCNxURIScheme                   March 2018
 
@@ -221,7 +221,7 @@ Internet-Draft                CCNxURIScheme                   March 2018
 
 
 
-Mosko & Wood            Expires September 7, 2018               [Page 4]
+Mosko & Wood            Expires September 8, 2018               [Page 4]
 
 Internet-Draft                CCNxURIScheme                   March 2018
 
@@ -277,7 +277,7 @@ Internet-Draft                CCNxURIScheme                   March 2018
 
 
 
-Mosko & Wood            Expires September 7, 2018               [Page 5]
+Mosko & Wood            Expires September 8, 2018               [Page 5]
 
 Internet-Draft                CCNxURIScheme                   March 2018
 
@@ -333,7 +333,7 @@ Internet-Draft                CCNxURIScheme                   March 2018
 
 
 
-Mosko & Wood            Expires September 7, 2018               [Page 6]
+Mosko & Wood            Expires September 8, 2018               [Page 6]
 
 Internet-Draft                CCNxURIScheme                   March 2018
 
@@ -389,7 +389,7 @@ Internet-Draft                CCNxURIScheme                   March 2018
 
 
 
-Mosko & Wood            Expires September 7, 2018               [Page 7]
+Mosko & Wood            Expires September 8, 2018               [Page 7]
 
 Internet-Draft                CCNxURIScheme                   March 2018
 
@@ -445,7 +445,7 @@ Internet-Draft                CCNxURIScheme                   March 2018
 
 
 
-Mosko & Wood            Expires September 7, 2018               [Page 8]
+Mosko & Wood            Expires September 8, 2018               [Page 8]
 
 Internet-Draft                CCNxURIScheme                   March 2018
 
@@ -501,7 +501,7 @@ Internet-Draft                CCNxURIScheme                   March 2018
 
 
 
-Mosko & Wood            Expires September 7, 2018               [Page 9]
+Mosko & Wood            Expires September 8, 2018               [Page 9]
 
 Internet-Draft                CCNxURIScheme                   March 2018
 
@@ -557,7 +557,7 @@ Internet-Draft                CCNxURIScheme                   March 2018
 
 
 
-Mosko & Wood            Expires September 7, 2018              [Page 10]
+Mosko & Wood            Expires September 8, 2018              [Page 10]
 
 Internet-Draft                CCNxURIScheme                   March 2018
 
@@ -613,7 +613,7 @@ Authors' Addresses
 
 
 
-Mosko & Wood            Expires September 7, 2018              [Page 11]
+Mosko & Wood            Expires September 8, 2018              [Page 11]
 
 Internet-Draft                CCNxURIScheme                   March 2018
 
@@ -669,4 +669,4 @@ Internet-Draft                CCNxURIScheme                   March 2018
 
 
 
-Mosko & Wood            Expires September 7, 2018              [Page 12]
+Mosko & Wood            Expires September 8, 2018              [Page 12]

@@ -5,10 +5,10 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
 Intended status: Experimental                                   I. Solis
-Expires: September 7, 2018                                      LinkedIn
+Expires: September 8, 2018                                      LinkedIn
                                                                  C. Wood
                                          University of California Irvine
-                                                           March 6, 2018
+                                                           March 7, 2018
 
 
                       CCNx Messages in TLV Format
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 7, 2018.
+   This Internet-Draft will expire on September 8, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Mosko, et al.           Expires September 7, 2018               [Page 1]
+Mosko, et al.           Expires September 8, 2018               [Page 1]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Mosko, et al.           Expires September 7, 2018               [Page 2]
+Mosko, et al.           Expires September 8, 2018               [Page 2]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -165,7 +165,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018               [Page 3]
+Mosko, et al.           Expires September 8, 2018               [Page 3]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -221,7 +221,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018               [Page 4]
+Mosko, et al.           Expires September 8, 2018               [Page 4]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -277,7 +277,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018               [Page 5]
+Mosko, et al.           Expires September 8, 2018               [Page 5]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -333,7 +333,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018               [Page 6]
+Mosko, et al.           Expires September 8, 2018               [Page 6]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -389,7 +389,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018               [Page 7]
+Mosko, et al.           Expires September 8, 2018               [Page 7]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -445,7 +445,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018               [Page 8]
+Mosko, et al.           Expires September 8, 2018               [Page 8]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -501,7 +501,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018               [Page 9]
+Mosko, et al.           Expires September 8, 2018               [Page 9]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -557,7 +557,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 10]
+Mosko, et al.           Expires September 8, 2018              [Page 10]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -613,7 +613,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 11]
+Mosko, et al.           Expires September 8, 2018              [Page 11]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -669,7 +669,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 12]
+Mosko, et al.           Expires September 8, 2018              [Page 12]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -725,7 +725,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 13]
+Mosko, et al.           Expires September 8, 2018              [Page 13]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -781,7 +781,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 14]
+Mosko, et al.           Expires September 8, 2018              [Page 14]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -837,7 +837,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 15]
+Mosko, et al.           Expires September 8, 2018              [Page 15]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -893,7 +893,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 16]
+Mosko, et al.           Expires September 8, 2018              [Page 16]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -949,7 +949,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 17]
+Mosko, et al.           Expires September 8, 2018              [Page 17]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1005,7 +1005,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 18]
+Mosko, et al.           Expires September 8, 2018              [Page 18]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1061,7 +1061,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 19]
+Mosko, et al.           Expires September 8, 2018              [Page 19]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1117,7 +1117,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 20]
+Mosko, et al.           Expires September 8, 2018              [Page 20]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1173,7 +1173,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 21]
+Mosko, et al.           Expires September 8, 2018              [Page 21]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1229,7 +1229,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 22]
+Mosko, et al.           Expires September 8, 2018              [Page 22]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1285,7 +1285,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 23]
+Mosko, et al.           Expires September 8, 2018              [Page 23]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1341,7 +1341,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 24]
+Mosko, et al.           Expires September 8, 2018              [Page 24]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1397,7 +1397,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 25]
+Mosko, et al.           Expires September 8, 2018              [Page 25]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1453,7 +1453,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 26]
+Mosko, et al.           Expires September 8, 2018              [Page 26]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1509,7 +1509,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 27]
+Mosko, et al.           Expires September 8, 2018              [Page 27]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1565,7 +1565,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 28]
+Mosko, et al.           Expires September 8, 2018              [Page 28]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1621,7 +1621,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 29]
+Mosko, et al.           Expires September 8, 2018              [Page 29]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1677,7 +1677,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 30]
+Mosko, et al.           Expires September 8, 2018              [Page 30]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1733,7 +1733,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 31]
+Mosko, et al.           Expires September 8, 2018              [Page 31]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1789,7 +1789,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 32]
+Mosko, et al.           Expires September 8, 2018              [Page 32]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1845,7 +1845,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 33]
+Mosko, et al.           Expires September 8, 2018              [Page 33]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1901,7 +1901,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 34]
+Mosko, et al.           Expires September 8, 2018              [Page 34]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -1957,7 +1957,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 35]
+Mosko, et al.           Expires September 8, 2018              [Page 35]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -2013,7 +2013,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 36]
+Mosko, et al.           Expires September 8, 2018              [Page 36]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -2069,7 +2069,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 37]
+Mosko, et al.           Expires September 8, 2018              [Page 37]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -2125,7 +2125,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 38]
+Mosko, et al.           Expires September 8, 2018              [Page 38]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -2181,7 +2181,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 39]
+Mosko, et al.           Expires September 8, 2018              [Page 39]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -2237,7 +2237,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 40]
+Mosko, et al.           Expires September 8, 2018              [Page 40]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -2293,7 +2293,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 41]
+Mosko, et al.           Expires September 8, 2018              [Page 41]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -2349,7 +2349,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 42]
+Mosko, et al.           Expires September 8, 2018              [Page 42]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -2405,4 +2405,4 @@ Authors' Addresses
 
 
 
-Mosko, et al.           Expires September 7, 2018              [Page 43]
+Mosko, et al.           Expires September 8, 2018              [Page 43]

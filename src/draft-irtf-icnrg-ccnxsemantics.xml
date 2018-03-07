@@ -164,7 +164,7 @@
       </t>
       <t>
       The original work by Jacobson formed the basis of the <xref target="ndn">Named Data Networking</xref>
-      (NDN) university work, though the present specification diverges from NDN in a few
+      (NDN) university project.  The current CCNx 1.0 specification diverges from NDN in a few
       significant areas.  As CCNx 0.x is no longer under development,
       we will only describe some of the differences with NDN.
       In both NDN and CCNx 1.0, a forwarder uses a longest prefix
@@ -179,7 +179,7 @@
       through the network until it finds a feasible response whose name at least partially
       matches the request's name via a set of discovery rules.  NDN supports several different
       content discovery strategies that differ in their load on the network and the state
-      maintained at each hop.
+      maintained at each hop.  A forwarding strategy must be implemented at each forwarder.
       On a match, a forwarder returns the entire response (e.g. several kilobytes
       to megabytes of data) hop-by-hop to the requester.  
       The requestor may then use that response or issue a new
@@ -188,16 +188,16 @@
       the network level, but uses a protocol on top of it's layer 3 protocol.  
       In CCNx 1.0, not every forwarder needs to implement discovery and the network
       could support multiple discovery protocols.  The main
-      ramification of this change is that in CCNx 1.0 the name in a response must
+      ramification of this approach is that in CCNx 1.0 the name in a response must
       always exactly match the name in a request (see <xref target="matching"/> for the
-      exact details).
+      exact details).  A forwarder does not prefix matches a response to a request.
       </t>
       
       <t><xref target="selectors">CCNx Selectors</xref> is an example of using
 		a higher-layer protocol on top of the CCNx 1.0 layer-3 to perform content
 		discovery.  The selector protocol uses a method similar to the original
 		CCNx 0.x and the current NDN techniques without requiring partial name
-		matches in the forwarder.</t>
+		matching of a response to a request in the forwarder.</t>
       
       <t>The document represents the consensus of the ICN RG.  It is the first
 		ICN protocol from the RG, created from the early CCNx protocol <xref target="nnc"/>
@@ -1441,16 +1441,16 @@ SigTime       := AbsTime
       <reference anchor="ccnlite" target="http://www.ccn-lite.net/">
       	<front>
       		<title>CCN-Lite V2</title>
-      		<author initials="C." surname="Tschudin"><organization>University of Basel</organization></author>
-      		<date year="2018"/>
+      		<author><organization>Tschudin, C., et al., University of Basel</organization></author>
+      		<date year="2011-2018"/>
       	</front>
       </reference>
 
       <reference anchor="cicn" target="https://wiki.fd.io/view/Cicn">
       	<front>
       		<title>Community ICN (CICN)</title>
-      		<author initials="L." surname="Muscariello" fullname="Luca Muscariello"><organization>Cisco Systems</organization></author>
-      		<date year="2018"/>
+      		<author><organization>Muscariello, L., et al., Cisco Systems</organization></author>
+      		<date year="2017-2018"/>
       	</front>
       </reference>
       

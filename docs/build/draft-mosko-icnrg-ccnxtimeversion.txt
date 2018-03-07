@@ -4,8 +4,8 @@
 
 ICNRG                                                           M. Mosko
 Internet-Draft                                                      PARC
-Intended status: Experimental                              March 6, 2018
-Expires: September 7, 2018
+Intended status: Experimental                              March 7, 2018
+Expires: September 8, 2018
 
 
                   CCNx Publisher Clock Time Versioning
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 7, 2018.
+   This Internet-Draft will expire on September 8, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Mosko                   Expires September 7, 2018               [Page 1]
+Mosko                   Expires September 8, 2018               [Page 1]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Mosko                   Expires September 7, 2018               [Page 2]
+Mosko                   Expires September 8, 2018               [Page 2]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -165,7 +165,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko                   Expires September 7, 2018               [Page 3]
+Mosko                   Expires September 8, 2018               [Page 3]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -221,7 +221,7 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko                   Expires September 7, 2018               [Page 4]
+Mosko                   Expires September 8, 2018               [Page 4]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
@@ -277,4 +277,4 @@ Author's Address
 
 
 
-Mosko                   Expires September 7, 2018               [Page 5]
+Mosko                   Expires September 8, 2018               [Page 5]
