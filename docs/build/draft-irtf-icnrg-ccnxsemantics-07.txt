@@ -173,24 +173,24 @@ Internet-Draft               CCNx Semantics                   March 2018
    deliver the response to the requester.  Herein lies the main
    difference between NDN and CCNx 1.0.
 
-   NDN performs, at the network layer, content discovery via controlled
-   flooding of a request through the network until it finds a feasible
-   response whose name at least partially matches the request's name via
-   a set of discovery rules.  NDN supports several different content
-   discovery strategies that differ in their load on the network and the
-   state maintained at each hop.  A forwarding strategy must be
-   implemented at each forwarder.  On a match, a forwarder returns the
-   entire response (e.g. several kilobytes to megabytes of data) hop-by-
-   hop to the requester.  The requestor may then use that response or
-   issue a new request that excludes the unwanted result via a type of
-   interval filter on the last name component of the request's name.
-   CCNx 1.0 does not include discovery at the network level, but uses a
-   protocol on top of it's layer 3 protocol.  In CCNx 1.0, not every
-   forwarder needs to implement discovery and the network could support
-   multiple discovery protocols.  The main ramification of this approach
-   is that in CCNx 1.0 the name in a response must always exactly match
-   the name in a request (see Section 9 for the exact details).  A
-   forwarder does not prefix matches a response to a request.
+   NDN performs, at the network layer, content discovery via various
+   strategies of partial matching a request name to a response name.
+   NDN supports several different content discovery strategies that
+   differ in their load on the network and the state maintained at each
+   hop.  A forwarding strategy must be implemented at each forwarder.
+   On a match, a forwarder returns the entire response (e.g. several
+   kilobytes to megabytes of data) hop-by-hop to the requester.  The
+   requestor may then use that response or issue a new request that
+   excludes the unwanted result via a type of interval filter on the
+   last name component of the request's name.  CCNx 1.0 does not include
+   discovery at the network level, but uses a protocol on top of it's
+   layer 3 protocol.  In CCNx 1.0, not every forwarder needs to
+   implement discovery and the network could support multiple discovery
+   protocols.  The main ramification of this approach is that in CCNx
+   1.0 the name in a response always exactly matches the name in a
+   request (see Section 9 for the exact details and one exception for
+   nameless responses).  A forwarder does not prefix match a response to
+   a request.
 
    CCNx Selectors [selectors] is an example of using a higher-layer
    protocol on top of the CCNx 1.0 layer-3 to perform content discovery.

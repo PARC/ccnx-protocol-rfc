@@ -178,7 +178,7 @@
     the use here must be evaluated at each network hop, so even small validation latencies
     could add to a large packet forwarding delay.  For very small packets or low
     throughput links, where the extra bytes may become a concern, one may use a
-    TLV compression protocol, for example <xref target="compress"/>.
+    TLV compression protocol, for example <xref target="compress"/> and <xref target="CCNxz"/>.
     </t>
 
       <t>This document specifies: <list style="symbols">
@@ -2110,6 +2110,13 @@
           </front>
       </reference>
 
+     <reference anchor="CCNxz" target="https://github.com/PARC/CCNxz">
+          <front>
+              <title>CCNxz TLV Header Compression Experimental Code</title>
+              <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
+              <date year="2016-2018"/>
+          </front>
+      </reference>
 
       <reference anchor="CCN" target="http://www.CCNx.org">
         <front>

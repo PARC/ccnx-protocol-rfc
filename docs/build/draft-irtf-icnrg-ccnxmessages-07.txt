@@ -148,7 +148,8 @@ Internet-Draft                  CCNx TLV                      March 2018
    be evaluated at each network hop, so even small validation latencies
    could add to a large packet forwarding delay.  For very small packets
    or low throughput links, where the extra bytes may become a concern,
-   one may use a TLV compression protocol, for example [compress].
+   one may use a TLV compression protocol, for example [compress] and
+   [CCNxz].
 
    This document specifies:
 
@@ -161,7 +162,6 @@ Internet-Draft                  CCNx TLV                      March 2018
    o  The encoding of values for each type.
 
    o  Top level types that exist at the outermost containment.
-
 
 
 
@@ -2302,6 +2302,9 @@ Internet-Draft                  CCNx TLV                      March 2018
               draft)", 2017,
               <http://tools.ietf.org/html/draft-mosko-icnrg-ccnxuri-02>.
 
+   [CCNxz]    Mosko, M., "CCNxz TLV Header Compression Experimental
+              Code", 2016-2018, <https://github.com/PARC/CCNxz>.
+
    [compress]
               Mosko, M., "Header Compression for TLV-based Packets",
               2016, <https://datatracker.ietf.org/meeting/interim-2016-
@@ -2339,11 +2342,8 @@ Internet-Draft                  CCNx TLV                      March 2018
               DOI 10.17487/RFC5226, May 2008, <https://www.rfc-
               editor.org/info/rfc5226>.
 
-   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
-              Housley, R., and W. Polk, "Internet X.509 Public Key
-              Infrastructure Certificate and Certificate Revocation List
-              (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
-              <https://www.rfc-editor.org/info/rfc5280>.
+
+
 
 
 
@@ -2353,6 +2353,12 @@ Mosko, et al.           Expires September 8, 2018              [Page 42]
 
 Internet-Draft                  CCNx TLV                      March 2018
 
+
+   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
+              Housley, R., and W. Polk, "Internet X.509 Public Key
+              Infrastructure Certificate and Certificate Revocation List
+              (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
+              <https://www.rfc-editor.org/info/rfc5280>.
 
    [RFC6920]  Farrell, S., Kutscher, D., Dannewitz, C., Ohlman, B.,
               Keranen, A., and P. Hallam-Baker, "Naming Things with
@@ -2396,12 +2402,6 @@ Authors' Addresses
 
    Phone: +01 315-806-5939
    Email: woodc1@uci.edu
-
-
-
-
-
-
 
 
 

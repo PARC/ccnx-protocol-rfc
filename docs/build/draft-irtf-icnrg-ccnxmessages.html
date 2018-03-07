@@ -465,7 +465,7 @@ address {
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
 <p id="rfc.section.1.p.1">This document specifies a Type-Length-Value (TLV) packet format and the TLV type and value encodings for CCNx messages.  A full description of the CCNx network protocol, providing an encoding-free description of CCNx messages and message elements, may be found in <a href="#CCNSemantics">[CCNSemantics]</a>.  CCNx is a network protocol that uses a hierarchical name to forward requests and to match responses to requests.  It does not use endpoint addresses, such as Internet Protocol.  Restrictions in a request can limit the response by the public key of the response's signer or the cryptographic hash of the response.  Every CCNx forwarder along the path does the name matching and restriction checking.  The CCNx protocol fits within the broader framework of Information Centric Networking (ICN) protocols <a href="#RFC7927">[RFC7927]</a>.  </p>
-<p id="rfc.section.1.p.2">This document describes a TLV scheme using a fixed 2-byte T and a fixed 2-byte L field.  The rational for this choice is described in <a href="#Security">Section 5</a>.  Briefly, this choice is to avoid multiple encodings of the same value (aliases) and reduce the work of a validator to ensure compliance.  Unlike some uses of TLV in networking, the use here must be evaluated at each network hop, so even small validation latencies could add to a large packet forwarding delay.  For very small packets or low throughput links, where the extra bytes may become a concern, one may use a TLV compression protocol, for example <a href="#compress">[compress]</a>.  </p>
+<p id="rfc.section.1.p.2">This document describes a TLV scheme using a fixed 2-byte T and a fixed 2-byte L field.  The rational for this choice is described in <a href="#Security">Section 5</a>.  Briefly, this choice is to avoid multiple encodings of the same value (aliases) and reduce the work of a validator to ensure compliance.  Unlike some uses of TLV in networking, the use here must be evaluated at each network hop, so even small validation latencies could add to a large packet forwarding delay.  For very small packets or low throughput links, where the extra bytes may become a concern, one may use a TLV compression protocol, for example <a href="#compress">[compress]</a> and <a href="#CCNxz">[CCNxz]</a>.  </p>
 <p id="rfc.section.1.p.3">This document specifies: </p>
 
 <ul>
@@ -2147,6 +2147,12 @@ address {
         <b id="CCNxURI">[CCNxURI]</b>
       </td>
       <td class="top"><a title="PARC, Inc.">Mosko, M.</a> and <a title="University of California, Irvine.">C. Wood</a>, "<a href="http://tools.ietf.org/html/draft-mosko-icnrg-ccnxuri-02">The CCNx URI Scheme (Internet draft)</a>", 2017.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="CCNxz">[CCNxz]</b>
+      </td>
+      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, "<a href="https://github.com/PARC/CCNxz">CCNxz TLV Header Compression Experimental Code</a>", 2016-2018.</td>
     </tr>
     <tr>
       <td class="reference">
