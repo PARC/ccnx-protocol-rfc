@@ -1742,7 +1742,7 @@ Internet-Draft               CCNx Semantics                   March 2018
    the CCNx name.  It also means that an entity that registers a CCNx
    routable prefix, say ccnx:/example.com, would need separate
    registrations for simple variations like ccnx:/Example.com.  Unless
-   this is address in URI normalization and routing protocol
+   this is addressed in URI normalization and routing protocol
    conventions, there could be phishing attacks.
 
    For a more general introduction to ICN-related security concerns and
