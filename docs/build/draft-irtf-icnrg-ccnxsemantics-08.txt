@@ -151,17 +151,17 @@ Internet-Draft               CCNx Semantics                     May 2018
    implementation is Community ICN (CINC) [cicn], a Linux Foundation
    project hosted at fd.io.  Another active implementation is CCN-lite
    [ccnlite], with support for IoT systems and the RIOT operating
-   system.
+   system.  CCNx 0.x formed the basis of the Named Data Networking
+   [ndn] (NDN) university project.
 
-   The original work by Jacobson, embodied in CCNx 0.x, formed the basis
-   of the Named Data Networking [ndn] (NDN) university project.  The
-   current CCNx 1.0 specification diverges from CCNx 0.x and NDN in a
-   few significant areas.  The most pronounced behavioral difference
-   between CCNx 0.x and CCNx 1.0 is that CCNx 1.0 has a simpler response
+   The current CCNx 1.0 specification diverges from CCNx 0.x in a few
+   significant areas.  The most pronounced behavioral difference between
+   CCNx 0.x and CCNx 1.0 is that CCNx 1.0 has a simpler response
    processing behavior.  In both CCNx 0.x and CCNx 1.0, a forwarder uses
    a hierarchical longest prefix match of a request name against the
    forwarding information base (FIB) to send the request through the
    network to a system that can issue a response.  A forwarder must then
+   match a response's name to a request's name to determine the reverse
 
 
 
@@ -170,7 +170,6 @@ Mosko, et al.           Expires November 4, 2018                [Page 3]
 Internet-Draft               CCNx Semantics                     May 2018
 
 
-   match a response's name to a request's name to determine the reverse
    path and deliver the response to the requester.  In CCNx 0.x, the
    Interest name may be a hierarchical prefix of the response name,
    which allows a form of layer 3 content discovery.  In CCNx 1.0, a
@@ -217,7 +216,8 @@ Internet-Draft               CCNx Semantics                     May 2018
    (FIB).  This allows a request to reach the producer and fetch a
    response (if one exists).
 
-
+   The forwarding information base (FIB) is a table that tells a
+   forwarder where to send a request.  It may point to a local
 
 
 
@@ -226,8 +226,6 @@ Mosko, et al.           Expires November 4, 2018                [Page 4]
 Internet-Draft               CCNx Semantics                     May 2018
 
 
-   The forwarding information base (FIB) is a table that tells a
-   forwarder where to send a request.  It may point to a local
    application, a local cache or content store, or to a remote system.
    If there is no matching entry in the FIB, a forwarder cannot process
    a request.  The detailed rules on name matching to the FIB are given
@@ -274,6 +272,8 @@ Internet-Draft               CCNx Semantics                     May 2018
    segment has a type and zero or more bytes.  Matching two names is
    done as a binary comparison of the type and value, segment by
    segment.  The human-readable form is defined under a URI scheme
+   "ccnx:" [CCNxURI], though the canonical encoding of a name is a
+   series of (type, octet string) pairs.  There is no requirement that
 
 
 
@@ -282,8 +282,6 @@ Mosko, et al.           Expires November 4, 2018                [Page 5]
 Internet-Draft               CCNx Semantics                     May 2018
 
 
-   "ccnx:" [CCNxURI], though the canonical encoding of a name is a
-   series of (type, octet string) pairs.  There is no requirement that
    any path segment be human readable or UTF-8.  The first few segments
    in a name will matched against the FIB and a routing protocol may put
    its own restrictions on the routable name components (e.g. a maximum
@@ -330,6 +328,8 @@ Internet-Draft               CCNx Semantics                     May 2018
    ValidationAlgorithm}, ValidationPayload}, where all fields in the
    inner tuple are covered by the validation payload (e.g. signature).
    Consumers of this data can check the binding integrity by re-
+   computing the same cryptographic hash and verifying the digital
+   signature in Validation.
 
 
 
@@ -337,9 +337,6 @@ Mosko, et al.           Expires November 4, 2018                [Page 6]
 
 Internet-Draft               CCNx Semantics                     May 2018
 
-
-   computing the same cryptographic hash and verifying the digital
-   signature in Validation.
 
    In addition to digital signatures (e.g.  RSA), we also support
    message authentication codes (e.g.  HMAC) and message integrity codes
@@ -386,6 +383,9 @@ Internet-Draft               CCNx Semantics                     May 2018
    As an Interest travels the forward path following the Forwarding
    Information Base (FIB), it establishes state at each forwarder such
    that a Content Object response can trace its way back to the original
+   requester(s) without the requester needing to include a routable
+   return address.  We use the notional Pending Interest Table (PIT) as
+
 
 
 
@@ -394,8 +394,6 @@ Mosko, et al.           Expires November 4, 2018                [Page 7]
 Internet-Draft               CCNx Semantics                     May 2018
 
 
-   requester(s) without the requester needing to include a routable
-   return address.  We use the notional Pending Interest Table (PIT) as
    a method to store state that facilitates the return of a Content
    Object.
 
@@ -442,6 +440,8 @@ Internet-Draft               CCNx Semantics                     May 2018
    There are multiple ways to describe larger objects in CCNx.
    Aggregating layer-3 content objects in to larger objects is beyond
    the scope of this document.  One proposed method, FLIC [flic], uses a
+   manifest to enumerate the pieces of a larger object.  Manifests are,
+   themselves, Content Objects.  Another option is to use a convention
 
 
 
@@ -450,8 +450,6 @@ Mosko, et al.           Expires November 4, 2018                [Page 8]
 Internet-Draft               CCNx Semantics                     May 2018
 
 
-   manifest to enumerate the pieces of a larger object.  Manifests are,
-   themselves, Content Objects.  Another option is to use a convention
    in the Content Object name, as in the CCNx Chunking [chunking]
    protocol where a large object is broken in to small chunks and each
    chunk receives a special name component indicating its serial order.
@@ -498,6 +496,8 @@ Internet-Draft               CCNx Semantics                     May 2018
    o  ConObjHash: The value of the Content Object Hash, which is the
       SHA256-32 over the message from the beginning of the body to the
       end of the message.  Note that this coverage area is different
+      from the ValidationAlg.  This value SHOULD NOT be trusted across
+      domains (see Section 5).
 
 
 
@@ -505,9 +505,6 @@ Mosko, et al.           Expires November 4, 2018                [Page 9]
 
 Internet-Draft               CCNx Semantics                     May 2018
 
-
-      from the ValidationAlg.  This value SHOULD NOT be trusted across
-      domains (see Section 5).
 
    o  ExpiryTime: An absolute time after which the content object should
       be considered expired (see Section 4).
@@ -555,6 +552,9 @@ Internet-Draft               CCNx Semantics                     May 2018
 
    o  Payload: The message's data, as defined by PayloadType.
 
+   o  PayloadType: The format of the Payload.  If missing, assume
+      DataType.  DataType means the payload is opaque application bytes.
+
 
 
 Mosko, et al.           Expires November 4, 2018               [Page 10]
@@ -562,8 +562,6 @@ Mosko, et al.           Expires November 4, 2018               [Page 10]
 Internet-Draft               CCNx Semantics                     May 2018
 
 
-   o  PayloadType: The format of the Payload.  If missing, assume
-      DataType.  DataType means the payload is opaque application bytes.
       KeyType means the payload is a DER-encoded public key.  LinkType
       means it is one or more Links (see Section 6).
 
@@ -584,6 +582,8 @@ Internet-Draft               CCNx Semantics                     May 2018
       identify the algorithm used to generate the hash followed by the
       hash value.  This form is to allow hash agility.  Some fields may
       mandate a specific HashType.
+
+
 
 
 

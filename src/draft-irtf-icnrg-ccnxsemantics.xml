@@ -161,11 +161,12 @@
       project hosted at fd.io.
       Another active implementation is <xref target="ccnlite">CCN-lite</xref>, 
       with support for IoT systems and the RIOT operating system.
-      </t>
-      <t>
-      The original work by Jacobson, embodied in CCNx 0.x, formed the basis of the
+      CCNx 0.x formed the basis of the
       <xref target="ndn">Named Data Networking</xref> (NDN) university project.
-      The current CCNx 1.0 specification diverges from CCNx 0.x and NDN in a few
+      </t>
+      
+      <t>
+      The current CCNx 1.0 specification diverges from CCNx 0.x in a few
       significant areas.
       The most pronounced behavioral difference between CCNx 0.x and CCNx 1.0 is that
       CCNx 1.0 has a simpler response processing behavior.
