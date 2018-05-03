@@ -163,37 +163,24 @@
       with support for IoT systems and the RIOT operating system.
       </t>
       <t>
-      The original work by Jacobson formed the basis of the <xref target="ndn">Named Data Networking</xref>
-      (NDN) university project.  The current CCNx 1.0 specification diverges from NDN in a few
-      significant areas.  As CCNx 0.x is no longer under development,
-      we will only describe some of the differences with NDN.
-      In both NDN and CCNx 1.0, a forwarder uses a longest prefix
+      The original work by Jacobson, embodied in CCNx 0.x, formed the basis of the
+      <xref target="ndn">Named Data Networking</xref> (NDN) university project.
+      The current CCNx 1.0 specification diverges from CCNx 0.x and NDN in a few
+      significant areas.
+      The most pronounced behavioral difference between CCNx 0.x and CCNx 1.0 is that
+      CCNx 1.0 has a simpler response processing behavior.
+      In both CCNx 0.x and CCNx 1.0, a forwarder uses a hierarchical longest prefix
       match of a request name against the forwarding information base (FIB) to send
       the request through the network to a system that can issue a response.  
       A forwarder must then match a response's name
       to a request's name to determine the reverse path and deliver the
-      response to the requester.  Herein lies the main difference between NDN and CCNx 1.0.
+      response to the requester.  In CCNx 0.x, the Interest name may be
+      a hierarchical prefix of the response name, which allows a form of
+      layer 3 content discovery.
+      In CCNx 1.0, a response's name must exactly equal a request's name.
+      Content discovery is performed by a higher-layer protocol.
       </t>
-      <t>
-      NDN performs, at the network layer, content discovery via various strategies of
-      partial matching a request name to a response name.
-	  NDN supports several different
-      content discovery strategies that differ in their load on the network and the state
-      maintained at each hop.  A forwarding strategy must be implemented at each forwarder.
-      On a match, a forwarder returns the entire response (e.g. several kilobytes
-      to megabytes of data) hop-by-hop to the requester.  
-      The requestor may then use that response or issue a new
-      request that excludes the unwanted result via a type of interval filter on
-      the last name component of the request's name.  CCNx 1.0 does not include discovery at
-      the network level, but uses a protocol on top of it's layer 3 protocol.  
-      In CCNx 1.0, not every forwarder needs to implement discovery and the network
-      could support multiple discovery protocols.  The main
-      ramification of this approach is that in CCNx 1.0 the name in a response
-      always exactly matches the name in a request (see <xref target="matching"/> for the
-      exact details and one exception for nameless responses).  
-      A forwarder does not prefix match a response to a request.
-      </t>
-      
+
       <t><xref target="selectors">CCNx Selectors</xref> is an example of using
 		a higher-layer protocol on top of the CCNx 1.0 layer-3 to perform content
 		discovery.  The selector protocol uses a method similar to the original

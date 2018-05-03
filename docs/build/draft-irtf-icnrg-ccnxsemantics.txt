@@ -5,10 +5,10 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
 Intended status: Experimental                                   I. Solis
-Expires: September 8, 2018                                      LinkedIn
+Expires: November 4, 2018                                       LinkedIn
                                                                  C. Wood
                                          University of California Irvine
-                                                           March 7, 2018
+                                                             May 3, 2018
 
 
                              CCNx Semantics
@@ -46,16 +46,16 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 8, 2018.
+   This Internet-Draft will expire on November 4, 2018.
 
 
 
 
 
 
-Mosko, et al.           Expires September 8, 2018               [Page 1]
+Mosko, et al.           Expires November 4, 2018                [Page 1]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
 Copyright Notice
@@ -77,8 +77,8 @@ Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
      1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   4
-     1.2.  Architecture  . . . . . . . . . . . . . . . . . . . . . .   5
-     1.3.  Protocol Overview . . . . . . . . . . . . . . . . . . . .   6
+     1.2.  Architecture  . . . . . . . . . . . . . . . . . . . . . .   4
+     1.3.  Protocol Overview . . . . . . . . . . . . . . . . . . . .   5
    2.  Protocol  . . . . . . . . . . . . . . . . . . . . . . . . . .   9
      2.1.  Message Grammar . . . . . . . . . . . . . . . . . . . . .   9
      2.2.  Consumer Behavior . . . . . . . . . . . . . . . . . . . .  13
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Mosko, et al.           Expires September 8, 2018               [Page 2]
+Mosko, et al.           Expires November 4, 2018                [Page 2]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
        10.3.4.  No Resources . . . . . . . . . . . . . . . . . . . .  28
@@ -153,44 +153,29 @@ Internet-Draft               CCNx Semantics                   March 2018
    [ccnlite], with support for IoT systems and the RIOT operating
    system.
 
-   The original work by Jacobson formed the basis of the Named Data
-   Networking [ndn] (NDN) university project.  The current CCNx 1.0
-   specification diverges from NDN in a few significant areas.  As CCNx
-   0.x is no longer under development, we will only describe some of the
-   differences with NDN.  In both NDN and CCNx 1.0, a forwarder uses a
-   longest prefix match of a request name against the forwarding
-   information base (FIB) to send the request through the network to a
-   system that can issue a response.  A forwarder must then match a
-   response's name to a request's name to determine the reverse path and
+   The original work by Jacobson, embodied in CCNx 0.x, formed the basis
+   of the Named Data Networking [ndn] (NDN) university project.  The
+   current CCNx 1.0 specification diverges from CCNx 0.x and NDN in a
+   few significant areas.  The most pronounced behavioral difference
+   between CCNx 0.x and CCNx 1.0 is that CCNx 1.0 has a simpler response
+   processing behavior.  In both CCNx 0.x and CCNx 1.0, a forwarder uses
+   a hierarchical longest prefix match of a request name against the
+   forwarding information base (FIB) to send the request through the
+   network to a system that can issue a response.  A forwarder must then
 
 
 
-Mosko, et al.           Expires September 8, 2018               [Page 3]
+Mosko, et al.           Expires November 4, 2018                [Page 3]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
-   deliver the response to the requester.  Herein lies the main
-   difference between NDN and CCNx 1.0.
-
-   NDN performs, at the network layer, content discovery via various
-   strategies of partial matching a request name to a response name.
-   NDN supports several different content discovery strategies that
-   differ in their load on the network and the state maintained at each
-   hop.  A forwarding strategy must be implemented at each forwarder.
-   On a match, a forwarder returns the entire response (e.g. several
-   kilobytes to megabytes of data) hop-by-hop to the requester.  The
-   requestor may then use that response or issue a new request that
-   excludes the unwanted result via a type of interval filter on the
-   last name component of the request's name.  CCNx 1.0 does not include
-   discovery at the network level, but uses a protocol on top of it's
-   layer 3 protocol.  In CCNx 1.0, not every forwarder needs to
-   implement discovery and the network could support multiple discovery
-   protocols.  The main ramification of this approach is that in CCNx
-   1.0 the name in a response always exactly matches the name in a
-   request (see Section 9 for the exact details and one exception for
-   nameless responses).  A forwarder does not prefix match a response to
-   a request.
+   match a response's name to a request's name to determine the reverse
+   path and deliver the response to the requester.  In CCNx 0.x, the
+   Interest name may be a hierarchical prefix of the response name,
+   which allows a form of layer 3 content discovery.  In CCNx 1.0, a
+   response's name must exactly equal a request's name.  Content
+   discovery is performed by a higher-layer protocol.
 
    CCNx Selectors [selectors] is an example of using a higher-layer
    protocol on top of the CCNx 1.0 layer-3 to perform content discovery.
@@ -214,18 +199,6 @@ Internet-Draft               CCNx Semantics                   March 2018
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in RFC 2119 [RFC2119].
 
-
-
-
-
-
-
-
-Mosko, et al.           Expires September 8, 2018               [Page 4]
-
-Internet-Draft               CCNx Semantics                   March 2018
-
-
 1.2.  Architecture
 
    We describe the architecture of the network in which CCNx operates
@@ -243,6 +216,15 @@ Internet-Draft               CCNx Semantics                   March 2018
    name prefix that is represented in the forwarding information base
    (FIB).  This allows a request to reach the producer and fetch a
    response (if one exists).
+
+
+
+
+
+Mosko, et al.           Expires November 4, 2018                [Page 4]
+
+Internet-Draft               CCNx Semantics                     May 2018
+
 
    The forwarding information base (FIB) is a table that tells a
    forwarder where to send a request.  It may point to a local
@@ -274,14 +256,6 @@ Internet-Draft               CCNx Semantics                   March 2018
    the application, retry the request or return an error to the
    application.
 
-
-
-
-Mosko, et al.           Expires September 8, 2018               [Page 5]
-
-Internet-Draft               CCNx Semantics                   March 2018
-
-
 1.3.  Protocol Overview
 
    The goal of CCNx is to name content and retrieve the content from the
@@ -300,6 +274,14 @@ Internet-Draft               CCNx Semantics                   March 2018
    segment has a type and zero or more bytes.  Matching two names is
    done as a binary comparison of the type and value, segment by
    segment.  The human-readable form is defined under a URI scheme
+
+
+
+Mosko, et al.           Expires November 4, 2018                [Page 5]
+
+Internet-Draft               CCNx Semantics                     May 2018
+
+
    "ccnx:" [CCNxURI], though the canonical encoding of a name is a
    series of (type, octet string) pairs.  There is no requirement that
    any path segment be human readable or UTF-8.  The first few segments
@@ -330,14 +312,6 @@ Internet-Draft               CCNx Semantics                   March 2018
    to rely on host identities, such as those derived from TLS
    certificates, to ascertain the chunk legitimacy.  Data integrity is
    therefore a core feature of CCNx; it does not rely on the data
-
-
-
-Mosko, et al.           Expires September 8, 2018               [Page 6]
-
-Internet-Draft               CCNx Semantics                   March 2018
-
-
    transmission channel.  There are several options for data
    confidentiality, discussed later.
 
@@ -356,6 +330,14 @@ Internet-Draft               CCNx Semantics                   March 2018
    ValidationAlgorithm}, ValidationPayload}, where all fields in the
    inner tuple are covered by the validation payload (e.g. signature).
    Consumers of this data can check the binding integrity by re-
+
+
+
+Mosko, et al.           Expires November 4, 2018                [Page 6]
+
+Internet-Draft               CCNx Semantics                     May 2018
+
+
    computing the same cryptographic hash and verifying the digital
    signature in Validation.
 
@@ -386,14 +368,6 @@ Internet-Draft               CCNx Semantics                   March 2018
    matching prefix in a Forwarder.  The longest matching prefix is
    computed name segment by name segment in the hierarchical path name,
    where each name segment must be exactly equal to match.  There is no
-
-
-
-Mosko, et al.           Expires September 8, 2018               [Page 7]
-
-Internet-Draft               CCNx Semantics                   March 2018
-
-
    requirement that the prefix be globally routable.  Within a
    deployment any local routing may be used, even one that only uses a
    single flat (non-hierarchical) name segment.
@@ -412,6 +386,14 @@ Internet-Draft               CCNx Semantics                   March 2018
    As an Interest travels the forward path following the Forwarding
    Information Base (FIB), it establishes state at each forwarder such
    that a Content Object response can trace its way back to the original
+
+
+
+Mosko, et al.           Expires November 4, 2018                [Page 7]
+
+Internet-Draft               CCNx Semantics                     May 2018
+
+
    requester(s) without the requester needing to include a routable
    return address.  We use the notional Pending Interest Table (PIT) as
    a method to store state that facilitates the return of a Content
@@ -442,14 +424,6 @@ Internet-Draft               CCNx Semantics                   March 2018
    In CCNx, higher-layer protocols are often called "name-based
    protocols" because they operate on the CCNx Name.  For example, a
    versioning protocol might append additional name segments to convey
-
-
-
-Mosko, et al.           Expires September 8, 2018               [Page 8]
-
-Internet-Draft               CCNx Semantics                   March 2018
-
-
    state about the version of payload.  A content discovery protocol
    might append certain protocol-specific name segments to a prefix to
    discover content under that prefix.  Many such protocols may exist
@@ -468,6 +442,14 @@ Internet-Draft               CCNx Semantics                   March 2018
    There are multiple ways to describe larger objects in CCNx.
    Aggregating layer-3 content objects in to larger objects is beyond
    the scope of this document.  One proposed method, FLIC [flic], uses a
+
+
+
+Mosko, et al.           Expires November 4, 2018                [Page 8]
+
+Internet-Draft               CCNx Semantics                     May 2018
+
+
    manifest to enumerate the pieces of a larger object.  Manifests are,
    themselves, Content Objects.  Another option is to use a convention
    in the Content Object name, as in the CCNx Chunking [chunking]
@@ -498,14 +480,6 @@ Internet-Draft               CCNx Semantics                   March 2018
    Specific wire encodings are given in a separate document.  If a
    Validation section exists, the Validation Algorithm covers from the
    Body (BodyName or BodyOptName) through the end of the ValidationAlg
-
-
-
-Mosko, et al.           Expires September 8, 2018               [Page 9]
-
-Internet-Draft               CCNx Semantics                   March 2018
-
-
    section.  The InterestLifetime, CacheTime, and Return Code fields
    exist outside of the validation envelope and may be modified.
 
@@ -524,6 +498,14 @@ Internet-Draft               CCNx Semantics                   March 2018
    o  ConObjHash: The value of the Content Object Hash, which is the
       SHA256-32 over the message from the beginning of the body to the
       end of the message.  Note that this coverage area is different
+
+
+
+Mosko, et al.           Expires November 4, 2018                [Page 9]
+
+Internet-Draft               CCNx Semantics                     May 2018
+
+
       from the ValidationAlg.  This value SHOULD NOT be trusted across
       domains (see Section 5).
 
@@ -555,13 +537,6 @@ Internet-Draft               CCNx Semantics                   March 2018
       used to verify the ValidationPayload.  A message SHOULD NOT have
       both a KeyLink and a PublicKey.
 
-
-
-Mosko, et al.           Expires September 8, 2018              [Page 10]
-
-Internet-Draft               CCNx Semantics                   March 2018
-
-
    o  Lifetime: The approximate time during which a requester is willing
       to wait for a response, usually measured in seconds.  It is not
       strongly related to the network round trip time, though it must
@@ -579,6 +554,13 @@ Internet-Draft               CCNx Semantics                   March 2018
       Object.
 
    o  Payload: The message's data, as defined by PayloadType.
+
+
+
+Mosko, et al.           Expires November 4, 2018               [Page 10]
+
+Internet-Draft               CCNx Semantics                     May 2018
+
 
    o  PayloadType: The format of the Payload.  If missing, assume
       DataType.  DataType means the payload is opaque application bytes.
@@ -613,9 +595,27 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 11]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.           Expires November 4, 2018               [Page 11]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    Message       := Interest / ContentObject / InterestReturn
@@ -669,9 +669,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 12]
+Mosko, et al.           Expires November 4, 2018               [Page 12]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
 2.2.  Consumer Behavior
@@ -725,9 +725,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 13]
+Mosko, et al.           Expires November 4, 2018               [Page 13]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    o  Ensure the content object is properly formatted.
@@ -781,9 +781,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 14]
+Mosko, et al.           Expires November 4, 2018               [Page 14]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
       carry a Validation section if the publisher application does not
@@ -837,9 +837,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 15]
+Mosko, et al.           Expires November 4, 2018               [Page 15]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
 2.4.2.  Interest Aggregation
@@ -893,9 +893,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 16]
+Mosko, et al.           Expires November 4, 2018               [Page 16]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
       InterestExpiry time per previous hop.  In the first case, the
@@ -949,9 +949,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 17]
+Mosko, et al.           Expires November 4, 2018               [Page 17]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    3.  If forwarding the Interest, check for a hit in the Content Store,
@@ -1005,9 +1005,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 18]
+Mosko, et al.           Expires November 4, 2018               [Page 18]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    There are three different types of names in CCNx: prefix, exact, and
@@ -1061,9 +1061,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 19]
+Mosko, et al.           Expires November 4, 2018               [Page 19]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    value) for equality.  The Forwarder matches paths segment-by-segment
@@ -1117,9 +1117,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 20]
+Mosko, et al.           Expires November 4, 2018               [Page 20]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    used to respond to an Interest from a cache.  Stale content MAY be
@@ -1173,9 +1173,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 21]
+Mosko, et al.           Expires November 4, 2018               [Page 21]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
 7.  Hashes
@@ -1229,9 +1229,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 22]
+Mosko, et al.           Expires November 4, 2018               [Page 22]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    A PublicKeyLocator KeyLink points to a Content Object with a DER-
@@ -1285,9 +1285,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 23]
+Mosko, et al.           Expires November 4, 2018               [Page 23]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    If a Content Object does not carry the Content ObjectHash as an
@@ -1341,9 +1341,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 24]
+Mosko, et al.           Expires November 4, 2018               [Page 24]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
 10.1.  Message Format
@@ -1397,9 +1397,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 25]
+Mosko, et al.           Expires November 4, 2018               [Page 25]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    +----------------------+--------------------------------------------+
@@ -1453,9 +1453,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 26]
+Mosko, et al.           Expires November 4, 2018               [Page 26]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    o  Verify that the Interest Return came from a next-hop to which it
@@ -1509,9 +1509,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 27]
+Mosko, et al.           Expires November 4, 2018               [Page 27]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
 10.3.2.  HopLimit Exceeded
@@ -1565,9 +1565,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 28]
+Mosko, et al.           Expires November 4, 2018               [Page 28]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
 10.3.8.  Unsupported Content Object Hash Algorithm
@@ -1621,9 +1621,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 29]
+Mosko, et al.           Expires November 4, 2018               [Page 29]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    include a public key embedded in the object or may use the
@@ -1677,9 +1677,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 30]
+Mosko, et al.           Expires November 4, 2018               [Page 30]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    the Interest in the Interest Return to that node and not allow anyone
@@ -1733,9 +1733,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 31]
+Mosko, et al.           Expires November 4, 2018               [Page 31]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    symbol mismatches unless one uses a consistent URI normalization to
@@ -1789,9 +1789,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 32]
+Mosko, et al.           Expires November 4, 2018               [Page 32]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    [CCNxURI]  Mosko, M. and C. Wood, "The CCNx URI Scheme (Internet
@@ -1845,9 +1845,9 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 33]
+Mosko, et al.           Expires November 4, 2018               [Page 33]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
@@ -1901,9 +1901,9 @@ Authors' Addresses
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 34]
+Mosko, et al.           Expires November 4, 2018               [Page 34]
 
-Internet-Draft               CCNx Semantics                   March 2018
+Internet-Draft               CCNx Semantics                     May 2018
 
 
    Christopher A. Wood
@@ -1957,4 +1957,4 @@ Internet-Draft               CCNx Semantics                   March 2018
 
 
 
-Mosko, et al.           Expires September 8, 2018              [Page 35]
+Mosko, et al.           Expires November 4, 2018               [Page 35]

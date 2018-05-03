@@ -4,8 +4,8 @@
 
 ICNRG                                                           M. Mosko
 Internet-Draft                                                      PARC
-Intended status: Experimental                              March 7, 2018
-Expires: September 8, 2018
+Intended status: Experimental                                May 3, 2018
+Expires: November 4, 2018
 
 
                   CCNx Publisher Clock Time Versioning
@@ -32,7 +32,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 8, 2018.
+   This Internet-Draft will expire on November 4, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Mosko                   Expires September 8, 2018               [Page 1]
+Mosko                   Expires November 4, 2018                [Page 1]
 
-Internet-Draft                  CCNx TLV                      March 2018
+Internet-Draft                  CCNx TLV                        May 2018
 
 
 Table of Contents
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Mosko                   Expires September 8, 2018               [Page 2]
+Mosko                   Expires November 4, 2018                [Page 2]
 
-Internet-Draft                  CCNx TLV                      March 2018
+Internet-Draft                  CCNx TLV                        May 2018
 
 
    The use of a timestamp in a Name to denote a version SHOULD NOT
@@ -165,9 +165,9 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko                   Expires September 8, 2018               [Page 3]
+Mosko                   Expires November 4, 2018                [Page 3]
 
-Internet-Draft                  CCNx TLV                      March 2018
+Internet-Draft                  CCNx TLV                        May 2018
 
 
    As per RFC 3339, the string format for two timestamps MAY be compared
@@ -221,9 +221,9 @@ Internet-Draft                  CCNx TLV                      March 2018
 
 
 
-Mosko                   Expires September 8, 2018               [Page 4]
+Mosko                   Expires November 4, 2018                [Page 4]
 
-Internet-Draft                  CCNx TLV                      March 2018
+Internet-Draft                  CCNx TLV                        May 2018
 
 
    [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
@@ -277,4 +277,4 @@ Author's Address
 
 
 
-Mosko                   Expires September 8, 2018               [Page 5]
+Mosko                   Expires November 4, 2018                [Page 5]
