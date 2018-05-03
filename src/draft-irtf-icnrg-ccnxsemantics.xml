@@ -184,7 +184,7 @@
       <t><xref target="selectors">CCNx Selectors</xref> is an example of using
 		a higher-layer protocol on top of the CCNx 1.0 layer-3 to perform content
 		discovery.  The selector protocol uses a method similar to the original
-		CCNx 0.x and the current NDN techniques without requiring partial name
+		CCNx 0.x techniques without requiring partial name
 		matching of a response to a request in the forwarder.</t>
       
       <t>The document represents the consensus of the ICN RG.  It is the first
