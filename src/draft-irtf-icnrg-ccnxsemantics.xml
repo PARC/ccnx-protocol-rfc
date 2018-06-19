@@ -170,7 +170,7 @@
       significant areas.
       The most pronounced behavioral difference between CCNx 0.x and CCNx 1.0 is that
       CCNx 1.0 has a simpler response processing behavior.
-      In both CCNx 0.x and CCNx 1.0, a forwarder uses a hierarchical longest prefix
+      In both versions, a forwarder uses a hierarchical longest prefix
       match of a request name against the forwarding information base (FIB) to send
       the request through the network to a system that can issue a response.  
       A forwarder must then match a response's name
@@ -305,17 +305,17 @@
            A named payload is thus the tuple {{Name, ExtraFields, Payload, ValidationAlgorithm}, ValidationPayload},
           	where all fields in the inner tuple are covered by the validation payload (e.g. signature).
            Consumers of this data can check the binding integrity by re-computing
-           the same cryptographic hash and verifying the digital signature in Validation.
+           the same cryptographic hash and verifying the digital signature in ValidationPayload.
            </t>
        <t>
-           In addition to digital signatures (e.g. RSA), we also support message authentication
+           In addition to digital signatures (e.g. RSA), CCNx also supports message authentication
            codes (e.g. HMAC) and message integrity codes (e.g. SHA-256 or CRC).  To maintain
-           the cryptographic binding, there should be an object with a signature or authentication
+           the cryptographic binding, there should be at least one object with a signature or authentication
            code, but not all objects require it.  For example, a first object with a signature
            could refer to other objects via a hash chain, a Merkle tree, or a signed manifest.
            The later objects may not have any validation and rely purely on the references.
-           The use of an integrity code (e.g. CRC) is intended for protecting Interests in
-           the network from accidental corruption.
+           The use of an integrity code (e.g. CRC) is intended for detecting accidental corruption
+           in an Interest.
        </t>
 
         <t>CCNx specifies a network protocol around Interests (request messages) and Content Objects
@@ -438,6 +438,10 @@
             <t>ExpiryTime: An absolute time after which the
               content object should be considered expired (see <xref target="cachecontrol"/>).
             </t>
+            <t>Hash: Hash values carried in a Message carry a HashType to identify the algorithm
+              used to generate the hash followed by the hash value.  This form is to allow
+              hash agility.  Some fields may mandate a specific HashType.
+            </t>
             <t>HopLimit: Interest messages may loop if there are loops in the forwarding plane.
               To eventually terminate loops, each Interest carries a HopLimit that is decremented
               after each hop and no longer forwarded when it reaches zero.  See <xref target="forwarder"/>.
@@ -491,9 +495,10 @@
             <t>SigTime: The absolute time (UTC milliseconds) when the signature was
               generated.
             </t>
-            <t>Hash: Hash values carried in a Message carry a HashType to identify the algorithm
-              used to generate the hash followed by the hash value.  This form is to allow
-              hash agility.  Some fields may mandate a specific HashType.
+            <t>Vendor: Vendor-specific opaque data.  The Vendor data includes the
+            <xref target="EpriseNumbers">IANA Private Enterprise Numbers</xref>, followed by
+            vendor-specific information.  CCNx allows vendor-specific data in most
+            locations of the grammar.
             </t>
           </list>
         </t>
@@ -502,8 +507,10 @@
        <figure anchor="abnfgrammar">
         <artwork align="left"><![CDATA[
 Message       := Interest / ContentObject / InterestReturn
-Interest      := HopLimit [Lifetime] BodyName [Validation]
-ContentObject := [CacheTime / ConObjHash] BodyOptName [Validation]
+Interest      := IntHdr BodyName [Validation]
+IntHdr        := HopLimit [Lifetime] *Vendor
+ContentObject := ConObjHdr BodyOptName [Validation]
+ConObjHdr     := [CacheTime / ConObjHash] *Vendor
 InterestReturn:= ReturnCode Interest
 BodyName      := Name Common
 BodyOptName   := [Name] Common
@@ -511,10 +518,10 @@ Common        := *Field [Payload]
 Validation    := ValidationAlg ValidatonPayload
 
 Name          := FirstSegment *Segment
-FirstSegment  := 1* OCTET
-Segment       := 0* OCTET
+FirstSegment  := 1* OCTET / Vendor
+Segment       := 0* OCTET / Vendor
 
-ValidationAlg := RSA-SHA256 HMAC-SHA256 CRC32C
+ValidationAlg := (RSA-SHA256 / HMAC-SHA256 / CRC32C) *Vendor
 ValidatonPayload := 1* OCTET
 RSA-SHA256    := KeyId [PublicKey] [SigTime] [KeyLink]
 HMAC-SHA256   := KeyId [SigTime] [KeyLink]
@@ -526,7 +533,7 @@ ConObjField   := ExpiryTime / PayloadType
 ConObjHash    := Hash ; The Content Object Hash
 DataType      := "1"
 ExpiryTime    := AbsTime
-Field         := InterestField / ConObjField
+Field         := InterestField / ConObjField / Vendor
 Hash          := HashType 1* OCTET
 HashType      := SHA256-32 / SHA512-64 / SHA512-32
 HopLimit      := OCTET
@@ -545,6 +552,8 @@ PublicKey     := ; DER-encoded public key
 RelTime       := 1* OCTET ; msec
 ReturnCode    := ; see Section 10.2
 SigTime       := AbsTime
+Vendor        := PEN 0* OCTET
+PEN           := ; IANA Private Enterprise Number
 ]]></artwork>
       </figure>
 
@@ -599,7 +608,7 @@ SigTime       := AbsTime
             <t>Ensure the content object is properly formatted.
             </t>
             <t>Verify that the returned Name matches a pending request.  If the request
-              also had KeyIdRestr and ObjHashRest, it should also validate those properties.
+              also had KeyIdRestr or ObjHashRest, it MUST also validate those properties.
             </t>
             <t>If the content object is signed, it SHOULD cryptographically verify the signature.
               If it does not have the corresponding key, it SHOULD fetch the key, such as from
@@ -613,7 +622,7 @@ SigTime       := AbsTime
             <t>If the content object is signed, it should assert the trustworthiness of the
               signing key to the namespace.  Such an assertion is beyond the scope of this
               document, though one may use traditional PKI methods,
-              a trusted key resolution service, or methods like [schematized trust].
+              a trusted key resolution service, or methods like <xref target="trust"/>.
             </t>
             <t>It MAY cache the content object for future use, up to the ExpiryTime
               if present.
@@ -651,7 +660,8 @@ SigTime       := AbsTime
               Interest's previous hop.  If the requested content cannot be returned,
               the publisher SHOULD reply with an InterestReturn or a content object with
               application payload that says the content is not available; this content object
-              should have a short ExpiryTime in the future.
+              should have a short ExpiryTime in the future or not be cacheable (i.e. an
+              expiry time of 0).
             </t>
           </list>
         </t>
@@ -674,7 +684,22 @@ SigTime       := AbsTime
         <section anchor="hoplimit" title="Interest HopLimit">
           <t>Interest looping is not prevented in CCNx. An Interest traversing loops is eventually
             discarded using the hop-limit field of the Interest, which is decremented at each hop
-            traversed by the Interest.
+            traversed by the Interest.  
+         </t>
+          <t>
+            A loop may also terminate because the Interest
+            is aggregated with it's previous PIT entry along the loop.  In this case,
+            the Content will be sent back along the loop and eventually return to a node
+            that already forwarded the content, so it will likely not have a PIT entry
+            any more. When the content reaches a node without a PIT entry, it will be discarded.
+            It may be that a new Interest or another looped Interest will return to that
+            same node, in which case the node will either return a cached response
+            to make a new PIT entry, as below.
+          </t>
+          <t>The HopLimit is the last resort method to stop Interest loops where
+          a Content Object chases an Interest around a loop and where the intermediate
+          nodes, for whatever reason, no longer have a PIT entry and do not cache
+          the Content Object.
           </t>
           <t>Every Interest MUST carry a HopLimit.
           </t>
@@ -683,14 +708,15 @@ SigTime       := AbsTime
             at least 1 before it is forwarded.
           </t>
           <t>If the HopLimit equals 0, the Interest MUST NOT be forwarded to another forwarder;
-            it MAY be sent to a publisher application or serviced from a local Content Store.
+            it MAY be sent to a local publisher application or serviced from a local Content Store.
           </t>
         </section>
 
             <section anchor="aggregation" title="Interest Aggregation">
             <t>Interest aggregation is when a forwarder receives an Interest message that
-              could be satisfied by another Interest message already forwarded by the node so the
-              forwarder suppresses the new Interest; it only records the additional previous hop
+              could be satisfied by the response to another Interest message already
+              forwarded by the node, so the
+              forwarder suppresses forwarding the new Interest; it only records the additional previous hop
               so a Content Object sent in response to the first Interest will satisfy both Interests.
           </t>
             <t>CCNx uses an Interest aggregation rule that assumes the InterestLifetime is
@@ -722,7 +748,8 @@ SigTime       := AbsTime
                from the same previous hop MUST be forwarded.  We consider these a retransmission requests.
           </t>
             <t>A second or later reception of an Interest similar to a valid pending Interest
-            from a new previous hop MAY be aggregated (not forwarded).
+            from a new previous hop MAY be aggregated (not forwarded).  If this Interest
+            has a larger HopLimit than the pending Interest, it MUST be forwarded.
           </t>
             <t>Aggregating an Interest MUST extend the InterestExpiry time of the Interest record.
                An implementation MAY keep a single InterestExpiry time for all previous hops
@@ -737,10 +764,10 @@ SigTime       := AbsTime
         </section>
 
         <section anchor="contentstore" title="Content Store Behavior">
-          <t>The Content Store is a special cache that sits on the fast path of a CCNx forwarder.
+          <t>The Content Store is a special cache that is an integral part of a CCNx forwarder.
             It is an optional component.  It serves to repair lost packets and handle flash requests
             for popular content.  It could be pre-populated or use opportunistic caching.
-            Because the Content Store could serve to amplify an attach via cache poisoning, there
+            Because the Content Store could serve to amplify an attack via cache poisoning, there
             are special rules about how a Content Store behaves.
             <list style="numbers">
               <t>A forwarder MAY implement a Content Store.  If it does, the Content Store
@@ -749,7 +776,12 @@ SigTime       := AbsTime
               <t>If an Interest has a KeyIdRestr, then the Content Store MUST NOT reply unless it knows
                 the signature on the matching Content Object is correct.  It may do this by external knowledge
                 (i.e., in a managed network or system with pre-populated caches) or by having the public key and
-                cryptographically verifying the signature.  If the public key is provided in the Content Object
+                cryptographically verifying the signature.  A Content Store is NOT REQURIED to verify
+                signatures; if it does not, then it treats these cases like a cache miss.
+              </t>
+              <t>  
+                If a Content Store chooses to verify signatures, then it MAY do so as follows.
+                If the public key is provided in the Content Object
                 itself (i.e., in the PublicKey field) or in the Interest, the Content Store MUST verify that
                 the public key's SHA-256 hash is equal to the KeyId and that it verifies the signature.
                 A Content Store MAY verify the digital signature of a Content Object before it is cached, but
@@ -761,7 +793,7 @@ SigTime       := AbsTime
                 knows the the matching Content Object has the correct hash.  If it cannot verify the
                 hash, then it should treat the Interest as a cache miss.
               </t>
-              <t>It must object the Cache Control directives (see <xref target="cachecontrol"/>).
+              <t>It must obey the Cache Control directives (see <xref target="cachecontrol"/>).
               </t>
             </list>
           </t>
@@ -833,17 +865,14 @@ SigTime       := AbsTime
           An exact name is one which uniquely identifies the name of a Content Object.
           A full name is one which is exact and is accompanied by an explicit or implicit ConObjHash.
           The ConObjHash is explicit in an Interest and implicit in a Content Object.</t>
+      <t>Note that a forwarder does not need to know any semantics about a name.  It only
+      needs to be able to match a prefix to forward Interests and match an exact or full
+      name to forward Content Objects.  It is not sensitive to the name segment types.
+      </t>
       <t>The name segment labels specified in this document are given in the table below.
         Name Segment is a general name segment, typically occurring in the
         routable prefix and user-specified content name.  Other segment types are for
         functional name components that imply a specific purpose. </t>
-      <t>A forwarding table entry may contain name segments of any type.
-        Routing protocol policy and local system policy may limit what goes into
-        forwarding entries, but there is no restriction at the core level.
-        An Interest routing protocol, for example, may only allow binary name segments.
-        A load balancer or compute cluster
-        may route through additional component types, depending on their services.
-      </t>
       <texttable anchor="name_types" title="CCNx Name Segment Types">
         <ttcol align="center">Name</ttcol>
         <ttcol align="left">Description</ttcol>
@@ -864,7 +893,13 @@ SigTime       := AbsTime
         matches paths segment-by-segment against
         its forwarding table to determine a next hop.</t>
       <section anchor="NameExamples" title="Name Examples">
-        <t>This section uses the <xref target="CCNxURI">CCNx URI</xref> representation of CCNx names .</t>
+        <t>This section uses the <xref target="CCNxURI">CCNx URI</xref> representation of CCNx names.
+        Note that as per the message grammar, an Interest must have a Name with at least
+        one name segment and that name segment must have at least 1 octet of value.
+        A Content Object must have a similar name or no name at all.  The FIB, on the other hand,
+        could have 0-length names (a default route), or a first name segment with no value,
+        or a regular name.
+        </t>
         <texttable anchor="name_examples" title="CCNx Name Examples">
           <ttcol align="center">Name</ttcol>
           <ttcol align="left">Description</ttcol>
@@ -998,7 +1033,7 @@ SigTime       := AbsTime
         Ni = Name in Interest (may not be empty), Ki = KeyIdRestr
         in the interest (may be empty), Hi = ContentObjectHashRestr in Interest (may be empty).
         Likewise, No, Ko, Ho are those properties in the Content Object, where No and Ko may be empty;
-        Ho always exists.
+        Ho always exists (it is an intrinsic property of the Content Object).
         For binary relations, we use &amp; for AND and | for OR.  We use E for the EXISTS (not empty)
         operator and ! for the NOT EXISTS operator.</t>
       <t>As a special case, if the ContentObjectHashRestr in the Interest specifies an
@@ -1326,6 +1361,16 @@ SigTime       := AbsTime
           </front>
       </reference>
 
+	<reference anchor="trust" target="https://doi.org/10.1109/ICCCN.2016.7568589">
+		<front>
+			<title>Trust in Information-Centric Networking: From Theory to Practice</title>
+			<author initials="C." surname="Tschudin"><organiziation>University of Basel</organization></author>
+			<author initials="E." surname="Uzun"><organiziation>PARC, Inc.</organization></author>
+			<author initials="C." surname="Wood"><organiziation>University of California, Irvine</organization></author>
+              <date year="2016"/>			
+		</front>
+	</reference>
+	
       <reference anchor="CCN" target="http://www.CCNx.org"><front><title>CCNx Open Source</title><author><organization>PARC, Inc.</organization></author><date year="2007"/></front></reference>
 
       <reference anchor="ndn" target="http://www.named-data.net"><front><title>Named Data Networking</title><author><organization>UCLA</organization></author><date year="2007"/></front></reference>
@@ -1496,6 +1541,17 @@ SigTime       := AbsTime
       	</front>
       </reference>
       
+    <reference anchor="EpriseNumbers" target="http://www.iana.org/assignments/enterprise-numbers/enterprise-numbers">
+        <front>
+          <title>IANA Private Enterprise Numbers</title>
+          <author>
+            <organization>IANA</organization>
+          </author>
+
+          <date year="2015"/>
+        </front>
+      </reference>
+
     </references>
 
 
