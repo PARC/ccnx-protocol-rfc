@@ -332,7 +332,7 @@ address {
 
   <meta name="dct.creator" content="Mosko, M., Solis, I., and C. Wood" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-irtf-icnrg-ccnxsemantics-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-5-3" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-6-20" />
   <meta name="dct.abstract" content="This document describes the core concepts of the Content Centric Networking (CCNx) architecture and presents a network protocol based on two messages: Interests and Content Objects.  It specifies the set of mandatory and optional fields within those messages and describes their behavior and interpretation. This architecture and protocol specification is independent of a specific wire encoding." />
   <meta name="description" content="This document describes the core concepts of the Content Centric Networking (CCNx) architecture and presents a network protocol based on two messages: Interests and Content Objects.  It specifies the set of mandatory and optional fields within those messages and describes their behavior and interpretation. This architecture and protocol specification is independent of a specific wire encoding." />
 
@@ -356,7 +356,7 @@ address {
   <td class="right">I. Solis</td>
 </tr>
 <tr>
-  <td class="left">Expires: November 4, 2018</td>
+  <td class="left">Expires: December 22, 2018</td>
   <td class="right">LinkedIn</td>
 </tr>
 <tr>
@@ -369,7 +369,7 @@ address {
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">May 3, 2018</td>
+  <td class="right">June 20, 2018</td>
 </tr>
 
     	
@@ -391,7 +391,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on November 4, 2018.</p>
+<p>This Internet-Draft will expire on December 22, 2018.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -452,8 +452,8 @@ address {
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
 <p id="rfc.section.1.p.1">This document describes the principles of the CCNx architecture. It describes a network protocol that uses a hierarchical name to forward requests and to match responses to requests.  It does not use endpoint addresses, such as Internet Protocol.  Restrictions in a request can limit the response by the public key of the response's signer or the cryptographic hash of the response.  Every CCNx forwarder along the path does the name matching and restriction checking.  The CCNx protocol fits within the broader framework of Information Centric Networking (ICN) protocols <a href="#RFC7927">[RFC7927]</a>.  This document concerns the semantics of the protocol and is not dependent on a specific wire format encoding.  The <a href="#CCNMessages">CCNx Messages</a> <cite title="NONE">[CCNMessages]</cite> document describes a type-length-value (TLV) wire protocol encoding.  This section introduces the main concepts of CCNx, which are further elaborated in the remainder of the document.  </p>
-<p id="rfc.section.1.p.2">The CCNx protocol derives from the early ICN work by <a href="#nnc">Jacobson et al.</a> <cite title="NONE">[nnc]</cite>.  Jacobson's version of CCNx is known as the 0.x version ("CCNx 0.x") and the present work is known as the 1.0 version ("CCNx 1.0").  There are two active implementations of CCNx 1.0.  The most complete implementation is <a href="#cicn">Community ICN (CINC)</a> <cite title="NONE">[cicn]</cite>, a Linux Foundation project hosted at fd.io.  Another active implementation is <a href="#ccnlite">CCN-lite</a> <cite title="NONE">[ccnlite]</cite>, with support for IoT systems and the RIOT operating system.  CCNx 0.x, formed the basis of the <a href="#ndn">Named Data Networking</a> <cite title="NONE">[ndn]</cite> (NDN) university project.  </p>
-<p id="rfc.section.1.p.3">The current CCNx 1.0 specification diverges from CCNx 0.x in a few significant areas.  The most pronounced behavioral difference between CCNx 0.x and CCNx 1.0 is that CCNx 1.0 has a simpler response processing behavior.  In both CCNx 0.x and CCNx 1.0, a forwarder uses a hierarchical longest prefix match of a request name against the forwarding information base (FIB) to send the request through the network to a system that can issue a response.  A forwarder must then match a response's name to a request's name to determine the reverse path and deliver the response to the requester.  In CCNx 0.x, the Interest name may be a hierarchical prefix of the response name, which allows a form of layer 3 content discovery.  In CCNx 1.0, a response's name must exactly equal a request's name.  Content discovery is performed by a higher-layer protocol.  </p>
+<p id="rfc.section.1.p.2">The CCNx protocol derives from the early ICN work by <a href="#nnc">Jacobson et al.</a> <cite title="NONE">[nnc]</cite>.  Jacobson's version of CCNx is known as the 0.x version ("CCNx 0.x") and the present work is known as the 1.0 version ("CCNx 1.0").  There are two active implementations of CCNx 1.0.  The most complete implementation is <a href="#cicn">Community ICN (CINC)</a> <cite title="NONE">[cicn]</cite>, a Linux Foundation project hosted at fd.io.  Another active implementation is <a href="#ccnlite">CCN-lite</a> <cite title="NONE">[ccnlite]</cite>, with support for IoT systems and the RIOT operating system.  CCNx 0.x formed the basis of the <a href="#ndn">Named Data Networking</a> <cite title="NONE">[ndn]</cite> (NDN) university project.  </p>
+<p id="rfc.section.1.p.3">The current CCNx 1.0 specification diverges from CCNx 0.x in a few significant areas.  The most pronounced behavioral difference between CCNx 0.x and CCNx 1.0 is that CCNx 1.0 has a simpler response processing behavior.  In both versions, a forwarder uses a hierarchical longest prefix match of a request name against the forwarding information base (FIB) to send the request through the network to a system that can issue a response.  A forwarder must then match a response's name to a request's name to determine the reverse path and deliver the response to the requester.  In CCNx 0.x, the Interest name may be a hierarchical prefix of the response name, which allows a form of layer 3 content discovery.  In CCNx 1.0, a response's name must exactly equal a request's name.  Content discovery is performed by a higher-layer protocol.  </p>
 <p><a href="#selectors">CCNx Selectors</a> <cite title="NONE">[selectors]</cite> is an example of using a higher-layer protocol on top of the CCNx 1.0 layer-3 to perform content discovery.  The selector protocol uses a method similar to the original CCNx 0.x techniques without requiring partial name matching of a response to a request in the forwarder.</p>
 <p id="rfc.section.1.p.5">The document represents the consensus of the ICN RG.  It is the first ICN protocol from the RG, created from the early CCNx protocol <a href="#nnc">[nnc]</a> with significant revision and input from the ICN community and RG members.  The draft has received critical reading by several members of the ICN community and the RG.  The authors and RG chairs approve of the contents.  The document is sponsored under the IRTF and is not issued by the IETF and is not an IETF standard.  This is an experimental protocol and may not be suitable for any specific application and the specification may change in the future.  </p>
 <h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
@@ -471,8 +471,8 @@ address {
 <p id="rfc.section.1.3.p.3">The CCNx name, as used by the forwarder, is purposefully left as a general octet-encoded type and value without any requirements on human readability and character encoding.  The reason for this is that we are concerned with how a forwarder processes names.  We expect that applications, routing protocols, or other higher layers will apply their own conventions and restrictions on the allowed path segment types and path segment values.</p>
 <p id="rfc.section.1.3.p.4">CCNx is a request and response protocol to fetch chunks of data using a name. The integrity of each chunk may be directly asserted through a digital signature or Message Authentication Code (MAC), or, alternatively, indirectly via hash chains. Chunks may also carry weaker message integrity checks (MICs) or no integrity protection mechanism at all.  Because provenance information is carried with each chunk (or larger indirectly protected block), we no longer need to rely on host identities, such as those derived from TLS certificates, to ascertain the chunk legitimacy. Data integrity is therefore a core feature of CCNx; it does not rely on the data transmission channel. There are several options for data confidentiality, discussed later.  </p>
 <p id="rfc.section.1.3.p.5">This document only defines the general properties of CCNx names.  In some isolated environments, CCNx users may be able to use any name they choose and either inject that name (or prefix) into a routing protocol or use other information foraging techniques.  In the Internet environment, there will be policies around the formats of names and assignments of names to publishers, though those are not specified here.  </p>
-<p id="rfc.section.1.3.p.6">The key concept of CCNx is that a subjective name is cryptographically bound to a fixed payload. These publisher-generated bindings can therefore be cryptographically verified.  A named payload is thus the tuple {{Name, ExtraFields, Payload, ValidationAlgorithm}, ValidationPayload}, where all fields in the inner tuple are covered by the validation payload (e.g. signature).  Consumers of this data can check the binding integrity by re-computing the same cryptographic hash and verifying the digital signature in Validation.  </p>
-<p id="rfc.section.1.3.p.7">In addition to digital signatures (e.g. RSA), we also support message authentication codes (e.g. HMAC) and message integrity codes (e.g. SHA-256 or CRC).  To maintain the cryptographic binding, there should be an object with a signature or authentication code, but not all objects require it.  For example, a first object with a signature could refer to other objects via a hash chain, a Merkle tree, or a signed manifest.  The later objects may not have any validation and rely purely on the references.  The use of an integrity code (e.g. CRC) is intended for protecting Interests in the network from accidental corruption.  </p>
+<p id="rfc.section.1.3.p.6">The key concept of CCNx is that a subjective name is cryptographically bound to a fixed payload. These publisher-generated bindings can therefore be cryptographically verified.  A named payload is thus the tuple {{Name, ExtraFields, Payload, ValidationAlgorithm}, ValidationPayload}, where all fields in the inner tuple are covered by the validation payload (e.g. signature).  Consumers of this data can check the binding integrity by re-computing the same cryptographic hash and verifying the digital signature in ValidationPayload.  </p>
+<p id="rfc.section.1.3.p.7">In addition to digital signatures (e.g. RSA), CCNx also supports message authentication codes (e.g. HMAC) and message integrity codes (e.g. SHA-256 or CRC).  To maintain the cryptographic binding, there should be at least one object with a signature or authentication code, but not all objects require it.  For example, a first object with a signature could refer to other objects via a hash chain, a Merkle tree, or a signed manifest.  The later objects may not have any validation and rely purely on the references.  The use of an integrity code (e.g. CRC) is intended for detecting accidental corruption in an Interest.  </p>
 <p id="rfc.section.1.3.p.8">CCNx specifies a network protocol around Interests (request messages) and Content Objects (response messages) to move named payloads.  An Interest includes the Name -- which identifies the desired response -- and optional matching restrictions.  Restrictions limit the possible matching Content Objects. Two restrictions exist: KeyIdRestr and ContentObjectHashRestr. The first restriction on the KeyId limits responses to those signed with a ValidationAlgorithm KeyId field equal to the restriction.  The second is the Content ObjectHash restriction, which limits the response to one where the cryptographic hash of the entire named payload is equal to the restriction.  </p>
 <p id="rfc.section.1.3.p.9">The hierarchy of a CCNx Name is used for routing via the longest matching prefix in a Forwarder.  The longest matching prefix is computed name segment by name segment in the hierarchical path name, where each name segment must be exactly equal to match.  There is no requirement that the prefix be globally routable.  Within a deployment any local routing may be used, even one that only uses a single flat (non-hierarchical) name segment.  </p>
 <p id="rfc.section.1.3.p.10">Another concept of CCNx is that there should be flow balance between Interest messages and Content Object messages.  At the network level, an Interest traveling along a single path should elicit no more than one Content Object response.  If some node sends the Interest along more than one path, that node should consolidate the responses such that only one Content Object flows back towards the requester.  If an Interest is sent broadcast or multicast on a multiple-access media, the sender should be prepared for multiple responses unless some other media-dependent mechanism like gossip suppression or leader election is used.  </p>
@@ -497,6 +497,7 @@ address {
   <li>ConObjField: These are optional fields that may appear in a Content Object.  </li>
   <li>ConObjHash: The value of the Content Object Hash, which is the SHA256-32 over the message from the beginning of the body to the end of the message.  Note that this coverage area is different from the ValidationAlg.  This value SHOULD NOT be trusted across domains (see <a href="#ConObjHash">Section 5</a>).  </li>
   <li>ExpiryTime: An absolute time after which the content object should be considered expired (see <a href="#cachecontrol">Section 4</a>).  </li>
+  <li>Hash: Hash values carried in a Message carry a HashType to identify the algorithm used to generate the hash followed by the hash value.  This form is to allow hash agility.  Some fields may mandate a specific HashType.  </li>
   <li>HopLimit: Interest messages may loop if there are loops in the forwarding plane.  To eventually terminate loops, each Interest carries a HopLimit that is decremented after each hop and no longer forwarded when it reaches zero.  See <a href="#forwarder">Section 2.4</a>.  </li>
   <li>InterestField: These are optional fields that may appear in an Interest message.  </li>
   <li>KeyIdRestr: The KeyId Restriction.  A Content Object must have a KeyId with the same value as the restriction.  </li>
@@ -511,7 +512,7 @@ address {
   <li>RelTime: A relative time, measured in milli-seconds.  </li>
   <li>ReturnCode: States the reason an Interest message is being returned to the previous hop (see <a href="#TypeDefinitions">Section 10.2</a>).  </li>
   <li>SigTime: The absolute time (UTC milliseconds) when the signature was generated.  </li>
-  <li>Hash: Hash values carried in a Message carry a HashType to identify the algorithm used to generate the hash followed by the hash value.  This form is to allow hash agility.  Some fields may mandate a specific HashType.  </li>
+  <li>Vendor: Vendor-specific opaque data.  The Vendor data includes the <a href="#EpriseNumbers">IANA Private Enterprise Numbers</a> <cite title="NONE">[EpriseNumbers]</cite>, followed by vendor-specific information.  CCNx allows vendor-specific data in most locations of the grammar.  </li>
 </ul>
 
 <p> </p>
@@ -519,8 +520,10 @@ address {
 <div id="abnfgrammar"/>
 <pre>
 Message       := Interest / ContentObject / InterestReturn
-Interest      := HopLimit [Lifetime] BodyName [Validation]
-ContentObject := [CacheTime / ConObjHash] BodyOptName [Validation]
+Interest      := IntHdr BodyName [Validation]
+IntHdr        := HopLimit [Lifetime] *Vendor
+ContentObject := ConObjHdr BodyOptName [Validation]
+ConObjHdr     := [CacheTime / ConObjHash] *Vendor
 InterestReturn:= ReturnCode Interest
 BodyName      := Name Common
 BodyOptName   := [Name] Common
@@ -528,10 +531,10 @@ Common        := *Field [Payload]
 Validation    := ValidationAlg ValidatonPayload
 
 Name          := FirstSegment *Segment
-FirstSegment  := 1* OCTET
-Segment       := 0* OCTET
+FirstSegment  := 1* OCTET / Vendor
+Segment       := 0* OCTET / Vendor
 
-ValidationAlg := RSA-SHA256 HMAC-SHA256 CRC32C
+ValidationAlg := (RSA-SHA256 / HMAC-SHA256 / CRC32C) *Vendor
 ValidatonPayload := 1* OCTET
 RSA-SHA256    := KeyId [PublicKey] [SigTime] [KeyLink]
 HMAC-SHA256   := KeyId [SigTime] [KeyLink]
@@ -543,7 +546,7 @@ ConObjField   := ExpiryTime / PayloadType
 ConObjHash    := Hash ; The Content Object Hash
 DataType      := "1"
 ExpiryTime    := AbsTime
-Field         := InterestField / ConObjField
+Field         := InterestField / ConObjField / Vendor
 Hash          := HashType 1* OCTET
 HashType      := SHA256-32 / SHA512-64 / SHA512-32
 HopLimit      := OCTET
@@ -562,6 +565,8 @@ PublicKey     := ; DER-encoded public key
 RelTime       := 1* OCTET ; msec
 ReturnCode    := ; see Section 10.2
 SigTime       := AbsTime
+Vendor        := PEN 0* OCTET
+PEN           := ; IANA Private Enterprise Number
 </pre>
 <p class="figure">Figure 1</p>
 <h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#consumer" id="consumer">Consumer Behavior</a></h1>
@@ -575,10 +580,10 @@ SigTime       := AbsTime
 
 <ul>
   <li>Ensure the content object is properly formatted.  </li>
-  <li>Verify that the returned Name matches a pending request.  If the request also had KeyIdRestr and ObjHashRest, it should also validate those properties.  </li>
+  <li>Verify that the returned Name matches a pending request.  If the request also had KeyIdRestr or ObjHashRest, it MUST also validate those properties.  </li>
   <li>If the content object is signed, it SHOULD cryptographically verify the signature.  If it does not have the corresponding key, it SHOULD fetch the key, such as from a key resolution service or via the KeyLink.  </li>
   <li>If the signature has a SigTime, the consumer MAY use that in considering if the signature is valid.  For example, if the consumer is asking for dynamically generated content, it should expect the SigTime to not be before the time the Interest was generated.  </li>
-  <li>If the content object is signed, it should assert the trustworthiness of the signing key to the namespace.  Such an assertion is beyond the scope of this document, though one may use traditional PKI methods, a trusted key resolution service, or methods like [schematized trust].  </li>
+  <li>If the content object is signed, it should assert the trustworthiness of the signing key to the namespace.  Such an assertion is beyond the scope of this document, though one may use traditional PKI methods, a trusted key resolution service, or methods like <a href="#trust">[trust]</a>.  </li>
   <li>It MAY cache the content object for future use, up to the ExpiryTime if present.  </li>
   <li>A consumer MAY accept a content object off the wire that is expired.  It may happen that a packet expires while in flight, and there is no requirement that forwarders drop expired packets in flight.  The only requirement is that content stores, caches, or producers MUST NOT respond with an expired content object.  </li>
 </ul>
@@ -591,7 +596,7 @@ SigTime       := AbsTime
 <ul>
   <li>Verify that the Interest is part of the publishers namespace(s).  </li>
   <li>If the Interest has a Validation section, verify the ValidationPayload.  Usually an Interest will only have a CRC32C unless the publisher application specifically accommodates other validations.  The publisher MAY choose to drop Interests that carry a Validation section if the publisher application does not expect those signatures as this could be a form of computational denial of service.  If the signature requires a key that the publisher does not have, it is NOT RECOMMENDED that the publisher fetch the key over the network, unless it is part of the application's expected behavior.  </li>
-  <li>Retrieve or generate the requested content object and return it to the Interest's previous hop.  If the requested content cannot be returned, the publisher SHOULD reply with an InterestReturn or a content object with application payload that says the content is not available; this content object should have a short ExpiryTime in the future.  </li>
+  <li>Retrieve or generate the requested content object and return it to the Interest's previous hop.  If the requested content cannot be returned, the publisher SHOULD reply with an InterestReturn or a content object with application payload that says the content is not available; this content object should have a short ExpiryTime in the future or not be cacheable (i.e. an expiry time of 0).  </li>
 </ul>
 
 <p> </p>
@@ -600,11 +605,22 @@ SigTime       := AbsTime
 <p id="rfc.section.2.4.p.2">In this document, we will use two processing pipelines, one for Interests and one for Content Objects.  Interest processing is made up of checking for duplicate Interests in the PIT (see <a href="#aggregation">Section 2.4.2</a>), checking for a cached Content Object in the Content Store (see <a href="#contentstore">Section 2.4.3</a>), and forwarding an Interest via the FIB.  Content Store processing is made up of checking for matching Interests in the PIT and forwarding to those previous hops.  </p>
 <h1 id="rfc.section.2.4.1"><a href="#rfc.section.2.4.1">2.4.1.</a> <a href="#hoplimit" id="hoplimit">Interest HopLimit</a></h1>
 <p id="rfc.section.2.4.1.p.1">Interest looping is not prevented in CCNx. An Interest traversing loops is eventually discarded using the hop-limit field of the Interest, which is decremented at each hop traversed by the Interest.  </p>
-<p id="rfc.section.2.4.1.p.2">Every Interest MUST carry a HopLimit.  </p>
-<p id="rfc.section.2.4.1.p.3">When an Interest is received from another forwarder, the HopLimit MUST be positive. A forwarder MUST decrement the HopLimit of an Interest by at least 1 before it is forwarded.  </p>
-<p id="rfc.section.2.4.1.p.4">If the HopLimit equals 0, the Interest MUST NOT be forwarded to another forwarder; it MAY be sent to a publisher application or serviced from a local Content Store.  </p>
+<p id="rfc.section.2.4.1.p.2">A loop may also terminate because the Interest is aggregated with it's previous PIT entry along the loop.  In this case, the Content will be sent back along the loop and eventually return to a node that already forwarded the content, so it will likely not have a PIT entry any more. When the content reaches a node without a PIT entry, it will be discarded.  It may be that a new Interest or another looped Interest will return to that same node, in which case the node will either return a cached response to make a new PIT entry, as below.  </p>
+<p id="rfc.section.2.4.1.p.3">The HopLimit is the last resort method to stop Interest loops where a Content Object chases an Interest around a loop and where the intermediate nodes, for whatever reason, no longer have a PIT entry and do not cache the Content Object.  </p>
+<p id="rfc.section.2.4.1.p.4">Every Interest MUST carry a HopLimit.  An Interest received from a local application MAY have a 0 HopLimit, which restricts the Interest to other local sources.  </p>
+<p id="rfc.section.2.4.1.p.5">When an Interest is received from another forwarder, the HopLimit MUST be positive, otherwise the forwarder will discard the Interest.  A forwarder MUST decrement the HopLimit of an Interest by at least 1 before it is forwarded.  </p>
+<p id="rfc.section.2.4.1.p.6">If the decremented HopLimit equals 0, the Interest MUST NOT be forwarded to another forwarder; it MAY be sent to a local publisher application or serviced from a local Content Store.  </p>
+<p id="rfc.section.2.4.1.p.7">A RECOMMENDED HopLimit processing pipeline is below: </p>
+
+<ul>
+  <li>If Interest received from a remote system: <ul><li>If received HopLimit is 0, optionally send InterestReturn (HopLimit Exceeded), and discard Interest.</li><li>Otherwise, decrement the HopLimit by 1.</li></ul><p> </p></li>
+  <li>Process as per Content Store and Aggregation rules.</li>
+  <li>If the Interest will be forwarded: <ul><li>If the (potentailly decremented) HopLimit is 0, restrict forwarding to the local system.</li><li>Otherwise, forward as desired to local or remote systems.</li></ul><p> </p></li>
+</ul>
+
+<p> </p>
 <h1 id="rfc.section.2.4.2"><a href="#rfc.section.2.4.2">2.4.2.</a> <a href="#aggregation" id="aggregation">Interest Aggregation</a></h1>
-<p id="rfc.section.2.4.2.p.1">Interest aggregation is when a forwarder receives an Interest message that could be satisfied by another Interest message already forwarded by the node so the forwarder suppresses the new Interest; it only records the additional previous hop so a Content Object sent in response to the first Interest will satisfy both Interests.  </p>
+<p id="rfc.section.2.4.2.p.1">Interest aggregation is when a forwarder receives an Interest message that could be satisfied by the response to another Interest message already forwarded by the node, so the forwarder suppresses forwarding the new Interest; it only records the additional previous hop so a Content Object sent in response to the first Interest will satisfy both Interests.  </p>
 <p id="rfc.section.2.4.2.p.2">CCNx uses an Interest aggregation rule that assumes the InterestLifetime is akin to a subscription time and is not a network round trip time.  Some previous aggregation rules assumed the lifetime was a round trip time, but this leads to problems of expiring an Interest before a response comes if the RTT is estimated too short or interfering with an ARQ scheme that wants to re-transmit an Interest but a prior interest over-estimated the RTT.  </p>
 <p id="rfc.section.2.4.2.p.3">A forwarder MAY implement an Interest aggregation scheme.  If it does not, then it will forward all Interest messages.  This does not imply that multiple, possibly identical, Content Objects will come back.  A forwarder MUST still satisfy all pending Interests, so one Content Object could satisfy multiple similar interests, even if the forwarded did not suppress duplicate Interest messages.  </p>
 <p id="rfc.section.2.4.2.p.4">A RECOMMENDED Interest aggregation scheme is: </p>
@@ -615,19 +631,20 @@ SigTime       := AbsTime
   <li>An Interest record (PIT entry) is considered invalid if its InterestExpiry time is in the past.  </li>
   <li>The first reception of an Interest MUST be forwarded.  </li>
   <li>A second or later reception of an Interest similar to a valid pending Interest from the same previous hop MUST be forwarded.  We consider these a retransmission requests.  </li>
-  <li>A second or later reception of an Interest similar to a valid pending Interest from a new previous hop MAY be aggregated (not forwarded).  </li>
+  <li>A second or later reception of an Interest similar to a valid pending Interest from a new previous hop MAY be aggregated (not forwarded).  If this Interest has a larger HopLimit than the pending Interest, it MUST be forwarded.  </li>
   <li>Aggregating an Interest MUST extend the InterestExpiry time of the Interest record.  An implementation MAY keep a single InterestExpiry time for all previous hops or MAY keep the InterestExpiry time per previous hop.  In the first case, the forwarder might send a Content Object down a path that is no longer waiting for it, in which case the previous hop (next hop of the Content Object) would drop it.  </li>
 </ul>
 
 <p> </p>
 <h1 id="rfc.section.2.4.3"><a href="#rfc.section.2.4.3">2.4.3.</a> <a href="#contentstore" id="contentstore">Content Store Behavior</a></h1>
-<p id="rfc.section.2.4.3.p.1">The Content Store is a special cache that sits on the fast path of a CCNx forwarder.  It is an optional component.  It serves to repair lost packets and handle flash requests for popular content.  It could be pre-populated or use opportunistic caching.  Because the Content Store could serve to amplify an attach via cache poisoning, there are special rules about how a Content Store behaves.  </p>
+<p id="rfc.section.2.4.3.p.1">The Content Store is a special cache that is an integral part of a CCNx forwarder.  It is an optional component.  It serves to repair lost packets and handle flash requests for popular content.  It could be pre-populated or use opportunistic caching.  Because the Content Store could serve to amplify an attack via cache poisoning, there are special rules about how a Content Store behaves.  </p>
 
 <ol>
   <li>A forwarder MAY implement a Content Store.  If it does, the Content Store matches a Content Object to an Interest via the normal matching rules (see <a href="#matching">Section 9</a>).  </li>
-  <li>If an Interest has a KeyIdRestr, then the Content Store MUST NOT reply unless it knows the signature on the matching Content Object is correct.  It may do this by external knowledge (i.e., in a managed network or system with pre-populated caches) or by having the public key and cryptographically verifying the signature.  If the public key is provided in the Content Object itself (i.e., in the PublicKey field) or in the Interest, the Content Store MUST verify that the public key's SHA-256 hash is equal to the KeyId and that it verifies the signature.  A Content Store MAY verify the digital signature of a Content Object before it is cached, but it is not required to do so.  A Content Store SHOULD NOT fetch keys over the network.  If it cannot or has not yet verified the signature, it should treat the Interest as a cache miss.  </li>
+  <li>If an Interest has a KeyIdRestr, then the Content Store MUST NOT reply unless it knows the signature on the matching Content Object is correct.  It may do this by external knowledge (i.e., in a managed network or system with pre-populated caches) or by having the public key and cryptographically verifying the signature.  A Content Store is NOT REQURIED to verify signatures; if it does not, then it treats these cases like a cache miss.  </li>
+  <li>If a Content Store chooses to verify signatures, then it MAY do so as follows.  If the public key is provided in the Content Object itself (i.e., in the PublicKey field) or in the Interest, the Content Store MUST verify that the public key's SHA-256 hash is equal to the KeyId and that it verifies the signature.  A Content Store MAY verify the digital signature of a Content Object before it is cached, but it is not required to do so.  A Content Store SHOULD NOT fetch keys over the network.  If it cannot or has not yet verified the signature, it should treat the Interest as a cache miss.  </li>
   <li>If an Interest has an ContentObjectHashRestr, then the Content Store MUST NOT reply unless it knows the the matching Content Object has the correct hash.  If it cannot verify the hash, then it should treat the Interest as a cache miss.  </li>
-  <li>It must object the Cache Control directives (see <a href="#cachecontrol">Section 4</a>).  </li>
+  <li>It must obey the Cache Control directives (see <a href="#cachecontrol">Section 4</a>).  </li>
 </ol>
 
 <p> </p>
@@ -656,8 +673,8 @@ SigTime       := AbsTime
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#names" id="names">Names</a></h1>
 <p id="rfc.section.3.p.1">A CCNx name is a composition of name segments. Each name segment carries a label identifying the purpose of the name segment, and a value.  For example, some name segments are general names and some serve specific purposes, such as carrying version information or the sequencing of many chunks of a large object into smaller, signed Content Objects.</p>
 <p id="rfc.section.3.p.2">There are three different types of names in CCNx: prefix, exact, and full names.  A prefix name is simply a name that does not uniquely identify a single Content Object, but rather a namespace or prefix of an existing Content Object name.  An exact name is one which uniquely identifies the name of a Content Object.  A full name is one which is exact and is accompanied by an explicit or implicit ConObjHash.  The ConObjHash is explicit in an Interest and implicit in a Content Object.</p>
-<p id="rfc.section.3.p.3">The name segment labels specified in this document are given in the table below.  Name Segment is a general name segment, typically occurring in the routable prefix and user-specified content name.  Other segment types are for functional name components that imply a specific purpose. </p>
-<p id="rfc.section.3.p.4">A forwarding table entry may contain name segments of any type.  Routing protocol policy and local system policy may limit what goes into forwarding entries, but there is no restriction at the core level.  An Interest routing protocol, for example, may only allow binary name segments.  A load balancer or compute cluster may route through additional component types, depending on their services.  </p>
+<p id="rfc.section.3.p.3">Note that a forwarder does not need to know any semantics about a name.  It only needs to be able to match a prefix to forward Interests and match an exact or full name to forward Content Objects.  It is not sensitive to the name segment types.  </p>
+<p id="rfc.section.3.p.4">The name segment labels specified in this document are given in the table below.  Name Segment is a general name segment, typically occurring in the routable prefix and user-specified content name.  Other segment types are for functional name components that imply a specific purpose. </p>
 <div id="rfc.table.1"/>
 <div id="name_types"/>
 <table cellpadding="3" cellspacing="0" class="tt full center">
@@ -685,7 +702,7 @@ SigTime       := AbsTime
 </table>
 <p id="rfc.section.3.p.5">At the lowest level, a Forwarder does not need to understand the semantics of name segments; it need only identify name segment boundaries and be able to compare two name segments (both label and value) for equality.  The Forwarder matches paths segment-by-segment against its forwarding table to determine a next hop.</p>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#NameExamples" id="NameExamples">Name Examples</a></h1>
-<p id="rfc.section.3.1.p.1">This section uses the <a href="#CCNxURI">CCNx URI</a> <cite title="NONE">[CCNxURI]</cite> representation of CCNx names .</p>
+<p id="rfc.section.3.1.p.1">This section uses the <a href="#CCNxURI">CCNx URI</a> <cite title="NONE">[CCNxURI]</cite> representation of CCNx names.  Note that as per the message grammar, an Interest must have a Name with at least one name segment and that name segment must have at least 1 octet of value.  A Content Object must have a similar name or no name at all.  The FIB, on the other hand, could have 0-length names (a default route), or a first name segment with no value, or a regular name.  </p>
 <div id="rfc.table.2"/>
 <div id="name_examples"/>
 <table cellpadding="3" cellspacing="0" class="tt full center">
@@ -734,7 +751,7 @@ SigTime       := AbsTime
 <p id="rfc.section.8.1.p.4">A PublicKeyLocator KeyLink points to a Content Object with a DER-encoded X509 certificate in the payload.  In this case, the target KeyId must equal the first object's KeyId.  The target KeyLocator must include the public key corresponding to the KeyId.  That key must validate the target Signature.  The payload is an X.509 certificate whose public key must match the target KeyLocator's key.  It must be issued by a trusted authority, preferably specifying the valid namespace of the key in the distinguished name.  </p>
 <h1 id="rfc.section.9"><a href="#rfc.section.9">9.</a> <a href="#matching" id="matching">Interest to Content Object matching</a></h1>
 <p id="rfc.section.9.p.1">A Content Object satisfies an Interest if and only if (a) the Content Object name, if present, exactly matches the Interest name, and (b) the ValidationAlgorithm KeyId of the Content Object exactly equals the Interest KeyIdRestr, if present, and (c) the computed Content ObjectHash exactly equals the Interest ContentObjectHashRestr, if present.</p>
-<p id="rfc.section.9.p.2">The matching rules are given by this predicate, which if it evaluates true means the Content Object matches the Interest.  Ni = Name in Interest (may not be empty), Ki = KeyIdRestr in the interest (may be empty), Hi = ContentObjectHashRestr in Interest (may be empty).  Likewise, No, Ko, Ho are those properties in the Content Object, where No and Ko may be empty; Ho always exists.  For binary relations, we use &amp; for AND and | for OR.  We use E for the EXISTS (not empty) operator and ! for the NOT EXISTS operator.</p>
+<p id="rfc.section.9.p.2">The matching rules are given by this predicate, which if it evaluates true means the Content Object matches the Interest.  Ni = Name in Interest (may not be empty), Ki = KeyIdRestr in the interest (may be empty), Hi = ContentObjectHashRestr in Interest (may be empty).  Likewise, No, Ko, Ho are those properties in the Content Object, where No and Ko may be empty; Ho always exists (it is an intrinsic property of the Content Object).  For binary relations, we use &amp; for AND and | for OR.  We use E for the EXISTS (not empty) operator and ! for the NOT EXISTS operator.</p>
 <p id="rfc.section.9.p.3">As a special case, if the ContentObjectHashRestr in the Interest specifies an unsupported hash algorithm, then no Content Object can match the Interest so the system should drop the Interest and MAY send an InterestReturn to the previous hop.  In this case, the predicate below will never get executed because the Interest is never forwarded.  If the system is using the optional behavior of having a different system calculate the hash for it, then the system may assume all hash functions are supported and leave it to the other system to accept or reject the Interest.</p>
 <pre>
 (!No | (Ni=No)) &amp; (!Ki | (Ki=Ko)) &amp; (!Hi | (Hi=Ho)) &amp; (E No | E Hi)
@@ -936,6 +953,12 @@ SigTime       := AbsTime
     </tr>
     <tr>
       <td class="reference">
+        <b id="EpriseNumbers">[EpriseNumbers]</b>
+      </td>
+      <td class="top"><a>IANA</a>, "<a href="http://www.iana.org/assignments/enterprise-numbers/enterprise-numbers">IANA Private Enterprise Numbers</a>", 2015.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="esic">[esic]</b>
       </td>
       <td class="top"><a title="PARC, Inc.">Mosko, M.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a href="https://www.ietf.org/id/draft-wood-icnrg-esic-01.txt">Encrypted Sessions In CCNx (ESIC)</a>", 2017.</td>
@@ -1005,6 +1028,12 @@ SigTime       := AbsTime
         <b id="terminology">[terminology]</b>
       </td>
       <td class="top"><a title="TNO">Wissingh, B.</a>, <a title="University of California Irvine">Wood, C.</a>, <a title="UCLA">Afanasyev, A.</a>, <a title="UCLA">Zhang, L.</a>, <a title="Network Systems Research &amp; Design">Oran, D.</a> and <a title="University of Basel">C. Tschudin</a>, "<a href="https://www.ietf.org/id/draft-irtf-icnrg-terminology-00.txt">Information-Centric Networking (ICN): CCN and NDN Terminology</a>", 2017.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="trust">[trust]</b>
+      </td>
+      <td class="top"><a title="University of Basel">Tschudin, C.</a>, <a title="PARC, Inc.">Uzun, E.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a href="https://doi.org/10.1109/ICCCN.2016.7568589">Trust in Information-Centric Networking: From Theory to Practice</a>", 2016.</td>
     </tr>
   </tbody>
 </table>

@@ -701,15 +701,35 @@ PEN           := ; IANA Private Enterprise Number
           nodes, for whatever reason, no longer have a PIT entry and do not cache
           the Content Object.
           </t>
-          <t>Every Interest MUST carry a HopLimit.
+          <t>Every Interest MUST carry a HopLimit.  An Interest received from a local
+              application MAY have a 0 HopLimit, which restricts the Interest to other
+              local sources.
           </t>
           <t>When an Interest is received from another forwarder, the HopLimit MUST
-            be positive. A forwarder MUST decrement the HopLimit of an Interest by
+            be positive, otherwise the forwarder will discard the Interest.
+            A forwarder MUST decrement the HopLimit of an Interest by
             at least 1 before it is forwarded.
           </t>
-          <t>If the HopLimit equals 0, the Interest MUST NOT be forwarded to another forwarder;
+          <t>If the decremented HopLimit equals 0, the Interest MUST NOT be forwarded to another forwarder;
             it MAY be sent to a local publisher application or serviced from a local Content Store.
           </t>
+          <t>A RECOMMENDED HopLimit processing pipeline is below:
+              <list style="symbols">
+                <t>If Interest received from a remote system:
+                      <list style="symbols">
+                          <t>If received HopLimit is 0, optionally send InterestReturn (HopLimit Exceeded), and discard Interest.</t>
+                          <t>Otherwise, decrement the HopLimit by 1.</t>
+                      </list>
+                </t>
+                <t>Process as per Content Store and Aggregation rules.</t>
+                <t>If the Interest will be forwarded:
+                    <list style="symbols">
+                        <t>If the (potentailly decremented) HopLimit is 0, restrict forwarding to the local system.</t>
+                        <t>Otherwise, forward as desired to local or remote systems.</t>
+                    </list>
+                </t>
+              </list>
+        </t>
         </section>
 
             <section anchor="aggregation" title="Interest Aggregation">
@@ -1364,9 +1384,9 @@ PEN           := ; IANA Private Enterprise Number
 	<reference anchor="trust" target="https://doi.org/10.1109/ICCCN.2016.7568589">
 		<front>
 			<title>Trust in Information-Centric Networking: From Theory to Practice</title>
-			<author initials="C." surname="Tschudin"><organiziation>University of Basel</organization></author>
-			<author initials="E." surname="Uzun"><organiziation>PARC, Inc.</organization></author>
-			<author initials="C." surname="Wood"><organiziation>University of California, Irvine</organization></author>
+			<author initials="C." surname="Tschudin"><organization>University of Basel</organization></author>
+			<author initials="E." surname="Uzun"><organization>PARC, Inc.</organization></author>
+			<author initials="C." surname="Wood"><organization>University of California, Irvine</organization></author>
               <date year="2016"/>			
 		</front>
 	</reference>
