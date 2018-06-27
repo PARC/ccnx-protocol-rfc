@@ -1367,8 +1367,8 @@ PEN           := ; IANA Private Enterprise Number
     </references>
     <references title="Informative References">
       <!-- Here we use entities that we defined at the beginning. -->
-      &RFC3986;
-      &RFC3552;
+      <!-- &RFC3986; -->
+      <!-- &RFC3552; -->
       &RFC5234;
       <!-- A reference written by by an organization not a person. -->
 
@@ -1391,8 +1391,6 @@ PEN           := ; IANA Private Enterprise Number
 		</front>
 	</reference>
 	
-      <reference anchor="CCN" target="http://www.CCNx.org"><front><title>CCNx Open Source</title><author><organization>PARC, Inc.</organization></author><date year="2007"/></front></reference>
-
       <reference anchor="ndn" target="http://www.named-data.net"><front><title>Named Data Networking</title><author><organization>UCLA</organization></author><date year="2007"/></front></reference>
 
       <reference anchor="CCNMessages" target="https://www.ietf.org/id/draft-irtf-icnrg-ccnxmessages-07.txt">

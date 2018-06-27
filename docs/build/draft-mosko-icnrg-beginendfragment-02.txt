@@ -5,8 +5,8 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                      PARC
 Intended status: Experimental                                C. Tschudin
-Expires: December 22, 2018                           University of Basel
-                                                           June 20, 2018
+Expires: December 28, 2018                           University of Basel
+                                                           June 26, 2018
 
 
                 ICN "Begin-End" Hop by Hop Fragmentation
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 22, 2018.
+   This Internet-Draft will expire on December 28, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Mosko & Tschudin        Expires December 22, 2018               [Page 1]
+Mosko & Tschudin        Expires December 28, 2018               [Page 1]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Mosko & Tschudin        Expires December 22, 2018               [Page 2]
+Mosko & Tschudin        Expires December 28, 2018               [Page 2]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -165,7 +165,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018               [Page 3]
+Mosko & Tschudin        Expires December 28, 2018               [Page 3]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -221,7 +221,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018               [Page 4]
+Mosko & Tschudin        Expires December 28, 2018               [Page 4]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -277,7 +277,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018               [Page 5]
+Mosko & Tschudin        Expires December 28, 2018               [Page 5]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -333,7 +333,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018               [Page 6]
+Mosko & Tschudin        Expires December 28, 2018               [Page 6]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -389,7 +389,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018               [Page 7]
+Mosko & Tschudin        Expires December 28, 2018               [Page 7]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -445,7 +445,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018               [Page 8]
+Mosko & Tschudin        Expires December 28, 2018               [Page 8]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -501,7 +501,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018               [Page 9]
+Mosko & Tschudin        Expires December 28, 2018               [Page 9]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -557,7 +557,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 10]
+Mosko & Tschudin        Expires December 28, 2018              [Page 10]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -613,7 +613,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 11]
+Mosko & Tschudin        Expires December 28, 2018              [Page 11]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -669,7 +669,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 12]
+Mosko & Tschudin        Expires December 28, 2018              [Page 12]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -725,7 +725,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 13]
+Mosko & Tschudin        Expires December 28, 2018              [Page 13]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -781,7 +781,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 14]
+Mosko & Tschudin        Expires December 28, 2018              [Page 14]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -837,7 +837,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 15]
+Mosko & Tschudin        Expires December 28, 2018              [Page 15]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -893,7 +893,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 16]
+Mosko & Tschudin        Expires December 28, 2018              [Page 16]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -949,7 +949,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 17]
+Mosko & Tschudin        Expires December 28, 2018              [Page 17]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -1005,7 +1005,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 18]
+Mosko & Tschudin        Expires December 28, 2018              [Page 18]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -1061,7 +1061,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 19]
+Mosko & Tschudin        Expires December 28, 2018              [Page 19]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -1117,7 +1117,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 20]
+Mosko & Tschudin        Expires December 28, 2018              [Page 20]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -1173,7 +1173,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 21]
+Mosko & Tschudin        Expires December 28, 2018              [Page 21]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -1229,7 +1229,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 22]
+Mosko & Tschudin        Expires December 28, 2018              [Page 22]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -1285,7 +1285,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 23]
+Mosko & Tschudin        Expires December 28, 2018              [Page 23]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -1341,7 +1341,7 @@ Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 24]
+Mosko & Tschudin        Expires December 28, 2018              [Page 24]
 
 Internet-Draft         ICN-BeginEnd-Fragmentation              June 2018
 
@@ -1397,4 +1397,4 @@ Authors' Addresses
 
 
 
-Mosko & Tschudin        Expires December 22, 2018              [Page 25]
+Mosko & Tschudin        Expires December 28, 2018              [Page 25]
