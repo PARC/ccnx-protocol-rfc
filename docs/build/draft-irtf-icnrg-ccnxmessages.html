@@ -339,7 +339,7 @@ address {
 
   <meta name="dct.creator" content="Mosko, M., Solis, I., and C. Wood" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-irtf-icnrg-ccnxmessages-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-6-26" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-7-2" />
   <meta name="dct.abstract" content="This document specifies the encoding of CCNx messages in a TLV packet format, including the TLV types used by each message element and the encoding of each value.  The semantics of CCNx messages follow the encoding-independent CCNx Semantics specification.  " />
   <meta name="description" content="This document specifies the encoding of CCNx messages in a TLV packet format, including the TLV types used by each message element and the encoding of each value.  The semantics of CCNx messages follow the encoding-independent CCNx Semantics specification.  " />
 
@@ -363,7 +363,7 @@ address {
   <td class="right">I. Solis</td>
 </tr>
 <tr>
-  <td class="left">Expires: December 28, 2018</td>
+  <td class="left">Expires: January 3, 2019</td>
   <td class="right">LinkedIn</td>
 </tr>
 <tr>
@@ -376,7 +376,7 @@ address {
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">June 26, 2018</td>
+  <td class="right">July 2, 2018</td>
 </tr>
 
     	
@@ -397,7 +397,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on December 28, 2018.</p>
+<p>This Internet-Draft will expire on January 3, 2019.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -465,7 +465,7 @@ address {
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
 <p id="rfc.section.1.p.1">This document specifies a Type-Length-Value (TLV) packet format and the TLV type and value encodings for CCNx messages.  A full description of the CCNx network protocol, providing an encoding-free description of CCNx messages and message elements, may be found in <a href="#CCNSemantics">[CCNSemantics]</a>.  CCNx is a network protocol that uses a hierarchical name to forward requests and to match responses to requests.  It does not use endpoint addresses, such as Internet Protocol.  Restrictions in a request can limit the response by the public key of the response's signer or the cryptographic hash of the response.  Every CCNx forwarder along the path does the name matching and restriction checking.  The CCNx protocol fits within the broader framework of Information Centric Networking (ICN) protocols <a href="#RFC7927">[RFC7927]</a>.  </p>
-<p id="rfc.section.1.p.2">This document describes a TLV scheme using a fixed 2-byte T and a fixed 2-byte L field.  The rational for this choice is described in <a href="#Security">Section 5</a>.  Briefly, this choice is to avoid multiple encodings of the same value (aliases) and reduce the work of a validator to ensure compliance.  Unlike some uses of TLV in networking, the use here must be evaluated at each network hop, so even small validation latencies could add to a large packet forwarding delay.  For very small packets or low throughput links, where the extra bytes may become a concern, one may use a TLV compression protocol, for example <a href="#compress">[compress]</a> and <a href="#CCNxz">[CCNxz]</a>.  </p>
+<p id="rfc.section.1.p.2">This document describes a TLV scheme using a fixed 2-byte T and a fixed 2-byte L field.  The rational for this choice is described in <a href="#Security">Section 5</a>.  Briefly, this choice avoids multiple encodings of the same value (aliases) and reduces the work of a validator to ensure compliance.  Unlike some uses of TLV in networking, the each network hop must evaluate the encoding, so even small validation latencies at each hop could add up to a large overall forwarding delay.  For very small packets or low throughput links, where the extra bytes may become a concern, one may use a TLV compression protocol, for example <a href="#compress">[compress]</a> and <a href="#CCNxz">[CCNxz]</a>.  </p>
 <p id="rfc.section.1.p.3">This document specifies: </p>
 
 <ul>
@@ -487,7 +487,7 @@ address {
 </ul>
 
 <p> </p>
-<p id="rfc.section.1.p.5">The type values in <a href="#IANA">Section 4</a> represent the values in common usage today.  These values may change pending IANA assignments. All type values are relative to their parent containers. It is possible for a TLV to redefine a type value defined by its parent.  For example, each level of a nested TLV structure might define a "type = 1" with a completely different meaning.</p>
+<p id="rfc.section.1.p.5">The type values in <a href="#IANA">Section 4</a> represent the values in common usage today.  These values may change pending IANA assignments. All type values are relative to their parent containers. For example, each level of a nested TLV structure might define a "type = 1" with a completely different meaning.  In the following, we use the symbolic names defined in that section.</p>
 <p id="rfc.section.1.p.6">Packets are represented as 32-bit wide words using ASCII art.  Due to the nested levels of TLV encoding and the presence of optional fields and variable sizes, there is no concise way to represent all possibilities.  We use the convention that ASCII art fields enclosed by vertical bars "|" represent exact bit widths.  Fields with a forward slash "/" are variable bit widths, which we typically pad out to word alignment for picture readability.</p>
 <p id="rfc.section.1.p.7">The document represents the consensus of the ICN RG.  It is the first ICN protocol from the RG, created from the early CCNx protocol <a href="#nnc">[nnc]</a> with significant revision and input from the ICN community and RG members.  The draft has received critical reading by several members of the ICN community and the RG.  The authors and RG chairs approve of the contents.  The document is sponsored under the IRTF and is not issued by the IETF and is not an IETF standard.  This is an experimental protocol and may not be suitable for any specific application and the specification may change in the future.  </p>
 <h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
@@ -496,15 +496,15 @@ address {
 <p/>
 
 <ul>
-  <li>Name: A hierarchically structured variable length identifier. It is an ordered list of path segments, which may be variable length octet strings. In human-readable form, it is represented in URI format as ccnx:/path/part. There is no host or query string. See <a href="#CCNxURI">[CCNxURI]</a> for complete details.</li>
-  <li>Interest: A message requesting a Content Object with a matching Name and other optional selectors to choose from multiple objects with the same Name. Any Content Object with a Name and optional selectors that matches the Name and optional selectors of the Interest is said to satisfy the Interest.</li>
-  <li>Content Object: A data object sent in response to an Interest request. It has an (optional) Name and a content payload that are bound together via cryptographic means. </li>
+  <li>Name: A hierarchically structured variable length identifier. It is an ordered list of path segments, which are variable length octet strings. In human-readable form, it is represented in URI format as ccnx:/path/part. There is no host or query string. See <a href="#CCNxURI">[CCNxURI]</a> for complete details.</li>
+  <li>Interest: A message requesting a Content Object with a matching Name and other optional selectors to choose from multiple objects with the same Name. Any Content Object with a Name and attributes that matches the Name and optional selectors of the Interest is said to satisfy the Interest.</li>
+  <li>Content Object: A data object sent in response to an Interest request. It has an optional Name and a content payload that are bound together via cryptographic means. </li>
 </ul>
 
 <p> </p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#TLV" id="TLV">Type-Length-Value (TLV) Packets</a></h1>
-<p id="rfc.section.3.p.1">We use 16-bit Type and 16-bit Length fields to encode TLV based packets. This provides 64K different possible types and value field lengths of up to 64KiB.  With 64K possible types, there should be sufficient space for basic protocol types, while also allowing ample room for experimentation, application use, and growth.</p>
-<p id="rfc.section.3.p.2">Specifically, the TLV types in the range 0x1000 - 0x1FFF are reserved for experimental use.  These type values are reserved in all TLV container contexts. In the event that more space is needed, either for types or for length, a new version of the protocol would be needed. See <a href="#vendor">Section 3.3.2</a> for more information about organization specific TLVs.  </p>
+<p id="rfc.section.3.p.1">We use 16-bit Type and 16-bit Length fields to encode TLV based packets. This provides 64K different possible types and value field lengths of up to 64KiB.  With 64K possible types at each level of TLV encoding, there should be sufficient space for basic protocol types, while also allowing ample room for experimentation, application use, vendor extensions, and growth.  This encoding does not allow for jumbo packets beyond 64 KiB total length.  If used on a media that allows for jumbo frames, we suggest defining a media adapation envelope that allows for multiple smaller frames.</p>
+<p id="rfc.section.3.p.2">There are several global TLV definitions that we reserve at all hierarchical contexts.  The TLV types in the range 0x1000 - 0x1FFF are reserved for experimental use.  The TLV type T_ORG is also reserved for vendor extensions ( see <a href="#vendor">Section 3.3.2</a>).  The TLV type T_PAD is used to optionally pad a field out to some desired alignment.  </p>
 <div id="rfc.table.1"/>
 <div id="reserved_types"/>
 <table cellpadding="3" cellspacing="0" class="tt full center">
@@ -521,6 +521,11 @@ address {
       <td class="center">T_ORG</td>
       <td class="center"><a href="#vendor">Vendor Specific Information</a> <cite title="NONE">[vendor]</cite></td>
       <td class="left">Information specific to a vendor implementation (see below).</td>
+    </tr>
+    <tr>
+      <td class="center">T_PAD</td>
+      <td class="center"><a href="#pad">Padding</a> <cite title="NONE">[pad]</cite></td>
+      <td class="left">Adds padding to a field (see below).</td>
     </tr>
     <tr>
       <td class="center">n/a</td>
@@ -540,7 +545,7 @@ address {
 <p id="rfc.section.3.p.4">TLV structures are nestable, allowing the Value field of one TLV structure to contain additional TLV structures. The enclosing TLV structure is called the container of the enclosed TLV.  </p>
 <p id="rfc.section.3.p.5">Type values are context-dependent.  Within a TLV container, one may re-use previous type values for new context-dependent purposes.  </p>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#packet_format" id="packet_format">Overall packet format</a></h1>
-<p id="rfc.section.3.1.p.1">Each packet includes the 8 byte fixed header described below, followed by a set of TLV fields. These fields are optional hop-by-hop headers and the Packet Payload.  </p>
+<p id="rfc.section.3.1.p.1">Each packet includes the 8 byte fixed header, described below, followed by a set of TLV fields. These fields are optional hop-by-hop headers and the Packet Payload.  </p>
 <pre>
                     1                   2                   3
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -567,12 +572,12 @@ address {
 +---------------+---------------+---------------+---------------+
 </pre>
 <p id="rfc.section.3.1.p.3">This document describes the Version "1" TLV encoding.</p>
-<p id="rfc.section.3.1.p.4">After discarding the fixed and hop-by-hop headers the remaining PacketPayload should be a valid protocol message. Therefore, the PacketPayload always begins with a 4 byte TLV defining the protocol message (whether it is an Interest, Content Object, or other message type) and its total length.  The embedding of a self-sufficient protocol data unit inside the fixed and hop-by-hop headers allows a network stack to discard the headers and operate only on the embedded message.</p>
+<p id="rfc.section.3.1.p.4">After discarding the fixed and hop-by-hop headers the remaining PacketPayload should be a valid protocol message. Therefore, the PacketPayload always begins with 4 bytes of type-length that specifies the protocol message (whether it is an Interest, Content Object, or other message type) and its total length.  The embedding of a self-sufficient protocol data unit inside the fixed and hop-by-hop headers allows a network stack to discard the headers and operate only on the embedded message.  It also de-couples the PacketType field -- which specifies how to forward the packet -- from the PacketPayload.</p>
 <p id="rfc.section.3.1.p.5">The range of bytes protected by the Validation includes the CCNx Message and the ValidationAlgorithm.</p>
 <p id="rfc.section.3.1.p.6">The ContentObjectHash begins with the CCNx Message and ends at the tail of the packet.</p>
 <h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#header" id="header">Fixed Headers</a></h1>
-<p id="rfc.section.3.2.p.1">CCNx messages begin with an 8 byte fixed header (non-TLV format).  The HeaderLength field represents the combined length of the Fixed and Hop-by-hop headers.  The PacketLength field represents the entire Packet length.  </p>
-<p id="rfc.section.3.2.p.2">A specific PacketType may assign meaning to the "PacketType specific fields".</p>
+<p id="rfc.section.3.2.p.1">CCNx messages begin with an 8 byte fixed header (non-TLV format).  The HeaderLength field represents the combined length of the Fixed and Hop-by-hop headers.  The PacketLength field represents the entire Packet length from the first byte of Version to the last byte of the packet.  </p>
+<p id="rfc.section.3.2.p.2">A specific PacketType may assign meaning to the "PacketType specific fields," which are otherwise reserved.  For the three defined PacketTypes (Interest, ContentObject, and InterestReturn), we define those values in this document.</p>
 <p id="rfc.section.3.2.p.3">The PacketPayload of a CCNx packet is the protocol message itself. The Content Object Hash is computed over the PacketPayload only, excluding the fixed and hop-by-hop headers as those might change from hop to hop.  Signed information or Similarity Hashes should not include any of the fixed or hop-by-hop headers.  The PacketPayload should be self-sufficient in the event that the fixed and hop-by-hop headers are removed.  </p>
 <pre>
                      1                   2                   3
@@ -594,11 +599,11 @@ address {
 </ul>
 
 <p> </p>
-<p id="rfc.section.3.2.p.5">The PacketType field indicates how the forwarder should process the packet.  A Request Packet (Interest) has PacketType PT_INTEREST, a Response (Content Object) has PacketType PT_CONTENT, and an InterestReturn Packet has PacketType PT_RETURN.  </p>
-<p id="rfc.section.3.2.p.6">HeaderLength is the number of octets from the start of the packet (Version) to the end of the hop-by-hop headers. PacketLength is the number of octets from the start of the packet to the end of the packet.</p>
+<p id="rfc.section.3.2.p.5">The PacketType field indicates how the forwarder should process the packet.  A Request Packet (Interest) has PacketType PT_INTEREST, a Response (Content Object) has PacketType PT_CONTENT, and an InterestReturn has PacketType PT_RETURN.  </p>
+<p id="rfc.section.3.2.p.6">HeaderLength is the number of octets from the start of the packet (Version) to the end of the hop-by-hop headers. PacketLength is the number of octets from the start of the packet to the end of the packet.  Both lengths have a minimum value of 8 (the fixed header itself).</p>
 <p id="rfc.section.3.2.p.7">The PacketType specific fields are reserved bits whose use depends on the PacketType.  They are used for network-level signaling.</p>
 <h1 id="rfc.section.3.2.1"><a href="#rfc.section.3.2.1">3.2.1.</a> Interest Fixed Header</h1>
-<p id="rfc.section.3.2.1.p.1">If the PacketType in the Fixed Header is PT_INTEREST, it indicates that the PacketPayload should be processed as an Interest message.  For this type of packet, the Fixed Header includes a field for a HopLimit as well as Reserved and Flags fields. The Reserved field MUST be set to 0 in an Interest - this field will be set to a return code in the case of an Interest Return.  There are currently no Flags defined, so this field MUST be set to 0.  </p>
+<p id="rfc.section.3.2.1.p.1">If the PacketType is PT_INTEREST, it indicates that the PacketPayload should be processed as an Interest message.  For this type of packet, the Fixed Header includes a field for a HopLimit as well as Reserved and Flags fields. The Reserved field MUST be set to 0 in an Interest - this field will be set to a return code in the case of an Interest Return.  There are currently no Flags defined, so this field MUST be set to 0.  </p>
 <pre>
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -612,7 +617,7 @@ address {
 <p id="rfc.section.3.2.1.1.p.1">For an Interest message, the HopLimit is a counter that is decremented with each hop. It limits the distance an Interest may travel on the network.  The node originating the Interest MAY put in any value - up to the maximum of 255.  Each node that receives an Interest with a HopLimit decrements the value upon reception.  If the value is 0 after the decrement, the Interest MUST NOT be forwarded off the node.</p>
 <p id="rfc.section.3.2.1.1.p.2">It is an error to receive an Interest with a 0 hop-limit from a remote node.</p>
 <h1 id="rfc.section.3.2.2"><a href="#rfc.section.3.2.2">3.2.2.</a> Content Object Fixed Header</h1>
-<p id="rfc.section.3.2.2.p.1">If the PacketType in the Fixed Header is PT_CONTENT, it indicates that the PacketPayload should be processed as a Content Object message.  A Content Object defines a Flags field, however there are currently no flags defined, so the Flags field must be set to 0.</p>
+<p id="rfc.section.3.2.2.p.1">If the PacketType is PT_CONTENT, it indicates that the PacketPayload should be processed as a Content Object message.  A Content Object defines a Flags field, however there are currently no flags defined, so the Flags field must be set to 0.</p>
 <pre>
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -623,7 +628,7 @@ address {
 +---------------+---------------+---------------+---------------+
    </pre>
 <h1 id="rfc.section.3.2.3"><a href="#rfc.section.3.2.3">3.2.3.</a> InterestReturn Fixed Header</h1>
-<p id="rfc.section.3.2.3.p.1">If the PacketType in the Fixed Header is PT_RETURN, it indicates that the PacketPayload should be processed as a returned Interest message.  The only difference between this InterestReturn message and the original Interest is that the PacketType is changed to PT_RETURN and a ReturnCode is is put into the Reserved octet.  All other fields are unchanged.  The purpose of this encoding is to prevent packet length changes so no additional bytes are needed to return an Interest to the previous hop.  See <a href="#CCNSemantics">[CCNSemantics]</a> for a protocol description of this packet type.</p>
+<p id="rfc.section.3.2.3.p.1">If the PacketType is PT_RETURN, it indicates that the PacketPayload should be processed as a returned Interest message.  The only difference between this InterestReturn message and the original Interest is that the PacketType is changed to PT_RETURN and a ReturnCode is is put into the ReturnCode field.  All other fields are unchanged from the Interest packet.  The purpose of this encoding is to prevent packet length changes so no additional bytes are needed to return an Interest to the previous hop.  See <a href="#CCNSemantics">[CCNSemantics]</a> for a protocol description of this packet type.</p>
 <pre>
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -693,7 +698,7 @@ address {
 <p id="rfc.section.3.3.p.1">This section defines global formats that may be nested within other TLVs.</p>
 <h1 id="rfc.section.3.3.1"><a href="#rfc.section.3.3.1">3.3.1.</a> <a href="#pad" id="pad">Pad</a></h1>
 <p id="rfc.section.3.3.1.p.1">The pad type may be used by protocols that prefer word-aligned data.  The size of the word may be defined by the protocol.  Padding 4-byte words, for example, would use a 1-byte, 2-byte, and 3-byte Length.  Padding 8-byte words would use a (0, 1, 2, 3, 5, 6, 7)-byte Length.  </p>
-<p id="rfc.section.3.3.1.p.2">A pad MAY be inserted after any TLV in the CCNx Message or in the Validation Dependent Data In the remainder of this document, we will not show optional pad TLVs.</p>
+<p id="rfc.section.3.3.1.p.2">One MUST NOT pad inside a Name.  Apart from that, a pad MAY be inserted after any other TLV in the CCNx Message or in the Validation Dependent Data In the remainder of this document, we will not show optional pad TLVs.</p>
 <pre>
                     1                   2                   3
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -704,7 +709,8 @@ address {
 +---------------+---------------+---------------+---------------+
             </pre>
 <h1 id="rfc.section.3.3.2"><a href="#rfc.section.3.3.2">3.3.2.</a> <a href="#vendor" id="vendor">Organization Specific TLVs</a></h1>
-<p id="rfc.section.3.3.2.p.1">Organization specific TLVs MUST use the T_ORG type. The Length field is the length of the organization specific information plus 3. The Value begins with the 3 byte organization number derived from the last three digits of the <a href="#EpriseNumbers">IANA Private Enterprise Numbers</a> <cite title="NONE">[EpriseNumbers]</cite>, followed by the organization specific information.</p>
+<p id="rfc.section.3.3.2.p.1">Organization specific TLVs (also known as Vendor TLVs) MUST use the T_ORG type.  The Length field is the length of the organization specific information plus 3. The Value begins with the 3 byte organization number derived from the last three digits of the <a href="#EpriseNumbers">IANA Private Enterprise Numbers</a> <cite title="NONE">[EpriseNumbers]</cite>, followed by the organization specific information.</p>
+<p id="rfc.section.3.3.2.p.2">A T_ORG MAY be used as a path segment in a Name, in which case it is a regular path segment and is part of the regular name matching.</p>
 <pre>
                     1                   2                   3
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -718,9 +724,9 @@ address {
             </pre>
 <h1 id="rfc.section.3.3.3"><a href="#rfc.section.3.3.3">3.3.3.</a> <a href="#hash_format" id="hash_format">Hash Format</a></h1>
 <p id="rfc.section.3.3.3.p.1">Hash values are used in several fields throughout a packet.  This TLV encoding is commonly embedded inside those fields to specify the specific hash function used and it's value.  Note that the reserved TLV types are also reserved here for user-defined experimental functions.</p>
-<p id="rfc.section.3.3.3.p.2">The LENGTH field of the hash value MUST be less than or equal to the hash function length.  If the LENGTH is less than the full length, it is taken as the left LENGTH bytes of the hash function output.  Only the specified truncations are allowed.</p>
+<p id="rfc.section.3.3.3.p.2">The LENGTH field of the hash value MUST be less than or equal to the hash function length.  If the LENGTH is less than the full length, it is taken as the left LENGTH bytes of the hash function output.  Only specified truncations are allowed, not arbitrary truncations.</p>
 <p id="rfc.section.3.3.3.p.3">This nested format is used because it allows binary comparison of hash values for certain fields without a router needing to understand a new hash function.  For example, the KeyIdRestriction is bit-wise compared between an Interest's KeyIdRestriction field and a ContentObject's KeyId field.  This format means the outer field values do not change with differing hash functions so a router can still identify those fields and do a binary comparison of the hash TLV without need to understand the specific hash used.  An alternative approach, such as using T_KEYID_SHA512-256, would require each router keep an up-to-date parser and supporting user-defined hash functions here would explode the parsing state-space.</p>
-<p id="rfc.section.3.3.3.p.4">A CCN entity MUST support the hash type T_SHA-256. An entity MAY support the remaining hash types.</p>
+<p id="rfc.section.3.3.3.p.4">A CCNx entity MUST support the hash type T_SHA-256. An entity MAY support the remaining hash types.</p>
 <div id="rfc.table.3"/>
 <div id="hash_types"/>
 <table cellpadding="3" cellspacing="0" class="tt full center">
@@ -759,7 +765,7 @@ address {
             </pre>
 <p class="figure">Example nesting inside type T_FOO</p>
 <h1 id="rfc.section.3.3.4"><a href="#rfc.section.3.3.4">3.3.4.</a> <a href="#Link" id="Link">Link</a></h1>
-<p id="rfc.section.3.3.4.p.1">A Link is the tuple: {Name, [KeyIdRestr], [ContentObjectHashRestr]}.  It is a general encoding  that is used in both the payload of a Content Object with PayloadType = "Link" and in the KeyLink field in a KeyLocator.</p>
+<p id="rfc.section.3.3.4.p.1">A Link is the tuple: {Name, [KeyIdRestr], [ContentObjectHashRestr]}.  It is a general encoding that is used in both the payload of a Content Object with PayloadType = "Link" and in the KeyLink field in a KeyLocator.  A Link is essentially the body of an Interest.  </p>
 <pre>
                     1                   2                   3
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -805,7 +811,7 @@ address {
 <p id="rfc.section.3.4.p.2">Additional hop-by-hop headers are defined in higher level specifications such as the fragmentation specification.</p>
 <h1 id="rfc.section.3.4.1"><a href="#rfc.section.3.4.1">3.4.1.</a> <a href="#Lifetime" id="Lifetime">Interest Lifetime</a></h1>
 <p id="rfc.section.3.4.1.p.1">The Interest Lifetime is the time that an Interest should stay pending at an intermediate node.  It is expressed in milliseconds as an unsigned, network byte order integer.</p>
-<p id="rfc.section.3.4.1.p.2">A value of 0 (encoded as 1 byte %x00) indicates the Interest does not elicit a Content Object response.  It should still be forwarded, but no reply is expected.</p>
+<p id="rfc.section.3.4.1.p.2">A value of 0 (encoded as 1 byte %x00) indicates the Interest does not elicit a Content Object response.  It should still be forwarded, but no reply is expected and a forwarder could skip creating a PIT entry.</p>
 <pre>
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -2126,15 +2132,9 @@ address {
     </tr>
     <tr>
       <td class="reference">
-        <b id="CCN">[CCN]</b>
-      </td>
-      <td class="top"><a>PARC, Inc.</a>, "<a href="http://www.CCNx.org">CCNx Open Source</a>", 2007.</td>
-    </tr>
-    <tr>
-      <td class="reference">
         <b id="CCNSemantics">[CCNSemantics]</b>
       </td>
-      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, <a title="LinkedIn">Solis, I.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a href="https://www.ietf.org/id/draft-irtf-icnrg-ccnxsemantics-07.txt">CCNx Semantics (Internet draft)</a>", 2018.</td>
+      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, <a title="LinkedIn">Solis, I.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a href="https://www.ietf.org/id/draft-irtf-icnrg-ccnxsemantics-09.txt">CCNx Semantics (Internet draft)</a>", 2018.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -2192,27 +2192,9 @@ address {
     </tr>
     <tr>
       <td class="reference">
-        <b id="RFC3552">[RFC3552]</b>
-      </td>
-      <td class="top"><a>Rescorla, E.</a> and <a>B. Korver</a>, "<a href="http://tools.ietf.org/html/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>", BCP 72, RFC 3552, DOI 10.17487/RFC3552, July 2003.</td>
-    </tr>
-    <tr>
-      <td class="reference">
         <b id="RFC5226">[RFC5226]</b>
       </td>
       <td class="top"><a>Narten, T.</a> and <a>H. Alvestrand</a>, "<a href="http://tools.ietf.org/html/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>", RFC 5226, DOI 10.17487/RFC5226, May 2008.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC5280">[RFC5280]</b>
-      </td>
-      <td class="top"><a>Cooper, D.</a>, <a>Santesson, S.</a>, <a>Farrell, S.</a>, <a>Boeyen, S.</a>, <a>Housley, R.</a> and <a>W. Polk</a>, "<a href="http://tools.ietf.org/html/rfc5280">Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile</a>", RFC 5280, DOI 10.17487/RFC5280, May 2008.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC6920">[RFC6920]</b>
-      </td>
-      <td class="top"><a>Farrell, S.</a>, <a>Kutscher, D.</a>, <a>Dannewitz, C.</a>, <a>Ohlman, B.</a>, <a>Keranen, A.</a> and <a>P. Hallam-Baker</a>, "<a href="http://tools.ietf.org/html/rfc6920">Naming Things with Hashes</a>", RFC 6920, DOI 10.17487/RFC6920, April 2013.</td>
     </tr>
     <tr>
       <td class="reference">

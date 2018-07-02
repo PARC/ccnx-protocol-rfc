@@ -4,8 +4,8 @@
 
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
-Intended status: Experimental                              June 26, 2018
-Expires: December 28, 2018
+Intended status: Experimental                               July 2, 2018
+Expires: January 3, 2019
 
 
                      CCNx Selector Based Discovery
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 28, 2018.
+   This Internet-Draft will expire on January 3, 2019.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Mosko                   Expires December 28, 2018               [Page 1]
+Mosko                    Expires January 3, 2019                [Page 1]
 
-Internet-Draft               CCNx Selectors                    June 2018
+Internet-Draft               CCNx Selectors                    July 2018
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Mosko                   Expires December 28, 2018               [Page 2]
+Mosko                    Expires January 3, 2019                [Page 2]
 
-Internet-Draft               CCNx Selectors                    June 2018
+Internet-Draft               CCNx Selectors                    July 2018
 
 
    Selector discovery in CCNx 1.0 differs in three ways from the current
@@ -165,9 +165,9 @@ Internet-Draft               CCNx Selectors                    June 2018
 
 
 
-Mosko                   Expires December 28, 2018               [Page 3]
+Mosko                    Expires January 3, 2019                [Page 3]
 
-Internet-Draft               CCNx Selectors                    June 2018
+Internet-Draft               CCNx Selectors                    July 2018
 
 
    o  ChildSelector: Answer with the left-most or right-most child.
@@ -221,9 +221,9 @@ Internet-Draft               CCNx Selectors                    June 2018
 
 
 
-Mosko                   Expires December 28, 2018               [Page 4]
+Mosko                    Expires January 3, 2019                [Page 4]
 
-Internet-Draft               CCNx Selectors                    June 2018
+Internet-Draft               CCNx Selectors                    July 2018
 
 
    explicit set of HashExcludes rather than constructing a full name
@@ -277,9 +277,9 @@ Internet-Draft               CCNx Selectors                    June 2018
 
 
 
-Mosko                   Expires December 28, 2018               [Page 5]
+Mosko                    Expires January 3, 2019                [Page 5]
 
-Internet-Draft               CCNx Selectors                    June 2018
+Internet-Draft               CCNx Selectors                    July 2018
 
 
    +------+-----------------+------------+-----------------------------+
@@ -333,9 +333,9 @@ Internet-Draft               CCNx Selectors                    June 2018
 
 
 
-Mosko                   Expires December 28, 2018               [Page 6]
+Mosko                    Expires January 3, 2019                [Page 6]
 
-Internet-Draft               CCNx Selectors                    June 2018
+Internet-Draft               CCNx Selectors                    July 2018
 
 
 3.1.  Child Selector
@@ -389,9 +389,9 @@ Internet-Draft               CCNx Selectors                    June 2018
 
 
 
-Mosko                   Expires December 28, 2018               [Page 7]
+Mosko                    Expires January 3, 2019                [Page 7]
 
-Internet-Draft               CCNx Selectors                    June 2018
+Internet-Draft               CCNx Selectors                    July 2018
 
 
    length Length ensures correct shortlex length sorting.  This will not
@@ -445,9 +445,9 @@ Internet-Draft               CCNx Selectors                    June 2018
 
 
 
-Mosko                   Expires December 28, 2018               [Page 8]
+Mosko                    Expires January 3, 2019                [Page 8]
 
-Internet-Draft               CCNx Selectors                    June 2018
+Internet-Draft               CCNx Selectors                    July 2018
 
 
 3.3.1.  Exclude Singleton
@@ -501,9 +501,9 @@ Internet-Draft               CCNx Selectors                    June 2018
 
 
 
-Mosko                   Expires December 28, 2018               [Page 9]
+Mosko                    Expires January 3, 2019                [Page 9]
 
-Internet-Draft               CCNx Selectors                    June 2018
+Internet-Draft               CCNx Selectors                    July 2018
 
 
    +---------------+---------------------------------------------------+
@@ -557,9 +557,9 @@ Internet-Draft               CCNx Selectors                    June 2018
 
 
 
-Mosko                   Expires December 28, 2018              [Page 10]
+Mosko                    Expires January 3, 2019               [Page 10]
 
-Internet-Draft               CCNx Selectors                    June 2018
+Internet-Draft               CCNx Selectors                    July 2018
 
 
    A non-participating content store must obey the outer cache control
@@ -613,9 +613,9 @@ Internet-Draft               CCNx Selectors                    June 2018
 
 
 
-Mosko                   Expires December 28, 2018              [Page 11]
+Mosko                    Expires January 3, 2019               [Page 11]
 
-Internet-Draft               CCNx Selectors                    June 2018
+Internet-Draft               CCNx Selectors                    July 2018
 
 
    operation in a specific environment.  An outer Validation section is
@@ -669,4 +669,4 @@ Author's Address
 
 
 
-Mosko                   Expires December 28, 2018              [Page 12]
+Mosko                    Expires January 3, 2019               [Page 12]

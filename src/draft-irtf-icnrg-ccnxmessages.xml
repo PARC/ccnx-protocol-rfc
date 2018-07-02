@@ -173,10 +173,10 @@
            
     <t>This document describes a TLV scheme using a fixed 2-byte T and a fixed 2-byte L field.
     The rational for this choice is described in <xref target="Security"/>.
-    Briefly, this choice is to avoid multiple encodings of the same value (aliases) and
-    reduce the work of a validator to ensure compliance.  Unlike some uses of TLV in networking,
-    the use here must be evaluated at each network hop, so even small validation latencies
-    could add to a large packet forwarding delay.  For very small packets or low
+    Briefly, this choice avoids multiple encodings of the same value (aliases) and
+    reduces the work of a validator to ensure compliance.  Unlike some uses of TLV in networking,
+    the each network hop must evaluate the encoding, so even small validation latencies
+    at each hop could add up to a large overall forwarding delay.  For very small packets or low
     throughput links, where the extra bytes may become a concern, one may use a
     TLV compression protocol, for example <xref target="compress"/> and <xref target="CCNxz"/>.
     </t>
@@ -201,9 +201,10 @@
       </t>
        <t>The type values in <xref target="IANA"/> represent the values in common usage today.
          These values may change pending IANA assignments. All type values are
-         relative to their parent containers. It is possible for a TLV to redefine a type value defined by
-         its parent.  For example, each level of a nested TLV structure might define a "type = 1" with
-         a completely different meaning.</t>
+         relative to their parent containers. For example,
+         each level of a nested TLV structure might define a "type = 1" with
+         a completely different meaning.  In the following, we use the symbolic names
+           defined in that section.</t>
 
        <t>Packets are represented as 32-bit wide words using ASCII art.  Due to
          the nested levels of TLV encoding and the presence of optional fields and variable sizes,
@@ -234,15 +235,16 @@
       <t>
         <list style="symbols">
           <t>Name: A hierarchically structured variable length identifier. It is an ordered list of path
-              segments, which may be variable length octet strings. In human-readable form, it is represented
+              segments, which are variable length octet strings. In human-readable form, it is represented
               in URI format as ccnx:/path/part. There is no host or query string. See <xref target="CCNxURI"></xref>
               for complete details.</t>
           <t>Interest: A message requesting a Content Object with a matching Name and other
             optional selectors to choose from multiple objects with the same Name. Any
-            Content Object with a Name and optional selectors that matches the Name and optional selectors of the
+            Content Object with a Name and attributes that matches
+            the Name and optional selectors of the
             Interest is said to satisfy the Interest.</t>
-          <t>Content Object: A data object sent in response to an Interest request. It has an (optional) Name and
-            a content payload that are bound together via cryptographic means. </t>
+          <t>Content Object: A data object sent in response to an Interest request. It has an optional
+              Name and a content payload that are bound together via cryptographic means. </t>
         </list>
       </t>
     </section>
@@ -250,13 +252,18 @@
     <section anchor="TLV" title="Type-Length-Value (TLV) Packets">
          <t>We use 16-bit Type and 16-bit Length
           fields to encode TLV based packets. This provides 64K different possible types and value field lengths
-          of up to 64KiB.  With 64K possible types, there should be sufficient space for basic protocol types,
-          while also allowing ample room for experimentation, application use, and growth.</t>
+          of up to 64KiB.  With 64K possible types at each level of TLV encoding,
+          there should be sufficient space for basic protocol types,
+          while also allowing ample room for experimentation, application use, vendor extensions,
+             and growth.  This encoding does not allow for jumbo packets beyond 64 KiB total length.
+             If used on a media that allows for jumbo frames, we suggest defining a media adapation
+             envelope that allows for multiple smaller frames.</t>
 
-          <t>Specifically, the TLV types in the range 0x1000 - 0x1FFF are reserved for experimental use.
-          These type values are reserved in all TLV container contexts. In the event that more space is needed,
-          either for types or for length, a new version of the protocol would be needed. See <xref target="vendor"></xref>
-          for more information about organization specific TLVs.
+          <t>There are several global TLV definitions that we reserve at all hierarchical contexts.
+              The TLV types in the range 0x1000 - 0x1FFF are reserved for experimental use.
+          The TLV type T_ORG is also reserved for vendor extensions (
+          see <xref target="vendor"></xref>).  The TLV type T_PAD is used to optionally
+          pad a field out to some desired alignment.
             </t>
 
           <texttable anchor="reserved_types" title="Reserved TLV Types">
@@ -268,7 +275,11 @@
              <c><xref target="vendor">Vendor Specific Information</xref></c>
              <c>Information specific to a vendor implementation (see below).</c>
 
-              <c>n/a</c>
+            <c>T_PAD</c>
+            <c><xref target="pad">Padding</xref></c>
+            <c>Adds padding to a field (see below).</c>
+
+                <c>n/a</c>
               <c>Experimental</c>
               <c>Experimental use.</c>
           </texttable>
@@ -295,7 +306,7 @@
       </t>
 
         <section anchor="packet_format" title="Overall packet format">
-          <t>Each packet includes the 8 byte fixed header described below, followed by a set of TLV fields. These fields are
+          <t>Each packet includes the 8 byte fixed header, described below, followed by a set of TLV fields. These fields are
             optional hop-by-hop headers and the Packet Payload.
              </t>
 
@@ -335,11 +346,13 @@
 
       <t>After discarding the fixed and hop-by-hop headers the remaining PacketPayload
         should be a valid protocol message. Therefore, the PacketPayload always begins with
-        a 4 byte TLV defining the protocol message (whether it is an Interest, Content Object, or
+        4 bytes of type-length that specifies the protocol message (whether it is an Interest, Content Object, or
         other message type) and its total length.
         The embedding of a self-sufficient protocol data unit inside the fixed
         and hop-by-hop headers allows a network stack to discard the headers
-        and operate only on the embedded message.</t>
+        and operate only on the embedded message.  It also de-couples the
+      PacketType field -- which specifies how to forward the packet -- from the
+      PacketPayload.</t>
 
       <t>The range of bytes protected by the Validation includes the CCNx Message and the
         ValidationAlgorithm.</t>
@@ -350,10 +363,13 @@
          <section anchor="header" title="Fixed Headers">
           <t>CCNx messages begin with an 8 byte fixed header (non-TLV format).
             The HeaderLength field represents the combined length of the Fixed and Hop-by-hop headers.
-            The PacketLength field represents the entire Packet length.
+            The PacketLength field represents the entire Packet length from the first byte of Version
+            to the last byte of the packet.
           </t>
 
-          <t>A specific PacketType may assign meaning to the "PacketType specific fields".</t>
+          <t>A specific PacketType may assign meaning to the "PacketType specific fields," which
+          are otherwise reserved.  For the three defined PacketTypes (Interest, ContentObject,
+          and InterestReturn), we define those values in this document.</t>
 
           <t>The PacketPayload of a CCNx packet is the protocol message itself. The
             Content Object Hash is computed over the PacketPayload only, excluding
@@ -388,19 +404,19 @@
             </t>
 
           <t>The PacketType field indicates how the forwarder should process the packet.
-          A Request Packet (Interest) has PacketType PT_INTEREST, a Response (Content Object) has PacketType PT_CONTENT, and an InterestReturn
-          Packet has PacketType PT_RETURN.
+          A Request Packet (Interest) has PacketType PT_INTEREST, a Response (Content Object) has PacketType PT_CONTENT, and an InterestReturn has PacketType PT_RETURN.
         </t>
 
         <t>HeaderLength is the number of octets from the
           start of the packet (Version) to the end of the hop-by-hop headers. PacketLength is
-          the number of octets from the start of the packet to the end of the packet.</t>
+          the number of octets from the start of the packet to the end of the packet.
+         Both lengths have a minimum value of 8 (the fixed header itself).</t>
 
         <t>The PacketType specific fields are reserved bits whose use depends on the
           PacketType.  They are used for network-level signaling.</t>
 
         <section title="Interest Fixed Header">
-          <t>If the PacketType in the Fixed Header is PT_INTEREST, it indicates that the PacketPayload should be processed
+          <t>If the PacketType is PT_INTEREST, it indicates that the PacketPayload should be processed
             as an Interest message.
             For this type of packet, the Fixed Header includes a field for a HopLimit as well as Reserved and Flags fields. The Reserved
             field MUST be set to 0 in an Interest - this field will be set to a return code in the case of an Interest Return.
@@ -432,7 +448,7 @@
         </section>
         </section>
         <section title="Content Object Fixed Header">
-          <t>If the PacketType in the Fixed Header is PT_CONTENT, it indicates that the PacketPayload should be processed
+          <t>If the PacketType is PT_CONTENT, it indicates that the PacketPayload should be processed
             as a Content Object message.
             A Content Object defines a Flags field, however there are currently no flags defined, so
           the Flags field must be set to 0.</t>
@@ -452,11 +468,11 @@
         </section>
 
         <section title="InterestReturn Fixed Header">
-          <t>If the PacketType in the Fixed Header is PT_RETURN, it indicates that the PacketPayload should be processed
+          <t>If the PacketType is PT_RETURN, it indicates that the PacketPayload should be processed
             as a returned Interest message.
             The only difference between this InterestReturn message and the original Interest is that the PacketType is changed
-            to PT_RETURN and a ReturnCode is is put into the Reserved octet.  All other
-          fields are unchanged.  The purpose of this encoding is to prevent packet
+            to PT_RETURN and a ReturnCode is is put into the ReturnCode field.  All other
+          fields are unchanged from the Interest packet.  The purpose of this encoding is to prevent packet
           length changes so no additional bytes are needed to return an Interest to
           the previous hop.  See <xref target="CCNSemantics"></xref> for a protocol description
           of this packet type.</t>
@@ -475,7 +491,8 @@
 
 
           <section anchor="InterestReturnHopLimit" title="InterestReturn HopLimit">
-            <t>This is the original Interest's HopLimit, as received.  It is the value before being
+            <t>This is the original Interest's HopLimit, as received.
+                It is the value before being
             decremented at the current node (i.e. the received value).</t>
           </section>
 
@@ -520,9 +537,10 @@
             Length.
         </t>
 
-        <t>A pad MAY be inserted after any TLV in the CCNx Message or in the Validation Dependent Data
+        <t>One MUST NOT pad inside a Name.  Apart from that, a pad MAY be inserted after any other
+            TLV in the CCNx Message or in the Validation Dependent Data
           In the remainder of this document, we will not show optional pad TLVs.</t>
-
+        
         <figure>
 
             <artwork align="left"><![CDATA[
@@ -538,10 +556,15 @@
     </section>
 
     <section anchor="vendor" title="Organization Specific TLVs">
-        <t>Organization specific TLVs MUST use the T_ORG type. The Length field is the length of the organization
-            specific information plus 3. The Value begins with the 3 byte organization number derived from the last
-            three digits of the <xref target="EpriseNumbers">IANA Private Enterprise Numbers</xref>, followed by the
-            organization specific information.</t>
+        <t>Organization specific TLVs (also known as Vendor TLVs) MUST use the T_ORG type.
+            The Length field is the length of the organization
+            specific information plus 3. The Value begins with the 3 byte organization number derived
+            from the last
+            three digits of the <xref target="EpriseNumbers">IANA Private Enterprise Numbers</xref>,
+            followed by the organization specific information.</t>
+        
+        <t>A T_ORG MAY be used as a path segment in a Name, in which case it is a regular path segment and
+            is part of the regular name matching.</t>
 
         <figure>
             <artwork align="left"><![CDATA[
@@ -564,8 +587,7 @@
             reserved TLV types are also reserved here for user-defined experimental functions.</t>
 
         <t>The LENGTH field of the hash value MUST be less than or equal to the hash function length.  If the
-            LENGTH is less than the full length, it is taken as the left LENGTH bytes of the hash function output.
-            Only the specified truncations are allowed.</t>
+            LENGTH is less than the full length, it is taken as the left LENGTH bytes of the hash function output.  Only specified truncations are allowed, not arbitrary truncations.</t>
 
         <t>This nested format is used because it allows binary comparison of hash values for certain fields
             without a router needing to understand a new hash function.  For example, the KeyIdRestriction is bit-wise
@@ -576,7 +598,7 @@
             keep an up-to-date parser and supporting user-defined hash functions here would explode the
             parsing state-space.</t>
 
-        <t>A CCN entity MUST support the hash type T_SHA-256. An entity MAY support
+        <t>A CCNx entity MUST support the hash type T_SHA-256. An entity MAY support
             the remaining hash types.</t>
 
         <texttable anchor="hash_types" title="CCNx Hash Functions">
@@ -610,9 +632,10 @@
 
     <section anchor="Link" title="Link">
       <t> A Link is the tuple: {Name, [KeyIdRestr], [ContentObjectHashRestr]}.
-            It is a general encoding  that is used in both the payload of a Content Object with
-            PayloadType = "Link" and
-            in the KeyLink field in a KeyLocator.</t>
+            It is a general encoding that is used in both the payload of a Content Object with
+            PayloadType = "Link" and in the KeyLink field in a KeyLocator.
+            A Link is essentially the body of an Interest.
+      </t>
         <figure>
             <artwork align="left"><![CDATA[
                     1                   2                   3
@@ -664,7 +687,8 @@
 
             <t>A value of 0 (encoded as 1 byte %x00) indicates the
               Interest does not elicit a Content Object response.  It should still be
-              forwarded, but no reply is expected.</t>
+              forwarded, but no reply is expected and a forwarder could skip creating
+              a PIT entry.</t>
 
             <figure>
               <artwork align="left"><![CDATA[
@@ -968,8 +992,6 @@
               <c>A <xref target="hash_format"></xref> representation of the hash of the
                 specific Content Object that would satisfy the Interest.</c>
             </texttable>
-
-
 
             <section anchor="KeyIdRes" title="KeyIdRestriction">
               <t>An Interest MAY include a KeyIdRestriction selector.
@@ -2096,10 +2118,8 @@
 
     <references title="Informative References">
       <!-- Here we use entities that we defined at the beginning. -->
-      &RFC3552;
       &RFC5226;
-      &RFC6920;
-      &RFC5280;
+
       <!-- A reference written by by an organization not a person. -->
 
      <reference anchor="compress" target="https://datatracker.ietf.org/meeting/interim-2016-icnrg-02/materials/slides-interim-2016-icnrg-2-7">
@@ -2118,18 +2138,7 @@
           </front>
       </reference>
 
-      <reference anchor="CCN" target="http://www.CCNx.org">
-        <front>
-          <title>CCNx Open Source</title>
-          <author>
-            <organization>PARC, Inc.</organization>
-          </author>
-
-          <date year="2007"/>
-        </front>
-      </reference>
-
-      <reference anchor="CCNSemantics" target="https://www.ietf.org/id/draft-irtf-icnrg-ccnxsemantics-07.txt">
+      <reference anchor="CCNSemantics" target="https://www.ietf.org/id/draft-irtf-icnrg-ccnxsemantics-09.txt">
         <front>
           <title>CCNx Semantics (Internet draft)</title>
 
