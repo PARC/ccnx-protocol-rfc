@@ -339,7 +339,7 @@ address {
 
   <meta name="dct.creator" content="Mosko, M., Solis, I., and C. Wood" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-irtf-icnrg-ccnxmessages-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-7-2" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-1-24" />
   <meta name="dct.abstract" content="This document specifies the encoding of CCNx messages in a TLV packet format, including the TLV types used by each message element and the encoding of each value.  The semantics of CCNx messages follow the encoding-independent CCNx Semantics specification.  " />
   <meta name="description" content="This document specifies the encoding of CCNx messages in a TLV packet format, including the TLV types used by each message element and the encoding of each value.  The semantics of CCNx messages follow the encoding-independent CCNx Semantics specification.  " />
 
@@ -363,7 +363,7 @@ address {
   <td class="right">I. Solis</td>
 </tr>
 <tr>
-  <td class="left">Expires: January 3, 2019</td>
+  <td class="left">Expires: July 28, 2019</td>
   <td class="right">LinkedIn</td>
 </tr>
 <tr>
@@ -376,7 +376,7 @@ address {
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">July 2, 2018</td>
+  <td class="right">January 24, 2019</td>
 </tr>
 
     	
@@ -397,11 +397,11 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 3, 2019.</p>
+<p>This Internet-Draft will expire on July 28, 2019.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
-<p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
@@ -1401,7 +1401,7 @@ address {
     </tr>
     <tr>
       <td class="left">Syntax</td>
-      <td class="left">1 octet (decimal)</td>
+      <td class="left">1 octet</td>
     </tr>
   </tbody>
 </table>
@@ -1416,17 +1416,17 @@ address {
   </thead>
   <tbody>
     <tr>
-      <td class="center">0</td>
+      <td class="center">%x00</td>
       <td class="center">PT_INTEREST</td>
       <td class="center"><a href="#header">Fixed Header Types</a> <cite title="NONE">[header]</cite></td>
     </tr>
     <tr>
-      <td class="center">1</td>
+      <td class="center">%x01</td>
       <td class="center">PT_CONTENT</td>
       <td class="center"><a href="#header">Fixed Header Types</a> <cite title="NONE">[header]</cite></td>
     </tr>
     <tr>
-      <td class="center">2</td>
+      <td class="center">%x02</td>
       <td class="center">PT_RETURN</td>
       <td class="center"><a href="#header">Fixed Header Types</a> <cite title="NONE">[header]</cite></td>
     </tr>
@@ -1453,11 +1453,11 @@ address {
     </tr>
     <tr>
       <td class="left">Review process</td>
-      <td class="left">Expert Review, should include public standard leading to RFC.</td>
+      <td class="left">Specification Required</td>
     </tr>
     <tr>
       <td class="left">Syntax</td>
-      <td class="left">1 octet (decimal)</td>
+      <td class="left">1 octet</td>
     </tr>
   </tbody>
 </table>
@@ -1472,47 +1472,52 @@ address {
   </thead>
   <tbody>
     <tr>
-      <td class="center">1</td>
+      <td class="center">%x00</td>
+      <td class="center">Reserved</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="center">%x01</td>
       <td class="center">T_RETURN_NO_ROUTE</td>
       <td class="center"><a href="#ReturnCode">Fixed Header Types</a> <cite title="NONE">[ReturnCode]</cite></td>
     </tr>
     <tr>
-      <td class="center">2</td>
+      <td class="center">%x02</td>
       <td class="center">T_RETURN_LIMIT_EXCEEDED</td>
       <td class="center"><a href="#ReturnCode">Fixed Header Types</a> <cite title="NONE">[ReturnCode]</cite></td>
     </tr>
     <tr>
-      <td class="center">3</td>
+      <td class="center">%x03</td>
       <td class="center">T_RETURN_NO_RESOURCES</td>
       <td class="center"><a href="#ReturnCode">Fixed Header Types</a> <cite title="NONE">[ReturnCode]</cite></td>
     </tr>
     <tr>
-      <td class="center">4</td>
+      <td class="center">%x04</td>
       <td class="center">T_RETURN_PATH_ERROR</td>
       <td class="center"><a href="#ReturnCode">Fixed Header Types</a> <cite title="NONE">[ReturnCode]</cite></td>
     </tr>
     <tr>
-      <td class="center">5</td>
+      <td class="center">%x05</td>
       <td class="center">T_RETURN_PROHIBITED</td>
       <td class="center"><a href="#ReturnCode">Fixed Header Types</a> <cite title="NONE">[ReturnCode]</cite></td>
     </tr>
     <tr>
-      <td class="center">6</td>
+      <td class="center">%x06</td>
       <td class="center">T_RETURN_CONGESTED</td>
       <td class="center"><a href="#ReturnCode">Fixed Header Types</a> <cite title="NONE">[ReturnCode]</cite></td>
     </tr>
     <tr>
-      <td class="center">7</td>
+      <td class="center">%x07</td>
       <td class="center">T_RETURN_MTU_TOO_LARGE</td>
       <td class="center"><a href="#ReturnCode">Fixed Header Types</a> <cite title="NONE">[ReturnCode]</cite></td>
     </tr>
     <tr>
-      <td class="center">8</td>
+      <td class="center">%x08</td>
       <td class="center">T_RETURN_UNSUPPORTED_HASH_RESTRICTION</td>
       <td class="center"><a href="#ReturnCode">Fixed Header Types</a> <cite title="NONE">[ReturnCode]</cite></td>
     </tr>
     <tr>
-      <td class="center">9</td>
+      <td class="center">%x09</td>
       <td class="center">T_RETURN_MALFORMED_INTEREST</td>
       <td class="center"><a href="#ReturnCode">Fixed Header Types</a> <cite title="NONE">[ReturnCode]</cite></td>
     </tr>
@@ -1543,7 +1548,7 @@ address {
     </tr>
     <tr>
       <td class="left">Syntax</td>
-      <td class="left">2 octet TLV type (decimal)</td>
+      <td class="left">2 octet TLV type</td>
     </tr>
   </tbody>
 </table>
@@ -1558,22 +1563,27 @@ address {
   </thead>
   <tbody>
     <tr>
-      <td class="center">1</td>
+      <td class="center">%x0000</td>
+      <td class="center">Reserved</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="center">%x0001</td>
       <td class="center">T_INTLIFE</td>
       <td class="center"><a href="#per-hop">Hop-by-hop TLV headers</a> <cite title="NONE">[per-hop]</cite></td>
     </tr>
     <tr>
-      <td class="center">2</td>
+      <td class="center">%x0002</td>
       <td class="center">T_CACHETIME</td>
       <td class="center"><a href="#per-hop">Hop-by-hop TLV headers</a> <cite title="NONE">[per-hop]</cite></td>
     </tr>
     <tr>
-      <td class="center">3</td>
+      <td class="center">%x0003</td>
       <td class="center">T_MSGHASH</td>
       <td class="center"><a href="#per-hop">Hop-by-hop TLV headers</a> <cite title="NONE">[per-hop]</cite></td>
     </tr>
     <tr>
-      <td class="center">4 - 7</td>
+      <td class="center">%x0004 - %x0007</td>
       <td class="center">Reserved</td>
       <td class="center"/>
     </tr>
@@ -1619,7 +1629,7 @@ address {
     </tr>
     <tr>
       <td class="left">Syntax</td>
-      <td class="left">2 octet TLV type (decimal)</td>
+      <td class="left">2 octet TLV type</td>
     </tr>
   </tbody>
 </table>
@@ -1634,22 +1644,27 @@ address {
   </thead>
   <tbody>
     <tr>
-      <td class="center">1</td>
+      <td class="center">%x0000</td>
+      <td class="center">Reserved</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="center">%x0001</td>
       <td class="center">T_INTEREST</td>
       <td class="center"><a href="#top_level">Top-Level Types</a> <cite title="NONE">[top_level]</cite></td>
     </tr>
     <tr>
-      <td class="center">2</td>
+      <td class="center">%x0002</td>
       <td class="center">T_OBJECT</td>
       <td class="center"><a href="#top_level">Top-Level Types</a> <cite title="NONE">[top_level]</cite></td>
     </tr>
     <tr>
-      <td class="center">3</td>
+      <td class="center">%x0003</td>
       <td class="center">T_VALIDATION_ALG</td>
       <td class="center"><a href="#top_level">Top-Level Types</a> <cite title="NONE">[top_level]</cite></td>
     </tr>
     <tr>
-      <td class="center">4</td>
+      <td class="center">%x0004</td>
       <td class="center">T_VALIDATION_PAYLOAD</td>
       <td class="center"><a href="#top_level">Top-Level Types</a> <cite title="NONE">[top_level]</cite></td>
     </tr>
@@ -1676,11 +1691,11 @@ address {
     </tr>
     <tr>
       <td class="left">Review process</td>
-      <td class="left">Expert Review with public specification</td>
+      <td class="left">Specification Required</td>
     </tr>
     <tr>
       <td class="left">Syntax</td>
-      <td class="left">2 octet TLV type (decimal)</td>
+      <td class="left">2 octet TLV type</td>
     </tr>
   </tbody>
 </table>
@@ -1695,17 +1710,22 @@ address {
   </thead>
   <tbody>
     <tr>
-      <td class="center">1</td>
+      <td class="center">%x0000</td>
+      <td class="center">Reserved</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="center">%x0001</td>
       <td class="center">T_NAMESEGMENT</td>
       <td class="center"><a href="#names">Name</a> <cite title="NONE">[names]</cite></td>
     </tr>
     <tr>
-      <td class="center">2</td>
+      <td class="center">%x0002</td>
       <td class="center">T_IPID</td>
       <td class="center"><a href="#names">Name</a> <cite title="NONE">[names]</cite></td>
     </tr>
     <tr>
-      <td class="center">16 - 19</td>
+      <td class="center">%x0010 - %x0013</td>
       <td class="center">Reserved</td>
       <td class="center">Used in other drafts</td>
     </tr>
@@ -1746,7 +1766,7 @@ address {
     </tr>
     <tr>
       <td class="left">Syntax</td>
-      <td class="left">2 octet TLV type (decimal)</td>
+      <td class="left">2 octet TLV type</td>
     </tr>
   </tbody>
 </table>
@@ -1761,37 +1781,37 @@ address {
   </thead>
   <tbody>
     <tr>
-      <td class="center">0</td>
+      <td class="center">%x0000</td>
       <td class="center">T_NAME</td>
       <td class="center"><a href="#CCNMessage">Message Types</a> <cite title="NONE">[CCNMessage]</cite></td>
     </tr>
     <tr>
-      <td class="center">1</td>
+      <td class="center">%x0001</td>
       <td class="center">T_PAYLOAD</td>
       <td class="center"><a href="#CCNMessage">Message Types</a> <cite title="NONE">[CCNMessage]</cite></td>
     </tr>
     <tr>
-      <td class="center">2</td>
+      <td class="center">%x0002</td>
       <td class="center">T_KEYIDRESTR</td>
       <td class="center"><a href="#CCNMessage">Message Types</a> <cite title="NONE">[CCNMessage]</cite></td>
     </tr>
     <tr>
-      <td class="center">3</td>
+      <td class="center">%x0003</td>
       <td class="center">T_OBJHASHRESTR</td>
       <td class="center"><a href="#CCNMessage">Message Types</a> <cite title="NONE">[CCNMessage]</cite></td>
     </tr>
     <tr>
-      <td class="center">5</td>
+      <td class="center">%x0005</td>
       <td class="center">T_PAYLDTYPE</td>
       <td class="center"><a href="#COmetadata">Content Object Message Types</a> <cite title="NONE">[COmetadata]</cite></td>
     </tr>
     <tr>
-      <td class="center">6</td>
+      <td class="center">%x0006</td>
       <td class="center">T_EXPIRY</td>
       <td class="center"><a href="#COmetadata">Content Object Message Types</a> <cite title="NONE">[COmetadata]</cite></td>
     </tr>
     <tr>
-      <td class="center">7 - 12</td>
+      <td class="center">%x0007 - %x000C</td>
       <td class="center">Reserved</td>
       <td class="center">Used in other RFC drafts</td>
     </tr>
@@ -1833,11 +1853,11 @@ address {
     </tr>
     <tr>
       <td class="left">Review process</td>
-      <td class="left">Expert Review with public specification</td>
+      <td class="left">Specification Required</td>
     </tr>
     <tr>
       <td class="left">Syntax</td>
-      <td class="left">Variable length unsigned integer (decimal)</td>
+      <td class="left">Variable length unsigned integer</td>
     </tr>
   </tbody>
 </table>
@@ -1852,24 +1872,24 @@ address {
   </thead>
   <tbody>
     <tr>
-      <td class="center">0</td>
+      <td class="center">%x00</td>
       <td class="center">T_PAYLOADTYPE_DATA</td>
       <td class="center"><a href="#payload_type">Payload Types</a> <cite title="NONE">[payload_type]</cite></td>
     </tr>
     <tr>
-      <td class="center">1</td>
+      <td class="center">%x01</td>
       <td class="center">T_PAYLOADTYPE_KEY</td>
       <td class="center"><a href="#payload_type">Payload Types</a> <cite title="NONE">[payload_type]</cite></td>
     </tr>
     <tr>
-      <td class="center">2</td>
+      <td class="center">%x02</td>
       <td class="center">T_PAYLOADTYPE_LINK</td>
       <td class="center"><a href="#payload_type">Payload Types</a> <cite title="NONE">[payload_type]</cite></td>
     </tr>
   </tbody>
 </table>
 <h1 id="rfc.section.4.8"><a href="#rfc.section.4.8">4.8.</a> <a href="#IANA_ValidationAlgorithm" id="IANA_ValidationAlgorithm">Validation Algorithm Type Registry</a></h1>
-<p id="rfc.section.4.8.p.1">The following validation algorithm types should be allocated.</p>
+<p id="rfc.section.4.8.p.1">The following validation algorithm types should be allocated.  Note: registration requires public specification of the algorithm.</p>
 <table cellpadding="3" cellspacing="0" class="tt full center">
   <caption>Registry Creation</caption>
   <thead>
@@ -1889,11 +1909,11 @@ address {
     </tr>
     <tr>
       <td class="left">Review process</td>
-      <td class="left">Expert Review with public specification of the algorithm</td>
+      <td class="left">Specification Required</td>
     </tr>
     <tr>
       <td class="left">Syntax</td>
-      <td class="left">2 octet TLV type (decimal)</td>
+      <td class="left">2 octet TLV type</td>
     </tr>
   </tbody>
 </table>
@@ -1908,27 +1928,42 @@ address {
   </thead>
   <tbody>
     <tr>
-      <td class="center">2</td>
+      <td class="center">%x0000</td>
+      <td class="center">Reserved</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="center">%x0001</td>
+      <td class="center">Unassigned</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="center">%x0002</td>
       <td class="center">T_CRC32C</td>
       <td class="center"><a href="#ValAlg">Validation Algorithm</a> <cite title="NONE">[ValAlg]</cite></td>
     </tr>
     <tr>
-      <td class="center">4</td>
+      <td class="center">%x0003</td>
+      <td class="center">Unassigned</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="center">%x0004</td>
       <td class="center">T_HMAC-SHA256</td>
       <td class="center"><a href="#ValAlg">Validation Algorithm</a> <cite title="NONE">[ValAlg]</cite></td>
     </tr>
     <tr>
-      <td class="center">5</td>
+      <td class="center">%x0005</td>
       <td class="center">T_RSA-SHA256</td>
       <td class="center"><a href="#ValAlg">Validation Algorithm</a> <cite title="NONE">[ValAlg]</cite></td>
     </tr>
     <tr>
-      <td class="center">6</td>
+      <td class="center">%x0006</td>
       <td class="center">EC-SECP-256K1</td>
       <td class="center"><a href="#ValAlg">Validation Algorithm</a> <cite title="NONE">[ValAlg]</cite></td>
     </tr>
     <tr>
-      <td class="center">7</td>
+      <td class="center">%x0007</td>
       <td class="center">EC-SECP-384R1</td>
       <td class="center"><a href="#ValAlg">Validation Algorithm</a> <cite title="NONE">[ValAlg]</cite></td>
     </tr>
@@ -1974,7 +2009,7 @@ address {
     </tr>
     <tr>
       <td class="left">Syntax</td>
-      <td class="left">2 octet TLV type (decimal)</td>
+      <td class="left">2 octet TLV type</td>
     </tr>
   </tbody>
 </table>
@@ -1989,37 +2024,47 @@ address {
   </thead>
   <tbody>
     <tr>
-      <td class="center">9</td>
+      <td class="center">%x0000</td>
+      <td class="center">Reserved</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="center">%x0001 - %x0008</td>
+      <td class="center">Unassigned</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="center">%x0009</td>
       <td class="center">T_KEYID</td>
       <td class="center"><a href="#vdd">Validation Dependent Data</a> <cite title="NONE">[vdd]</cite></td>
     </tr>
     <tr>
-      <td class="center">10</td>
+      <td class="center">%x000A</td>
       <td class="center">T_PUBLICKEYLOC</td>
       <td class="center"><a href="#vdd">Validation Dependent Data</a> <cite title="NONE">[vdd]</cite></td>
     </tr>
     <tr>
-      <td class="center">11</td>
+      <td class="center">%x000B</td>
       <td class="center">T_PUBLICKEY</td>
       <td class="center"><a href="#vdd">Validation Dependent Data</a> <cite title="NONE">[vdd]</cite></td>
     </tr>
     <tr>
-      <td class="center">12</td>
+      <td class="center">%x000C</td>
       <td class="center">T_CERT</td>
       <td class="center"><a href="#vdd">Validation Dependent Data</a> <cite title="NONE">[vdd]</cite></td>
     </tr>
     <tr>
-      <td class="center">13</td>
+      <td class="center">%x000D</td>
       <td class="center">T_LINK</td>
       <td class="center"><a href="#vdd">Validation Dependent Data</a> <cite title="NONE">[vdd]</cite></td>
     </tr>
     <tr>
-      <td class="center">14</td>
+      <td class="center">%x000E</td>
       <td class="center">T_KEYLINK</td>
       <td class="center"><a href="#vdd">Validation Dependent Data</a> <cite title="NONE">[vdd]</cite></td>
     </tr>
     <tr>
-      <td class="center">15</td>
+      <td class="center">%x000F</td>
       <td class="center">T_SIGTIME</td>
       <td class="center"><a href="#vdd">Validation Dependent Data</a> <cite title="NONE">[vdd]</cite></td>
     </tr>
@@ -2036,7 +2081,7 @@ address {
   </tbody>
 </table>
 <h1 id="rfc.section.4.10"><a href="#rfc.section.4.10">4.10.</a> <a href="#IANA_HashFunctions" id="IANA_HashFunctions">Hash Function Type Registry</a></h1>
-<p id="rfc.section.4.10.p.1">The following CCNx hash function types should be allocated.</p>
+<p id="rfc.section.4.10.p.1">The following CCNx hash function types should be allocated.  Note: registration requires public specification of the algorithm.</p>
 <table cellpadding="3" cellspacing="0" class="tt full center">
   <caption>Registry Creation</caption>
   <thead>
@@ -2056,11 +2101,11 @@ address {
     </tr>
     <tr>
       <td class="left">Review process</td>
-      <td class="left">Expert Review with public specification of the hash function</td>
+      <td class="left">Specification Required</td>
     </tr>
     <tr>
       <td class="left">Syntax</td>
-      <td class="left">2 octet TLV type (decimal)</td>
+      <td class="left">2 octet TLV type</td>
     </tr>
   </tbody>
 </table>
@@ -2075,12 +2120,17 @@ address {
   </thead>
   <tbody>
     <tr>
-      <td class="center">1</td>
+      <td class="center">%x0000</td>
+      <td class="center">Reserved</td>
+      <td class="center"/>
+    </tr>
+    <tr>
+      <td class="center">%x0001</td>
       <td class="center">T_SHA-256</td>
       <td class="center"><a href="#hash_format">Hash Format</a> <cite title="NONE">[hash_format]</cite></td>
     </tr>
     <tr>
-      <td class="center">2</td>
+      <td class="center">%x0002</td>
       <td class="center">T_SHA-512</td>
       <td class="center"><a href="#hash_format">Hash Format</a> <cite title="NONE">[hash_format]</cite></td>
     </tr>

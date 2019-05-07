@@ -139,7 +139,7 @@
 	 If this element is not present, the default is "Network Working Group",
         which is used by the RFC Editor as a nod to the history of the IETF. -->
 
-    <keyword>Content Centric Networking</keyword>
+    <keyword>Content-Centric Networking</keyword>
 
     <!-- Keywords will be incorporated into HTML output
         files in a meta tag but they have no effect on text or nroff
@@ -147,12 +147,17 @@
         keywords will be used for the search engine. -->
 
     <abstract>
-      <t>This document specifies the encoding of CCNx messages in a TLV packet format,
+        <t>Content-Centric Networking (CCNx) is a network protocol
+            that uses a hierarchical name to forward requests and to match responses
+            to requests.
+            This document specifies the encoding of CCNx messages in a TLV packet format,
           including the TLV types used by each message element and the encoding of each value.
           The semantics of CCNx messages follow the encoding-independent CCNx Semantics specification.
       </t>
       <t>This document is a product of the Information Centric Networking 
-         research group (ICNRG).</t>
+         research group (ICNRG).  The document received wide review among ICNRG participants,
+          and has two full implementations currently in active use, which has informed the
+          technical maturity of the protocol specification.</t>
     </abstract>
   </front>
 
@@ -163,7 +168,7 @@
            CCNx messages and message elements, may be found in <xref target="CCNSemantics"/>. 
            CCNx is a network protocol
         that uses a hierarchical name to forward requests and to match responses
-        to requests.  It does not use endpoint addresses, such as Internet Protocol.
+        to requests.  It does not use endpoint addresses; whereas the Internet Protocol does.
         Restrictions in a request can limit the response by the public key of the response's signer or
         the cryptographic hash of the response.  Every CCNx forwarder along the path
         does the name matching and restriction checking.
@@ -180,6 +185,11 @@
     throughput links, where the extra bytes may become a concern, one may use a
     TLV compression protocol, for example <xref target="compress"/> and <xref target="CCNxz"/>.
     </t>
+    
+    <t>This document uses the terms CCNx Packet, CCNx Message, and CCNx Message TLV.
+        A CCNx Packet is defined in <xref target="packet_format"/> as the entire Layer 3 datagram.
+        A CCNx Message is defined in the <xref target="CCNSemantics">CCNx Semantics document</xref>.
+        A CCNx Message TLV is defined in <xref target="CCNMessage"/> as the encoding of a CCNx Messages.</t>
 
       <t>This document specifies: <list style="symbols">
         <t>The TLV packet format.</t>
@@ -199,12 +209,12 @@
         <t>URI notation: see <xref target="CCNxURI"></xref> for the CCNx URI notation.</t>
       </list>
       </t>
-       <t>The type values in <xref target="IANA"/> represent the values in common usage today.
-         These values may change pending IANA assignments. All type values are
+       <t>The type values in <xref target="IANA"/> conform to the IANA assigned numbers
+           for the CCNx protocol.  This document uses the symbolic names defined in
+           that section.  All TLV type values are
          relative to their parent containers. For example,
          each level of a nested TLV structure might define a "type = 1" with
-         a completely different meaning.  In the following, we use the symbolic names
-           defined in that section.</t>
+         a completely different meaning.</t>
 
        <t>Packets are represented as 32-bit wide words using ASCII art.  Due to
          the nested levels of TLV encoding and the presence of optional fields and variable sizes,
@@ -272,12 +282,12 @@
               <ttcol align="left">Description</ttcol>
 
              <c>T_ORG</c>
-             <c><xref target="vendor">Vendor Specific Information</xref></c>
-             <c>Information specific to a vendor implementation (see below).</c>
+             <c>Vendor Specific Information</c>
+             <c>Information specific to a vendor implementation (<xref target="vendor"/>).</c>
 
             <c>T_PAD</c>
-            <c><xref target="pad">Padding</xref></c>
-            <c>Adds padding to a field (see below).</c>
+            <c>Padding</c>
+            <c>Adds padding to a field (<xref target="pad"/>).</c>
 
                 <c>n/a</c>
               <c>Experimental</c>
@@ -1212,10 +1222,12 @@
           </section>
 
             <section anchor="MAC" title="Message Authentication Checks">
-            <t>MACs are useful for communication between two trusting parties who have already shared private keys.
-              Examples include an RSA signature of a SHA256 digest or others.
-              They rely on a KeyId. Some MACs might use more than a KeyId,
-              but those would be defined in the future. </t>
+            <t>MACs are useful for communication between two trusting parties who have already shared secret keys.
+                An example is the HMAC algorithm.
+              A MAC uses the KeyId field to identify which shared secret is in use.  The meaning of the KeyId is
+              specific to the two parties involved, and could be a simple integer to enumerate keys.
+              If a new MAC requires an additional field, such as an Initialization Vector, that field would
+              need to be defined as part of the updated specification.</t>
             </section>
 
             <section anchor="signature_val" title="Signature">
@@ -1297,6 +1309,8 @@
               </figure>
             </section>
             <section anchor="Cert" title="Certificate">
+                <t>A Certificate is a DER encoded X509 certificate.
+                The <xref target="KeyId">KeyId</xref> is derived from this encoding.</t>
               <figure>
                 <artwork align="left"><![CDATA[
                      1                   2                   3
@@ -1993,9 +2007,12 @@
 		<t>
         The CCNx message format includes the ability to attach MICs (e.g. SHA-256 or CRC), MACs (e.g. HMAC), 
         and Signatures (e.g. RSA or ECDSA) to
-        all packet types.  This does not mean that it is a good idea to use an arbitrary
-        ValidationAlgorithm, nor to include computationally expensive algorithms in Interest
-        packets, as that could lead to computational DoS attacks.  Applications should
+        all packet types.
+        Because Interest packets can be sent at will, an application should carefully select when to use
+        a given ValidationAlgorithm in an Interest to avoid DoS attacks.  MICs, for example, are inexpensive and
+        could be used as desired, whereas MACs and Signatures are more expensive and their inappropriate use
+        could open a computational DoS attack surface.
+        Applications should
         use an explicit protocol to guide their use of packet signatures.  As a general guideline,
         an application might use a MIC on an Interest to detect unintentionally corrupted packets.  
         If one wishes to secure an Interest, one should

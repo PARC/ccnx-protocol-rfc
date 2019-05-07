@@ -583,7 +583,7 @@ PEN           := ; IANA Private Enterprise Number
         <t>The consumer SHOULD specify an InterestLifetime, which is the length of time
           the consumer is willing to wait for a response.  The InterestLifetime is an
           application-scale time, not a network round trip time (see <xref target="aggregation"/>).
-          If not present, the InterestLifetime will use a default value (TO_INTERESTLIFETIME).
+          If not present, the InterestLifetime will use a default value (2 seconds).
         </t>
         <t>The consumer SHOULD set the Interest HopLimit to a reasonable value or use
            the default 255.  If the consumer knows the distances to the producer via
@@ -1234,8 +1234,6 @@ PEN           := ; IANA Private Enterprise Number
     <!-- Possibly a 'Contributors' section ... -->
     <section anchor="IANA" title="IANA Considerations">
       <t>This memo includes no request to IANA. </t>
-
-      <t>TO_INTERESTLIFETIME = 2 seconds.</t>
     </section>
     <section anchor="Security" title="Security Considerations">
 		<t>The CCNx protocol is a layer 3 network protocol, which may also operate as an overlay using other
