@@ -105,7 +105,7 @@ format encoding".  Should these be made uniform?
       
         
       <t>The protocol also uses a control message called an
-      InterestReturn, whereby one system can return an Interest
+      Interest Return, whereby one system can return an Interest
       message to the previous hop due to an error condition.  This
       indicates to the previous hop that the current system will not
       respond to the Interest.</t>
@@ -267,11 +267,11 @@ Or perhaps:
       request, called an Interest, and forwards it via the endpoint's
       FIB.  The consumer should get back either a response (called a
       Content Object) that matches the Interest or a control message
-      (called an InterestReturn) that indicates the network cannot
+      (called an Interest Return) that indicates the network cannot
       handle the request.</t>
       
       <t>There are three ways to detect errors in Interest handling.
-      An InterestReturn is a network control message that indicates a
+      An Interest Return is a network control message that indicates a
       low-level error like "no route" or "out of resources".  If an
       Interest arrives at a producer, but the producer does not have
       the requested content, the producer should send an
@@ -296,22 +296,22 @@ Or perhaps:
       	details of these restrictions are described below.
       	</t>
       	
-      	<t>The CCNx name is a hierarchical series of path segments.
-      	Each path segment has a type and zero or more bytes.  Matching
+      	<t>The CCNx name is a hierarchical series of name segments.
+      	Each name segment has a type and zero or more bytes.  Matching
       	two names is done as a binary comparison of the type and
       	value, and is done segment by segment.  The human-readable
       	form is defined under a URI scheme <xref
       	target="ccnx-uri">"ccnx:"</xref>, though the canonical
       	encoding of a name is a series of pairs (type, octet string).
-      	There is no requirement that any path segment be human
+      	There is no requirement that any name segment be human
       	readable or UTF-8.  The first few segments in a name will be
       	matched against the FIB, and a routing protocol may put its
       	own restrictions on the routable name components (e.g., a
       	maximum length or character-encoding rules).  In principle,
-      	path segments and names have unbounded length, though in
+      	name segments and names have unbounded length, though in
       	practice they are limited by the wire-format encoding and
       	practical considerations imposed by a routing protocol.  Note
-      	that in CCNx, path segments use binary comparison, whereas in a
+      	that in CCNx, name segments use binary comparison, whereas in a
       	URI, the authority uses a case-insensitive hostname (due to
       	DNS).</t>
       	
@@ -321,15 +321,15 @@ Or perhaps:
       	reason for this is that we are concerned with how a forwarder
       	processes names.  We expect that applications, routing
       	protocols, or other higher layers will apply their own
-      	conventions and restrictions on the allowed path-segment types
-      	and path-segment values.</t>
+      	conventions and restrictions on the allowed name-segment types
+      	and name-segment values.</t>
       
         <t>CCNx is a request and response protocol that fetches chunks
         of data using a name. The integrity of each chunk may be
         directly asserted through a digital signature or Message
         Authentication Code (MAC), or, alternatively, indirectly via
         hash chains. Chunks may also carry weaker Message Integrity
-        Checks (MICs) or no integrity protection mechanism at all.
+        Code (MICs) or no integrity protection mechanism at all.
         Because provenance information is carried with each chunk (or
         larger indirectly protected block), we no longer need to rely
         on host identities, such as those derived from TLS
@@ -423,7 +423,7 @@ throughout. Is there a preferred format when not intending
 
         <t>CCNx specifies a network protocol around Interests (request
         messages) and Content Objects (response messages) to move
-        named payloads.  An Interest includes the Name, which
+        named payloads.  An Interest includes the Name field, which
         identifies the desired response, and optional matching
         restrictions.  Restrictions limit the possible matching
         Content Objects. Two restrictions exist: the Key ID restriction (KeyIdRestr)
@@ -438,10 +438,10 @@ throughout. Is there a preferred format when not intending
         fully explains how these restrictions limit matching of a
         Content Object to an Interest.
         </t>
-        <t>The hierarchy of a CCNx Name is used for routing via the
+        <t>The hierarchy of a CCNx name is used for routing via the
         longest matching prefix in a Forwarder.  The longest matching
         prefix is computed name segment by name segment in the
-        hierarchical path name, where each name segment must be
+        hierarchical name, where each name segment must be
         exactly equal to match.  There is no requirement that the
         prefix be globally routable.  Within a deployment, any local
         routing may be used, even one that only uses a single flat
@@ -468,8 +468,8 @@ throughout. Is there a preferred format when not intending
           use the notional Pending Interest Table (PIT) as a method to
           store state that facilitates the return of a Content Object.
         </t>
-        <t>The notional PIT table stores the last hop of an Interest
-        plus its Name and optional restrictions.  This is the data
+        <t>The notional PIT stores the last hop of an Interest
+        plus its Name field and optional restrictions.  This is the data
         required to match a Content Object to an Interest (see <xref
         target="matching"/>).  When a Content Object arrives, it must
         be matched against the PIT to determine which entries it
@@ -489,11 +489,11 @@ An actual PIT table is not mandated by this specification.
  
  MM: Done
 -->
-        <t>An actual PIT table is not mandated by this specification.
+        <t>An actual PIT is not mandated by this specification.
         An implementation may use any technique that gives the same
         external behavior.  There are, for example, research papers
         that use techniques like label switching in some parts of the
-        network to reduce the per-node state incurred by the PIT table
+        network to reduce the per-node state incurred by the PIT
         <xref target="dart"/>.  Some implementations store the PIT
         state in the FIB, so there is not a second table.</t>
         
@@ -519,18 +519,18 @@ Original:
         PIT.
         </t>
         <t>In CCNx, higher-layer protocols are often called
-        "name-based protocols" because they operate on the CCNx Name.
+        "name-based protocols" because they operate on the CCNx name.
         For example, a versioning protocol might append additional
         name segments to convey state about the version of payload.  A
         content discovery protocol might append certain
         protocol-specific name segments to a prefix to discover
         content under that prefix.  Many such protocols may exist and
-        apply their own rules to Names. They may be layered with each
-        protocol encapsulating (to the left) a higher layer's Name
+        apply their own rules to names. They may be layered with each
+        protocol encapsulating (to the left) a higher layer's name
         prefix.
         </t>
         <t>This document also describes a control message called an
-        InterestReturn.  A network element may return an Interest
+        Interest Return.  A network element may return an Interest
         message to a previous hop if there is an error processing the
         Interest. The returned Interest may be further processed at
         the previous hop or returned towards the Interest origin.
@@ -559,14 +559,14 @@ Original:
         </t>
         <t>With these concepts, the remainder of the document
         specifies the behavior of a forwarder in processing Interest,
-        Content Object, and InterestReturn messages.
+        Content Object, and Interest Return messages.
         </t>
       </section>
     </section>
     <section anchor="protocol" title="Protocol">
       <t>CCNx is a request and response protocol. A request is called
       an "Interest" and a response is called a "Content Object".  CCNx
-      also uses a 1-hop control message called InterestReturn.  These
+      also uses a 1-hop control message called Interest Return.  These
       are, as a group, called CCNx Messages.</t>
 
       <section anchor="grammar" title="Message Grammar">
@@ -659,7 +659,7 @@ The CCNx message ABNF [RFC5234] grammar is shown in Figure 1
             </t>
             <t hangText="Name:">A name is made up of a non-empty first segment
             followed by zero or more additional segments, which may be
-            of 0 length.  Path segments are opaque octet strings and
+            of 0 length.  Name segments are opaque octet strings and
             are thus case sensitive if encoding UTF-8.  An Interest
             MUST have a Name.  A Content Object MAY have a Name (see
             <xref target="matching"/>).  The segments of a name are
@@ -671,11 +671,15 @@ The CCNx message ABNF [RFC5234] grammar is shown in Figure 1
             </t>
             <t hangText="Payload:">The message's data, as defined by PayloadType.
             </t>
-            <t hangText="PayloadType:">The format of the Payload.  If missing,
-            assume DataType.  DataType means the payload is opaque
-            application bytes.  KeyType means the payload is a
-            DER-encoded public key.  LinkType means it is one or more
-            Links (see <xref target="link"/>).
+            <t hangText="PayloadType:">The format of the Payload field.  If missing,
+            assume Data type (T_PAYLOADTYPE_DATA <xref target="ccnx-registry"/>).
+            Data type means the payload is opaque
+            application bytes.
+            Key type (<xref target="ccnx-registry">T_PAYLOADTYPE_KEY</xref>)
+            means the payload is a
+            DER-encoded public key or X.509 certificate.
+            Link type (<xref target="ccnx-registry">T_PAYLOADTYPE_LINK</xref>)
+            means it is one or more Links (see <xref target="link"/>).
             </t>
             <t hangText="PublicKey:">Some applications may wish to embed the
             public key used to verify the signature within the message
@@ -701,7 +705,7 @@ The CCNx message ABNF [RFC5234] grammar is shown in Figure 1
         </t>
 
 
-       <figure anchor="abnfgrammar" title="CCNx Message ABNF">
+       <figure anchor="abnfgrammar" title="CCNx Message ABNF Grammar">
         <artwork align="left"><![CDATA[
 Message       = Interest / ContentObject / InterestReturn
 Interest      = IntHdr BodyName [Validation]
@@ -776,6 +780,8 @@ Perhaps:
    PEN           := ; IANA Private Enterprise Number
 
                                  Figure 1: CCNx Message ABNF Grammar
+ 
+ MM: Done
 -->
       </section>
 
@@ -786,11 +792,11 @@ Perhaps:
         Interest message with those values.  It MAY add a validation
         section, typically only a CRC32C.  A consumer MAY put a
         Payload field in an Interest to send additional data to the
-        producer beyond what is in the Name.  The Name is used for
+        producer beyond what is in the name.  The name is used for
         routing and may be remembered at each hop in the notional PIT
         table to facilitate returning a Content Object; Storing large
-        amounts of state in the Name could lead to high memory
-        requirements.  Because the Payload is not considered when
+        amounts of state in the name could lead to high memory
+        requirements.  Because the payload is not considered when
         forwarding an Interest or matching a Content Object to an
         Interest, a consumer SHOULD put an Interest Payload ID (see
         <xref target="ipid"/>) as part of the name to allow a
@@ -824,7 +830,7 @@ Perhaps:
         unanswered, up to the InterestLifetime.  No transport protocol
         is specified in this document.
         </t>
-        <t>The network MAY send to the consumer an InterestReturn
+        <t>The network MAY send to the consumer an Interest Return
         message that indicates the network cannot fulfill the
         Interest.  The ReturnCode specifies the reason for the
         failure, such as no route or congestion.  Depending on the
@@ -832,7 +838,8 @@ Perhaps:
         an error to the requesting application.
         </t>
         <t>If the content was found and returned by the first forwarder, the
-        consumer will receive a Content Object.  The consumer SHOULD:
+            consumer will receive a Content Object.
+            The consumer uses the following set of checks to validate a received Content Object.
 
 
 <!--[rfced] Regarding the list in Section 2.2:
@@ -848,11 +855,12 @@ introductory text makes sense.
 
 b) Please review the use of the pronoun "it".  Will it be clear to the
 reader who/what "it" refers to in each case?
+ MM: Done
 -->
 
 	
           <list style="symbols">
-            <t>Ensure the Content Object is properly formatted.
+            <t>The consumer MUST ensure the Content Object is properly formatted.
             </t>
 
 <!-- [rfced] This document appears to use both "name" and "Name" throughout as
@@ -863,40 +871,38 @@ Original:
    Note that as per the message grammar, an Interest must have a
    Name with at least one name segment and that name segment must have
    at least 1 octet of value.  A Content Object must have a similar name
-   or no name at all.     
+   or no name at all.
+ MM: Done
  -->
-            <t>Verify that the returned Name matches a pending
-            request.  If the request also had KeyID restriction or
-            Content-Object Hash restriction, it MUST also validate those properties.
+            <t>The consumer MUST verify that the returned Content Object matches one
+                or more pending Interests
+                as per <xref target="matching"/>.
             </t>
-            <t>If the Content Object is signed, it SHOULD
-            cryptographically verify the signature.  If it does not
-            have the corresponding key, it SHOULD fetch the key, such
-            as from a key resolution service or via the KeyLink.
+            <t>If the Content Object is signed, the consumer SHOULD cryptographically
+                verify the signature.  If it does not have the corresponding key,
+                it SHOULD fetch the key, such as from a key resolution service or
+                via the KeyLink.
             </t>
-            <t>If the signature has a SigTime, the consumer MAY use
-            that in considering if the signature is valid.  For
-            example, if the consumer is asking for dynamically
-            generated content, it should expect the SigTime not to be
-            before the time the Interest was generated.
+            <t>If the signature has a SigTime, the consumer MAY use that in
+                considering if the signature is valid.  For example, if the
+                consumer is asking for dynamically generated content, it should
+                expect the SigTime not to be before the time the Interest was
+                generated.
             </t>
-            <t>If the Content Object is signed, it should assert the
-            trustworthiness of the signing key to the namespace.  Such
-            an assertion is beyond the scope of this document, though
-            one may use traditional PKI methods, a trusted key
-            resolution service, or methods like <xref
-            target="trust"/>.
-	    
+            <t>If the Content Object is signed, the consumer should assert the
+                trustworthiness of the signing key to the namespace.  Such an
+                assertion is beyond the scope of this document, though one may use
+                traditional PKI methods, a trusted key resolution service, or
+                methods like <xref target="trust"/>.
             </t>
-            <t>It MAY cache the Content Object for future use, up to
-            the ExpiryTime if present.
+            <t>The consumer MAY cache the Content Object for future use, up to the
+                ExpiryTime if present.
             </t>
-            <t>A consumer MAY accept a Content Object off the wire
-            that is expired.  It may happen that a packet expires
-            while in flight, and there is no requirement that
-            forwarders drop expired packets in flight.  The only
-            requirement is that Content Stores, caches, or producers
-            MUST NOT respond with an expired Content Object.
+            <t>The consumer MAY accept a Content Object off the wire that is
+                expired.  This may happen that a Content Object expires while in flight:
+                there is no requirement that forwarders drop expired packets in
+                flight.  The only requirement is that Content Stores, caches, or
+                producers MUST NOT respond with an expired Content Object.
             </t>
           </list>
         </t>
@@ -929,7 +935,7 @@ Original:
             <t>Retrieve or generate the requested Content Object and
             return it to the Interest's previous hop.  If the
             requested content cannot be returned, the publisher SHOULD
-            reply with an InterestReturn or a Content Object with
+            reply with an Interest Return or a Content Object with
             application payload that says the content is not
             available; this Content Object should have a short
             ExpiryTime in the future or not be cacheable (i.e., an
@@ -943,7 +949,7 @@ Original:
         <t>A forwarder routes Interest messages based on a Forwarding
         Information Base (FIB), returns Content Objects that match
         Interests to the Interest's previous hop, and processes
-        InterestReturn control messages.  It may also keep a cache of
+        Interest Return control messages.  It may also keep a cache of
         Content Objects in the notional Content-Store table.  This
         document does not specify the internal behavior of a
         forwarder, only these and other external behaviors.
@@ -973,11 +979,12 @@ Original:
    In this case, the Content will be sent back along the loop and eventually
    return to a node that already forwarded the content, so it will likely not
    have a PIT entry anymore.
+ MM: Done
 -->
           <t>
             A loop may also terminate because the Interest is
             aggregated with its previous PIT entry along the loop.  In
-            this case, the Content will be sent back along the loop
+            this case, the Content Object will be sent back along the loop
             and eventually return to a node that already forwarded the
             content, so it will likely not have a PIT entry
             anymore. When the content reaches a node without a PIT
@@ -1012,7 +1019,7 @@ Original:
                 <t>If Interest received from a remote system:
                       <list style="symbols">
                           <t>If received HopLimit is 0, optionally
-                          send InterestReturn (HopLimit Exceeded), and
+                          send Interest Return (HopLimit Exceeded), and
                           discard Interest.</t>
                           <t>Otherwise, decrement the HopLimit by 1.</t>
                       </list>
@@ -1065,7 +1072,7 @@ Original:
             identical, Content Objects will come back.  A forwarder
             MUST still satisfy all pending Interests, so one Content
             Object could satisfy multiple similar Interests, even if
-            the forwarded did not suppress duplicate Interest
+            the forwarder did not suppress duplicate Interest
             messages.
           </t>
             <t>A RECOMMENDED Interest aggregation scheme is:
@@ -1181,7 +1188,7 @@ Original:
               previous hop.  If a match is found, forward the
               Interest.  If no match is found or the forwarder chooses
               not to forward due to a local condition (e.g.,
-              congestion), it SHOULD send an InterestReturn message as
+              congestion), it SHOULD send an Interest Return message as
               per <xref target="InterestReturn"/>.</t>
             </list>
           </t>
@@ -1246,18 +1253,19 @@ Original:
 <!-- [rfced] This document uses "name segment","Name segment", and
 "Name Segment" (note the capitalization) throughout. Please let
 us know which form is preferred.
+ MM: Done
 -->
 
       <t>The name segment labels specified in this document are given
-      in the table below.  Name Segment is a general name segment,
+      in Table <xref target="name_types"/>.  Name Segment is a general name segment,
       typically occurring in the routable prefix and user-specified
-      content name.  Other segment types are for functional name
-      components that imply a specific purpose. </t>
-
+      content name.  Interest Payload ID is a name segment to identify the Interest's
+      payload.  Application Components are a set of name segment types reserved for
+      application use. </t>
 
 <?rfc compact="no"?>      
       <texttable anchor="name_types" title="CCNx Name-Segment Types">
-        <ttcol align="center">Name</ttcol>
+        <ttcol align="center">Type</ttcol>
         <ttcol align="left">Description</ttcol>
         <c>Name Segment</c>
         <c>A generic name segment that includes arbitrary octets.</c>
@@ -1265,13 +1273,13 @@ us know which form is preferred.
         <c>An octet string that identifies the payload carried in an
         Interest.  As an example, the Payload ID might be a hash of the
         Interest Payload.  This provides a way to differentiate
-        between Interests based on the Payload solely through a Name
-        Segment without having to include all the extra bytes of the
+        between Interests based on the Payload solely through a name
+        segment without having to include all the extra bytes of the
         payload itself. </c>
         <c>Application Components</c>
         <c>An application-specific payload in a name segment.  An
         application may apply its own semantics to these components.
-        A good practice is to identify the application in a Name
+        A good practice is to identify the application in a name
         segment prior to the application component segments.</c>
       </texttable>
  <?rfc compact="yes"?>
@@ -1279,7 +1287,7 @@ us know which form is preferred.
       the semantics of name segments; it need only identify name
       segment boundaries and be able to compare two name segments
       (both label and value) for equality.  The Forwarder matches
-      paths segment by segment against its forwarding table to
+      names segment by segment against its forwarding table to
       determine a next hop.</t>
       <section anchor="NameExamples" title="Name Examples">
         <t>This section uses the <xref target="ccnx-uri">CCNx
@@ -1315,10 +1323,12 @@ Original:
    Interest but is not used to match a Content Object.  If an Interest
    contains a payload, the Interest name should contain an Interest
    Payload ID (IPID).
+ 
+ MM: Done
 -->
 
       <section anchor="ipid" title="Interest Payload ID">
-        <t>An Interest may also have a Payload that carries state
+        <t>An Interest may also have a Payload field that carries state
         about the Interest but is not used to match a Content Object.
         If an Interest contains a payload, the Interest name should
         contain an Interest Payload ID (IPID).  The IPID allows a PIT
@@ -1360,6 +1370,7 @@ Perhaps:
    It is the UTC time in milliseconds after which
    the publisher considers the Content Object to be of too low a value to
    cache.
+ MM: Done
  --> 
       <t>The Recommended Cache Time (RCT) is a field that exists
       outside the signature envelope.  It is the UTC time in
@@ -1403,7 +1414,7 @@ Perhaps:
       <t>A Link is the tuple {Name, [KeyIdRestr],
       [ContentObjectHashRestr]}.  The information in a Link comprises
       the fields of an Interest that would retrieve the Link target.
-      A Content Object with PayloadType = "Link" is an object whose
+      A Content Object with PayloadType of "Link" is an object whose
       payload is one or more Links.  This tuple may be used as a
       KeyLink to identify a specific object with the
       certificate-wrapped key.
@@ -1457,7 +1468,8 @@ Original:
    do not need to provide any additional information
    ...
    Chunks may also carry weaker Message Integrity Checks (MICs) or no
-   integrity protection mechanism at all. 
+   integrity protection mechanism at all.
+ MM: Done
 -->
 
 <!-- [rfced] Please verify that the expansion for "RSA" is the common
@@ -1472,6 +1484,7 @@ Original:
 Perhaps:
    Signature validators use public key cryptographic algorithms such as RSA,
    DSA, and the Elliptic Curve Digital Signature Algorithm (ECDSA).
+ MM: Done
 -->
 
 <!-- [rfced] Can a signature bundle a Key, a Certificate,
@@ -1483,7 +1496,8 @@ Original:
 
 Perhaps: 
    A signature may optionally include a KeyLocator, as described above, to
-   bundle a Key, Certificate, or KeyLink. 
+   bundle a Key, Certificate, or KeyLink.
+ MM: Done
 -->
 
 <!-- [rfced] This document appears to use both "signature" and
@@ -1496,11 +1510,12 @@ Original:
    Signatures.
    ...
    The KeyId field in the ValidationAlgorithm identifies the public key used
-   to verify the signature. 
+   to verify the signature.
+ MM: Done
 -->
 <t>
           Validation Algorithms fall into three categories: MICs,
-          MACs, and Signatures.  Validators using Message Integrity
+          MACs, and signatures.  Validators using Message Integrity
           Code (MIC) algorithms do not need to provide any additional
           information; they may be computed and verified based only on
           the algorithm (e.g., CRC32C). MAC validators require the use
@@ -1508,23 +1523,25 @@ Original:
           authenticator. Because MACs are usually used between two
           parties that have already exchanged secret keys via a key
           exchange protocol, the KeyId may be any agreed-upon value to
-          identify which key is used.  Signature validators use public
-          key cryptographic algorithms such as RSA, DSA, ECDSA. The
-          KeyId field in the ValidationAlgorithm identifies the public
-          key used to verify the signature. A signature may optionally
-          include a KeyLocator, as described above, to bundle a Key or
-          Certificate or KeyLink.  MAC and Signature validators may
+          identify which key is used.
+          Signature validators use public key cryptographic algorithms such as RSA,
+          DSA, and the Elliptic Curve Digital Signature Algorithm (ECDSA).
+          The KeyId field in the ValidationAlgorithm identifies the public
+          key used to verify the signature.
+          A signature may optionally include any of: the corresponding public key,
+          the corresponding certificate, or a KeyLink to the public key or a certificate.
+          If it includes multiple options, the consumer should ensure they are consistent.
+          MAC and signature validators may
           also include a SignatureTime, as described above.
         </t>
-        <t>A PublicKeyLocator KeyLink points to a Content Object with
-        a DER-encoded X.509 certificate in the payload.  In this case,
-        the target KeyId must equal the first object's KeyId.  The
-        target KeyLocator must include the public key corresponding to
-        the KeyId.  That key must validate the target Signature.  The
-        payload is an X.509 certificate whose public key must match
-        the target KeyLocator's key.  It must be issued by a trusted
-        authority, preferably specifying the valid namespace of the
-        key in the distinguished name.
+        <t>A KeyLink may point to a Content Object with a DER-encoded X.509
+            certificate in the payload.  In this case, the target
+            KeyId must equal the first object's KeyId.  The target PublicKey
+            must include the public key corresponding to the KeyId.  That key
+            must validate the target signature.  The payload is an X.509
+            certificate whose public key must match the target's PublicKey.
+            It must be issued by a trusted authority, preferably specifying the
+            valid namespace of the key in the distinguished name.
         </t>
       </section>
     </section>
@@ -1549,7 +1566,7 @@ Original:
       <t>As a special case, if the Content-Object Hash restriction in the
       Interest specifies an unsupported hash algorithm, then no
       Content Object can match the Interest, so the system should drop
-      the Interest and MAY send an InterestReturn to the previous hop.
+      the Interest and MAY send an Interest Return to the previous hop.
       In this case, the predicate below will never get executed
       because the Interest is never forwarded.  If the system is using
       the optional behavior of having a different system calculate the
@@ -1592,7 +1609,7 @@ Original:
       headers, and the CCNx Message body). The returned Interest
       packet is modified in only two ways:
         <list style="symbols">
-          <t>The PacketType is set to InterestReturn to indicate a
+          <t>The PacketType is set to Interest Return to indicate a
           Feedback message.
           </t>
           <t>The ReturnCode is set to the appropriate value to signal
@@ -1610,20 +1627,20 @@ Original:
       Object or any other message type.</t>
       <t>An Interest Return message is a 1-hop message between peers.
       It is not propagated multiple hops via the FIB.  An intermediate
-      node that receives an InterestReturn may take corrective actions
-      or may propagate its own InterestReturn to previous hops as
+      node that receives an Interest Return may take corrective actions
+      or may propagate its own Interest Return to previous hops as
       indicated in the reverse path of a PIT entry.</t>
       <section anchor="MessageFormat" title="Message Format">
         <t>The Interest Return message looks exactly like the original
         Interest message with the exception of the two modifications
         mentioned above.  The PacketType is set to indicate the
-        message is an InterestReturn, and the reserved byte in the
+        message is an Interest Return, and the reserved byte in the
         Interest header is used as a Return Code.  The numeric values
         for the PacketType and ReturnCodes are in <xref
         target="ccn-messages"/>.</t>
       </section>
       <section anchor="TypeDefinitions" title="ReturnCode Types">
-        <t>This section defines the InterestReturn ReturnCode
+        <t>This section defines the Interest Return ReturnCode
         introduced in this RFC.  The numeric values used in the packet
         are defined in <xref target="ccn-messages"/>.</t>
 
@@ -1701,8 +1718,8 @@ Original:
         could keep track of which next hops it has tried and not reuse
         them.</t>
         <t>If a forwarder tries an alternate route, it may receive a
-        second InterestReturn, possibly of a different type than the
-        first InterestReturn.  For example, node A sends an Interest
+        second Interest Return, possibly of a different type than the
+        first Interest Return.  For example, node A sends an Interest
         to node B, which sends a No Route return.  Node A then tries
         node C, which sends a Prohibited.  Node A should choose what
         it thinks is the appropriate code to send back to its previous
@@ -1735,7 +1752,8 @@ Original:
 
 Perhaps:
    If a Forwarder receives an "Interest MTU Too Large" message, it SHOULD NOT try
-   alternate paths. 
+   alternate paths.
+ MM: Done
 -->
 
 <!-- [rfced] Can "InterestReturn" stand on its own as a noun or should
@@ -1744,18 +1762,20 @@ instances be changed to "InterestReturn message"?
 Original:
    If a Forwarder receives an Interest and it cannot process the
    Interest due to lack of resources, it MAY send an InterestReturn.
+ MM: Done
 -->
         <section anchor="MTU" title="Interest MTU Too Large">
           <t>If a Forwarder receives an Interest whose MTU exceeds the
           prescribed minimum, it MAY send an "Interest MTU Too Large"
           message, or it may silently discard the Interest.</t>
-          <t>If a Forwarder receives an "Interest MTU Too Large" is SHOULD NOT try alternate paths.
+          <t>If a Forwarder receives an "Interest MTU Too Large" response, it SHOULD NOT try
+              alternate paths.
             It SHOULD propagate the Interest Return to its previous hops.</t>
         </section>
         <section anchor="NoResources" title="No Resources">
           <t>If a Forwarder receives an Interest and it cannot process
           the Interest due to lack of resources, it MAY send an
-          InterestReturn.  A lack of resources could mean the PIT
+          Interest Return.  A lack of resources could mean the PIT
           table is too large or that there is some other capacity
           limit.</t>
         </section>
@@ -1770,6 +1790,7 @@ Original:
    it MAY send a Prohibited InterestReturn to the previous hop   
    ...
    it MAY send a Congestion InterestReturn to the previous hop.
+ MM: Done
 --> 
         <section anchor="PathError" title="Path Error">
           <t>If a forwarder detects an error forwarding an Interest,
@@ -1794,31 +1815,32 @@ Perhaps:
    come from interface e0, but the Forwarder receives one from e1, the
    Forwarder must have a way to return the Interest with an
    explanation.
+ MM: Done
  -->
         <section anchor="Prohibited" title="Prohibited">
           <t>A forwarder may have administrative policies, such as
           access control lists (ACLs), that prohibit receiving or
           forwarding an Interest.  If a forwarder discards an Interest
-          due to a policy, it MAY send a Prohibited InterestReturn to
+          due to a policy, it MAY send a Prohibited Interest Return to
           the previous hop. For example, if there is an ACL that says
-          /parc/private can only come from interface e0, but the
+          "/example/private" can only come from interface e0, but the
           Forwarder receives one from e1, the Forwarder must have a
           way to return the Interest with an explanation.</t>
         </section>
         <section anchor="Congestion" title="Congestion">
-          <t>If a forwarder discards an Interest due to congestion, it MAY send a Congestion InterestReturn to
+          <t>If a forwarder discards an Interest due to congestion, it MAY send a Congestion Interest Return to
             the previous hop.</t>
         </section>
         <section anchor="UnsupportedHashAlgorithm" title="Unsupported Content-Object Hash Algorithm">
           <t>If a Content-Object Hash Restriction specifies a hash
           algorithm the forwarder cannot verify, the Interest should
-          not be accepted and the forwarder MAY send an InterestReturn
+          not be accepted and the forwarder MAY send an Interest Return
           to the previous hop.</t>
         </section>
         <section anchor="MalformedInterest" title="Malformed Interest">
           <t>If a forwarder detects a structural or syntactical error
           in an Interest, it SHOULD drop the Interest and MAY send an
-          InterestReturn to the previous hop.  This does not imply
+          Interest Return to the previous hop.  This does not imply
           that any router must validate the entire structure of an
           Interest.</t>
         </section>
@@ -1845,7 +1867,7 @@ Perhaps:
 		
 		<t>
         The CCNx message format includes the ability to attach MICs
-        (e.g., SHA-256 or CRC), MACs (e.g., HMAC), and Signatures
+        (e.g., SHA-256 or CRC), MACs (e.g., HMAC), and signatures
         (e.g., RSA or ECDSA) to all packet types.  This does not mean
         that it is a good idea to use an arbitrary
         ValidationAlgorithm, nor to include computationally expensive
@@ -1864,11 +1886,12 @@ Perhaps:
         </t>		
 		
 		<t>As a L3 protocol, this document does not describe
-		how one arrives at keys or how one trusts keys.  The
-		CCNx Content Object may include a public key embedded
-		in the object or may use the PublicKeyLocator field to
-		point to a public key (or public key certificate) that
-		authenticates the message.  One key-exchange
+		how one arrives at keys or how one trusts keys.
+        The CCNx Content Object may
+        include a public key or certificate embedded in the object or may use the
+        KeyLink field to point to a public key or certificate
+        that authenticates the message.
+        One key-exchange
 		specification is <xref target="ccnx-ke">CCNxKE</xref>
 		<xref target="mobile"/>, which is similar to the TLS
 		1.3 key exchange except it is over the CCNx L3
@@ -1910,16 +1933,17 @@ Perhaps:
    Some TLVs use variable length "T" and variable length "L"
    fields to accomodate a wide gamut of values while trying to be byte-
    efficient.
+ MM: Done
 -->
 		<t>The specific encoding of messages will have
 		security implications.  <xref target="ccn-messages"/>
 		uses a type-length-value (TLV) encoding.  We chose to
 		compromise between extensibility and unambiguous
 		encodings of types and lengths.  Some TLVs use
-		variable length T and variable length L fields to
+		variable length "T" and variable length "L" fields to
 		accommodate a wide gamut of values while trying to be
 		byte-efficient.  Our TLV encoding uses a fixed-length
-		2-byte T and 2-byte L.  Using a fixed-length T and L
+		2-byte "T" and 2-byte "L".  Using a fixed-length "T" and "L"
 		field solves two problems.  The first is aliases.  If
 		one is able to encode the same value, such as 0x2 and
 		0x02, in different byte lengths, then one must decide
@@ -1936,7 +1960,7 @@ Perhaps:
 		fields with 4 encodings each, or 1001 combinations.
 		It also means that one cannot compare, for example, a
 		name via a memory function as one needs to consider
-		that any embedded T or L might have a different
+		that any embedded "T" or "L" might have a different
 		format.</t>
     		
       <t>The Interest Return message has no authenticator from the
@@ -1972,8 +1996,8 @@ Perhaps:
       respond.
       	</t>
       	
-       <t>A user-level cache could perform full-signature verification
-       by fetching a public key according to the PublicKeyLocator.
+        <t>A user-level cache could perform full signature verification by
+            fetching a public key or certificate according to the KeyLink.
        That is not, however, a burden we wish to impose on the
        forwarder.  A user-level cache could also rely on out-of-band
        attestation, such as the cache operator only inserting content
@@ -1993,17 +2017,19 @@ Perhaps:
    so a forwarder (or related system) must know the hash algorithm and
    whether or not it could cause backward compatibility problems if
    the hash type is updated.
+ MM: Done
 -->
       <t>The CCNx grammar allows for hash-algorithm agility via the
       HashType.  It specifies a short list of acceptable hash
       algorithms that should be implemented at each forwarder.  Some
       hash values only apply to end systems, so updating the hash
       algorithm does not affect forwarders; they would simply match
-      the buffer that includes the type-length-hash buffer.  Some
-      fields, such as the ConObjHash, must be verified at each hop, so
-      a forwarder (or related system) must know the hash algorithm and
-      it could cause backward compatibility problems if the hash type
-      is updated.  <xref target="ccn-messages"/> is the authoritative
+      the buffer that includes the type-length-hash buffer.
+      Some fields, such as the ConObjHash, must be verified at
+      each hop, so a forwarder (or related system) must know the hash
+      algorithm: it could cause backward compatibility problems if the
+      hash type is updated.
+      <xref target="ccn-messages"/> is the authoritative
       source for per-field-allowed hash types in that encoding.</t>
       
       <t>A CCNx name uses binary matching whereas a URI uses a
@@ -2058,10 +2084,13 @@ Communications" value="(ICNC)"/>
 
 	</reference>
 	
-      <reference anchor="ndn"
-		 target="http://www.named-data.net"><front><title>Named Data
-      Networking</title><author><organization></organization></author><date
-      /></front></reference> 
+      <reference anchor="ndn" target="http://www.named-data.net">
+         <front>
+             <title>Named Data Networking</title>
+             <author><organization>UCLA</organization></author>
+             <date year="2019"/>
+         </front>
+      </reference>
 
 
 <!-- [rfced] We note that draft-irtf-icnrg-ccnxmessages is currently
@@ -2070,6 +2099,7 @@ pointing to the Work in Progress (Internet-Draft) version so as
 not to slow publication.  Please let us know if it is preferrable
 to wait for that document to clear the queue to reference the RFC
 number it will be assigned instead.
+ MM: Done
 
 -->
 
@@ -2142,16 +2172,20 @@ Original:
 Perhaps:
      [selectors]
              "CCNx Selector Based Discovery", July 2018,
-	     <https://raw.githubusercontent.com/mmosko/ccnx-protocol-rfc/master/docs/build/draft-mosko-icnrg-selectors-01.txt> 
+	     <https://raw.githubusercontent.com/mmosko/ccnx-protocol-rfc/master/docs/build/draft-mosko-icnrg-selectors-01.txt>
+ 
+ MM: Done (updated draft from the github)
 --> 
 
-     <reference anchor="selectors" target="https://raw.githubusercontent.com/mmosko/ccnx-protocol-rfc/master/docs/build/draft-mosko-icnrg-selectors-01.txt">
-          <front>
-              <title>CCNx Selector Based Discovery</title>
-              <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
-              <date year="2018"/>
-          </front>
-      </reference>
+     <reference anchor="selectors">
+         <front>
+             <title>CCNx Selector Based Discovery</title>
+             <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
+             <date month="May" year="2019"/>
+         </front>
+         <seriesInfo name="Work in Progress," value="draft-mosko-icnrg-selectors-01"/>
+         
+     </reference>
 
 <!-- draft-mosko-icnrg-ccnxchunking-02: Expired --> 
      <reference anchor="chunking">
@@ -2199,6 +2233,7 @@ Original:
 Updated:
    [ccnx-uri]  Mosko, M. and C. Wood, "The CCNx URI Scheme", Work in
               Progress, draft-mosko-icnrg-ccnxurischeme-01, April 2016.
+ MM: Done
 -->
 
 <!-- draft-mosko-icnrg-ccnxurischeme-01: Expired --> 
@@ -2243,7 +2278,7 @@ Currently:
       <reference anchor="ccn-lite" target="ccn-lite.net">
       	<front>
       		<title>CCN-lite</title>
-      		<author><organization>Computer Networks Group, University of Basel</organization></author>
+      		<author initials="C." surname="Tschudin"><organization>Computer Networks Group, University of Basel</organization></author>
       		<date />
       	</front>
       </reference>
@@ -2306,6 +2341,14 @@ Currently:
           <date />
         </front>
       </reference>
+
+    <reference anchor="ccnx-registry" target="https://www.iana.org/assignments/ccnx/ccnx.xhtml">
+        <front>
+            <title>Content-Centric Networking (CCNx)</title>
+            <author><organization>Internet Assigned Numbers Authority (IANA)</organization></author>
+            <date year="2019"/>
+        </front>
+    </reference>
 
     </references>
 <!-- [rfced] We had the following questions that affected more

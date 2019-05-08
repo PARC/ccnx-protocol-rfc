@@ -116,42 +116,43 @@
       name suffix matching to discover content in the network.  Participating
       nodes may respond with matching Content Objects from cache using
       an encapsulation protocol.  This document specifies the available
-      selectors, their encoding in a name path segment, and the encapsulation
+      selectors, their encoding in a name segment, and the encapsulation
       protocol.</t>
     </abstract>
   </front>
 
   <middle>    
      <section title="Introduction">
-       <t>Content Discovery is an important feature of CCNx.  This document specifies
-       a discovery mechanism that uses a name path segment to encode a discovery query
-       in an Interest.  Participating nodes may reply with a Content Object
+       <t>Content Discovery is an important feature of <xref target="CCNxSemantics">CCNx</xref>.  This document specifies
+       a discovery mechanism that uses a name segment to encode a discovery query
+       in an Interest.  Nodes that participate in discovery may reply with a Content Object
        if it matches the encoded query.  The query uses exclusions to work around
        incorrect responses.</t>
        
-       <t>This document specifies a new name TLV type, T_SELECTOR, for selector query.  It also specifies
+       <t>This document updates <xref target="CCNxMessages">CCNx Messages</xref>
+           with a new name TLV type, T_SELECTOR, for selector query.  It also specifies
        a new Content Object PayloadType that encapsulates another Content Object.  The
        inner Content Object is used to return a Content Object with a longer name
-       than in an interest.  The inner object's signature should verify.
+       than in an interest.  The inner object's signature should verify as normal.
        </t>
        
        <t>Not all nodes along the Interest path need to participate in the discovery
          process.  A non-participating node should forward the Interest and encapsulating
-       Content Object as normal per <xref target="CCNSemantics"></xref>.  A participating
+       Content Object as normal.  A participating
        node should verify that the inner Content Object matches the selector query
-       in the PIT entry.</t>
+       in the PIT entry befor returning it and erasing the PIT entry.</t>
        
        <t>Note that Selector discovery is not needed when asking for a Content Object
-       by its ContentObjectHash, as there should only ever be one match for that.</t>
+       by its Content-Object Hash, as there should only ever be one match for that.</t>
        
-       <t>Selector discovery in CCNx 1.0 differs in three ways from the current
-         NDN and prior CCNx 0.x selector discovery.  First, CCNx 1.0 uses a distinguished
-         field for the ContentObjectHashRestriction.  It is not appended to the name to
+       <t>Selector discovery in CCNx 1.0 differs in three ways from the
+         prior CCNx 0.x selector discovery.  First, CCNx 1.0 uses a distinguished
+         field for the Content-Object Hash restriction.  It is not appended to the name to
          form the so-called "full name."  This means that there is no implicit digest
          name segment.  Thus, using a MinSuffixComponents and MaxSuffixComponents
          of 0 will match the exact name in the Interest without needing to add
          one extra component to account for the implicit digest.  Second,
-         there is a HashExcludes field that lists ContentObjectHashRestrictions to
+         there is a HashExcludes field that lists Content-Object Hash restrictions to
          exclude instead of appending them as an implicit name component.
          Third, the encoding of Excludes differs from prior encodings and uses a simpler formulation
          with the same expressiveness that also takes in to consideration
@@ -176,28 +177,28 @@
 
     <section anchor="protocol" title="Protocol Description">
       <t>Selector based discovery uses seven query variables to discover content. These
-      selectors are encoded as a single name path segment affixed to an Interest name.
+      selectors are encoded as a single name segment affixed to an Interest name.
       The selectors operate on the prefix up to, but not including the selector
-      name path segment.  The selector name path segment should be the last path segment.</t>
+      name segment.  The selector name segment should be the last name segment.</t>
       
       <t>The selectors are:
         <list style="symbols">
-          <t>MinSuffixComponents: the minimum number of additional name path segments a matching
+          <t>MinSuffixComponents: the minimum number of additional name segments a matching
             Content Object must have in its name.  The default value is 0.</t>
-          <t>MaxSuffixComponents: The maximum number of additional name path segments a matching
+          <t>MaxSuffixComponents: The maximum number of additional name segments a matching
           Content Object may have in its name.  The default value is unlimited.</t>
           <t>ChildSelector: Answer with the left-most or right-most child.</t>
           <t>NameExcludes: A set of range and singleton exclusions to eliminate Content Objects.
-          The exclusions match against the name path segment that would immediately follow
-          the Interest name prefix up to but not including the Selector path segment.</t>
+          The exclusions match against the name segment that would immediately follow
+          the Interest name prefix up to but not including the Selector name segment.</t>
           <t>InnerKeyId: Matches the KeyId of the encapsulated object.</t>
           <t>HashExcludes: A list of ContentObjectHashRestrictions to exclude.</t>
           <t>SelectorNonce: A number to make the query unique.</t>
         </list>
       </t>
 
-      <t>A node using Selector discovery appends a Selector name path segment to the end
-      of the Interest name.  Even if no selectors are used, the Selector path segment
+      <t>A node using Selector discovery appends a Selector name segment to the end
+      of the Interest name.  Even if no selectors are used, the Selector name segment
       is added to the end, which indicates to a participating node that it should apply
       Selector based matching to the Interest.   In this case, the default values -- if any -- of
       each selector are used.</t>
@@ -297,7 +298,7 @@
         <c>1</c>
         <c>T_EX_SINGLE</c>
         <c>Exclude Singleton</c>
-        <c>Exclude a single name path segment.</c>
+        <c>Exclude a single name segment.</c>
         
         <c>2</c>
         <c>T_EX_RANGE</c>
@@ -316,7 +317,7 @@
         <c>Hash Excludes</c>
         <c>Excludes a set of ContentObjectHash from the allowed responses.  Each
         restriction is encoded using its Hash Function Type Registry type
-        (e.g. T_SHA-256) from <xref target="CCNMessages"></xref>.</c>
+        (e.g. T_SHA-256) from <xref target="CCNxMessages"></xref>.</c>
         
       </texttable>
       
@@ -374,7 +375,7 @@ type = T_MINSUFFIX or T_MAXSUFFIX
         that X is less than Y is X is shorter than Y or the
         lengths being equal, X lexicagraphically sorts before Y.</t>
         
-        <t>Using the normal 2+2 TLV encoding of <xref target="CCNMessages"></xref>,
+        <t>Using the normal 2+2 TLV encoding of <xref target="CCNxMessages"></xref>,
         the Exclude Sorting can be done by a byte-by-byte memcmp() of two
         TLVs.  This is because the fixed length Type ensures correct type
         sorting and fixed length Length ensures correct shortlex length sorting.
@@ -431,7 +432,7 @@ component = (start-range-tlv singleton-tlv) / singleton-tlv
         
         <section anchor="singleton" title="Exclude Singleton">
           <t>A singleton exclude component means to exclude
-            a name path segment exactly matching the given value.</t>
+            a name segment exactly matching the given value.</t>
           <figure>
             <artwork align="left"><![CDATA[
                      1                   2                   3
@@ -547,7 +548,53 @@ component = (start-range-tlv singleton-tlv) / singleton-tlv
     </section>
       
     <section anchor="Annex_A" title="Annex A: Examples">
-      <t>TODO: Provide complete examples of Interests and responses.</t>
+        <t>We use the <xref target="ccnx-uri">CCNx URI scheme</xref>, <xref target="ccnx-chunking">CCNx Chunking</xref>,
+            and
+            <xref target="ccnx-version">CCNx versioning</xref>.
+            For example purposes, will use content stored under the name
+            ccnx://example.com/protocol.pdf.  The names stored in a repository
+            are, in sorted order:
+            <list style="symbols">
+                <t>ccnx:/example/file.txt/Serial=%00/Chunk=%00</t>
+                <t>ccnx:/example/file.txt/Serial=%01/Chunk=%00</t>
+                <t>ccnx:/example/file.txt/Serial=%02/annotations/Serial=%00/Chunk=%00</t>
+                <t>ccnx:/example/file.txt/Serial=%02/Chunk=%00</t>
+                <t>ccnx:/example/file.txt/Serial=%02/Chunk=%01</t>
+                <t>ccnx:/example/file.txt/Serial=%02/%f001=foo</t>
+                <t>ccnx:/example/file.txt/Serial=%02/%f001=foo/%f002=bar</t>
+            </list>
+            
+            Remember that name segments without an explicit type have type Name Segment, which is normalized
+            to %x0001.  Chunk is %x0010 and Serial is %x0013.  This means the sort order is as above.
+        </t>
+        
+        <t>To discovery the latest version of file.txt, we would issue an Interest with a name
+            of "ccnx:/example/file.txt/Selector={MINSUFFIX=1}." We use the notation {...} to indicate
+            that the enclosed selectors are encoded as a single TLV name segment.  This query ensures
+            that there is at least 1 additional name segment beyond "file.txt."  The default is to
+            return the right-most child, which in this case is the Content Object corresponding to
+            "ccnx:/example/file.txt/Serial=%02/%f001=foo/%f002=bar."
+            </t>
+        
+        <t>By parsing the returned name, we know that Serial 2 is the latest version and could begin
+            retrieving the content by asking for chunk 0.
+            If we wished to discovery the ending chunk number of Serial 2, we could use an Interest
+            like "ccnx:/example/file.txt/Serial=%02/Selector={MINSUFFIX=1, MAXSUFFIX=1}" to try and
+            find a response with only a Chunk number.  Unfortunately, there is more junk content with the
+            name "ccnx:/example/file.txt/Serial=%02/%f001=foo."
+        </t>
+            
+        <t>Once we recieve the junk content, we need to exclude it and try again.  This could be done by including a
+            hash exclusion.  Assuing the SHA256 hash of the returned junk is %x0101...abc, we would re-issue the discovery
+            Interest with name "ccnx:/example/file.txt/Serial=%02/Selector={MINSUFFIX=1, MAXSUFFIX=1, HASH_EXCLUDE=%x0101...abc}."
+            We would now recieve the desired content for chunk 1 of Serial 2.</t>
+        
+        <t>A better way to discover structured names is to use exclusions so we only find objects with a Chunk segment
+            after the serial number.  In this case, the discovery Interest would be name
+            "ccnx:/example/file.txt/Serial=%02/Selector={MINSUFFIX=1, MAXSUFFIX=1, EXCLUDES=R[] S[Chunk=0] R[CHUNK+1=]}."
+            This exclusion eliminates everything from -infinity up to, but not including, Chunk=0 and also
+            excludes everything from Chunk+1 (%x0011) to +infinity.</t>
+            
     </section>
     
     <!--
@@ -565,7 +612,7 @@ component = (start-range-tlv singleton-tlv) / singleton-tlv
 
     <section anchor="IANA" title="IANA Considerations">
       <t>This memo includes no request to IANA.  TODO: If this document is submitted as an official
-        draft, this section must be updated to reflect the IANA registries described in <xref target="CCNMessages"></xref>
+        draft, this section must be updated to reflect the IANA registries described in <xref target="CCNxMessages"></xref>
       </t>
     </section>
 
@@ -610,21 +657,9 @@ component = (start-range-tlv singleton-tlv) / singleton-tlv
     <references title="Informative References">
       <!-- Here we use entities that we defined at the beginning. --> &RFC3552; &RFC5226;
       <!-- A reference written by by an organization not a person. -->
-
-      <reference anchor="CCNx" target="http://www.ccnx.org">
-        <front>
-          <title>CCNx Open Source</title>
-
-          <author>
-            <organization>PARC, Inc.</organization>
-          </author>
-
-          <date year="2007"/>
-        </front>
-      </reference>
       
       
-      <reference anchor="CCNSemantics" target="http://tools.ietf.org/html/draft-mosko-icnrg-ccnxsemantics-03">
+      <reference anchor="CCNxSemantics" target="https://tools.ietf.org/html/draft-irtf-icnrg-ccnxsemantics-10">
         <front>
           <title>CCNx Semantics (Internet draft)</title>
           
@@ -637,21 +672,48 @@ component = (start-range-tlv singleton-tlv) / singleton-tlv
             <organization>PARC, Inc.</organization>
           </author>
           
-          <date year="2016"/>
+          <date year="2019"/>
         </front>
       </reference>
       
-      <reference anchor="CCNMessages" target="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-03">
+      <reference anchor="CCNxMessages" target="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-09">
         <front>
           <title>CCNx Messages in TLV Format (Internet draft)</title>
           <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
           <author initials="I." surname="Solis" fullname="Ignacio Solis"></author>
           <author initials='C.' surname='Wood' fullname='Christopher Wood'><organization>PARC, Inc.</organization>
           </author>
-          <date year="2016"/>
+          <date year="2019"/>
         </front>
       </reference>
       
+      <reference anchor="ccnx-uri">
+          <front>
+              <title>The CCNx URI Scheme</title>
+              <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
+              <author initials="C." surname="Wood" fullname="Christopher A. Wood"><organization>University of California, Irvine</organization></author>
+              <date month="April" year="2016"/>
+          </front>
+          <seriesInfo name="Work in Progress," value="draft-mosko-icnrg-ccnxurischeme-01"/>
+      </reference>
+      
+      <reference anchor="ccnx-version">
+          <front>
+              <title>CCNx Publisher Serial Versioning</title>
+              <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
+              <date month="January" year="2015"/>
+          </front>
+          <seriesInfo name="Work in Progress," value="draft-mosko-icnrg-ccnxserialversion-00"/>
+      </reference>
+      
+      <reference anchor="ccnx-chunking">
+          <front>
+              <title>CCNx Content Object Chunking</title>
+              <author initials="M." surname="Mosko" fullname="Marc Mosko"><organization>PARC, Inc.</organization></author>
+              <date month="June" year="2016"/>
+          </front>
+          <seriesInfo name="Work in Progress," value="draft-mosko-icnrg-ccnxchunking-02"/>
+      </reference>
     </references>
 
   </back>

@@ -4,8 +4,8 @@
 
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
-Intended status: Experimental                           January 24, 2019
-Expires: July 28, 2019
+Intended status: Experimental                                May 8, 2019
+Expires: November 9, 2019
 
 
                      CCNx Selector Based Discovery
@@ -17,8 +17,8 @@ Abstract
    suffix matching to discover content in the network.  Participating
    nodes may respond with matching Content Objects from cache using an
    encapsulation protocol.  This document specifies the available
-   selectors, their encoding in a name path segment, and the
-   encapsulation protocol.
+   selectors, their encoding in a name segment, and the encapsulation
+   protocol.
 
 Status of This Memo
 
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 28, 2019.
+   This Internet-Draft will expire on November 9, 2019.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Mosko                     Expires July 28, 2019                 [Page 1]
+Mosko                   Expires November 9, 2019                [Page 1]
 
-Internet-Draft               CCNx Selectors                 January 2019
+Internet-Draft               CCNx Selectors                     May 2019
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -75,54 +75,58 @@ Table of Contents
        3.3.3.  Examples  . . . . . . . . . . . . . . . . . . . . . .   9
    4.  Content Store and Caching . . . . . . . . . . . . . . . . . .  10
    5.  Annex A: Examples . . . . . . . . . . . . . . . . . . . . . .  11
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .  12
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  12
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  13
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  13
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .  13
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  14
 
 1.  Introduction
 
-   Content Discovery is an important feature of CCNx.  This document
-   specifies a discovery mechanism that uses a name path segment to
-   encode a discovery query in an Interest.  Participating nodes may
-   reply with a Content Object if it matches the encoded query.  The
-   query uses exclusions to work around incorrect responses.
+   Content Discovery is an important feature of CCNx [CCNxSemantics].
+   This document specifies a discovery mechanism that uses a name
+   segment to encode a discovery query in an Interest.  Nodes that
+   participate in discovery may reply with a Content Object if it
+   matches the encoded query.  The query uses exclusions to work around
+   incorrect responses.
 
-   This document specifies a new name TLV type, T_SELECTOR, for selector
-   query.  It also specifies a new Content Object PayloadType that
-   encapsulates another Content Object.  The inner Content Object is
-   used to return a Content Object with a longer name than in an
-   interest.  The inner object's signature should verify.
+   This document updates CCNx Messages [CCNxMessages] with a new name
+   TLV type, T_SELECTOR, for selector query.  It also specifies a new
+   Content Object PayloadType that encapsulates another Content Object.
+   The inner Content Object is used to return a Content Object with a
+   longer name than in an interest.  The inner object's signature should
+   verify as normal.
 
    Not all nodes along the Interest path need to participate in the
    discovery process.  A non-participating node should forward the
-   Interest and encapsulating Content Object as normal per
-   [CCNSemantics].  A participating node should verify that the inner
-   Content Object matches the selector query in the PIT entry.
+   Interest and encapsulating Content Object as normal.  A participating
+   node should verify that the inner Content Object matches the selector
+   query in the PIT entry befor returning it and erasing the PIT entry.
+
+
+
+
+
+
+Mosko                   Expires November 9, 2019                [Page 2]
+
+Internet-Draft               CCNx Selectors                     May 2019
+
 
    Note that Selector discovery is not needed when asking for a Content
-   Object by its ContentObjectHash, as there should only ever be one
+   Object by its Content-Object Hash, as there should only ever be one
    match for that.
 
-
-
-
-Mosko                     Expires July 28, 2019                 [Page 2]
-
-Internet-Draft               CCNx Selectors                 January 2019
-
-
-   Selector discovery in CCNx 1.0 differs in three ways from the current
-   NDN and prior CCNx 0.x selector discovery.  First, CCNx 1.0 uses a
-   distinguished field for the ContentObjectHashRestriction.  It is not
-   appended to the name to form the so-called "full name."  This means
-   that there is no implicit digest name segment.  Thus, using a
-   MinSuffixComponents and MaxSuffixComponents of 0 will match the exact
-   name in the Interest without needing to add one extra component to
-   account for the implicit digest.  Second, there is a HashExcludes
-   field that lists ContentObjectHashRestrictions to exclude instead of
+   Selector discovery in CCNx 1.0 differs in three ways from the prior
+   CCNx 0.x selector discovery.  First, CCNx 1.0 uses a distinguished
+   field for the Content-Object Hash restriction.  It is not appended to
+   the name to form the so-called "full name."  This means that there is
+   no implicit digest name segment.  Thus, using a MinSuffixComponents
+   and MaxSuffixComponents of 0 will match the exact name in the
+   Interest without needing to add one extra component to account for
+   the implicit digest.  Second, there is a HashExcludes field that
+   lists Content-Object Hash restrictions to exclude instead of
    appending them as an implicit name component.  Third, the encoding of
    Excludes differs from prior encodings and uses a simpler formulation
    with the same expressiveness that also takes in to consideration that
@@ -148,34 +152,34 @@ Internet-Draft               CCNx Selectors                 January 2019
 2.  Protocol Description
 
    Selector based discovery uses seven query variables to discover
-   content.  These selectors are encoded as a single name path segment
+   content.  These selectors are encoded as a single name segment
    affixed to an Interest name.  The selectors operate on the prefix up
-   to, but not including the selector name path segment.  The selector
-   name path segment should be the last path segment.
+   to, but not including the selector name segment.  The selector name
+   segment should be the last name segment.
 
    The selectors are:
 
-   o  MinSuffixComponents: the minimum number of additional name path
+   o  MinSuffixComponents: the minimum number of additional name
       segments a matching Content Object must have in its name.  The
       default value is 0.
 
-   o  MaxSuffixComponents: The maximum number of additional name path
+
+
+Mosko                   Expires November 9, 2019                [Page 3]
+
+Internet-Draft               CCNx Selectors                     May 2019
+
+
+   o  MaxSuffixComponents: The maximum number of additional name
       segments a matching Content Object may have in its name.  The
       default value is unlimited.
-
-
-
-Mosko                     Expires July 28, 2019                 [Page 3]
-
-Internet-Draft               CCNx Selectors                 January 2019
-
 
    o  ChildSelector: Answer with the left-most or right-most child.
 
    o  NameExcludes: A set of range and singleton exclusions to eliminate
-      Content Objects.  The exclusions match against the name path
-      segment that would immediately follow the Interest name prefix up
-      to but not including the Selector path segment.
+      Content Objects.  The exclusions match against the name segment
+      that would immediately follow the Interest name prefix up to but
+      not including the Selector name segment.
 
    o  InnerKeyId: Matches the KeyId of the encapsulated object.
 
@@ -183,9 +187,9 @@ Internet-Draft               CCNx Selectors                 January 2019
 
    o  SelectorNonce: A number to make the query unique.
 
-   A node using Selector discovery appends a Selector name path segment
-   to the end of the Interest name.  Even if no selectors are used, the
-   Selector path segment is added to the end, which indicates to a
+   A node using Selector discovery appends a Selector name segment to
+   the end of the Interest name.  Even if no selectors are used, the
+   Selector name segment is added to the end, which indicates to a
    participating node that it should apply Selector based matching to
    the Interest.  In this case, the default values -- if any -- of each
    selector are used.
@@ -214,18 +218,17 @@ Internet-Draft               CCNx Selectors                 January 2019
    matter if matching objects are discarded before name prefix selector
    matching or after.  A Content Object must always pass both the
    HashExcludes filter and the name prefix selector filters, wether it
+
+
+
+Mosko                   Expires November 9, 2019                [Page 4]
+
+Internet-Draft               CCNx Selectors                     May 2019
+
+
    is done first or last does not matter.  HashExcludes are encoded the
    same way as a ContentObjectHashRestriction value in an Interest.
    Note that this Selector does not exist in NDN or CCNx 0.x.  We use an
-
-
-
-
-Mosko                     Expires July 28, 2019                 [Page 4]
-
-Internet-Draft               CCNx Selectors                 January 2019
-
-
    explicit set of HashExcludes rather than constructing a full name
    with the implicit digest component at the end.
 
@@ -274,12 +277,9 @@ Internet-Draft               CCNx Selectors                 January 2019
 
 
 
-
-
-
-Mosko                     Expires July 28, 2019                 [Page 5]
+Mosko                   Expires November 9, 2019                [Page 5]
 
-Internet-Draft               CCNx Selectors                 January 2019
+Internet-Draft               CCNx Selectors                     May 2019
 
 
    +------+-----------------+------------+-----------------------------+
@@ -303,7 +303,7 @@ Internet-Draft               CCNx Selectors                 January 2019
    |  4   | T_NAME_EXCLUDES |    Name    | Encloses ExcludeComponents  |
    |      |                 |  Excludes  |                             |
    |      |                 |            |                             |
-   |  1   |   T_EX_SINGLE   |  Exclude   | Exclude a single name path  |
+   |  1   |   T_EX_SINGLE   |  Exclude   | Exclude a single name       |
    |      |                 | Singleton  | segment.                    |
    |      |                 |            |                             |
    |  2   |    T_EX_RANGE   |  Exclude   | Exclude an half-open range, |
@@ -326,16 +326,16 @@ Internet-Draft               CCNx Selectors                 January 2019
    |      |                 |            | using its Hash Function     |
    |      |                 |            | Type Registry type (e.g.    |
    |      |                 |            | T_SHA-256) from             |
-   |      |                 |            | [CCNMessages].              |
+   |      |                 |            | [CCNxMessages].             |
    +------+-----------------+------------+-----------------------------+
 
                           Table 1: Selector Types
 
 
 
-Mosko                     Expires July 28, 2019                 [Page 6]
+Mosko                   Expires November 9, 2019                [Page 6]
 
-Internet-Draft               CCNx Selectors                 January 2019
+Internet-Draft               CCNx Selectors                     May 2019
 
 
 3.1.  Child Selector
@@ -383,15 +383,15 @@ Internet-Draft               CCNx Selectors                 January 2019
    means that X is less than Y is X is shorter than Y or the lengths
    being equal, X lexicagraphically sorts before Y.
 
-   Using the normal 2+2 TLV encoding of [CCNMessages], the Exclude
+   Using the normal 2+2 TLV encoding of [CCNxMessages], the Exclude
    Sorting can be done by a byte-by-byte memcmp() of two TLVs.  This is
    because the fixed length Type ensures correct type sorting and fixed
 
 
 
-Mosko                     Expires July 28, 2019                 [Page 7]
+Mosko                   Expires November 9, 2019                [Page 7]
 
-Internet-Draft               CCNx Selectors                 January 2019
+Internet-Draft               CCNx Selectors                     May 2019
 
 
    length Length ensures correct shortlex length sorting.  This will not
@@ -445,15 +445,15 @@ Internet-Draft               CCNx Selectors                 January 2019
 
 
 
-Mosko                     Expires July 28, 2019                 [Page 8]
+Mosko                   Expires November 9, 2019                [Page 8]
 
-Internet-Draft               CCNx Selectors                 January 2019
+Internet-Draft               CCNx Selectors                     May 2019
 
 
 3.3.1.  Exclude Singleton
 
-   A singleton exclude component means to exclude a name path segment
-   exactly matching the given value.
+   A singleton exclude component means to exclude a name segment exactly
+   matching the given value.
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -501,9 +501,9 @@ Internet-Draft               CCNx Selectors                 January 2019
 
 
 
-Mosko                     Expires July 28, 2019                 [Page 9]
+Mosko                   Expires November 9, 2019                [Page 9]
 
-Internet-Draft               CCNx Selectors                 January 2019
+Internet-Draft               CCNx Selectors                     May 2019
 
 
    +---------------+---------------------------------------------------+
@@ -557,9 +557,9 @@ Internet-Draft               CCNx Selectors                 January 2019
 
 
 
-Mosko                     Expires July 28, 2019                [Page 10]
+Mosko                   Expires November 9, 2019               [Page 10]
 
-Internet-Draft               CCNx Selectors                 January 2019
+Internet-Draft               CCNx Selectors                     May 2019
 
 
    A non-participating content store must obey the outer cache control
@@ -585,13 +585,76 @@ Internet-Draft               CCNx Selectors                 January 2019
 
 5.  Annex A: Examples
 
-   TODO: Provide complete examples of Interests and responses.
+   We use the CCNx URI scheme [ccnx-uri], CCNx Chunking [ccnx-chunking],
+   and CCNx versioning [ccnx-version].  For example purposes, will use
+   content stored under the name ccnx://example.com/protocol.pdf.  The
+   names stored in a repository are, in sorted order:
+
+   o  ccnx:/example/file.txt/Serial=%00/Chunk=%00
+
+   o  ccnx:/example/file.txt/Serial=%01/Chunk=%00
+
+   o  ccnx:/example/file.txt/Serial=%02/annotations/Serial=%00/Chunk=%00
+
+   o  ccnx:/example/file.txt/Serial=%02/Chunk=%00
+
+   o  ccnx:/example/file.txt/Serial=%02/Chunk=%01
+
+   o  ccnx:/example/file.txt/Serial=%02/%f001=foo
+
+   o  ccnx:/example/file.txt/Serial=%02/%f001=foo/%f002=bar
+
+   Remember that name segments without an explicit type have type Name
+   Segment, which is normalized to %x0001.  Chunk is %x0010 and Serial
+   is %x0013.  This means the sort order is as above.
+
+   To discovery the latest version of file.txt, we would issue an
+   Interest with a name of "ccnx:/example/file.txt/
+
+
+
+Mosko                   Expires November 9, 2019               [Page 11]
+
+Internet-Draft               CCNx Selectors                     May 2019
+
+
+   Selector={MINSUFFIX=1}." We use the notation {...} to indicate that
+   the enclosed selectors are encoded as a single TLV name segment.
+   This query ensures that there is at least 1 additional name segment
+   beyond "file.txt."  The default is to return the right-most child,
+   which in this case is the Content Object corresponding to
+   "ccnx:/example/file.txt/Serial=%02/%f001=foo/%f002=bar."
+
+   By parsing the returned name, we know that Serial 2 is the latest
+   version and could begin retrieving the content by asking for chunk 0.
+   If we wished to discovery the ending chunk number of Serial 2, we
+   could use an Interest like "ccnx:/example/file.txt/Serial=%02/
+   Selector={MINSUFFIX=1, MAXSUFFIX=1}" to try and find a response with
+   only a Chunk number.  Unfortunately, there is more junk content with
+   the name "ccnx:/example/file.txt/Serial=%02/%f001=foo."
+
+   Once we recieve the junk content, we need to exclude it and try
+   again.  This could be done by including a hash exclusion.  Assuing
+   the SHA256 hash of the returned junk is %x0101...abc, we would re-
+   issue the discovery Interest with name
+   "ccnx:/example/file.txt/Serial=%02/Selector={MINSUFFIX=1,
+   MAXSUFFIX=1, HASH_EXCLUDE=%x0101...abc}." We would now recieve the
+   desired content for chunk 1 of Serial 2.
+
+   A better way to discover structured names is to use exclusions so we
+   only find objects with a Chunk segment after the serial number.  In
+   this case, the discovery Interest would be name
+   "ccnx:/example/file.txt/Serial=%02/Selector={MINSUFFIX=1,
+   MAXSUFFIX=1, EXCLUDES=R[] S[Chunk=0] R[CHUNK+1=]}." This exclusion
+   eliminates everything from -infinity up to, but not including,
+   Chunk=0 and also excludes everything from Chunk+1 (%x0011) to
+   +infinity.
 
 6.  IANA Considerations
 
    This memo includes no request to IANA.  TODO: If this document is
    submitted as an official draft, this section must be updated to
-   reflect the IANA registries described in [CCNMessages]
+   reflect the IANA registries described in [CCNxMessages]
 
 7.  Security Considerations
 
@@ -602,6 +665,15 @@ Internet-Draft               CCNx Selectors                 January 2019
    framing overhead.  This means that one cannot respond with a Content
    Object that is too close to the maximum packet size.
 
+
+
+
+
+Mosko                   Expires November 9, 2019               [Page 12]
+
+Internet-Draft               CCNx Selectors                     May 2019
+
+
    Participating nodes should be able to filter incorrect responses just
    as they do in NDN or CCNx 0.x.  If all node participate, then one has
    equivalent in-network filtering behavior as those other protocols.
@@ -609,15 +681,6 @@ Internet-Draft               CCNx Selectors                 January 2019
    If the outer Content Object is signed, the consumer should, as
    normal, verify the signature for accuracy.  However, the trust of the
    outer signature is normally not important and usually reflects
-
-
-
-
-Mosko                     Expires July 28, 2019                [Page 11]
-
-Internet-Draft               CCNx Selectors                 January 2019
-
-
    operation in a specific environment.  An outer Validation section is
    usually used only for integrity checks.
 
@@ -632,19 +695,40 @@ Internet-Draft               CCNx Selectors                 January 2019
 
 8.2.  Informative References
 
-   [CCNMessages]
+   [ccnx-chunking]
+              Mosko, M., "CCNx Content Object Chunking", Work in
+              Progress, draft-mosko-icnrg-ccnxchunking-02, June 2016.
+
+   [ccnx-uri]
+              Mosko, M. and C. Wood, "The CCNx URI Scheme", Work in
+              Progress, draft-mosko-icnrg-ccnxurischeme-01, April 2016.
+
+   [ccnx-version]
+              Mosko, M., "CCNx Publisher Serial Versioning", Work in
+              Progress, draft-mosko-icnrg-ccnxserialversion-00, January
+              2015.
+
+   [CCNxMessages]
               Mosko, M., Solis, I., and C. Wood, "CCNx Messages in TLV
-              Format (Internet draft)", 2016,
+              Format (Internet draft)", 2019,
               <http://tools.ietf.org/html/
-              draft-irtf-icnrg-ccnxmessages-03>.
+              draft-irtf-icnrg-ccnxmessages-09>.
 
-   [CCNSemantics]
+   [CCNxSemantics]
               Mosko, M., Solis, I., and C. Wood, "CCNx Semantics
-              (Internet draft)", 2016, <http://tools.ietf.org/html/
-              draft-mosko-icnrg-ccnxsemantics-03>.
+              (Internet draft)", 2019, <https://tools.ietf.org/html/
+              draft-irtf-icnrg-ccnxsemantics-10>.
 
-   [CCNx]     PARC, Inc., "CCNx Open Source", 2007,
-              <http://www.ccnx.org>.
+
+
+
+
+
+
+Mosko                   Expires November 9, 2019               [Page 13]
+
+Internet-Draft               CCNx Selectors                     May 2019
+
 
    [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
               Text on Security Considerations", BCP 72, RFC 3552,
@@ -669,4 +753,32 @@ Author's Address
 
 
 
-Mosko                     Expires July 28, 2019                [Page 12]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko                   Expires November 9, 2019               [Page 14]
