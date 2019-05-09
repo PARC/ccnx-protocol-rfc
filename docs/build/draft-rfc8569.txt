@@ -48,8 +48,8 @@ Status of This Memo
    suitable for deployment.  This RFC represents the consensus of the
    Information-Centric Networking Research Group of the Internet
    Research Task Force (IRTF).  Documents approved for publication by
-   the IRSG are not a candidate for any level of Internet Standard; see
-   Section 2 of RFC 5741.
+   the IRSG are not candidates for any level of Internet Standard; see
+   Section 2 of RFC 7841.
 
 
 
@@ -62,7 +62,7 @@ RFC 8569                     CCNx Semantics                   March 2019
 
    Information about the current status of this document, any errata,
    and how to provide feedback on it may be obtained at
-   http://www.rfc-editor.org/info/rfc8569.
+   https://www.rfc-editor.org/info/rfc8569.
 
 Copyright Notice
 
@@ -71,7 +71,7 @@ Copyright Notice
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents
-   (http://trustee.ietf.org/license-info) in effect on the date of
+   (https://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.
@@ -604,14 +604,14 @@ RFC 8569                     CCNx Semantics                   March 2019
       vendor-specific information.  CCNx allows vendor-specific data in
       most locations of the grammar.
 
-Message       = Interest / ContentObject / InterestReturn
-Interest      = IntHdr BodyName [Validation]
-IntHdr        = HopLimit [Lifetime] *Vendor
-ContentObject = ConObjHdr BodyOptName [Validation]
-ConObjHdr     = [CacheTime / ConObjHash] *Vendor
-InterestReturn= ReturnCode Interest
-BodyName      = Name Common
-BodyOptName   = [Name] Common
+   Message       = Interest / ContentObject / InterestReturn
+   Interest      = IntHdr BodyName [Validation]
+   IntHdr        = HopLimit [Lifetime] *Vendor
+   ContentObject = ConObjHdr BodyOptName [Validation]
+   ConObjHdr     = [CacheTime / ConObjHash] *Vendor
+   InterestReturn= ReturnCode Interest
+   BodyName      = Name Common
+   BodyOptName   = [Name] Common
 
 
 
@@ -620,50 +620,50 @@ Mosko, et al.                 Experimental                     [Page 11]
 RFC 8569                     CCNx Semantics                   March 2019
 
 
-Common        = *Field [Payload]
-Validation    = ValidationAlg ValidatonPayload
+   Common        = *Field [Payload]
+   Validation    = ValidationAlg ValidatonPayload
 
-Name          = FirstSegment *Segment
-FirstSegment  = 1*OCTET / Vendor
-Segment       = 0*OCTET / Vendor
+   Name          = FirstSegment *Segment
+   FirstSegment  = 1*OCTET / Vendor
+   Segment       = 0*OCTET / Vendor
 
-ValidationAlg = (RSA-SHA256 / EC-SECP-256K1 / EC-SECP-384R1 / HMAC-SHA256 / CRC32C) *Vendor
-ValidatonPayload = 1*OCTET
-PublicAlg     = KeyId [SigTime] [KeyLink] [PublicKey] [Cert]
-RSA-SHA256    = PublicAlg
-EC-SECP-256K1 = PublicAlg
-EC-SECP-384R1 = PublicAlg
-HMAC-SHA256   = KeyId [SigTime] [KeyLink]
-CRC32C        = [SigTime]
+   ValidationAlg = (RSA-SHA256 / EC-SECP-256K1 / EC-SECP-384R1 /
+                    HMAC-SHA256 / CRC32C) *Vendor
+   ValidatonPayload = 1*OCTET
+   PublicAlg     = KeyId [SigTime] [KeyLink] [PublicKey] [Cert]
+   RSA-SHA256    = PublicAlg
+   EC-SECP-256K1 = PublicAlg
+   EC-SECP-384R1 = PublicAlg
+   HMAC-SHA256   = KeyId [SigTime] [KeyLink]
+   CRC32C        = [SigTime]
 
-AbsTime       = 8OCTET ; 64-bit UTC msec since epoch
-CacheTime     = AbsTime
-ConObjField   = ExpiryTime / PayloadType
-ConObjHash    = Hash
-ExpiryTime    = AbsTime
-Field         = InterestField / ConObjField / Vendor
-Hash          = HashType 1*OCTET
-HashType      = 2OCTET ; IANA CCNx Hash Function Types
-HopLimit      = OCTET
-InterestField = KeyIdRestr / ContentObjectHashRestr
-KeyId         = Hash
-KeyIdRestr    = Hash
-KeyLink       = Link
-Lifetime      = RelTime
-Link          = Name [KeyIdRestr] [ContentObjectHashRestr]
-ContentObjectHashRestr  = Hash
-Payload       = *OCTET
-PayloadType   = OCTET ; IANA CCNx Payload Types
-PublicKey     = *OCTET ; DER-encoded public key
-Cert          = *OCTET ; DER-encoded X.509 Certificate
-RelTime       = 1*OCTET ; msec
-ReturnCode    = OCTET ; see Section 10.2
-SigTime       = AbsTime
-Vendor        = PEN 0*OCTET
-PEN           = 1*OCTET ; IANA Private Enterprise Number
+   AbsTime       = 8OCTET ; 64-bit UTC msec since epoch
+   CacheTime     = AbsTime
+   ConObjField   = ExpiryTime / PayloadType
+   ConObjHash    = Hash
+   ExpiryTime    = AbsTime
+   Field         = InterestField / ConObjField / Vendor
+   Hash          = HashType 1*OCTET
+   HashType      = 2OCTET ; IANA CCNx Hash Function Types
+   HopLimit      = OCTET
+   InterestField = KeyIdRestr / ContentObjectHashRestr
+   KeyId         = Hash
+   KeyIdRestr    = Hash
+   KeyLink       = Link
+   Lifetime      = RelTime
+   Link          = Name [KeyIdRestr] [ContentObjectHashRestr]
+   ContentObjectHashRestr  = Hash
+   Payload       = *OCTET
+   PayloadType   = OCTET ; IANA CCNx Payload Types
+   PublicKey     = *OCTET ; DER-encoded public key
+   Cert          = *OCTET ; DER-encoded X.509 Certificate
+   RelTime       = 1*OCTET ; msec
+   ReturnCode    = OCTET ; see Section 10.2
+   SigTime       = AbsTime
+   Vendor        = PEN 0*OCTET
+   PEN           = 1*OCTET ; IANA Private Enterprise Number
 
                     Figure 1: CCNx Message ABNF Grammar
-
 
 
 
@@ -1433,14 +1433,14 @@ RFC 8569                     CCNx Semantics                   March 2019
    a certificate.
 
    A KeyLink in a first Content Object may point to a second Content
-   Object with a DER-encoded public key in the PublicKey and an optional
-   DER-encoded X.509 certificate in the payload.  The second Content
-   Object's KeyId MUST equal the first object's KeyId.  The second
-   object's PublicKey field MUST be the public key corresponding to the
-   KeyId.  That key must validate both the first and second object's
-   signature.  A DER-encoded X.509 certificate may included in the
-   second object's payload and it's embedded public key MUST match the
-   PublicKey.  It must be issued by a trusted authority, preferably
+   Object with a DER-encoded public key in the PublicKey field and an
+   optional DER-encoded X.509 certificate in the payload.  The second
+   Content Object's KeyId MUST equal the first object's KeyId.  The
+   second object's PublicKey field MUST be the public key corresponding
+   to the KeyId.  That key must validate both the first and second
+   object's signature.  A DER-encoded X.509 certificate may included in
+   the second object's payload and it's embedded public key MUST match
+   the PublicKey.  It must be issued by a trusted authority, preferably
    specifying the valid namespace of the key in the distinguished name.
    The second object MUST NOT have a KeyLink: we do not allow for
    recursive key lookup.
@@ -1925,8 +1925,8 @@ RFC 8569                     CCNx Semantics                   March 2019
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
-              editor.org/info/rfc2119>.
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -2029,8 +2029,8 @@ RFC 8569                     CCNx Semantics                   March 2019
 
    [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
               Specifications: ABNF", STD 68, RFC 5234,
-              DOI 10.17487/RFC5234, January 2008, <https://www.rfc-
-              editor.org/info/rfc5234>.
+              DOI 10.17487/RFC5234, January 2008,
+              <https://www.rfc-editor.org/info/rfc5234>.
 
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
@@ -2047,8 +2047,8 @@ RFC 8569                     CCNx Semantics                   March 2019
    [RFC7945]  Pentikousis, K., Ed., Ohlman, B., Davies, E., Spirou, S.,
               and G. Boggia, "Information-Centric Networking: Evaluation
               and Security Considerations", RFC 7945,
-              DOI 10.17487/RFC7945, September 2016, <https://www.rfc-
-              editor.org/info/rfc7945>.
+              DOI 10.17487/RFC7945, September 2016,
+              <https://www.rfc-editor.org/info/rfc7945>.
 
    [selectors]
               Mosko, M., "CCNx Selector Based Discovery", Work in

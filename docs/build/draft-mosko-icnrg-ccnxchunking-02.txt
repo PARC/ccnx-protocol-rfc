@@ -4,7 +4,7 @@
 
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
-Intended status: Experimental                              February 2016
+Intended status: Experimental                           February 1, 2016
 Expires: August 4, 2016
 
 
@@ -73,7 +73,7 @@ Table of Contents
    4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   6
    5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   6
      7.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
      7.2.  Informative References  . . . . . . . . . . . . . . . . .   7
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   7
@@ -243,16 +243,15 @@ Internet-Draft                CCNx chunking                February 2016
    CCNx chunking uses two new Name types: Chunk Number and Chunk
    Metadata.
 
-   +--------+---------+-----------------+------------------------------+
-   |  Type  |  Abbrev |       Name      | Description                  |
-   +--------+---------+-----------------+------------------------------+
-   | %x0010 | T_CHUNK |   Chunk Number  | The current Chunk Number, is |
-   |        |         | (Section 3.1.1) | an unsigned integer in       |
-   |        |         |                 | network byte order without   |
-   |        |         |                 | leading zeros.  The value of |
-   |        |         |                 | zero is represented as the   |
-   |        |         |                 | single byte %x00.            |
-   +--------+---------+-----------------+------------------------------+
+   +--------+---------+----------+-------------------------------------+
+   |  Type  |  Abbrev |   Name   | Description                         |
+   +--------+---------+----------+-------------------------------------+
+   | %x0010 | T_CHUNK |  Chunk   | The current Chunk Number, is an     |
+   |        |         |  Number  | unsigned integer in network byte    |
+   |        |         | (Section | order without leading zeros.  The   |
+   |        |         |  3.1.1)  | value of zero is represented as the |
+   |        |         |          | single byte %x00.                   |
+   +--------+---------+----------+-------------------------------------+
 
                             Table 1: Name Types
 
@@ -277,6 +276,7 @@ Internet-Draft                CCNx chunking                February 2016
 
 
 
+
 Mosko                    Expires August 4, 2016                 [Page 5]
 
 Internet-Draft                CCNx chunking                February 2016
@@ -286,17 +286,16 @@ Internet-Draft                CCNx chunking                February 2016
 
    CCNx chunking introduces one new TLV for use in a Content Object.
 
-   +--------+------------+-----------------+---------------------------+
-   |  Type  |   Abbrev   |       Name      | Description               |
-   +--------+------------+-----------------+---------------------------+
-   | %x000C | T_ENDCHUNK |  EndChunkNumber | The last Chunk number, as |
-   |        |            | (Section 3.1.1) | an unsigned integer in    |
-   |        |            |                 | network byte order        |
-   |        |            |                 | without leading zeros.    |
-   |        |            |                 | The value of zero is      |
-   |        |            |                 | represented as the single |
-   |        |            |                 | byte %x00.                |
-   +--------+------------+-----------------+---------------------------+
+   +--------+------------+----------------+----------------------------+
+   |  Type  |   Abbrev   |      Name      | Description                |
+   +--------+------------+----------------+----------------------------+
+   | %x000C | T_ENDCHUNK | EndChunkNumber | The last Chunk number, as  |
+   |        |            |    (Section    | an unsigned integer in     |
+   |        |            |     3.1.1)     | network byte order without |
+   |        |            |                | leading zeros.  The value  |
+   |        |            |                | of zero is represented as  |
+   |        |            |                | the single byte %x00.      |
+   +--------+------------+----------------+----------------------------+
 
                        Table 2: Content Object Types
 
@@ -326,6 +325,7 @@ Internet-Draft                CCNx chunking                February 2016
    This draft does not put any requirements on how chunked data is
    signed or validated.
 
+7.  References
 
 
 
@@ -338,14 +338,12 @@ Mosko                    Expires August 4, 2016                 [Page 6]
 Internet-Draft                CCNx chunking                February 2016
 
 
-7.  References
-
 7.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
-              editor.org/info/rfc2119>.
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
 
 7.2.  Informative References
 
@@ -366,33 +364,20 @@ Internet-Draft                CCNx chunking                February 2016
    [RFC2616]  Fielding, R., Gettys, J., Mogul, J., Frystyk, H.,
               Masinter, L., Leach, P., and T. Berners-Lee, "Hypertext
               Transfer Protocol -- HTTP/1.1", RFC 2616,
-              DOI 10.17487/RFC2616, June 1999, <https://www.rfc-
-              editor.org/info/rfc2616>.
+              DOI 10.17487/RFC2616, June 1999,
+              <https://www.rfc-editor.org/info/rfc2616>.
 
    [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
               Text on Security Considerations", BCP 72, RFC 3552,
-              DOI 10.17487/RFC3552, July 2003, <https://www.rfc-
-              editor.org/info/rfc3552>.
+              DOI 10.17487/RFC3552, July 2003,
+              <https://www.rfc-editor.org/info/rfc3552>.
 
    [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
               IANA Considerations Section in RFCs", RFC 5226,
-              DOI 10.17487/RFC5226, May 2008, <https://www.rfc-
-              editor.org/info/rfc5226>.
+              DOI 10.17487/RFC5226, May 2008,
+              <https://www.rfc-editor.org/info/rfc5226>.
 
 Author's Address
-
-
-
-
-
-
-
-
-
-Mosko                    Expires August 4, 2016                 [Page 7]
-
-Internet-Draft                CCNx chunking                February 2016
-
 
    Marc Mosko
    PARC, Inc.
@@ -404,45 +389,4 @@ Internet-Draft                CCNx chunking                February 2016
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko                    Expires August 4, 2016                 [Page 8]
+Mosko                    Expires August 4, 2016                 [Page 7]

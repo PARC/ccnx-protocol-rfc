@@ -281,25 +281,25 @@ address {
 /*]]>*/</style>
 
 
-  <link href="#rfc.toc" rel="Contents"/>
-<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
-<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Language"/>
-<link href="#rfc.section.2" rel="Chapter" title="2 Protocol Description"/>
-<link href="#rfc.section.3" rel="Chapter" title="3 Acknowledgements"/>
-<link href="#rfc.section.4" rel="Chapter" title="4 IANA Considerations"/>
-<link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations"/>
-<link href="#rfc.references" rel="Chapter" title="6 References"/>
-<link href="#rfc.references.1" rel="Chapter" title="6.1 Normative References"/>
-<link href="#rfc.references.2" rel="Chapter" title="6.2 Informative References"/>
-<link href="#rfc.authors" rel="Chapter"/>
+  <link href="#rfc.toc" rel="Contents">
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Language">
+<link href="#rfc.section.2" rel="Chapter" title="2 Protocol Description">
+<link href="#rfc.section.3" rel="Chapter" title="3 Acknowledgements">
+<link href="#rfc.section.4" rel="Chapter" title="4 IANA Considerations">
+<link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations">
+<link href="#rfc.references" rel="Chapter" title="6 References">
+<link href="#rfc.references.1" rel="Chapter" title="6.1 Normative References">
+<link href="#rfc.references.2" rel="Chapter" title="6.2 Informative References">
+<link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.5.1 - http://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.22.3 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Mosko, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-mosko-icnrg-ccnxserialversion-01" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-5-9" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-09" />
   <meta name="dct.abstract" content="This document specifies using a serial number to indicate versions in name name segments.  A serial number is an increasing unsigned integer with an increment of 1.  Therefore, given one name with a serial version number, one may compute the next version number." />
   <meta name="description" content="This document specifies using a serial number to indicate versions in name name segments.  A serial number is an increasing unsigned integer with an increment of 1.  Therefore, given one name with a serial version number, one may compute the next version number." />
 
@@ -311,20 +311,20 @@ address {
     <tbody>
     
     	<tr>
-  <td class="left">ICNRG</td>
-  <td class="right">M. Mosko</td>
+<td class="left">ICNRG</td>
+<td class="right">M. Mosko</td>
 </tr>
 <tr>
-  <td class="left">Internet-Draft</td>
-  <td class="right">PARC</td>
+<td class="left">Internet-Draft</td>
+<td class="right">PARC</td>
 </tr>
 <tr>
-  <td class="left">Intended status: Experimental</td>
-  <td class="right">May 9, 2019</td>
+<td class="left">Intended status: Experimental</td>
+<td class="right">May 9, 2019</td>
 </tr>
 <tr>
-  <td class="left">Expires: November 10, 2019</td>
-  <td class="right"></td>
+<td class="left">Expires: November 10, 2019</td>
+<td class="right"></td>
 </tr>
 
     	
@@ -334,134 +334,131 @@ address {
   <p class="title">CCNx Publisher Serial Versioning<br />
   <span class="filename">draft-mosko-icnrg-ccnxserialversion-01</span></p>
   
-  <h1 id="rfc.abstract">
-  <a href="#rfc.abstract">Abstract</a>
-</h1>
+  <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>This document specifies using a serial number to indicate versions in name name segments.  A serial number is an increasing unsigned integer with an increment of 1.  Therefore, given one name with a serial version number, one may compute the next version number.</p>
-<h1 id="rfc.status">
-  <a href="#rfc.status">Status of This Memo</a>
-</h1>
+<h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
-<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
 <p>This Internet-Draft will expire on November 10, 2019.</p>
-<h1 id="rfc.copyrightnotice">
-  <a href="#rfc.copyrightnotice">Copyright Notice</a>
-</h1>
+<h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
-<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
   <hr class="noprint" />
   <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
   <ul class="toc">
 
-  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
-<ul><li>1.1.   <a href="#rfc.section.1.1">Requirements Language</a></li>
-</ul><li>2.   <a href="#rfc.section.2">Protocol Description</a></li>
-<li>3.   <a href="#rfc.section.3">Acknowledgements</a></li>
-<li>4.   <a href="#rfc.section.4">IANA Considerations</a></li>
-<li>5.   <a href="#rfc.section.5">Security Considerations</a></li>
-<li>6.   <a href="#rfc.references">References</a></li>
-<ul><li>6.1.   <a href="#rfc.references.1">Normative References</a></li>
-<li>6.2.   <a href="#rfc.references.2">Informative References</a></li>
-</ul><li><a href="#rfc.authors">Author's Address</a></li>
+  	<li>1.   <a href="#rfc.section.1">Introduction</a>
+</li>
+<ul><li>1.1.   <a href="#rfc.section.1.1">Requirements Language</a>
+</li>
+</ul><li>2.   <a href="#rfc.section.2">Protocol Description</a>
+</li>
+<li>3.   <a href="#rfc.section.3">Acknowledgements</a>
+</li>
+<li>4.   <a href="#rfc.section.4">IANA Considerations</a>
+</li>
+<li>5.   <a href="#rfc.section.5">Security Considerations</a>
+</li>
+<li>6.   <a href="#rfc.references">References</a>
+</li>
+<ul><li>6.1.   <a href="#rfc.references.1">Normative References</a>
+</li>
+<li>6.2.   <a href="#rfc.references.2">Informative References</a>
+</li>
+</ul><li><a href="#rfc.authors">Author's Address</a>
+</li>
 
 
   </ul>
 
-  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
+  <h1 id="rfc.section.1">
+<a href="#rfc.section.1">1.</a> Introduction</h1>
 <p id="rfc.section.1.p.1">This document specifies using a serial number in a CCNx name as a version identifier.  It specifies a new name segment label and a TLV encoding.  The use of a serial number in a name to denote a version is limited to coordination among publishers if an attempt is made to use a serial number as a distributed ordering.</p>
 <p id="rfc.section.1.p.2">Packets are represented as 32-bit wide words using ASCII art.  Because of the TLV encoding and optional fields or sizes, there is no concise way to represent all possibilities.  We use the convention that ASCII art fields enclosed by vertical bars "|" represent exact bit widths.  Fields with a forward slash "/" are variable bitwidths, which we typically pad out to word alignment for picture readability.</p>
 <p id="rfc.section.1.p.3">TODO -- we have not adopted the Requirements Language yet.</p>
-<h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
-<p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">RFC 2119</a> <cite title="NONE">[RFC2119]</cite>.</p>
-<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#protocol" id="protocol">Protocol Description</a></h1>
+<h1 id="rfc.section.1.1">
+<a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
+<p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119" class="xref">RFC 2119</a>.</p>
+<h1 id="rfc.section.2">
+<a href="#rfc.section.2">2.</a> <a href="#protocol" id="protocol">Protocol Description</a>
+</h1>
 <p id="rfc.section.2.p.1">A serial number in a CCNx Name segment indicates an ordering on names based on the unsigned integer.  The serial number is encoded in network byte order using the minimum number of bytes.  The value of "0" is represented as the single byte %x00.</p>
 <p id="rfc.section.2.p.2">The serial number must be incremented by 1 for consecutive versions of the prior name name segments.  There is no maximum serial number, it is limited only by the number of bytes put in to the name component.</p>
 <p id="rfc.section.2.p.3">A "GONE" PayloadType means that this version is a terminal version.  All prior versions should be interpreted as deleted.  A user, however, may publish more "DATA" after the terminal version, if he decides to un-delete it.</p>
-<div id="rfc.table.1"/>
-<div id="message_type"/>
+<div id="rfc.table.1"></div>
+<div id="message_type"></div>
 <table cellpadding="3" cellspacing="0" class="tt full center">
-  <caption>Labeled Content Information Types</caption>
-  <thead>
-    <tr>
-      <th class="center">Type</th>
-      <th class="center">Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="center">'Serial'</td>
-      <td class="center">Serial number, displayed as an Integer.</td>
-    </tr>
-  </tbody>
+<caption>Labeled Content Information Types</caption>
+<thead><tr>
+<th class="center">Type</th>
+<th class="center">Name</th>
+</tr></thead>
+<tbody><tr>
+<td class="center">'Serial'</td>
+<td class="center">Serial number, displayed as an Integer.</td>
+</tr></tbody>
 </table>
-<div id="rfc.table.2"/>
-<div id="name_types"/>
+<div id="rfc.table.2"></div>
+<div id="name_types"></div>
 <table cellpadding="3" cellspacing="0" class="tt full center">
-  <caption>CCNx Name Types</caption>
-  <thead>
-    <tr>
-      <th class="center">Type</th>
-      <th class="center">Symbol</th>
-      <th class="center">Name</th>
-      <th class="left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="center">%x0013</td>
-      <td class="center">T_SERIAL</td>
-      <td class="center">Serial Number</td>
-      <td class="left">Serial Number, incrementing by +1.</td>
-    </tr>
-  </tbody>
+<caption>CCNx Name Types</caption>
+<thead><tr>
+<th class="center">Type</th>
+<th class="center">Symbol</th>
+<th class="center">Name</th>
+<th class="left">Description</th>
+</tr></thead>
+<tbody><tr>
+<td class="center">%x0013</td>
+<td class="center">T_SERIAL</td>
+<td class="center">Serial Number</td>
+<td class="left">Serial Number, incrementing by +1.</td>
+</tr></tbody>
 </table>
-<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a></h1>
-<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#IANA" id="IANA">IANA Considerations</a></h1>
-<p id="rfc.section.4.p.1">TODO: Work with IANA to define the type space for CCNx Name segment types.</p>
-<p id="rfc.section.4.p.2">All drafts are required to have an IANA considerations section (see <a href="#RFC5226">Guidelines for Writing an IANA Considerations Section in RFCs</a> <cite title="NONE">[RFC5226]</cite> for a guide). If the draft does not require IANA to do anything, the section contains an explicit statement that this is the case (as above). If there are no requirements for IANA, the section will be removed during conversion into an RFC by the RFC Editor.</p>
-<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#Security" id="Security">Security Considerations</a></h1>
-<p id="rfc.section.5.p.1">All drafts are required to have a security considerations section. See <a href="#RFC3552">RFC 3552</a> <cite title="NONE">[RFC3552]</cite> for a guide.</p>
-<h1 id="rfc.references"><a href="#rfc.references">6.</a> References</h1>
-<h1 id="rfc.references.1"><a href="#rfc.references.1">6.1.</a> Normative References</h1>
-<table>
-  <tbody>
-    <tr>
-      <td class="reference">
-        <b id="RFC2119">[RFC2119]</b>
-      </td>
-      <td class="top"><a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
-    </tr>
-  </tbody>
-</table>
-<h1 id="rfc.references.2"><a href="#rfc.references.2">6.2.</a> Informative References</h1>
-<table>
-  <tbody>
-    <tr>
-      <td class="reference">
-        <b id="CCNx">[CCNx]</b>
-      </td>
-      <td class="top"><a>PARC, Inc.</a>, "<a href="http://www.ccnx.org">CCNx Open Source</a>", 2007.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC3552">[RFC3552]</b>
-      </td>
-      <td class="top"><a>Rescorla, E.</a> and <a>B. Korver</a>, "<a href="http://tools.ietf.org/html/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>", BCP 72, RFC 3552, DOI 10.17487/RFC3552, July 2003.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC5226">[RFC5226]</b>
-      </td>
-      <td class="top"><a>Narten, T.</a> and <a>H. Alvestrand</a>, "<a href="http://tools.ietf.org/html/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>", RFC 5226, DOI 10.17487/RFC5226, May 2008.</td>
-    </tr>
-  </tbody>
-</table>
-<h1 id="rfc.authors">
-  <a href="#rfc.authors">Author's Address</a>
+<h1 id="rfc.section.3">
+<a href="#rfc.section.3">3.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a>
 </h1>
+<h1 id="rfc.section.4">
+<a href="#rfc.section.4">4.</a> <a href="#IANA" id="IANA">IANA Considerations</a>
+</h1>
+<p id="rfc.section.4.p.1">TODO: Work with IANA to define the type space for CCNx Name segment types.</p>
+<p id="rfc.section.4.p.2">All drafts are required to have an IANA considerations section (see <a href="#RFC5226" class="xref">Guidelines for Writing an IANA Considerations Section in RFCs</a> for a guide). If the draft does not require IANA to do anything, the section contains an explicit statement that this is the case (as above). If there are no requirements for IANA, the section will be removed during conversion into an RFC by the RFC Editor.</p>
+<h1 id="rfc.section.5">
+<a href="#rfc.section.5">5.</a> <a href="#Security" id="Security">Security Considerations</a>
+</h1>
+<p id="rfc.section.5.p.1">All drafts are required to have a security considerations section. See <a href="#RFC3552" class="xref">RFC 3552</a> for a guide.</p>
+<h1 id="rfc.references">
+<a href="#rfc.references">6.</a> References</h1>
+<h1 id="rfc.references.1">
+<a href="#rfc.references.1">6.1.</a> Normative References</h1>
+<table><tbody><tr>
+<td class="reference"><b id="RFC2119">[RFC2119]</b></td>
+<td class="top">
+<a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+</tr></tbody></table>
+<h1 id="rfc.references.2">
+<a href="#rfc.references.2">6.2.</a> Informative References</h1>
+<table><tbody>
+<tr>
+<td class="reference"><b id="CCNx">[CCNx]</b></td>
+<td class="top">
+<a>PARC, Inc.</a>, "<a href="http://www.ccnx.org">CCNx Open Source</a>", 2007.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC3552">[RFC3552]</b></td>
+<td class="top">
+<a>Rescorla, E.</a> and <a>B. Korver</a>, "<a href="https://tools.ietf.org/html/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>", BCP 72, RFC 3552, DOI 10.17487/RFC3552, July 2003.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC5226">[RFC5226]</b></td>
+<td class="top">
+<a>Narten, T.</a> and <a>H. Alvestrand</a>, "<a href="https://tools.ietf.org/html/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>", RFC 5226, DOI 10.17487/RFC5226, May 2008.</td>
+</tr>
+</tbody></table>
+<h1 id="rfc.authors"><a href="#rfc.authors">Author's Address</a></h1>
 <div class="avoidbreak">
   <address class="vcard">
 	<span class="vcardline">

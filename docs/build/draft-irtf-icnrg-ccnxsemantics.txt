@@ -39,7 +39,7 @@ Status of This Memo
    Internet-Drafts are working documents of the Internet Engineering
    Task Force (IETF).  Note that other groups may also distribute
    working documents as Internet-Drafts.  The list of current Internet-
-   Drafts is at http://datatracker.ietf.org/drafts/current/.
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
 
    Internet-Drafts are draft documents valid for a maximum of six months
    and may be updated, replaced, or obsoleted by other documents at any
@@ -65,7 +65,7 @@ Copyright Notice
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents
-   (http://trustee.ietf.org/license-info) in effect on the date of
+   (https://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
@@ -1755,8 +1755,8 @@ Internet-Draft               CCNx Semantics                     May 2019
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
-              editor.org/info/rfc2119>.
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
 
 13.2.  Informative References
 
@@ -1780,8 +1780,8 @@ Internet-Draft               CCNx Semantics                     May 2019
 
    [ccnxke]   Mosko, M., Uzun, E., and C. Wood, "CCNx Key Exchange
               Protocol Version 1.0", 2017,
-              <https://www.ietf.org/archive/id/draft-wood-icnrg-
-              ccnxkeyexchange-02.txt>.
+              <https://www.ietf.org/archive/id/
+              draft-wood-icnrg-ccnxkeyexchange-02.txt>.
 
    [CCNxURI]  Mosko, M. and C. Wood, "The CCNx URI Scheme (Internet
               draft)", 2017,
@@ -1796,8 +1796,8 @@ Internet-Draft               CCNx Semantics                     May 2019
 
    [chunking]
               Mosko, M., "CCNx Content Object Chunking", 2016,
-              <https://www.ietf.org/archive/id/draft-mosko-icnrg-
-              ccnxchunking-02.txt>.
+              <https://www.ietf.org/archive/id/
+              draft-mosko-icnrg-ccnxchunking-02.txt>.
 
    [cicn]     Muscariello, L., et al., Cisco Systems, "Community ICN
               (CICN)", 2017-2018, <https://wiki.fd.io/view/Cicn>.
@@ -1812,12 +1812,12 @@ Internet-Draft               CCNx Semantics                     May 2019
               enterprise-numbers>.
 
    [esic]     Mosko, M. and C. Wood, "Encrypted Sessions In CCNx
-              (ESIC)", 2017, <https://www.ietf.org/id/draft-wood-icnrg-
-              esic-01.txt>.
+              (ESIC)", 2017,
+              <https://www.ietf.org/id/draft-wood-icnrg-esic-01.txt>.
 
    [flic]     Tschudin, C. and C. Wood, "File-Like ICN Collection
-              (FLIC)", 2017, <https://www.ietf.org/archive/id/draft-
-              tschudin-icnrg-flic-03.txt>.
+              (FLIC)", 2017, <https://www.ietf.org/archive/id/
+              draft-tschudin-icnrg-flic-03.txt>.
 
    [mobile]   Mosko, M., Uzun, E., and C. Wood, "Mobile Sessions in
               Content-Centric Networks", IFIP Networking, 2017,
@@ -1833,14 +1833,14 @@ Internet-Draft               CCNx Semantics                     May 2019
 
    [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
               Specifications: ABNF", STD 68, RFC 5234,
-              DOI 10.17487/RFC5234, January 2008, <https://www.rfc-
-              editor.org/info/rfc5234>.
+              DOI 10.17487/RFC5234, January 2008,
+              <https://www.rfc-editor.org/info/rfc5234>.
 
    [RFC7927]  Kutscher, D., Eum, S., Pentikousis, K., Psaras, I.,
               Corujo, D., Saucez, D., Schmidt, T., and M. Waehlisch,
               "Information-Centric Networking (ICN) Research
-              Challenges", 2016, <https://trac.tools.ietf.org/html/
-              rfc7927>.
+              Challenges", 2016,
+              <https://trac.tools.ietf.org/html/rfc7927>.
 
 
 
@@ -1864,8 +1864,8 @@ Internet-Draft               CCNx Semantics                     May 2019
               Wissingh, B., Wood, C., Afanasyev, A., Zhang, L., Oran,
               D., and C. Tschudin, "Information-Centric Networking
               (ICN): CCN and NDN Terminology", 2017,
-              <https://www.ietf.org/id/draft-irtf-icnrg-terminology-
-              00.txt>.
+              <https://www.ietf.org/id/
+              draft-irtf-icnrg-terminology-00.txt>.
 
    [trust]    Tschudin, C., Uzun, E., and C. Wood, "Trust in
               Information-Centric Networking: From Theory to Practice",

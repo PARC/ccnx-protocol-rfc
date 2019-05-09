@@ -281,33 +281,33 @@ address {
 /*]]>*/</style>
 
 
-  <link href="#rfc.toc" rel="Contents"/>
-<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
-<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Language"/>
-<link href="#rfc.section.2" rel="Chapter" title="2 URI path segment grammar for label=value pairs"/>
-<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Labeled Segments"/>
-<link href="#rfc.section.2.2" rel="Chapter" title="2.2 URI comparison"/>
-<link href="#rfc.section.3" rel="Chapter" title="3 Application to CCNx Names"/>
-<link href="#rfc.section.3.1" rel="Chapter" title="3.1 The ccnx Scheme"/>
-<link href="#rfc.section.3.2" rel="Chapter" title="3.2 URI Representation"/>
-<link href="#rfc.section.3.2.1" rel="Chapter" title="3.2.1 Examples"/>
-<link href="#rfc.section.3.3" rel="Chapter" title="3.3 ccnx: URI comparison"/>
-<link href="#rfc.section.4" rel="Chapter" title="4 IRI Considerations"/>
-<link href="#rfc.section.5" rel="Chapter" title="5 Acknowledgements"/>
-<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations"/>
-<link href="#rfc.section.7" rel="Chapter" title="7 Security Considerations"/>
-<link href="#rfc.references" rel="Chapter" title="8 References"/>
-<link href="#rfc.references.1" rel="Chapter" title="8.1 Normative References"/>
-<link href="#rfc.references.2" rel="Chapter" title="8.2 Informative References"/>
-<link href="#rfc.authors" rel="Chapter"/>
+  <link href="#rfc.toc" rel="Contents">
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Language">
+<link href="#rfc.section.2" rel="Chapter" title="2 URI path segment grammar for label=value pairs">
+<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Labeled Segments">
+<link href="#rfc.section.2.2" rel="Chapter" title="2.2 URI comparison">
+<link href="#rfc.section.3" rel="Chapter" title="3 Application to CCNx Names">
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 The ccnx Scheme">
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 URI Representation">
+<link href="#rfc.section.3.2.1" rel="Chapter" title="3.2.1 Examples">
+<link href="#rfc.section.3.3" rel="Chapter" title="3.3 ccnx: URI comparison">
+<link href="#rfc.section.4" rel="Chapter" title="4 IRI Considerations">
+<link href="#rfc.section.5" rel="Chapter" title="5 Acknowledgements">
+<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations">
+<link href="#rfc.section.7" rel="Chapter" title="7 Security Considerations">
+<link href="#rfc.references" rel="Chapter" title="8 References">
+<link href="#rfc.references.1" rel="Chapter" title="8.1 Normative References">
+<link href="#rfc.references.2" rel="Chapter" title="8.2 Informative References">
+<link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.5.1 - http://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.22.3 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Mosko, M. and C. Wood" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-mosko-icnrg-ccnxurischeme-02" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-5-9" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-09" />
   <meta name="dct.abstract" content="This document defines an RFC3986 URI compliant identifier called a Labeled Segment URI in which name segments carry a label. This allows differentiation between unrelated resources with similar identifiers. This document also specifies the CCNx URI scheme, called &quot;ccnx:,&quot; which conforms to the labeled segment encoding rules presented here. The CCNx URI scheme applies specific labels to each name segment of a URI to disambiguate between resources with similar names. This document defines a specific set of segment labels with label semantics.  " />
   <meta name="description" content="This document defines an RFC3986 URI compliant identifier called a Labeled Segment URI in which name segments carry a label. This allows differentiation between unrelated resources with similar identifiers. This document also specifies the CCNx URI scheme, called &quot;ccnx:,&quot; which conforms to the labeled segment encoding rules presented here. The CCNx URI scheme applies specific labels to each name segment of a URI to disambiguate between resources with similar names. This document defines a specific set of segment labels with label semantics.  " />
 
@@ -319,24 +319,24 @@ address {
     <tbody>
     
     	<tr>
-  <td class="left">ICNRG</td>
-  <td class="right">M. Mosko</td>
+<td class="left">ICNRG</td>
+<td class="right">M. Mosko</td>
 </tr>
 <tr>
-  <td class="left">Internet-Draft</td>
-  <td class="right">PARC, Inc.</td>
+<td class="left">Internet-Draft</td>
+<td class="right">PARC, Inc.</td>
 </tr>
 <tr>
-  <td class="left">Intended status: Experimental</td>
-  <td class="right">C. Wood</td>
+<td class="left">Intended status: Experimental</td>
+<td class="right">C. Wood</td>
 </tr>
 <tr>
-  <td class="left">Expires: November 10, 2019</td>
-  <td class="right">University of California Irvine</td>
+<td class="left">Expires: November 10, 2019</td>
+<td class="right">University of California Irvine</td>
 </tr>
 <tr>
-  <td class="left"></td>
-  <td class="right">May 9, 2019</td>
+<td class="left"></td>
+<td class="right">May 9, 2019</td>
 </tr>
 
     	
@@ -346,74 +346,92 @@ address {
   <p class="title">The CCNx URI Scheme<br />
   <span class="filename">draft-mosko-icnrg-ccnxurischeme-02</span></p>
   
-  <h1 id="rfc.abstract">
-  <a href="#rfc.abstract">Abstract</a>
-</h1>
+  <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>This document defines an RFC3986 URI compliant identifier called a Labeled Segment URI in which name segments carry a label. This allows differentiation between unrelated resources with similar identifiers. This document also specifies the CCNx URI scheme, called "ccnx:," which conforms to the labeled segment encoding rules presented here. The CCNx URI scheme applies specific labels to each name segment of a URI to disambiguate between resources with similar names. This document defines a specific set of segment labels with label semantics.  </p>
-<h1 id="rfc.status">
-  <a href="#rfc.status">Status of This Memo</a>
-</h1>
+<h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
-<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
 <p>This Internet-Draft will expire on November 10, 2019.</p>
-<h1 id="rfc.copyrightnotice">
-  <a href="#rfc.copyrightnotice">Copyright Notice</a>
-</h1>
+<h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
-<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
   <hr class="noprint" />
   <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
   <ul class="toc">
 
-  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
-<ul><li>1.1.   <a href="#rfc.section.1.1">Requirements Language</a></li>
-</ul><li>2.   <a href="#rfc.section.2">URI path segment grammar for label=value pairs</a></li>
-<ul><li>2.1.   <a href="#rfc.section.2.1">Labeled Segments</a></li>
-<li>2.2.   <a href="#rfc.section.2.2">URI comparison</a></li>
-</ul><li>3.   <a href="#rfc.section.3">Application to CCNx Names</a></li>
-<ul><li>3.1.   <a href="#rfc.section.3.1">The ccnx Scheme</a></li>
-<li>3.2.   <a href="#rfc.section.3.2">URI Representation</a></li>
-<ul><li>3.2.1.   <a href="#rfc.section.3.2.1">Examples</a></li>
-</ul><li>3.3.   <a href="#rfc.section.3.3">ccnx: URI comparison</a></li>
-</ul><li>4.   <a href="#rfc.section.4">IRI Considerations</a></li>
-<li>5.   <a href="#rfc.section.5">Acknowledgements</a></li>
-<li>6.   <a href="#rfc.section.6">IANA Considerations</a></li>
-<li>7.   <a href="#rfc.section.7">Security Considerations</a></li>
-<li>8.   <a href="#rfc.references">References</a></li>
-<ul><li>8.1.   <a href="#rfc.references.1">Normative References</a></li>
-<li>8.2.   <a href="#rfc.references.2">Informative References</a></li>
-</ul><li><a href="#rfc.authors">Authors' Addresses</a></li>
+  	<li>1.   <a href="#rfc.section.1">Introduction</a>
+</li>
+<ul><li>1.1.   <a href="#rfc.section.1.1">Requirements Language</a>
+</li>
+</ul><li>2.   <a href="#rfc.section.2">URI path segment grammar for label=value pairs</a>
+</li>
+<ul><li>2.1.   <a href="#rfc.section.2.1">Labeled Segments</a>
+</li>
+<li>2.2.   <a href="#rfc.section.2.2">URI comparison</a>
+</li>
+</ul><li>3.   <a href="#rfc.section.3">Application to CCNx Names</a>
+</li>
+<ul><li>3.1.   <a href="#rfc.section.3.1">The ccnx Scheme</a>
+</li>
+<li>3.2.   <a href="#rfc.section.3.2">URI Representation</a>
+</li>
+<ul><li>3.2.1.   <a href="#rfc.section.3.2.1">Examples</a>
+</li>
+</ul><li>3.3.   <a href="#rfc.section.3.3">ccnx: URI comparison</a>
+</li>
+</ul><li>4.   <a href="#rfc.section.4">IRI Considerations</a>
+</li>
+<li>5.   <a href="#rfc.section.5">Acknowledgements</a>
+</li>
+<li>6.   <a href="#rfc.section.6">IANA Considerations</a>
+</li>
+<li>7.   <a href="#rfc.section.7">Security Considerations</a>
+</li>
+<li>8.   <a href="#rfc.references">References</a>
+</li>
+<ul><li>8.1.   <a href="#rfc.references.1">Normative References</a>
+</li>
+<li>8.2.   <a href="#rfc.references.2">Informative References</a>
+</li>
+</ul><li><a href="#rfc.authors">Authors' Addresses</a>
+</li>
 
 
   </ul>
 
-  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
-<p id="rfc.section.1.p.1">A Labeled Segment is an <a href="#RFC3986">URI</a> <cite title="NONE">[RFC3986]</cite> compliant convention that allows an application or protocol to embed labels in name segments, thus disambiguating the resource identified by the path.  Labeled Segment URIs also allow for query and fragment components to follow the Labeled Segment form.  </p>
+  <h1 id="rfc.section.1">
+<a href="#rfc.section.1">1.</a> Introduction</h1>
+<p id="rfc.section.1.p.1">A Labeled Segment is an <a href="#RFC3986" class="xref">URI</a> compliant convention that allows an application or protocol to embed labels in name segments, thus disambiguating the resource identified by the path.  Labeled Segment URIs also allow for query and fragment components to follow the Labeled Segment form.  </p>
 <p id="rfc.section.1.p.2">Some protocols may wish to disambiguate name segments between different identifier spaces, such as "version" and "page".  Other protocols may wish to use a type system such as "/str=parc/int=7" and "/str=parc/str=7".  Labeled Segment URIs provide an unambiguous and flexible representation in systems that allow resources with otherwise similar names.</p>
 <p id="rfc.section.1.p.3">It is not sufficient to leave the determination of type to application-specific conventions.  In a networked system with multiple applications accessing resources generated by other applications, there needs to be a set of common conventions.  For example, if one application uses a base 64 encoding of a frame number, e.g. base64(0xbdea), and another uses "ver=" to represent a document version, there is an ambiguity because base64(0xbdea) is the string "ver=".</p>
 <p id="rfc.section.1.p.4">Labeled Segments defines "ls-segment" as "label[:param]=value", where the value only contains unreserved, percent-encoded, or certain sub-delim characters.  In the previous example, one application would say "/frame=%BD%EA" and the other would say "/ver=".</p>
-<p id="rfc.section.1.p.5">In this document, we use <a href="#RFC3986">URI</a> <cite title="NONE">[RFC3986]</cite> terminology, therefore a URI and CCNx Name are both composed of a URI path, which is a collection  of name segments.  We do not use the term "name component" as was common in old CCNx. In this document, the word "segment" alone means "name segment."</p>
+<p id="rfc.section.1.p.5">In this document, we use <a href="#RFC3986" class="xref">URI</a> terminology, therefore a URI and CCNx Name are both composed of a URI path, which is a collection  of name segments.  We do not use the term "name component" as was common in old CCNx. In this document, the word "segment" alone means "name segment."</p>
 <p id="rfc.section.1.p.6">URIs conforming to the CCNx URI scheme carry a label for each name segment.  The contents of each name segment must conform to the label semantics.  Example segment types are "Binary Segment", "Name", and "KeyId".</p>
-<p id="rfc.section.1.p.7">We use Labeled Segment URIs as the canonical, human-readable representation.  There is an unambiguous, one-to-one correspondence between an absolute LS-URI path and a Labeled Name.  Relative URI representations are removed during encoding, so no relative name ends up in wire format.  Some labels are URIs that are <a href="#RFC3987">IRI</a> <cite title="NONE">[RFC3987]</cite> compatible.</p>
+<p id="rfc.section.1.p.7">We use Labeled Segment URIs as the canonical, human-readable representation.  There is an unambiguous, one-to-one correspondence between an absolute LS-URI path and a Labeled Name.  Relative URI representations are removed during encoding, so no relative name ends up in wire format.  Some labels are URIs that are <a href="#RFC3987" class="xref">IRI</a> compatible.</p>
 <p id="rfc.section.1.p.8">Labeled Names shall be used everywhere a Name is used in CCNx, such as in the Name of an Interest or Content Object.  They are also used in Links, KeyLocators, or any other place requiring a name.  When encoded for the wire, a binary representation is used, depending on the specific wire format codec, which is outside the scope of this document.  </p>
 <p id="rfc.section.1.p.9">This document specifies: </p>
 
 <ul>
-  <li>the ccnx scheme.</li>
-  <li>a canonical URI representation.</li>
+<li>the ccnx scheme.</li>
+<li>a canonical URI representation.</li>
 </ul>
 
 <p> </p>
-<p id="rfc.section.1.p.10">Formal grammars use the <a href="#RFC5234">ABNF</a> <cite title="NONE">[RFC5234]</cite> notation.</p>
+<p id="rfc.section.1.p.10">Formal grammars use the <a href="#RFC5234" class="xref">ABNF</a> notation.</p>
 <p id="rfc.section.1.p.11">TODO: We have not adopted Requirements Language yet.</p>
-<h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
-<p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">RFC 2119</a> <cite title="NONE">[RFC2119]</cite>.</p>
-<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#LSU" id="LSU">URI path segment grammar for label=value pairs</a></h1>
-<h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#segments" id="segments">Labeled Segments</a></h1>
-<p id="rfc.section.2.1.p.1">This section describes the formal grammar for Labeled Segments using <a href="#RFC5234">ABNF</a> <cite title="NONE">[RFC5234]</cite> notation.  We do not impose restrictions on the length of labels or values.  The semantics of values are URI scheme specific, here we only describe the meta-structure of Labeled Segments.  We begin by reviewing some definitions from <a href="#RFC3986">[RFC3986]</a> that define an absolute path URI.</p>
+<h1 id="rfc.section.1.1">
+<a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
+<p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119" class="xref">RFC 2119</a>.</p>
+<h1 id="rfc.section.2">
+<a href="#rfc.section.2">2.</a> <a href="#LSU" id="LSU">URI path segment grammar for label=value pairs</a>
+</h1>
+<h1 id="rfc.section.2.1">
+<a href="#rfc.section.2.1">2.1.</a> <a href="#segments" id="segments">Labeled Segments</a>
+</h1>
+<p id="rfc.section.2.1.p.1">This section describes the formal grammar for Labeled Segments using <a href="#RFC5234" class="xref">ABNF</a> notation.  We do not impose restrictions on the length of labels or values.  The semantics of values are URI scheme specific, here we only describe the meta-structure of Labeled Segments.  We begin by reviewing some definitions from <a href="#RFC3986" class="xref">[RFC3986]</a> that define an absolute path URI.</p>
 <pre>
 URI           = scheme ":" hier-part [ "?" query ] [ "#" fragment ]
 hier-part     = "//" authority path-abempty
@@ -474,67 +492,75 @@ ls-sub-delims    = "!" / "$" / "'" / "(" / ")"
 <p id="rfc.section.2.1.p.9">lpv-segment labels and parameters may also be numbers.  For example, a protocol with a binary and URI representation may not have pre-defined all possible labels. In such cases, it could render unknown labels as their binary value, such as "/name=marc/x2003=green".</p>
 <p id="rfc.section.2.1.p.10">The ls-query component is a non-hierarchical set of components separated by "&amp;".  Each ls-query component is either a lpv-component or a v-component, similar to segments.  They are based on q-value, which uses q-pchar that excludes "&amp;", but includes "/".  This allows an LS-URI scheme to use type query parameters.</p>
 <p id="rfc.section.2.1.p.11">Labeled Segments allow for dot-segments "." and ".." in a v-segment.  They operate as normal.  A single dot "." refers to the current hierarchy level and may be elided when the URI is resolved.  Double dot ".." segments pop off the previous non-dot segment.  An lpv-segment with a value of "." or ".." is not a dot-segment.  It means that the value of the given label is "." or "..".  For example /a=parc/b=csl/.. is equivalent to "/a=parc/b=csl", but the LS-URI "/a=parc/b=csl/c=.." does not contain a dot-segment.</p>
-<h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#compare" id="compare">URI comparison</a></h1>
-<p id="rfc.section.2.2.p.1">An LS-URI scheme MUST specify the normalization rules to be used, following the methods of <a href="#RFC3986">Section 6</a> <cite title="NONE">[RFC3986]</cite>.  At minimum, an LS-URI scheme SHOULD do the following: </p>
+<h1 id="rfc.section.2.2">
+<a href="#rfc.section.2.2">2.2.</a> <a href="#compare" id="compare">URI comparison</a>
+</h1>
+<p id="rfc.section.2.2.p.1">An LS-URI scheme MUST specify the normalization rules to be used, following the methods of <a href="#RFC3986" class="xref">Section 6</a>.  At minimum, an LS-URI scheme SHOULD do the following: </p>
 
 <ul>
-  <li>Normalize unrestricted percent-encodings to the unrestricted form.</li>
-  <li>Normalize num-t to either dec-t or hex-t.</li>
-  <li>If the scheme allows for value-only segments or query components and interprets them as a default type, they should be normalized to having the type specified.</li>
-  <li>If the scheme allows for undefined labels and represents them, for example, as num-t, then it should normalize all labels to their corresponding num-t.  If "name", for example, is known to be %x50 in a binary encoding of the URI, then all labels should be compared using their numeric value.</li>
+<li>Normalize unrestricted percent-encodings to the unrestricted form.</li>
+<li>Normalize num-t to either dec-t or hex-t.</li>
+<li>If the scheme allows for value-only segments or query components and interprets them as a default type, they should be normalized to having the type specified.</li>
+<li>If the scheme allows for undefined labels and represents them, for example, as num-t, then it should normalize all labels to their corresponding num-t.  If "name", for example, is known to be %x50 in a binary encoding of the URI, then all labels should be compared using their numeric value.</li>
 </ul>
 
 <p> </p>
-<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#CCNx" id="CCNx">Application to CCNx Names</a></h1>
-<h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#labels" id="labels">The ccnx Scheme</a></h1>
+<h1 id="rfc.section.3">
+<a href="#rfc.section.3">3.</a> <a href="#CCNx" id="CCNx">Application to CCNx Names</a>
+</h1>
+<h1 id="rfc.section.3.1">
+<a href="#rfc.section.3.1">3.1.</a> <a href="#labels" id="labels">The ccnx Scheme</a>
+</h1>
 <p id="rfc.section.3.1.p.1">This section describes the CCNx URI scheme "ccnx:" for Labeled Names.  A Labeled Name assigns a semantic type or label to each segment of the hierarchical content Name.</p>
 <p id="rfc.section.3.1.p.2">Unless otherwise specified, a name segment is an arbitrary sequence of octets.</p>
 <p id="rfc.section.3.1.p.3">Several name segment labels are binary unsigned integers.  These are always encoded as variable length sequences of 1 or more octets in network byte order using the shortest representation (i.e. no leading %x00).  The value of "0" is encoded as the single byte of "%x00".  A zero-length sequence must be interpreted as "not present."</p>
 <p id="rfc.section.3.1.p.4">The CCNx Name segment types are: </p>
 
 <ul>
-  <li>Name Segment: A generic name segment that includes arbitrary octets.</li>
-  <li>Application Type N: An application may use application-specific parameters, numbered as integers, where N is from 0 to a system-specific maximum, not less than 255.  These are represented as "App:1=value", for example.</li>
+<li>Name Segment: A generic name segment that includes arbitrary octets.</li>
+<li>Application Type N: An application may use application-specific parameters, numbered as integers, where N is from 0 to a system-specific maximum, not less than 255.  These are represented as "App:1=value", for example.</li>
 </ul>
 
 <p> </p>
 <p id="rfc.section.3.1.p.5">It is common for an information centric networking protocol, such as CCNx or NDN, to use a binary on-the-wire representation for messages.  Such protocols, if they use the ccnx: scheme, must have an appropriate codec that unambiguously represents Labeled Content Information in the chosen wire format.  Relative dot-segments should not occur in the wire format, they should be resolved before encoding.</p>
-<h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#URI" id="URI">URI Representation</a></h1>
+<h1 id="rfc.section.3.2">
+<a href="#rfc.section.3.2">3.2.</a> <a href="#URI" id="URI">URI Representation</a>
+</h1>
 <p id="rfc.section.3.2.p.1">Typed Names use a standard RFC 3986 representation following the LS-URI convention.  A name segment consists of any "unreserved" characters plus percent-encoded characters.  Reserved characters must be percent encoded.</p>
 <p id="rfc.section.3.2.p.2">Within an absolute path, each segment consists of an "ls-segment" (c.f. LS-URI).  A labeled segment is a type and a name component value, with a URI representation of "type=value".  The "type=" portion may be omitted if it is type Name.</p>
 <p id="rfc.section.3.2.p.3">Some name types take a parameter, such as the Application types.  They are represented as "A:nnn=value", where the "nnn" is the application type number and value is the name component.</p>
 <p id="rfc.section.3.2.p.4">A CCNx URI MUST NOT include an Authority, Query, or Fragment.  It is an error to include them.</p>
 <p id="rfc.section.3.2.p.5">Dot-segments (relative name components) are resolved when the URI is converted to a Typed Name.  The "." dot-segment is removed.  The ".." dot-segment is removed along with the previous non-dot-segment.</p>
-<div id="rfc.table.1"/>
-<div id="message_type"/>
+<div id="rfc.table.1"></div>
+<div id="message_type"></div>
 <table cellpadding="3" cellspacing="0" class="tt full center">
-  <caption>The CCNx URI Scheme Types</caption>
-  <thead>
-    <tr>
-      <th class="center">Type</th>
-      <th class="center">Display</th>
-      <th class="center">Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="center">'Name'</td>
-      <td class="center">Hexadecimal</td>
-      <td class="center">Name Segment</td>
-    </tr>
-    <tr>
-      <td class="center">'IPID'</td>
-      <td class="center">Hexadecimal</td>
-      <td class="center">Interest Payload Identifier segment</td>
-    </tr>
-    <tr>
-      <td class="center">'App:0' - 'App:255'</td>
-      <td class="center">Hexadecimal</td>
-      <td class="center">Application Component</td>
-    </tr>
-  </tbody>
+<caption>The CCNx URI Scheme Types</caption>
+<thead><tr>
+<th class="center">Type</th>
+<th class="center">Display</th>
+<th class="center">Name</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="center">'Name'</td>
+<td class="center">Hexadecimal</td>
+<td class="center">Name Segment</td>
+</tr>
+<tr>
+<td class="center">'IPID'</td>
+<td class="center">Hexadecimal</td>
+<td class="center">Interest Payload Identifier segment</td>
+</tr>
+<tr>
+<td class="center">'App:0' - 'App:255'</td>
+<td class="center">Hexadecimal</td>
+<td class="center">Application Component</td>
+</tr>
+</tbody>
 </table>
-<h1 id="rfc.section.3.2.1"><a href="#rfc.section.3.2.1">3.2.1.</a> <a href="#Examples" id="Examples">Examples</a></h1>
+<h1 id="rfc.section.3.2.1">
+<a href="#rfc.section.3.2.1">3.2.1.</a> <a href="#Examples" id="Examples">Examples</a>
+</h1>
 <pre>
 A name / is
     ccnx:/ and is a 0-length name.
@@ -561,84 +587,83 @@ A name /foo/bar with application type 0 "hello"
 and application type 1 "world".
    ccnx:/Name=foo/Name=bar/App:0=hello/App:1=world
  </pre>
-<h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#compareb" id="compareb">ccnx: URI comparison</a></h1>
-<p id="rfc.section.3.3.p.1">While most comparisons are done using a wire format representation of a ccnx: URI, some applications may compare the CCNx URI using their URI representation.  This section defines the rules for comparing ccnx: URIs using the methods of <a href="#RFC3986">Section 6</a> <cite title="NONE">[RFC3986]</cite> </p>
+<h1 id="rfc.section.3.3">
+<a href="#rfc.section.3.3">3.3.</a> <a href="#compareb" id="compareb">ccnx: URI comparison</a>
+</h1>
+<p id="rfc.section.3.3.p.1">While most comparisons are done using a wire format representation of a ccnx: URI, some applications may compare the CCNx URI using their URI representation.  This section defines the rules for comparing ccnx: URIs using the methods of <a href="#RFC3986" class="xref">Section 6</a> </p>
 <p id="rfc.section.3.3.p.2">Comparing typed name URIs must be done with: </p>
 
 <ul>
-  <li>Syntax-based normalization</li>
-  <li>Case normalization: normalize the representation of percent encodings.  ccnx: does not use the host portion of the URI, and should be ignored if present.</li>
-  <li>Percent encoding normalization: Percent encodings of unreserved characters must be converted to the unreserved character.</li>
-  <li>Path segment normalization: dot-segments must be resolved first.</li>
-  <li>Scheme-based normalization: The authority should be removed and the path represented as an absolute path.</li>
-  <li>Protocol-based normalization: Should not be done.  A trailing slash indicates a zero-length terminal name component and signifies a different name.</li>
-  <li>typed-name-segment normalization: All segments should be presented with their type, do not elide the "N=" for Name components.</li>
-  <li>Binary unsigned integer normalization: remove any leading %x00 from numbers, leaving only the terminal %x00 for "0".</li>
-  <li>type parameters: they must have their percent encodings normalized.  If they are integers, such as for the 'A' type, they must not have leading zeros.</li>
+<li>Syntax-based normalization</li>
+<li>Case normalization: normalize the representation of percent encodings.  ccnx: does not use the host portion of the URI, and should be ignored if present.</li>
+<li>Percent encoding normalization: Percent encodings of unreserved characters must be converted to the unreserved character.</li>
+<li>Path segment normalization: dot-segments must be resolved first.</li>
+<li>Scheme-based normalization: The authority should be removed and the path represented as an absolute path.</li>
+<li>Protocol-based normalization: Should not be done.  A trailing slash indicates a zero-length terminal name component and signifies a different name.</li>
+<li>typed-name-segment normalization: All segments should be presented with their type, do not elide the "N=" for Name components.</li>
+<li>Binary unsigned integer normalization: remove any leading %x00 from numbers, leaving only the terminal %x00 for "0".</li>
+<li>type parameters: they must have their percent encodings normalized.  If they are integers, such as for the 'A' type, they must not have leading zeros.</li>
 </ul>
 
 <p> </p>
-<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#IRI" id="IRI">IRI Considerations</a></h1>
+<h1 id="rfc.section.4">
+<a href="#rfc.section.4">4.</a> <a href="#IRI" id="IRI">IRI Considerations</a>
+</h1>
 <p id="rfc.section.4.p.1">International Resource Identifiers extend the unreserved character set to include characters above U+07F and encode them using percent encoding.  This extension is compatible with the ccnx: schema.  It applies only to the "value" portion of an ls-segment.</p>
-<p id="rfc.section.4.p.2">The canonical name is determined by the URI representation of the IRI, after applying the rules of Section 3.1 of <a href="#RFC3987">[RFC3987]</a> and resolving dot-segments.  The canonical name thus includes the URI representation of language markers, including the bidirectional components.</p>
+<p id="rfc.section.4.p.2">The canonical name is determined by the URI representation of the IRI, after applying the rules of Section 3.1 of <a href="#RFC3987" class="xref">[RFC3987]</a> and resolving dot-segments.  The canonical name thus includes the URI representation of language markers, including the bidirectional components.</p>
 <p id="rfc.section.4.p.3">The value of a UTF-8 Name segment should be interpreted using IRI rules, including bidirectional markers.  They may be displayed using localized formats.</p>
 <p id="rfc.section.4.p.4">Binary unsigned integer types are not interpreted under IRI rules, they are specifically percent encoded numbers.  They may be displayed using a localized format.</p>
-<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a></h1>
-<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#IANA" id="IANA">IANA Considerations</a></h1>
-<p id="rfc.section.6.p.1">This memo includes no request to IANA.</p>
-<p id="rfc.section.6.p.2">All drafts are required to have an IANA considerations section (see <a href="#RFC5226">Guidelines for Writing an IANA Considerations Section in RFCs</a> <cite title="NONE">[RFC5226]</cite> for a guide). If the draft does not require IANA to do anything, the section contains an explicit statement that this is the case (as above). If there are no requirements for IANA, the section will be removed during conversion into an RFC by the RFC Editor.</p>
-<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#Security" id="Security">Security Considerations</a></h1>
-<p id="rfc.section.7.p.1">All drafts are required to have a security considerations section. See <a href="#RFC3552">RFC 3552</a> <cite title="NONE">[RFC3552]</cite> for a guide.</p>
-<h1 id="rfc.references"><a href="#rfc.references">8.</a> References</h1>
-<h1 id="rfc.references.1"><a href="#rfc.references.1">8.1.</a> Normative References</h1>
-<table>
-  <tbody>
-    <tr>
-      <td class="reference">
-        <b id="RFC2119">[RFC2119]</b>
-      </td>
-      <td class="top"><a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
-    </tr>
-  </tbody>
-</table>
-<h1 id="rfc.references.2"><a href="#rfc.references.2">8.2.</a> Informative References</h1>
-<table>
-  <tbody>
-    <tr>
-      <td class="reference">
-        <b id="RFC3552">[RFC3552]</b>
-      </td>
-      <td class="top"><a>Rescorla, E.</a> and <a>B. Korver</a>, "<a href="http://tools.ietf.org/html/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>", BCP 72, RFC 3552, DOI 10.17487/RFC3552, July 2003.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC3986">[RFC3986]</b>
-      </td>
-      <td class="top"><a>Berners-Lee, T.</a>, <a>Fielding, R.</a> and <a>L. Masinter</a>, "<a href="http://tools.ietf.org/html/rfc3986">Uniform Resource Identifier (URI): Generic Syntax</a>", STD 66, RFC 3986, DOI 10.17487/RFC3986, January 2005.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC3987">[RFC3987]</b>
-      </td>
-      <td class="top"><a>Duerst, M.</a> and <a>M. Suignard</a>, "<a href="http://tools.ietf.org/html/rfc3987">Internationalized Resource Identifiers (IRIs)</a>", RFC 3987, DOI 10.17487/RFC3987, January 2005.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC5226">[RFC5226]</b>
-      </td>
-      <td class="top"><a>Narten, T.</a> and <a>H. Alvestrand</a>, "<a href="http://tools.ietf.org/html/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>", RFC 5226, DOI 10.17487/RFC5226, May 2008.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC5234">[RFC5234]</b>
-      </td>
-      <td class="top"><a>Crocker, D.</a> and <a>P. Overell</a>, "<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>", STD 68, RFC 5234, DOI 10.17487/RFC5234, January 2008.</td>
-    </tr>
-  </tbody>
-</table>
-<h1 id="rfc.authors">
-  <a href="#rfc.authors">Authors' Addresses</a>
+<h1 id="rfc.section.5">
+<a href="#rfc.section.5">5.</a> <a href="#Acknowledgements" id="Acknowledgements">Acknowledgements</a>
 </h1>
+<h1 id="rfc.section.6">
+<a href="#rfc.section.6">6.</a> <a href="#IANA" id="IANA">IANA Considerations</a>
+</h1>
+<p id="rfc.section.6.p.1">This memo includes no request to IANA.</p>
+<p id="rfc.section.6.p.2">All drafts are required to have an IANA considerations section (see <a href="#RFC5226" class="xref">Guidelines for Writing an IANA Considerations Section in RFCs</a> for a guide). If the draft does not require IANA to do anything, the section contains an explicit statement that this is the case (as above). If there are no requirements for IANA, the section will be removed during conversion into an RFC by the RFC Editor.</p>
+<h1 id="rfc.section.7">
+<a href="#rfc.section.7">7.</a> <a href="#Security" id="Security">Security Considerations</a>
+</h1>
+<p id="rfc.section.7.p.1">All drafts are required to have a security considerations section. See <a href="#RFC3552" class="xref">RFC 3552</a> for a guide.</p>
+<h1 id="rfc.references">
+<a href="#rfc.references">8.</a> References</h1>
+<h1 id="rfc.references.1">
+<a href="#rfc.references.1">8.1.</a> Normative References</h1>
+<table><tbody><tr>
+<td class="reference"><b id="RFC2119">[RFC2119]</b></td>
+<td class="top">
+<a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+</tr></tbody></table>
+<h1 id="rfc.references.2">
+<a href="#rfc.references.2">8.2.</a> Informative References</h1>
+<table><tbody>
+<tr>
+<td class="reference"><b id="RFC3552">[RFC3552]</b></td>
+<td class="top">
+<a>Rescorla, E.</a> and <a>B. Korver</a>, "<a href="https://tools.ietf.org/html/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>", BCP 72, RFC 3552, DOI 10.17487/RFC3552, July 2003.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC3986">[RFC3986]</b></td>
+<td class="top">
+<a>Berners-Lee, T.</a>, <a>Fielding, R.</a> and <a>L. Masinter</a>, "<a href="https://tools.ietf.org/html/rfc3986">Uniform Resource Identifier (URI): Generic Syntax</a>", STD 66, RFC 3986, DOI 10.17487/RFC3986, January 2005.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC3987">[RFC3987]</b></td>
+<td class="top">
+<a>Duerst, M.</a> and <a>M. Suignard</a>, "<a href="https://tools.ietf.org/html/rfc3987">Internationalized Resource Identifiers (IRIs)</a>", RFC 3987, DOI 10.17487/RFC3987, January 2005.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC5226">[RFC5226]</b></td>
+<td class="top">
+<a>Narten, T.</a> and <a>H. Alvestrand</a>, "<a href="https://tools.ietf.org/html/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>", RFC 5226, DOI 10.17487/RFC5226, May 2008.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC5234">[RFC5234]</b></td>
+<td class="top">
+<a>Crocker, D.</a> and <a>P. Overell</a>, "<a href="https://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>", STD 68, RFC 5234, DOI 10.17487/RFC5234, January 2008.</td>
+</tr>
+</tbody></table>
+<h1 id="rfc.authors"><a href="#rfc.authors">Authors' Addresses</a></h1>
 <div class="avoidbreak">
   <address class="vcard">
 	<span class="vcardline">

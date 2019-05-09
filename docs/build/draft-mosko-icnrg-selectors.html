@@ -281,33 +281,33 @@ address {
 /*]]>*/</style>
 
 
-  <link href="#rfc.toc" rel="Contents"/>
-<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
-<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Language"/>
-<link href="#rfc.section.2" rel="Chapter" title="2 Protocol Description"/>
-<link href="#rfc.section.3" rel="Chapter" title="3 Name Labels and TLV types"/>
-<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Child Selector"/>
-<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Interest Min(Max)SuffixComponents"/>
-<link href="#rfc.section.3.3" rel="Chapter" title="3.3 Name Excludes"/>
-<link href="#rfc.section.3.3.1" rel="Chapter" title="3.3.1 Exclude Singleton"/>
-<link href="#rfc.section.3.3.2" rel="Chapter" title="3.3.2 Exclude Range"/>
-<link href="#rfc.section.3.3.3" rel="Chapter" title="3.3.3 Examples"/>
-<link href="#rfc.section.4" rel="Chapter" title="4 Content Store and Caching"/>
-<link href="#rfc.section.5" rel="Chapter" title="5 Annex A: Examples"/>
-<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations"/>
-<link href="#rfc.section.7" rel="Chapter" title="7 Security Considerations"/>
-<link href="#rfc.references" rel="Chapter" title="8 References"/>
-<link href="#rfc.references.1" rel="Chapter" title="8.1 Normative References"/>
-<link href="#rfc.references.2" rel="Chapter" title="8.2 Informative References"/>
-<link href="#rfc.authors" rel="Chapter"/>
+  <link href="#rfc.toc" rel="Contents">
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Language">
+<link href="#rfc.section.2" rel="Chapter" title="2 Protocol Description">
+<link href="#rfc.section.3" rel="Chapter" title="3 Name Labels and TLV types">
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Child Selector">
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Interest Min(Max)SuffixComponents">
+<link href="#rfc.section.3.3" rel="Chapter" title="3.3 Name Excludes">
+<link href="#rfc.section.3.3.1" rel="Chapter" title="3.3.1 Exclude Singleton">
+<link href="#rfc.section.3.3.2" rel="Chapter" title="3.3.2 Exclude Range">
+<link href="#rfc.section.3.3.3" rel="Chapter" title="3.3.3 Examples">
+<link href="#rfc.section.4" rel="Chapter" title="4 Content Store and Caching">
+<link href="#rfc.section.5" rel="Chapter" title="5 Annex A: Examples">
+<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations">
+<link href="#rfc.section.7" rel="Chapter" title="7 Security Considerations">
+<link href="#rfc.references" rel="Chapter" title="8 References">
+<link href="#rfc.references.1" rel="Chapter" title="8.1 Normative References">
+<link href="#rfc.references.2" rel="Chapter" title="8.2 Informative References">
+<link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.5.1 - http://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.22.3 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Mosko, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-mosko-icnrg-selectors-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-5-9" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-09" />
   <meta name="dct.abstract" content="CCNx selector based discovery uses exclusions and interest name suffix matching to discover content in the network.  Participating nodes may respond with matching Content Objects from cache using an encapsulation protocol.  This document specifies the available selectors, their encoding in a name segment, and the encapsulation protocol." />
   <meta name="description" content="CCNx selector based discovery uses exclusions and interest name suffix matching to discover content in the network.  Participating nodes may respond with matching Content Objects from cache using an encapsulation protocol.  This document specifies the available selectors, their encoding in a name segment, and the encapsulation protocol." />
 
@@ -319,20 +319,20 @@ address {
     <tbody>
     
     	<tr>
-  <td class="left">ICNRG</td>
-  <td class="right">M. Mosko</td>
+<td class="left">ICNRG</td>
+<td class="right">M. Mosko</td>
 </tr>
 <tr>
-  <td class="left">Internet-Draft</td>
-  <td class="right">PARC, Inc.</td>
+<td class="left">Internet-Draft</td>
+<td class="right">PARC, Inc.</td>
 </tr>
 <tr>
-  <td class="left">Intended status: Experimental</td>
-  <td class="right">May 9, 2019</td>
+<td class="left">Intended status: Experimental</td>
+<td class="right">May 9, 2019</td>
 </tr>
 <tr>
-  <td class="left">Expires: November 10, 2019</td>
-  <td class="right"></td>
+<td class="left">Expires: November 10, 2019</td>
+<td class="right"></td>
 </tr>
 
     	
@@ -342,72 +342,88 @@ address {
   <p class="title">CCNx Selector Based Discovery<br />
   <span class="filename">draft-mosko-icnrg-selectors-latest</span></p>
   
-  <h1 id="rfc.abstract">
-  <a href="#rfc.abstract">Abstract</a>
-</h1>
+  <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>CCNx selector based discovery uses exclusions and interest name suffix matching to discover content in the network.  Participating nodes may respond with matching Content Objects from cache using an encapsulation protocol.  This document specifies the available selectors, their encoding in a name segment, and the encapsulation protocol.</p>
-<h1 id="rfc.status">
-  <a href="#rfc.status">Status of This Memo</a>
-</h1>
+<h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
-<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
 <p>This Internet-Draft will expire on November 10, 2019.</p>
-<h1 id="rfc.copyrightnotice">
-  <a href="#rfc.copyrightnotice">Copyright Notice</a>
-</h1>
+<h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
-<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
   <hr class="noprint" />
   <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
   <ul class="toc">
 
-  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
-<ul><li>1.1.   <a href="#rfc.section.1.1">Requirements Language</a></li>
-</ul><li>2.   <a href="#rfc.section.2">Protocol Description</a></li>
-<li>3.   <a href="#rfc.section.3">Name Labels and TLV types</a></li>
-<ul><li>3.1.   <a href="#rfc.section.3.1">Child Selector</a></li>
-<li>3.2.   <a href="#rfc.section.3.2">Interest Min(Max)SuffixComponents</a></li>
-<li>3.3.   <a href="#rfc.section.3.3">Name Excludes</a></li>
-<ul><li>3.3.1.   <a href="#rfc.section.3.3.1">Exclude Singleton</a></li>
-<li>3.3.2.   <a href="#rfc.section.3.3.2">Exclude Range</a></li>
-<li>3.3.3.   <a href="#rfc.section.3.3.3">Examples</a></li>
-</ul></ul><li>4.   <a href="#rfc.section.4">Content Store and Caching</a></li>
-<li>5.   <a href="#rfc.section.5">Annex A: Examples</a></li>
-<li>6.   <a href="#rfc.section.6">IANA Considerations</a></li>
-<li>7.   <a href="#rfc.section.7">Security Considerations</a></li>
-<li>8.   <a href="#rfc.references">References</a></li>
-<ul><li>8.1.   <a href="#rfc.references.1">Normative References</a></li>
-<li>8.2.   <a href="#rfc.references.2">Informative References</a></li>
-</ul><li><a href="#rfc.authors">Author's Address</a></li>
+  	<li>1.   <a href="#rfc.section.1">Introduction</a>
+</li>
+<ul><li>1.1.   <a href="#rfc.section.1.1">Requirements Language</a>
+</li>
+</ul><li>2.   <a href="#rfc.section.2">Protocol Description</a>
+</li>
+<li>3.   <a href="#rfc.section.3">Name Labels and TLV types</a>
+</li>
+<ul><li>3.1.   <a href="#rfc.section.3.1">Child Selector</a>
+</li>
+<li>3.2.   <a href="#rfc.section.3.2">Interest Min(Max)SuffixComponents</a>
+</li>
+<li>3.3.   <a href="#rfc.section.3.3">Name Excludes</a>
+</li>
+<ul><li>3.3.1.   <a href="#rfc.section.3.3.1">Exclude Singleton</a>
+</li>
+<li>3.3.2.   <a href="#rfc.section.3.3.2">Exclude Range</a>
+</li>
+<li>3.3.3.   <a href="#rfc.section.3.3.3">Examples</a>
+</li>
+</ul></ul><li>4.   <a href="#rfc.section.4">Content Store and Caching</a>
+</li>
+<li>5.   <a href="#rfc.section.5">Annex A: Examples</a>
+</li>
+<li>6.   <a href="#rfc.section.6">IANA Considerations</a>
+</li>
+<li>7.   <a href="#rfc.section.7">Security Considerations</a>
+</li>
+<li>8.   <a href="#rfc.references">References</a>
+</li>
+<ul><li>8.1.   <a href="#rfc.references.1">Normative References</a>
+</li>
+<li>8.2.   <a href="#rfc.references.2">Informative References</a>
+</li>
+</ul><li><a href="#rfc.authors">Author's Address</a>
+</li>
 
 
   </ul>
 
-  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> Introduction</h1>
-<p id="rfc.section.1.p.1">Content Discovery is an important feature of <a href="#CCNxSemantics">CCNx</a> <cite title="NONE">[CCNxSemantics]</cite>.  This document specifies a discovery mechanism that uses a name segment to encode a discovery query in an Interest.  Nodes that participate in discovery may reply with a Content Object if it matches the encoded query.  The query uses exclusions to work around incorrect responses.</p>
-<p id="rfc.section.1.p.2">This document updates <a href="#CCNxMessages">CCNx Messages</a> <cite title="NONE">[CCNxMessages]</cite> with a new name TLV type, T_SELECTOR, for selector query.  It also specifies a new Content Object PayloadType that encapsulates another Content Object.  The inner Content Object is used to return a Content Object with a longer name than in an interest.  The inner object's signature should verify as normal.  </p>
+  <h1 id="rfc.section.1">
+<a href="#rfc.section.1">1.</a> Introduction</h1>
+<p id="rfc.section.1.p.1">Content Discovery is an important feature of <a href="#CCNxSemantics" class="xref">CCNx</a>.  This document specifies a discovery mechanism that uses a name segment to encode a discovery query in an Interest.  Nodes that participate in discovery may reply with a Content Object if it matches the encoded query.  The query uses exclusions to work around incorrect responses.</p>
+<p id="rfc.section.1.p.2">This document updates <a href="#CCNxMessages" class="xref">CCNx Messages</a> with a new name TLV type, T_SELECTOR, for selector query.  It also specifies a new Content Object PayloadType that encapsulates another Content Object.  The inner Content Object is used to return a Content Object with a longer name than in an interest.  The inner object's signature should verify as normal.  </p>
 <p id="rfc.section.1.p.3">Not all nodes along the Interest path need to participate in the discovery process.  A non-participating node should forward the Interest and encapsulating Content Object as normal.  A participating node should verify that the inner Content Object matches the selector query in the PIT entry befor returning it and erasing the PIT entry.</p>
 <p id="rfc.section.1.p.4">Note that Selector discovery is not needed when asking for a Content Object by its Content-Object Hash, as there should only ever be one match for that.</p>
 <p id="rfc.section.1.p.5">Selector discovery in CCNx 1.0 differs in three ways from the prior CCNx 0.x selector discovery.  First, CCNx 1.0 uses a distinguished field for the Content-Object Hash restriction.  It is not appended to the name to form the so-called "full name."  This means that there is no implicit digest name segment.  Thus, using a MinSuffixComponents and MaxSuffixComponents of 0 will match the exact name in the Interest without needing to add one extra component to account for the implicit digest.  Second, there is a HashExcludes field that lists Content-Object Hash restrictions to exclude instead of appending them as an implicit name component.  Third, the encoding of Excludes differs from prior encodings and uses a simpler formulation with the same expressiveness that also takes in to consideration that name segments in CCNx 1.0 have TLV types associated with them.</p>
 <p id="rfc.section.1.p.6">CCNx 1.0 allows Content Objects to have no name and be retrieved by hash only.  As they have no name, they are not discoverable via name-based selector discovery.</p>
 <p id="rfc.section.1.p.7">Packets are represented as 32-bit wide words using ASCII art.  Because of the TLV encoding and optional fields or sizes, there is no concise way to represent all possibilities.  We use the convention that ASCII art fields enclosed by vertical bars "|" represent exact bit widths.  Fields with a forward slash "/" are variable bitwidths, which we typically pad out to word alignment for picture readability.</p>
-<h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
-<p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">RFC 2119</a> <cite title="NONE">[RFC2119]</cite>.</p>
-<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#protocol" id="protocol">Protocol Description</a></h1>
+<h1 id="rfc.section.1.1">
+<a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
+<p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119" class="xref">RFC 2119</a>.</p>
+<h1 id="rfc.section.2">
+<a href="#rfc.section.2">2.</a> <a href="#protocol" id="protocol">Protocol Description</a>
+</h1>
 <p id="rfc.section.2.p.1">Selector based discovery uses seven query variables to discover content. These selectors are encoded as a single name segment affixed to an Interest name.  The selectors operate on the prefix up to, but not including the selector name segment.  The selector name segment should be the last name segment.</p>
 <p id="rfc.section.2.p.2">The selectors are: </p>
 
 <ul>
-  <li>MinSuffixComponents: the minimum number of additional name segments a matching Content Object must have in its name.  The default value is 0.</li>
-  <li>MaxSuffixComponents: The maximum number of additional name segments a matching Content Object may have in its name.  The default value is unlimited.</li>
-  <li>ChildSelector: Answer with the left-most or right-most child.</li>
-  <li>NameExcludes: A set of range and singleton exclusions to eliminate Content Objects.  The exclusions match against the name segment that would immediately follow the Interest name prefix up to but not including the Selector name segment.</li>
-  <li>InnerKeyId: Matches the KeyId of the encapsulated object.</li>
-  <li>HashExcludes: A list of ContentObjectHashRestrictions to exclude.</li>
-  <li>SelectorNonce: A number to make the query unique.</li>
+<li>MinSuffixComponents: the minimum number of additional name segments a matching Content Object must have in its name.  The default value is 0.</li>
+<li>MaxSuffixComponents: The maximum number of additional name segments a matching Content Object may have in its name.  The default value is unlimited.</li>
+<li>ChildSelector: Answer with the left-most or right-most child.</li>
+<li>NameExcludes: A set of range and singleton exclusions to eliminate Content Objects.  The exclusions match against the name segment that would immediately follow the Interest name prefix up to but not including the Selector name segment.</li>
+<li>InnerKeyId: Matches the KeyId of the encapsulated object.</li>
+<li>HashExcludes: A list of ContentObjectHashRestrictions to exclude.</li>
+<li>SelectorNonce: A number to make the query unique.</li>
 </ul>
 
 <p> </p>
@@ -419,73 +435,75 @@ address {
 <p id="rfc.section.2.p.8">A consumer MAY include a SelectorNonce.  This nonce is to make the query unqiue to bypass cached reponses to the same Selectors at non-participating nodes.  A conumser SHOULD use this field if it receives an non-conforming response in an encapsulated ContentObject and cannot further exclude that response.  If an attacker were able to inject an incorrect response into a non-participating cache then that non-participating node cannot determine that the response it is serving from cache is correct or not.  Therefore, a consumer can use the SelectorNonce to make its requrest name different from the cached name.  Note that if all nodes are participating, then this field has no effect as it is not processed by them.  The SelectorNone is not used for loop detection and may be as few bytes as needed to avoid a cached response.  </p>
 <p id="rfc.section.2.p.9">If an authoritative producer receives a Selector discovery, it SHOULD generate the inner Content Object as normal and encapsulate it as normal.  It MAY also respond with an Interest Return or not respond at all.  At the present, responding directly to the Selector Interest with data without encapsulating it is not supported.  Note that an application is NOT REQUIRED to implement Selector discovery; if the application wishes to make use of this mechanism, then it must implement it, if it does not use this mechanism then it does not need to implement it.  </p>
 <p id="rfc.section.2.p.10">Normally, the outer Content Object does not have a Validation section.  A responding node MAY include a CRC32C or other integrity check.  Signing or MACing an outer Content Object is possible, but should only be used in environments where that degree of trust is necessary.  Signing the outer Content Object in no way replaces the signature (if any) of the inner Content Object.  The outer signature only identifies the responding cache (or producer).  </p>
-<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#types" id="types">Name Labels and TLV types</a></h1>
+<h1 id="rfc.section.3">
+<a href="#rfc.section.3">3.</a> <a href="#types" id="types">Name Labels and TLV types</a>
+</h1>
 <p id="rfc.section.3.p.1">The Selector name segment type T_SELECTOR has type %x0010.</p>
 <p id="rfc.section.3.p.2">The PayloadType of T_PAYLOADTYPE_ENCAP has the value 8.</p>
-<div id="rfc.table.1"/>
-<div id="selector_types"/>
+<div id="rfc.table.1"></div>
+<div id="selector_types"></div>
 <table cellpadding="3" cellspacing="0" class="tt full center">
-  <caption>Selector Types</caption>
-  <thead>
-    <tr>
-      <th class="center">Type</th>
-      <th class="center">Symbol</th>
-      <th class="center">Name</th>
-      <th class="left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="center">1</td>
-      <td class="center">T_MINSUFFIX</td>
-      <td class="center">Selectors: Min Suffix Components</td>
-      <td class="left">Minimum number of additional name components after given name to match (0 default if missing).</td>
-    </tr>
-    <tr>
-      <td class="center">2</td>
-      <td class="center">T_MAXSUFFIX</td>
-      <td class="center">Selectors: Max Suffix Components</td>
-      <td class="left">Maximum number of additional name components after given name to match (unlimited default is missing).</td>
-    </tr>
-    <tr>
-      <td class="center">3</td>
-      <td class="center">T_CHILD</td>
-      <td class="center">Selectors: Child Selector</td>
-      <td class="left">0 = left, 1 = right (default)</td>
-    </tr>
-    <tr>
-      <td class="center">4</td>
-      <td class="center">T_NAME_EXCLUDES</td>
-      <td class="center">Name Excludes</td>
-      <td class="left">Encloses ExcludeComponents</td>
-    </tr>
-    <tr>
-      <td class="center">1</td>
-      <td class="center">T_EX_SINGLE</td>
-      <td class="center">Exclude Singleton</td>
-      <td class="left">Exclude a single name segment.</td>
-    </tr>
-    <tr>
-      <td class="center">2</td>
-      <td class="center">T_EX_RANGE</td>
-      <td class="center">Exclude Range</td>
-      <td class="left">Exclude an half-open range, beginning at this value and continuing up to the next Singleton, or to infinity if omitted on the last entry.</td>
-    </tr>
-    <tr>
-      <td class="center">5</td>
-      <td class="center">T_INNER_KEYID</td>
-      <td class="center">Inner KeyId</td>
-      <td class="left">A restriction on the inner keyid.  If present, it must match the KeyId of the inner Content Object in the encapsulated response.</td>
-    </tr>
-    <tr>
-      <td class="center">6</td>
-      <td class="center">T_HASH_EXCLUDES</td>
-      <td class="center">Hash Excludes</td>
-      <td class="left">Excludes a set of ContentObjectHash from the allowed responses.  Each restriction is encoded using its Hash Function Type Registry type (e.g. T_SHA-256) from <a href="#CCNxMessages">[CCNxMessages]</a>.</td>
-    </tr>
-  </tbody>
+<caption>Selector Types</caption>
+<thead><tr>
+<th class="center">Type</th>
+<th class="center">Symbol</th>
+<th class="center">Name</th>
+<th class="left">Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="center">1</td>
+<td class="center">T_MINSUFFIX</td>
+<td class="center">Selectors: Min Suffix Components</td>
+<td class="left">Minimum number of additional name components after given name to match (0 default if missing).</td>
+</tr>
+<tr>
+<td class="center">2</td>
+<td class="center">T_MAXSUFFIX</td>
+<td class="center">Selectors: Max Suffix Components</td>
+<td class="left">Maximum number of additional name components after given name to match (unlimited default is missing).</td>
+</tr>
+<tr>
+<td class="center">3</td>
+<td class="center">T_CHILD</td>
+<td class="center">Selectors: Child Selector</td>
+<td class="left">0 = left, 1 = right (default)</td>
+</tr>
+<tr>
+<td class="center">4</td>
+<td class="center">T_NAME_EXCLUDES</td>
+<td class="center">Name Excludes</td>
+<td class="left">Encloses ExcludeComponents</td>
+</tr>
+<tr>
+<td class="center">1</td>
+<td class="center">T_EX_SINGLE</td>
+<td class="center">Exclude Singleton</td>
+<td class="left">Exclude a single name segment.</td>
+</tr>
+<tr>
+<td class="center">2</td>
+<td class="center">T_EX_RANGE</td>
+<td class="center">Exclude Range</td>
+<td class="left">Exclude an half-open range, beginning at this value and continuing up to the next Singleton, or to infinity if omitted on the last entry.</td>
+</tr>
+<tr>
+<td class="center">5</td>
+<td class="center">T_INNER_KEYID</td>
+<td class="center">Inner KeyId</td>
+<td class="left">A restriction on the inner keyid.  If present, it must match the KeyId of the inner Content Object in the encapsulated response.</td>
+</tr>
+<tr>
+<td class="center">6</td>
+<td class="center">T_HASH_EXCLUDES</td>
+<td class="center">Hash Excludes</td>
+<td class="left">Excludes a set of ContentObjectHash from the allowed responses.  Each restriction is encoded using its Hash Function Type Registry type (e.g. T_SHA-256) from <a href="#CCNxMessages" class="xref">[CCNxMessages]</a>.</td>
+</tr>
+</tbody>
 </table>
-<h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#child" id="child">Child Selector</a></h1>
+<h1 id="rfc.section.3.1">
+<a href="#rfc.section.3.1">3.1.</a> <a href="#child" id="child">Child Selector</a>
+</h1>
 <p id="rfc.section.3.1.p.1">If there are multiple choices to answer an Interest, the Child Selector specifies the desired ordering of responses.  %x00 = leftmost, %x01 = rightmost.</p>
 <pre>
                      1                   2                   3
@@ -494,7 +512,9 @@ address {
 |    T_CHILD    |       1       |   selector    |
 +---------------+---------------+---------------+
 </pre>
-<h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#suffix" id="suffix">Interest Min(Max)SuffixComponents</a></h1>
+<h1 id="rfc.section.3.2">
+<a href="#rfc.section.3.2">3.2.</a> <a href="#suffix" id="suffix">Interest Min(Max)SuffixComponents</a>
+</h1>
 <p id="rfc.section.3.2.p.1">The Min and Max suffix components are encoded as a minimum-length unsigned integer in network byte order number inside the value.  A "0" is represented as a single byte %0x00.  A length 0 value is interpreted the same as the type not being present.</p>
 <pre>
                      1                   2                   3
@@ -506,11 +526,13 @@ address {
 +---------------+---------------+---------------+---------------+
 type = T_MINSUFFIX or T_MAXSUFFIX
 </pre>
-<h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#excludes" id="excludes">Name Excludes</a></h1>
+<h1 id="rfc.section.3.3">
+<a href="#rfc.section.3.3">3.3.</a> <a href="#excludes" id="excludes">Name Excludes</a>
+</h1>
 <p id="rfc.section.3.3.p.1">Interest Excludes specify a set of singletons and ranges to exclude when matching Content Object names to an Interest.  They match the name component immediately following the last component of the Interest name (not including the Selector TLV).  The excludes must be sorted in ascending order, using the Exclude sorting rules below.</p>
 <p id="rfc.section.3.3.p.2">A name exclusion is the full TLV expression of a name component, not just it's value.</p>
 <p id="rfc.section.3.3.p.3">Exclude Sorting: An exclusion value A is less than B iff the TLV type of A is less than the TLV type of B, or being equal, the TLV value of A is shortlex less than the TLV value of B.  A shortlex comparison means that X is less than Y is X is shorter than Y or the lengths being equal, X lexicagraphically sorts before Y.</p>
-<p id="rfc.section.3.3.p.4">Using the normal 2+2 TLV encoding of <a href="#CCNxMessages">[CCNxMessages]</a>, the Exclude Sorting can be done by a byte-by-byte memcmp() of two TLVs.  This is because the fixed length Type ensures correct type sorting and fixed length Length ensures correct shortlex length sorting.  This will not necessarily be true of other encodings.</p>
+<p id="rfc.section.3.3.p.4">Using the normal 2+2 TLV encoding of <a href="#CCNxMessages" class="xref">[CCNxMessages]</a>, the Exclude Sorting can be done by a byte-by-byte memcmp() of two TLVs.  This is because the fixed length Type ensures correct type sorting and fixed length Length ensures correct shortlex length sorting.  This will not necessarily be true of other encodings.</p>
 <p id="rfc.section.3.3.p.5">A zero-length exclusion is the minimum exclusion and must appear before any other exclusion.  Note that a zero-length exlcusion has no TLV type for the name component, so it will match any name segment TLV type.  It is equivalent to minus infinity.</p>
 <p id="rfc.section.3.3.p.6">The zero-length name component is the minimum name component of that name component type (e.g.T_NAMESEGMENT).  </p>
 <p id="rfc.section.3.3.p.7">An exclude may contain either an Exclude Range type or an Exclude Singleton type.  An Exclude Range type means the given value starts a half-open exclusion range that begins inclusive of the Range value and ends open at the next Singleton or at infinity if it is the last exclude component.  An Exclude Singleton means to exclude the exact value given.</p>
@@ -530,7 +552,9 @@ component = (start-range-tlv singleton-tlv) / singleton-tlv
 <p id="rfc.section.3.3.p.9">The ABNF of the exclude-component allows for zero or more components followed by an option start-range-tlv.  A component is either a half-open range (start-range-tlv singleton-tlv) or a singleton-tlv.</p>
 <p id="rfc.section.3.3.p.10">The optional final start-range-tlv has no terminating singleton-tlv.  This means it extends out to plus infinity.</p>
 <p id="rfc.section.3.3.p.11">Note that to exclude from negative infinity to some value "foo", we do not need to include an ANY element because the zero-length name component is, by definition, the minimum element and we use inclusive range start.  Therefore, begining an exlcusion with the zero-length range effectively excludes from minus infinity.</p>
-<h1 id="rfc.section.3.3.1"><a href="#rfc.section.3.3.1">3.3.1.</a> <a href="#singleton" id="singleton">Exclude Singleton</a></h1>
+<h1 id="rfc.section.3.3.1">
+<a href="#rfc.section.3.3.1">3.3.1.</a> <a href="#singleton" id="singleton">Exclude Singleton</a>
+</h1>
 <p id="rfc.section.3.3.1.p.1">A singleton exclude component means to exclude a name segment exactly matching the given value.</p>
 <pre>
                      1                   2                   3
@@ -541,7 +565,9 @@ component = (start-range-tlv singleton-tlv) / singleton-tlv
 /                        TLV name segment                       /
 +---------------+---------------+---------------+---------------+
 </pre>
-<h1 id="rfc.section.3.3.2"><a href="#rfc.section.3.3.2">3.3.2.</a> <a href="#range" id="range">Exclude Range</a></h1>
+<h1 id="rfc.section.3.3.2">
+<a href="#rfc.section.3.3.2">3.3.2.</a> <a href="#range" id="range">Exclude Range</a>
+</h1>
 <p id="rfc.section.3.3.2.p.1">A Range exclude means to exclude the from the given value up to but not including the next Singleton.  If the Range is the last component in the Exclude, it means to exclude to infinity.</p>
 <pre>
                      1                   2                   3
@@ -552,78 +578,82 @@ component = (start-range-tlv singleton-tlv) / singleton-tlv
 /                        TLV name segment                       /
 +---------------+---------------+---------------+---------------+
 </pre>
-<h1 id="rfc.section.3.3.3"><a href="#rfc.section.3.3.3">3.3.3.</a> <a href="#exclude_examples" id="exclude_examples">Examples</a></h1>
+<h1 id="rfc.section.3.3.3">
+<a href="#rfc.section.3.3.3">3.3.3.</a> <a href="#exclude_examples" id="exclude_examples">Examples</a>
+</h1>
 <p id="rfc.section.3.3.3.p.1">In these examples, we will use the notation S[foo] to represent a singleton exclusion "foo" and R[foo] to represent a range exclusion beginning at "foo."  In the column Range, we use standard open (parenthesis) and closed (square bracket) interval notation.  We assume all TLV name types of T_NAMESEGMENT if there is no explicit name segment type given.  In our notation, something like S[VER=bar] would exclude a TLV type Version and value "bar".  </p>
-<div id="rfc.table.2"/>
-<div id="example_table"/>
+<div id="rfc.table.2"></div>
+<div id="example_table"></div>
 <table cellpadding="3" cellspacing="0" class="tt full center">
-  <caption>CCNx Name Types</caption>
-  <thead>
-    <tr>
-      <th class="left">Exclude Pattern</th>
-      <th class="left">Range</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="left">S[ace]</td>
-      <td class="left">NAME=ace</td>
-    </tr>
-    <tr>
-      <td class="left">S[ace] R[bat]</td>
-      <td class="left">NAME=ace, [NAME=bat, infty)</td>
-    </tr>
-    <tr>
-      <td class="left">R[ace] S[bat]</td>
-      <td class="left">[NAME=ace, NAME=bat)</td>
-    </tr>
-    <tr>
-      <td class="left">R[CHUNK=0] S[CHUNK=20]</td>
-      <td class="left">[CHUNK=0, CHUNK=20)</td>
-    </tr>
-    <tr>
-      <td class="left">R[] S[ace]</td>
-      <td class="left">(-infty, NAME=ace), matches any preceeding TLV types using a zero-length Range exclude</td>
-    </tr>
-    <tr>
-      <td class="left">R[NAME=] S[ace]</td>
-      <td class="left">[NAME=, NAME=ace)</td>
-    </tr>
-    <tr>
-      <td class="left">R[]</td>
-      <td class="left">(-infty, +infty)</td>
-    </tr>
-    <tr>
-      <td class="left">S[zoo] S[ape]</td>
-      <td class="left">Invalid range, not sorted</td>
-    </tr>
-    <tr>
-      <td class="left">R[NAME=ace] S[CHUNK=0]</td>
-      <td class="left">[NAME=ace, CHUNK=0), this will span TLV ranges type between T_NAMESEGMENT and T_CHUNK</td>
-    </tr>
-    <tr>
-      <td class="left">R[CHUNK=] S[CHUNK+1=]</td>
-      <td class="left">[CHUNK=, CHUNK+1=), excludes all CHUNK TLV possibilities</td>
-    </tr>
-  </tbody>
+<caption>CCNx Name Types</caption>
+<thead><tr>
+<th class="left">Exclude Pattern</th>
+<th class="left">Range</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="left">S[ace]</td>
+<td class="left">NAME=ace</td>
+</tr>
+<tr>
+<td class="left">S[ace] R[bat]</td>
+<td class="left">NAME=ace, [NAME=bat, infty)</td>
+</tr>
+<tr>
+<td class="left">R[ace] S[bat]</td>
+<td class="left">[NAME=ace, NAME=bat)</td>
+</tr>
+<tr>
+<td class="left">R[CHUNK=0] S[CHUNK=20]</td>
+<td class="left">[CHUNK=0, CHUNK=20)</td>
+</tr>
+<tr>
+<td class="left">R[] S[ace]</td>
+<td class="left">(-infty, NAME=ace), matches any preceeding TLV types using a zero-length Range exclude</td>
+</tr>
+<tr>
+<td class="left">R[NAME=] S[ace]</td>
+<td class="left">[NAME=, NAME=ace)</td>
+</tr>
+<tr>
+<td class="left">R[]</td>
+<td class="left">(-infty, +infty)</td>
+</tr>
+<tr>
+<td class="left">S[zoo] S[ape]</td>
+<td class="left">Invalid range, not sorted</td>
+</tr>
+<tr>
+<td class="left">R[NAME=ace] S[CHUNK=0]</td>
+<td class="left">[NAME=ace, CHUNK=0), this will span TLV ranges type between T_NAMESEGMENT and T_CHUNK</td>
+</tr>
+<tr>
+<td class="left">R[CHUNK=] S[CHUNK+1=]</td>
+<td class="left">[CHUNK=, CHUNK+1=), excludes all CHUNK TLV possibilities</td>
+</tr>
+</tbody>
 </table>
-<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#caching" id="caching">Content Store and Caching</a></h1>
+<h1 id="rfc.section.4">
+<a href="#rfc.section.4">4.</a> <a href="#caching" id="caching">Content Store and Caching</a>
+</h1>
 <p id="rfc.section.4.p.1">The encapsulated responses to discovery are cachable, like all Content Objects.  A participating forwarder MAY cache the inner Content Object separately from the outer Content Object assuming it passes the selector tests.  A non-participating forwarder MAY only cache the outer Content Object (encapsulating the inner).  </p>
 <p id="rfc.section.4.p.2">A participating content store MUST obey both the outer and inner cache control directives: ExpiryTime and RecommendedCacheTime.  At a participating node, the outer and inner Content Objects are independent and cached independently.  This is allowed because a participating node has verified that the inner ContentObject comes from an on-path direction of the routing prefix, so it cannot be an off-path injection of bad content.</p>
 <p id="rfc.section.4.p.3">A non-participating content store must obey the outer cache control directives, as normal.  The inner content object is opaque data to it.</p>
 <p id="rfc.section.4.p.4">It is RECOMMENDED that a participating node creating the encapsulated response set a short ExpiryTime and MAY set a 0 ExpiryTime (to prevent all caching).  This is desirable because non-participating nodes only look at the outer ExpiryTime and cannot determine if the inner ContentObject actually satisfies the Selector query.  Note that a consumer can also use a SelectorNonce to avoid bad cache entries at non-participating nodes, so it is not necessary for correctness to use a 0 ExpiryTime.</p>
 <p id="rfc.section.4.p.5">Note that cached respones are, in general, not a problem for the discovery process.  Participating nodes will always do a full selector match, so a consumer can work around incorrect responses as normal.  Because Selector interests with differnent Exclude blocks will result in different names, prior responses will not match in the caches of non-participating nodes, esepcially if the ExpiryTime is set to 0.  </p>
-<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#Annex_A" id="Annex_A">Annex A: Examples</a></h1>
-<p id="rfc.section.5.p.1">We use the <a href="#ccnx-uri">CCNx URI scheme</a> <cite title="NONE">[ccnx-uri]</cite>, <a href="#ccnx-chunking">CCNx Chunking</a> <cite title="NONE">[ccnx-chunking]</cite>, and <a href="#ccnx-version">CCNx versioning</a> <cite title="NONE">[ccnx-version]</cite>.  For example purposes, will use content stored under the name ccnx://example.com/protocol.pdf.  The names stored in a repository are, in sorted order: </p>
+<h1 id="rfc.section.5">
+<a href="#rfc.section.5">5.</a> <a href="#Annex_A" id="Annex_A">Annex A: Examples</a>
+</h1>
+<p id="rfc.section.5.p.1">We use the <a href="#ccnx-uri" class="xref">CCNx URI scheme</a>, <a href="#ccnx-chunking" class="xref">CCNx Chunking</a>, and <a href="#ccnx-version" class="xref">CCNx versioning</a>.  For example purposes, will use content stored under the name ccnx://example.com/protocol.pdf.  The names stored in a repository are, in sorted order: </p>
 
 <ul>
-  <li>ccnx:/example/file.txt/Serial=%00/Chunk=%00</li>
-  <li>ccnx:/example/file.txt/Serial=%01/Chunk=%00</li>
-  <li>ccnx:/example/file.txt/Serial=%02/annotations/Serial=%00/Chunk=%00</li>
-  <li>ccnx:/example/file.txt/Serial=%02/Chunk=%00</li>
-  <li>ccnx:/example/file.txt/Serial=%02/Chunk=%01</li>
-  <li>ccnx:/example/file.txt/Serial=%02/%f001=foo</li>
-  <li>ccnx:/example/file.txt/Serial=%02/%f001=foo/%f002=bar</li>
+<li>ccnx:/example/file.txt/Serial=%00/Chunk=%00</li>
+<li>ccnx:/example/file.txt/Serial=%01/Chunk=%00</li>
+<li>ccnx:/example/file.txt/Serial=%02/annotations/Serial=%00/Chunk=%00</li>
+<li>ccnx:/example/file.txt/Serial=%02/Chunk=%00</li>
+<li>ccnx:/example/file.txt/Serial=%02/Chunk=%01</li>
+<li>ccnx:/example/file.txt/Serial=%02/%f001=foo</li>
+<li>ccnx:/example/file.txt/Serial=%02/%f001=foo/%f002=bar</li>
 </ul>
 
 <p> Remember that name segments without an explicit type have type Name Segment, which is normalized to %x0001.  Chunk is %x0010 and Serial is %x0013.  This means the sort order is as above.  </p>
@@ -631,74 +661,65 @@ component = (start-range-tlv singleton-tlv) / singleton-tlv
 <p id="rfc.section.5.p.3">By parsing the returned name, we know that Serial 2 is the latest version and could begin retrieving the content by asking for chunk 0.  If we wished to discovery the ending chunk number of Serial 2, we could use an Interest like "ccnx:/example/file.txt/Serial=%02/Selector={MINSUFFIX=1, MAXSUFFIX=1}" to try and find a response with only a Chunk number.  Unfortunately, there is more junk content with the name "ccnx:/example/file.txt/Serial=%02/%f001=foo." </p>
 <p id="rfc.section.5.p.4">Once we recieve the junk content, we need to exclude it and try again.  This could be done by including a hash exclusion.  Assuing the SHA256 hash of the returned junk is %x0101...abc, we would re-issue the discovery Interest with name "ccnx:/example/file.txt/Serial=%02/Selector={MINSUFFIX=1, MAXSUFFIX=1, HASH_EXCLUDE=%x0101...abc}." We would now recieve the desired content for chunk 1 of Serial 2.</p>
 <p id="rfc.section.5.p.5">A better way to discover structured names is to use exclusions so we only find objects with a Chunk segment after the serial number.  In this case, the discovery Interest would be name "ccnx:/example/file.txt/Serial=%02/Selector={MINSUFFIX=1, MAXSUFFIX=1, EXCLUDES=R[] S[Chunk=0] R[CHUNK+1=]}." This exclusion eliminates everything from -infinity up to, but not including, Chunk=0 and also excludes everything from Chunk+1 (%x0011) to +infinity.</p>
-<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#IANA" id="IANA">IANA Considerations</a></h1>
-<p id="rfc.section.6.p.1">This memo includes no request to IANA.  TODO: If this document is submitted as an official draft, this section must be updated to reflect the IANA registries described in <a href="#CCNxMessages">[CCNxMessages]</a> </p>
-<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#Security" id="Security">Security Considerations</a></h1>
+<h1 id="rfc.section.6">
+<a href="#rfc.section.6">6.</a> <a href="#IANA" id="IANA">IANA Considerations</a>
+</h1>
+<p id="rfc.section.6.p.1">This memo includes no request to IANA.  TODO: If this document is submitted as an official draft, this section must be updated to reflect the IANA registries described in <a href="#CCNxMessages" class="xref">[CCNxMessages]</a> </p>
+<h1 id="rfc.section.7">
+<a href="#rfc.section.7">7.</a> <a href="#Security" id="Security">Security Considerations</a>
+</h1>
 <p id="rfc.section.7.p.1">Because respones use encapsulation, there is size expansion in the response from the original Content Object.  The expansion will be the length of the encapsulating Selector name plus the size of any validation uses on the outer Content Object (e.g. a CRC32C), plus framing overhead.  This means that one cannot respond with a Content Object that is too close to the maximum packet size.</p>
 <p id="rfc.section.7.p.2">Participating nodes should be able to filter incorrect responses just as they do in NDN or CCNx 0.x.  If all node participate, then one has equivalent in-network filtering behavior as those other protocols.</p>
 <p id="rfc.section.7.p.3">If the outer Content Object is signed, the consumer should, as normal, verify the signature for accuracy.  However, the trust of the outer signature is normally not important and usually reflects operation in a specific environment.  An outer Validation section is usually used only for integrity checks.</p>
-<h1 id="rfc.references"><a href="#rfc.references">8.</a> References</h1>
-<h1 id="rfc.references.1"><a href="#rfc.references.1">8.1.</a> Normative References</h1>
-<table>
-  <tbody>
-    <tr>
-      <td class="reference">
-        <b id="RFC2119">[RFC2119]</b>
-      </td>
-      <td class="top"><a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
-    </tr>
-  </tbody>
-</table>
-<h1 id="rfc.references.2"><a href="#rfc.references.2">8.2.</a> Informative References</h1>
-<table>
-  <tbody>
-    <tr>
-      <td class="reference">
-        <b id="ccnx-chunking">[ccnx-chunking]</b>
-      </td>
-      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, "<a>CCNx Content Object Chunking</a>", Work in Progress, draft-mosko-icnrg-ccnxchunking-02, June 2016.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="ccnx-uri">[ccnx-uri]</b>
-      </td>
-      <td class="top"><a title="PARC, Inc.">Mosko, M.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a>The CCNx URI Scheme</a>", Work in Progress, draft-mosko-icnrg-ccnxurischeme-01, April 2016.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="ccnx-version">[ccnx-version]</b>
-      </td>
-      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, "<a>CCNx Publisher Serial Versioning</a>", Work in Progress, draft-mosko-icnrg-ccnxserialversion-00, January 2015.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="CCNxMessages">[CCNxMessages]</b>
-      </td>
-      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, <a>Solis, I.</a> and <a title="PARC, Inc.">C. Wood</a>, "<a href="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-09">CCNx Messages in TLV Format (Internet draft)</a>", 2019.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="CCNxSemantics">[CCNxSemantics]</b>
-      </td>
-      <td class="top"><a title="PARC, Inc.">Mosko, M.</a>, <a>Solis, I.</a> and <a title="PARC, Inc.">C. Wood</a>, "<a href="https://tools.ietf.org/html/draft-irtf-icnrg-ccnxsemantics-10">CCNx Semantics (Internet draft)</a>", 2019.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC3552">[RFC3552]</b>
-      </td>
-      <td class="top"><a>Rescorla, E.</a> and <a>B. Korver</a>, "<a href="http://tools.ietf.org/html/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>", BCP 72, RFC 3552, DOI 10.17487/RFC3552, July 2003.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC5226">[RFC5226]</b>
-      </td>
-      <td class="top"><a>Narten, T.</a> and <a>H. Alvestrand</a>, "<a href="http://tools.ietf.org/html/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>", RFC 5226, DOI 10.17487/RFC5226, May 2008.</td>
-    </tr>
-  </tbody>
-</table>
-<h1 id="rfc.authors">
-  <a href="#rfc.authors">Author's Address</a>
-</h1>
+<h1 id="rfc.references">
+<a href="#rfc.references">8.</a> References</h1>
+<h1 id="rfc.references.1">
+<a href="#rfc.references.1">8.1.</a> Normative References</h1>
+<table><tbody><tr>
+<td class="reference"><b id="RFC2119">[RFC2119]</b></td>
+<td class="top">
+<a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+</tr></tbody></table>
+<h1 id="rfc.references.2">
+<a href="#rfc.references.2">8.2.</a> Informative References</h1>
+<table><tbody>
+<tr>
+<td class="reference"><b id="ccnx-chunking">[ccnx-chunking]</b></td>
+<td class="top">
+<a title="PARC, Inc.">Mosko, M.</a>, "<a>CCNx Content Object Chunking</a>", Work in Progress, draft-mosko-icnrg-ccnxchunking-02, June 2016.</td>
+</tr>
+<tr>
+<td class="reference"><b id="ccnx-uri">[ccnx-uri]</b></td>
+<td class="top">
+<a title="PARC, Inc.">Mosko, M.</a> and <a title="University of California, Irvine">C. Wood</a>, "<a>The CCNx URI Scheme</a>", Work in Progress, draft-mosko-icnrg-ccnxurischeme-01, April 2016.</td>
+</tr>
+<tr>
+<td class="reference"><b id="ccnx-version">[ccnx-version]</b></td>
+<td class="top">
+<a title="PARC, Inc.">Mosko, M.</a>, "<a>CCNx Publisher Serial Versioning</a>", Work in Progress, draft-mosko-icnrg-ccnxserialversion-00, January 2015.</td>
+</tr>
+<tr>
+<td class="reference"><b id="CCNxMessages">[CCNxMessages]</b></td>
+<td class="top">
+<a title="PARC, Inc.">Mosko, M.</a>, <a>Solis, I.</a> and <a title="PARC, Inc.">C. Wood</a>, "<a href="http://tools.ietf.org/html/draft-irtf-icnrg-ccnxmessages-09">CCNx Messages in TLV Format (Internet draft)</a>", 2019.</td>
+</tr>
+<tr>
+<td class="reference"><b id="CCNxSemantics">[CCNxSemantics]</b></td>
+<td class="top">
+<a title="PARC, Inc.">Mosko, M.</a>, <a>Solis, I.</a> and <a title="PARC, Inc.">C. Wood</a>, "<a href="https://tools.ietf.org/html/draft-irtf-icnrg-ccnxsemantics-10">CCNx Semantics (Internet draft)</a>", 2019.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC3552">[RFC3552]</b></td>
+<td class="top">
+<a>Rescorla, E.</a> and <a>B. Korver</a>, "<a href="https://tools.ietf.org/html/rfc3552">Guidelines for Writing RFC Text on Security Considerations</a>", BCP 72, RFC 3552, DOI 10.17487/RFC3552, July 2003.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC5226">[RFC5226]</b></td>
+<td class="top">
+<a>Narten, T.</a> and <a>H. Alvestrand</a>, "<a href="https://tools.ietf.org/html/rfc5226">Guidelines for Writing an IANA Considerations Section in RFCs</a>", RFC 5226, DOI 10.17487/RFC5226, May 2008.</td>
+</tr>
+</tbody></table>
+<h1 id="rfc.authors"><a href="#rfc.authors">Author's Address</a></h1>
 <div class="avoidbreak">
   <address class="vcard">
 	<span class="vcardline">

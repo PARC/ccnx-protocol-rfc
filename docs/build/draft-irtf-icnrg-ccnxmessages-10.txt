@@ -38,7 +38,7 @@ Status of This Memo
    Internet-Drafts are working documents of the Internet Engineering
    Task Force (IETF).  Note that other groups may also distribute
    working documents as Internet-Drafts.  The list of current Internet-
-   Drafts is at http://datatracker.ietf.org/drafts/current/.
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
 
    Internet-Drafts are draft documents valid for a maximum of six months
    and may be updated, replaced, or obsoleted by other documents at any
@@ -65,7 +65,7 @@ Copyright Notice
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents
-   (http://trustee.ietf.org/license-info) in effect on the date of
+   (https://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
@@ -898,29 +898,30 @@ Mosko, et al.           Expires November 10, 2019              [Page 16]
 Internet-Draft                  CCNx TLV                        May 2019
 
 
-   +----------------------+-------------------+------------------------+
-   |        Abbrev        |        Name       | Description            |
-   +----------------------+-------------------+------------------------+
-   |      T_INTEREST      | Interest (Section | An Interest            |
-   |                      |        3.6)       | MessageType.           |
-   |                      |                   |                        |
-   |       T_OBJECT       |   Content Object  | A Content Object       |
-   |                      |   (Section 3.6)   | MessageType            |
-   |                      |                   |                        |
-   |   T_VALIDATION_ALG   |     Validation    | The method of message  |
-   |                      |     Algorithm     | verification such as   |
-   |                      | (Section 3.6.4.1) | Message Integrity      |
-   |                      |                   | Check (MIC), a Message |
-   |                      |                   | Authentication Code    |
-   |                      |                   | (MAC), or a            |
-   |                      |                   | cryptographic          |
-   |                      |                   | signature.             |
-   |                      |                   |                        |
-   | T_VALIDATION_PAYLOAD |     Validation    | The validation output, |
-   |                      |  Payload (Section | such as the CRC32C     |
-   |                      |      3.6.4.2)     | code or the RSA        |
-   |                      |                   | signature.             |
-   +----------------------+-------------------+------------------------+
+   +----------------------+------------+-------------------------------+
+   |        Abbrev        |    Name    | Description                   |
+   +----------------------+------------+-------------------------------+
+   |      T_INTEREST      |  Interest  | An Interest MessageType.      |
+   |                      |  (Section  |                               |
+   |                      |    3.6)    |                               |
+   |                      |            |                               |
+   |       T_OBJECT       |  Content   | A Content Object MessageType  |
+   |                      |   Object   |                               |
+   |                      |  (Section  |                               |
+   |                      |    3.6)    |                               |
+   |                      |            |                               |
+   |   T_VALIDATION_ALG   | Validation | The method of message         |
+   |                      | Algorithm  | verification such as Message  |
+   |                      |  (Section  | Integrity Check (MIC), a      |
+   |                      |  3.6.4.1)  | Message Authentication Code   |
+   |                      |            | (MAC), or a cryptographic     |
+   |                      |            | signature.                    |
+   |                      |            |                               |
+   | T_VALIDATION_PAYLOAD | Validation | The validation output, such   |
+   |                      |  Payload   | as the CRC32C code or the RSA |
+   |                      |  (Section  | signature.                    |
+   |                      |  3.6.4.2)  |                               |
+   +----------------------+------------+-------------------------------+
 
                        Table 5: CCNx Top Level Types
 
@@ -936,7 +937,6 @@ Internet-Draft                  CCNx TLV                        May 2019
    field.  The first enclosed TLV of a CCNx Message is always the Name
    TLV.  This is followed by an optional Message TLVs and an optional
    Payload TLV.
-
 
 
 
@@ -967,16 +967,17 @@ Internet-Draft                  CCNx TLV                        May 2019
    +---------------+---------------+---------------+---------------+
 
 
-   +-----------+-----------------+-------------------------------------+
-   |   Abbrev  |       Name      | Description                         |
-   +-----------+-----------------+-------------------------------------+
-   |   T_NAME  |  Name (Section  | The CCNx Name requested in an       |
-   |           |      3.6.1)     | Interest or published in a Content  |
-   |           |                 | Object.                             |
-   |           |                 |                                     |
-   | T_PAYLOAD |     Payload     | The message payload.                |
-   |           | (Section 3.6.3) |                                     |
-   +-----------+-----------------+-------------------------------------+
+   +-----------+---------------+---------------------------------------+
+   |   Abbrev  |      Name     | Description                           |
+   +-----------+---------------+---------------------------------------+
+   |   T_NAME  | Name (Section | The CCNx Name requested in an         |
+   |           |     3.6.1)    | Interest or published in a Content    |
+   |           |               | Object.                               |
+   |           |               |                                       |
+   | T_PAYLOAD |    Payload    | The message payload.                  |
+   |           |    (Section   |                                       |
+   |           |     3.6.3)    |                                       |
+   +-----------+---------------+---------------------------------------+
 
                         Table 6: CCNx Message Types
 
@@ -1004,38 +1005,35 @@ Internet-Draft                  CCNx TLV                        May 2019
 
 
 
-
 Mosko, et al.           Expires November 10, 2019              [Page 18]
 
 Internet-Draft                  CCNx TLV                        May 2019
 
 
-   +---------------+-------------------+-------------------------------+
-   | Symbolic Name |        Name       | Description                   |
-   +---------------+-------------------+-------------------------------+
-   | T_NAMESEGMENT |    Name segment   | A generic name Segment.       |
-   |               | (Section 3.6.1.1) |                               |
-   |               |                   |                               |
-   |     T_IPID    |  Interest Payload | An identifier that represents |
-   |               |    ID (Section    | the Interest Payload field.   |
-   |               |      3.6.1.2)     | As an example, the Payload ID |
-   |               |                   | might be a hash of the        |
-   |               |                   | Interest Payload.  This       |
-   |               |                   | provides a way to             |
-   |               |                   | differentiate between         |
-   |               |                   | Interests based on their      |
-   |               |                   | payloads without having to    |
-   |               |                   | parse all the bytes of the    |
-   |               |                   | payload itself; instead using |
-   |               |                   | only this Payload ID Name     |
-   |               |                   | segment.                      |
-   |               |                   |                               |
-   |   T_APP:00 -  |    Application    | Application-specific payload  |
-   |   T_APP:4096  |     Components    | in a name segment.  An        |
-   |               | (Section 3.6.1.1) | application may apply its own |
-   |               |                   | semantics to the 4096         |
-   |               |                   | reserved types.               |
-   +---------------+-------------------+-------------------------------+
+   +---------------+-------------+-------------------------------------+
+   | Symbolic Name |     Name    | Description                         |
+   +---------------+-------------+-------------------------------------+
+   | T_NAMESEGMENT |     Name    | A generic name Segment.             |
+   |               |   segment   |                                     |
+   |               |   (Section  |                                     |
+   |               |   3.6.1.1)  |                                     |
+   |               |             |                                     |
+   |     T_IPID    |   Interest  | An identifier that represents the   |
+   |               |  Payload ID | Interest Payload field. As an       |
+   |               |   (Section  | example, the Payload ID might be a  |
+   |               |   3.6.1.2)  | hash of the Interest Payload.  This |
+   |               |             | provides a way to differentiate     |
+   |               |             | between Interests based on their    |
+   |               |             | payloads without having to parse    |
+   |               |             | all the bytes of the payload        |
+   |               |             | itself; instead using only this     |
+   |               |             | Payload ID Name segment.            |
+   |               |             |                                     |
+   |   T_APP:00 -  | Application | Application-specific payload in a   |
+   |   T_APP:4096  |  Components | name segment.  An application may   |
+   |               |   (Section  | apply its own semantics to the 4096 |
+   |               |   3.6.1.1)  | reserved types.                     |
+   +---------------+-------------+-------------------------------------+
 
                          Table 7: CCNx Name Types
 
@@ -1047,6 +1045,8 @@ Internet-Draft                  CCNx TLV                        May 2019
    segments.
 
    For example, a name like "ccnx:/foo/bar/hi" would be encoded as:
+
+
 
 
 
@@ -1234,19 +1234,19 @@ Mosko, et al.           Expires November 10, 2019              [Page 22]
 Internet-Draft                  CCNx TLV                        May 2019
 
 
-   +-------------+---------------------+-------------------------------+
-   |    Abbrev   |         Name        | Description                   |
-   +-------------+---------------------+-------------------------------+
-   | T_PAYLDTYPE |     PayloadType     | Indicates the type of Payload |
-   |             | (Section 3.6.2.2.1) | contents.                     |
-   |             |                     |                               |
-   |   T_EXPIRY  | ExpiryTime (Section | The time at which the Payload |
-   |             |      3.6.2.2.2)     | expires, as expressed in the  |
-   |             |                     | number of milliseconds since  |
-   |             |                     | the epoch in UTC.  If         |
-   |             |                     | missing, Content Object may   |
-   |             |                     | be used as long as desired.   |
-   +-------------+---------------------+-------------------------------+
+   +-------------+-------------+---------------------------------------+
+   |    Abbrev   |     Name    | Description                           |
+   +-------------+-------------+---------------------------------------+
+   | T_PAYLDTYPE | PayloadType | Indicates the type of Payload         |
+   |             |   (Section  | contents.                             |
+   |             |  3.6.2.2.1) |                                       |
+   |             |             |                                       |
+   |   T_EXPIRY  |  ExpiryTime | The time at which the Payload         |
+   |             |   (Section  | expires, as expressed in the number   |
+   |             |  3.6.2.2.2) | of milliseconds since the epoch in    |
+   |             |             | UTC.  If missing, Content Object may  |
+   |             |             | be used as long as desired.           |
+   +-------------+-------------+---------------------------------------+
 
               Table 9: CCNx Content Object Message TLV Types
 
@@ -1363,27 +1363,29 @@ Internet-Draft                  CCNx TLV                        May 2019
    / ValidationType dependent data                                 /
    +---------------+---------------+---------------+---------------+
 
-   +---------------+---------------------+-----------------------------+
-   |     Abbrev    |         Name        | Description                 |
-   +---------------+---------------------+-----------------------------+
-   |    T_CRC32C   |   CRC32C (Section   | Castagnoli CRC32 (iSCSI,    |
-   |               |      3.6.4.1.1)     | ext4, etc.), with normal    |
-   |               |                     | form polynomial 0x1EDC6F41. |
-   |               |                     |                             |
-   | T_HMAC-SHA256 |     HMAC-SHA256     | HMAC (RFC 2104) using       |
-   |               | (Section 3.6.4.1.2) | SHA256 hash.                |
-   |               |                     |                             |
-   |  T_RSA-SHA256 | RSA-SHA256 (Section | RSA public key signature    |
-   |               |      3.6.4.1.3)     | using SHA256 digest.        |
-   |               |                     |                             |
-   | EC-SECP-256K1 | SECP-256K1 (Section | Elliptic Curve signature    |
-   |               |      3.6.4.1.3)     | with SECP-256K1 parameters  |
-   |               |                     | (see [ECC]).                |
-   |               |                     |                             |
-   | EC-SECP-384R1 | SECP-384R1 (Section | Elliptic Curve signature    |
-   |               |      3.6.4.1.3)     | with SECP-384R1 parameters  |
-   |               |                     | (see [ECC]).                |
-   +---------------+---------------------+-----------------------------+
+   +---------------+----------------+----------------------------------+
+   |     Abbrev    |      Name      | Description                      |
+   +---------------+----------------+----------------------------------+
+   |    T_CRC32C   |     CRC32C     | Castagnoli CRC32 (iSCSI, ext4,   |
+   |               |    (Section    | etc.), with normal form          |
+   |               |   3.6.4.1.1)   | polynomial 0x1EDC6F41.           |
+   |               |                |                                  |
+   | T_HMAC-SHA256 |  HMAC-SHA256   | HMAC (RFC 2104) using SHA256     |
+   |               |    (Section    | hash.                            |
+   |               |   3.6.4.1.2)   |                                  |
+   |               |                |                                  |
+   |  T_RSA-SHA256 |   RSA-SHA256   | RSA public key signature using   |
+   |               |    (Section    | SHA256 digest.                   |
+   |               |   3.6.4.1.3)   |                                  |
+   |               |                |                                  |
+   | EC-SECP-256K1 |   SECP-256K1   | Elliptic Curve signature with    |
+   |               |    (Section    | SECP-256K1 parameters (see       |
+   |               |   3.6.4.1.3)   | [ECC]).                          |
+   |               |                |                                  |
+   | EC-SECP-384R1 |   SECP-384R1   | Elliptic Curve signature with    |
+   |               |    (Section    | SECP-384R1 parameters (see       |
+   |               |   3.6.4.1.3)   | [ECC]).                          |
+   +---------------+----------------+----------------------------------+
 
                       Table 10: CCNx Validation Types
 
@@ -1391,8 +1393,6 @@ Internet-Draft                  CCNx TLV                        May 2019
 
    MICs do not require additional data in order to perform the
    verification.  An example is CRC32C that has a "0" length value.
-
-
 
 
 
@@ -1458,27 +1458,29 @@ Mosko, et al.           Expires November 10, 2019              [Page 26]
 Internet-Draft                  CCNx TLV                        May 2019
 
 
-   +-------------+-----------------------+-----------------------------+
-   |    Abbrev   |          Name         | Description                 |
-   +-------------+-----------------------+-----------------------------+
-   |   T_KEYID   |  SignerKeyId (Section | An identifier of the shared |
-   |             |      3.6.4.1.4.1)     | secret or public key        |
-   |             |                       | associated with a MAC or    |
-   |             |                       | Signature.                  |
-   |             |                       |                             |
-   | T_PUBLICKEY |  Public Key (Section  | DER encoded public key.     |
-   |             |      3.6.4.1.4.2)     |                             |
-   |             |                       |                             |
-   |    T_CERT   |  Certificate (Section | DER encoded X509            |
-   |             |      3.6.4.1.4.3)     | certificate.                |
-   |             |                       |                             |
-   |  T_KEYLINK  |    KeyLink (Section   | A CCNx Link object.         |
-   |             |      3.6.4.1.4.4)     |                             |
-   |             |                       |                             |
-   |  T_SIGTIME  |     SignatureTime     | A millsecond timestamp      |
-   |             | (Section 3.6.4.1.4.5) | indicating the time when    |
-   |             |                       | the signature was created.  |
-   +-------------+-----------------------+-----------------------------+
+   +-------------+-----------------+-----------------------------------+
+   |    Abbrev   |       Name      | Description                       |
+   +-------------+-----------------+-----------------------------------+
+   |   T_KEYID   |   SignerKeyId   | An identifier of the shared       |
+   |             |     (Section    | secret or public key associated   |
+   |             |   3.6.4.1.4.1)  | with a MAC or Signature.          |
+   |             |                 |                                   |
+   | T_PUBLICKEY |    Public Key   | DER encoded public key.           |
+   |             |     (Section    |                                   |
+   |             |   3.6.4.1.4.2)  |                                   |
+   |             |                 |                                   |
+   |    T_CERT   |   Certificate   | DER encoded X509 certificate.     |
+   |             |     (Section    |                                   |
+   |             |   3.6.4.1.4.3)  |                                   |
+   |             |                 |                                   |
+   |  T_KEYLINK  |     KeyLink     | A CCNx Link object.               |
+   |             |     (Section    |                                   |
+   |             |   3.6.4.1.4.4)  |                                   |
+   |             |                 |                                   |
+   |  T_SIGTIME  |  SignatureTime  | A millsecond timestamp indicating |
+   |             |     (Section    | the time when the signature was   |
+   |             |   3.6.4.1.4.5)  | created.                          |
+   +-------------+-----------------+-----------------------------------+
 
               Table 11: CCNx Validation Dependent Data Types
 
@@ -1502,8 +1504,6 @@ Internet-Draft                  CCNx TLV                        May 2019
    +---------------+---------------+---------------+---------------+
    /                     LENGTH octets of hash                     /
    +---------------+---------------+---------------+---------------+
-
-
 
 
 
@@ -2258,7 +2258,7 @@ Internet-Draft                  CCNx TLV                        May 2019
    include a public key embedded in the object or may use the
    PublicKeyLocator field to point to a public key (or public key
    certificate) that authenticates the message.  One key exchange
-   specification is CCNxKE [ccnxke]  [mobile], which is similar to the
+   specification is CCNxKE [ccnxke] [mobile], which is similar to the
    TLS 1.3 key exchange except it is over the CCNx layer 3 messages.
    Trust is beyond the scope of a layer-3 protocol protocol and left to
    applications or application frameworks.
@@ -2381,8 +2381,8 @@ Internet-Draft                  CCNx TLV                        May 2019
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
-              editor.org/info/rfc2119>.
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
 
 6.2.  Informative References
 
@@ -2394,13 +2394,13 @@ Internet-Draft                  CCNx TLV                        May 2019
 
    [CCNSemantics]
               Mosko, M., Solis, I., and C. Wood, "CCNx Semantics
-              (Internet draft)", 2018, <https://www.ietf.org/id/draft-
-              irtf-icnrg-ccnxsemantics-09.txt>.
+              (Internet draft)", 2018, <https://www.ietf.org/id/
+              draft-irtf-icnrg-ccnxsemantics-09.txt>.
 
    [ccnxke]   Mosko, M., Uzun, E., and C. Wood, "CCNx Key Exchange
               Protocol Version 1.0", 2017,
-              <https://www.ietf.org/archive/id/draft-wood-icnrg-
-              ccnxkeyexchange-02.txt>.
+              <https://www.ietf.org/archive/id/
+              draft-wood-icnrg-ccnxkeyexchange-02.txt>.
 
 
 
@@ -2419,8 +2419,9 @@ Internet-Draft                  CCNx TLV                        May 2019
 
    [compress]
               Mosko, M., "Header Compression for TLV-based Packets",
-              2016, <https://datatracker.ietf.org/meeting/interim-2016-
-              icnrg-02/materials/slides-interim-2016-icnrg-2-7>.
+              2016, <https://datatracker.ietf.org/meeting/
+              interim-2016-icnrg-02/materials/
+              slides-interim-2016-icnrg-2-7>.
 
    [ECC]      Certicom Research, "SEC 2: Recommended Elliptic Curve
               Domain Parameters", 2010,
@@ -2432,8 +2433,8 @@ Internet-Draft                  CCNx TLV                        May 2019
               enterprise-numbers>.
 
    [esic]     Mosko, M. and C. Wood, "Encrypted Sessions In CCNx
-              (ESIC)", 2017, <https://www.ietf.org/id/draft-wood-icnrg-
-              esic-01.txt>.
+              (ESIC)", 2017,
+              <https://www.ietf.org/id/draft-wood-icnrg-esic-01.txt>.
 
    [mobile]   Mosko, M., Uzun, E., and C. Wood, "Mobile Sessions in
               Content-Centric Networks", IFIP Networking, 2017,
@@ -2446,15 +2447,14 @@ Internet-Draft                  CCNx TLV                        May 2019
 
    [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
               IANA Considerations Section in RFCs", RFC 5226,
-              DOI 10.17487/RFC5226, May 2008, <https://www.rfc-
-              editor.org/info/rfc5226>.
+              DOI 10.17487/RFC5226, May 2008,
+              <https://www.rfc-editor.org/info/rfc5226>.
 
    [RFC7927]  Kutscher, D., Eum, S., Pentikousis, K., Psaras, I.,
               Corujo, D., Saucez, D., Schmidt, T., and M. Waehlisch,
               "Information-Centric Networking (ICN) Research
-              Challenges", 2016, <https://trac.tools.ietf.org/html/
-              rfc7927>.
-
+              Challenges", 2016,
+              <https://trac.tools.ietf.org/html/rfc7927>.
 
 
 
