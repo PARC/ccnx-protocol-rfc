@@ -88,9 +88,9 @@ Table of Contents
      2.3.  Publisher Behavior  . . . . . . . . . . . . . . . . . . .  14
      2.4.  Forwarder Behavior  . . . . . . . . . . . . . . . . . . .  15
        2.4.1.  Interest HopLimit . . . . . . . . . . . . . . . . . .  15
-       2.4.2.  Interest Aggregation  . . . . . . . . . . . . . . . .  16
+       2.4.2.  Interest Aggregation  . . . . . . . . . . . . . . . .  17
        2.4.3.  Content-Store Behavior  . . . . . . . . . . . . . . .  18
-       2.4.4.  Interest Pipeline . . . . . . . . . . . . . . . . . .  18
+       2.4.4.  Interest Pipeline . . . . . . . . . . . . . . . . . .  19
        2.4.5.  Content-Object Pipeline . . . . . . . . . . . . . . .  19
    3.  Names . . . . . . . . . . . . . . . . . . . . . . . . . . . .  20
      3.1.  Name Examples . . . . . . . . . . . . . . . . . . . . . .  21
@@ -492,14 +492,14 @@ RFC 8569                     CCNx Semantics                   March 2019
    section.  The InterestLifetime, CacheTime, and Return Code fields
    exist outside of the validation envelope and may be modified.
 
+   HashType, PayloadType, and PEN need to correspond to IANA values
+   registered in the "CCNx Hash Function Types" and "CCNx Payload Types"
+   registries [ccnx-registry] and the "IANA Private Enterprise Numbers
+   (PEN)" registry [eprise-numbers], respectively.
+
    The various fields, in alphabetical order, are defined as:
 
-   AbsTime:  Absolute times are conveyed as the 64-bit UTC time in
-      milliseconds since the epoch (standard POSIX time).
 
-   CacheTime:  The absolute time after which the publisher believes
-      there is low value in caching the Content Object.  This is a
-      recommendation to caches (see Section 4).
 
 
 
@@ -507,6 +507,13 @@ Mosko, et al.                 Experimental                      [Page 9]
 
 RFC 8569                     CCNx Semantics                   March 2019
 
+
+   AbsTime:  Absolute times are conveyed as the 64-bit UTC time in
+      milliseconds since the epoch (standard POSIX time).
+
+   CacheTime:  The absolute time after which the publisher believes
+      there is low value in caching the Content Object.  This is a
+      recommendation to caches (see Section 4).
 
    Cert:  Some applications may wish to embed an X.509 certificate to
       both validate the signature and provide a trust anchor.  The Cert
@@ -534,6 +541,10 @@ RFC 8569                     CCNx Semantics                   March 2019
       value.  This form is to allow hash agility.  Some fields may
       mandate a specific HashType.
 
+   HashType:  The algorithm used to calculate a hash, which must
+      correspond to one of the IANA "CCNx Hash Function Types"
+      [ccnx-registry].
+
    HopLimit:  Interest messages may loop if there are loops in the
       forwarding plane.  To eventually terminate loops, each Interest
       carries a HopLimit that is decremented after each hop and no
@@ -546,6 +557,13 @@ RFC 8569                     CCNx Semantics                   March 2019
       Validation (Section 8) for a description of how it is used for
       MACs and signatures.
 
+
+
+Mosko, et al.                 Experimental                     [Page 10]
+
+RFC 8569                     CCNx Semantics                   March 2019
+
+
    KeyIdRestr:  The KeyId Restriction.  A Content Object must have a
       KeyId with the same value as the restriction.
 
@@ -556,13 +574,6 @@ RFC 8569                     CCNx Semantics                   March 2019
       to wait for a response, usually measured in seconds.  It is not
       strongly related to the network round-trip time, though it must
       necessarily be larger.
-
-
-
-Mosko, et al.                 Experimental                     [Page 10]
-
-RFC 8569                     CCNx Semantics                   March 2019
-
 
    Name:  A name is made up of a non-empty first segment followed by
       zero or more additional segments, which may be of 0 length.  Name
@@ -601,6 +612,14 @@ RFC 8569                     CCNx Semantics                   March 2019
 
    Vendor:  Vendor-specific opaque data.  The Vendor data includes the
       IANA Private Enterprise Numbers [eprise-numbers], followed by
+
+
+
+Mosko, et al.                 Experimental                     [Page 11]
+
+RFC 8569                     CCNx Semantics                   March 2019
+
+
       vendor-specific information.  CCNx allows vendor-specific data in
       most locations of the grammar.
 
@@ -612,14 +631,6 @@ RFC 8569                     CCNx Semantics                   March 2019
    InterestReturn= ReturnCode Interest
    BodyName      = Name Common
    BodyOptName   = [Name] Common
-
-
-
-Mosko, et al.                 Experimental                     [Page 11]
-
-RFC 8569                     CCNx Semantics                   March 2019
-
-
    Common        = *Field [Payload]
    Validation    = ValidationAlg ValidatonPayload
 
@@ -644,7 +655,7 @@ RFC 8569                     CCNx Semantics                   March 2019
    ExpiryTime    = AbsTime
    Field         = InterestField / ConObjField / Vendor
    Hash          = HashType 1*OCTET
-   HashType      = 2OCTET ; IANA CCNx Hash Function Types
+   HashType      = 2OCTET ; IANA "CCNx Hash Function Types"
    HopLimit      = OCTET
    InterestField = KeyIdRestr / ContentObjectHashRestr
    KeyId         = Hash
@@ -654,20 +665,9 @@ RFC 8569                     CCNx Semantics                   March 2019
    Link          = Name [KeyIdRestr] [ContentObjectHashRestr]
    ContentObjectHashRestr  = Hash
    Payload       = *OCTET
-   PayloadType   = OCTET ; IANA CCNx Payload Types
+   PayloadType   = OCTET ; IANA "CCNx Payload Types"
    PublicKey     = *OCTET ; DER-encoded public key
    Cert          = *OCTET ; DER-encoded X.509 Certificate
-   RelTime       = 1*OCTET ; msec
-   ReturnCode    = OCTET ; see Section 10.2
-   SigTime       = AbsTime
-   Vendor        = PEN 0*OCTET
-   PEN           = 1*OCTET ; IANA Private Enterprise Number
-
-                    Figure 1: CCNx Message ABNF Grammar
-
-
-
-
 
 
 
@@ -675,6 +675,14 @@ Mosko, et al.                 Experimental                     [Page 12]
 
 RFC 8569                     CCNx Semantics                   March 2019
 
+
+   RelTime       = 1*OCTET ; msec
+   ReturnCode    = OCTET ; see Section 10.2
+   SigTime       = AbsTime
+   Vendor        = PEN 0*OCTET
+   PEN           = 1*OCTET ; IANA "Private Enterprise Number"
+
+                    Figure 1: CCNx Message ABNF Grammar
 
 2.2.  Consumer Behavior
 
@@ -715,6 +723,15 @@ RFC 8569                     CCNx Semantics                   March 2019
    the InterestLifetime.  No transport protocol is specified in this
    document.
 
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 13]
+
+RFC 8569                     CCNx Semantics                   March 2019
+
+
    The network MAY send to the consumer an Interest Return message that
    indicates the network cannot fulfill the Interest.  The ReturnCode
    specifies the reason for the failure, such as no route or congestion.
@@ -724,13 +741,6 @@ RFC 8569                     CCNx Semantics                   March 2019
    If the content was found and returned by the first forwarder, the
    consumer will receive a Content Object.  The consumer uses the
    following set of checks to validate a received Content Object.
-
-
-
-Mosko, et al.                 Experimental                     [Page 13]
-
-RFC 8569                     CCNx Semantics                   March 2019
-
 
    o  The consumer MUST ensure the Content Object is properly formatted.
 
@@ -769,6 +779,15 @@ RFC 8569                     CCNx Semantics                   March 2019
    This document does not specify the method by which names populate a
    FIB table at forwarders (see Section 2.4).  A publisher is either
    configured with one or more name prefixes under which it may create
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 14]
+
+RFC 8569                     CCNx Semantics                   March 2019
+
+
    content or it chooses its name prefixes and informs the routing layer
    to advertise those prefixes.
 
@@ -780,14 +799,6 @@ RFC 8569                     CCNx Semantics                   March 2019
       Section 8.  Usually an Interest will only have a CRC32C, unless
       the publisher application specifically accommodates other
       validations.  The publisher MAY choose to drop Interests that
-
-
-
-Mosko, et al.                 Experimental                     [Page 14]
-
-RFC 8569                     CCNx Semantics                   March 2019
-
-
       carry a Validation section if the publisher application does not
       expect those signatures, as this could be a form of computational
       denial of service.  If the signature requires a key that the
@@ -826,6 +837,13 @@ RFC 8569                     CCNx Semantics                   March 2019
    loops is eventually discarded using the hop-limit field of the
    Interest, which is decremented at each hop traversed by the Interest.
 
+
+
+Mosko, et al.                 Experimental                     [Page 15]
+
+RFC 8569                     CCNx Semantics                   March 2019
+
+
    A loop may also terminate because the Interest is aggregated with its
    previous PIT entry along the loop.  In this case, the Content Object
    will be sent back along the loop and eventually return to a node that
@@ -834,15 +852,6 @@ RFC 8569                     CCNx Semantics                   March 2019
    will be discarded.  It may be that a new Interest or another looped
    Interest will return to that same node, in which case the node will
    return a cached response to make a new PIT entry, as below.
-
-
-
-
-
-Mosko, et al.                 Experimental                     [Page 15]
-
-RFC 8569                     CCNx Semantics                   March 2019
-
 
    The HopLimit is the last resort method to stop Interest loops where a
    Content Object chases an Interest around a loop and where the
@@ -880,6 +889,17 @@ RFC 8569                     CCNx Semantics                   March 2019
 
       *  Otherwise, forward as desired to local or remote systems.
 
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 16]
+
+RFC 8569                     CCNx Semantics                   March 2019
+
+
 2.4.2.  Interest Aggregation
 
    Interest aggregation is when a forwarder receives an Interest message
@@ -892,14 +912,6 @@ RFC 8569                     CCNx Semantics                   March 2019
    CCNx uses an Interest aggregation rule that assumes the
    InterestLifetime is akin to a subscription time and is not a network
    round-trip time.  Some previous aggregation rules assumed the
-
-
-
-Mosko, et al.                 Experimental                     [Page 16]
-
-RFC 8569                     CCNx Semantics                   March 2019
-
-
    lifetime was a round-trip time, but this leads to problems of
    expiring an Interest before a response comes if the RTT is estimated
    too short or interfering with an Automatic Repeat ReQuest (ARQ)
@@ -937,6 +949,13 @@ RFC 8569                     CCNx Semantics                   March 2019
       forwarded).  If this Interest has a larger HopLimit than the
       pending Interest, it MUST be forwarded.
 
+
+
+Mosko, et al.                 Experimental                     [Page 17]
+
+RFC 8569                     CCNx Semantics                   March 2019
+
+
    o  Aggregating an Interest MUST extend the InterestExpiry time of the
       Interest record.  An implementation MAY keep a single
       InterestExpiry time for all previous hops or MAY keep the
@@ -944,17 +963,6 @@ RFC 8569                     CCNx Semantics                   March 2019
       forwarder might send a Content Object down a path that is no
       longer waiting for it, in which case the previous hop (next hop of
       the Content Object) would drop it.
-
-
-
-
-
-
-
-Mosko, et al.                 Experimental                     [Page 17]
-
-RFC 8569                     CCNx Semantics                   March 2019
-
 
 2.4.3.  Content-Store Behavior
 
@@ -995,14 +1003,6 @@ RFC 8569                     CCNx Semantics                   March 2019
 
    5.  It must obey the cache control directives (see Section 4).
 
-2.4.4.  Interest Pipeline
-
-   1.  Perform the HopLimit check (see Section 2.4.1).
-
-   2.  If the Interest carries a validation, such as a MIC or a
-       signature with embedded public key or certificate, a forwarder
-       MAY validate the Interest as per Section 8.  A forwarder SHOULD
-       NOT fetch keys via a KeyLink.  If the forwarder drops an Interest
 
 
 
@@ -1012,6 +1012,14 @@ Mosko, et al.                 Experimental                     [Page 18]
 RFC 8569                     CCNx Semantics                   March 2019
 
 
+2.4.4.  Interest Pipeline
+
+   1.  Perform the HopLimit check (see Section 2.4.1).
+
+   2.  If the Interest carries a validation, such as a MIC or a
+       signature with embedded public key or certificate, a forwarder
+       MAY validate the Interest as per Section 8.  A forwarder SHOULD
+       NOT fetch keys via a KeyLink.  If the forwarder drops an Interest
        due to failed validation, it MAY send an Interest Return
        (Section 10.3.9).
 
@@ -1052,14 +1060,6 @@ RFC 8569                     CCNx Semantics                   March 2019
        the same Content Object multiple times on the same interface,
        such as Ethernet, if it is going to different previous hops.
 
-   4.  A Content Object SHOULD only be put in the Content Store if it
-       satisfied an Interest (and passed rule #1 above).  This is to
-       reduce the chances of cache poisoning.
-
-
-
-
-
 
 
 
@@ -1067,6 +1067,10 @@ Mosko, et al.                 Experimental                     [Page 19]
 
 RFC 8569                     CCNx Semantics                   March 2019
 
+
+   4.  A Content Object SHOULD only be put in the Content Store if it
+       satisfied an Interest (and passed rule #1 above).  This is to
+       reduce the chances of cache poisoning.
 
 3.  Names
 
@@ -1097,10 +1101,6 @@ RFC 8569                     CCNx Semantics                   March 2019
    Interest Payload ID is a name segment to identify the Interest's
    payload.  Application Components are a set of name segment types
    reserved for application use.
-
-
-
-
 
 
 
@@ -1822,24 +1822,24 @@ RFC 8569                     CCNx Semantics                   March 2019
    The specific encoding of messages will have security implications.
    [ccn-messages] uses a type-length-value (TLV) encoding.  We chose to
    compromise between extensibility and unambiguous encodings of types
-   and lengths.  Some TLVs use variable length "T" and variable length
-   "L" fields to accommodate a wide gamut of values while trying to be
-   byte-efficient.  Our TLV encoding uses a fixed-length 2-byte "T" and
-   2-byte "L".  Using a fixed-length "T" and "L" field solves two
-   problems.  The first is aliases.  If one is able to encode the same
-   value, such as 0x2 and 0x02, in different byte lengths, then one must
-   decide if they mean the same thing, if they are different, or if one
-   is illegal.  If they are different, then one must always compare on
-   the buffers, not the integer equivalents.  If one is illegal, then
-   one must validate the TLV encoding, every field of every packet at
-   every hop.  If they are the same, then one has the second problem:
-   how to specify packet filters.  For example, if a name has 6 name
-   components, then there are 7 T's and 7 L's, each of which might have
-   up to 4 representations of the same value.  That would be 14 fields
-   with 4 encodings each, or 1001 combinations.  It also means that one
-   cannot compare, for example, a name via a memory function as one
-   needs to consider that any embedded "T" or "L" might have a different
-   format.
+   and lengths.  Some TLV encodings use variable length "T" and variable
+   length "L" fields to accommodate a wide gamut of values while trying
+   to be byte-efficient.  Our TLV encoding uses a fixed-length 2-byte
+   "T" and 2-byte "L".  Using a fixed-length "T" and "L" field solves
+   two problems.  The first is aliases.  If one is able to encode the
+   same value, such as %x02 and %x0002, in different byte lengths, then
+   one must decide if they mean the same thing, if they are different,
+   or if one is illegal.  If they are different, then one must always
+   compare on the buffers, not the integer equivalents.  If one is
+   illegal, then one must validate the TLV encoding, every field of
+   every packet at every hop.  If they are the same, then one has the
+   second problem: how to specify packet filters.  For example, if a
+   name has 6 name components, then there are 7 T's and 7 L's, each of
+   which might have up to 4 representations of the same value.  That
+   would be 14 fields with 4 encodings each, or 1001 combinations.  It
+   also means that one cannot compare, for example, a name via a memory
+   function as one needs to consider that any embedded "T" or "L" might
+   have a different format.
 
    The Interest Return message has no authenticator from the previous
    hop.  Therefore, the payload of the Interest Return should only be
@@ -1858,26 +1858,26 @@ RFC 8569                     CCNx Semantics                   March 2019
 
    Caching nodes must take caution when processing Content Objects.  It
    is essential that the Content Store obey the rules outlined in
-   Section 2.4.3 to avoid certain types of attacks.  Unlike NDN, CCNx
-   1.0 has no mechanism to work around an undesired result from the
-   network (there are no "excludes"), so if a cache becomes poisoned
-   with bad content, it might cause problems retrieving content.  There
-   are three types of access to content from a Content Store:
-   unrestricted, signature restricted, and hash restricted.  If an
-   Interest has no restrictions, then the requester is not particular
-   about what they get back, so any matching cached object is OK.  In
-   the hash restricted case, the requester is very specific about what
-   they want and the Content Store (and every forward hop) can easily
-   verify that the content matches the request.  In the signature
-   verified case (often used for initial manifest discovery), the
-   requester only knows the KeyId that signed the content.  It is this
-   case that requires the closest attention in the Content Store to
-   avoid amplifying bad data.  The Content Store must only respond with
-   a Content Object if it can verify the signature; this means either
-   the Content Object carries the public key inside it or the Interest
-   carries the public key in addition to the KeyId.  If that is not the
-   case, then the Content Store should treat the Interest as a cache
-   miss and let an endpoint respond.
+   Section 2.4.3 to avoid certain types of attacks.  CCNx 1.0 has no
+   mechanism to work around an undesired result from the network (there
+   are no "excludes"), so if a cache becomes poisoned with bad content,
+   it might cause problems retrieving content.  There are three types of
+   access to content from a Content Store: unrestricted, signature
+   restricted, and hash restricted.  If an Interest has no restrictions,
+   then the requester is not particular about what they get back, so any
+   matching cached object is OK.  In the hash restricted case, the
+   requester is very specific about what they want and the Content Store
+   (and every forward hop) can easily verify that the content matches
+   the request.  In the signature restricted case (often used for
+   initial manifest discovery), the requester only knows the KeyId that
+   signed the content.  It is this case that requires the closest
+   attention in the Content Store to avoid amplifying bad data.  The
+   Content Store must only respond with a Content Object if it can
+   verify the signature; this means either the Content Object carries
+   the public key inside it or the Interest carries the public key in
+   addition to the KeyId.  If that is not the case, then the Content
+   Store should treat the Interest as a cache miss and let an endpoint
+   respond.
 
    A user-level cache could perform full signature verification by
    fetching a public key or certificate according to the KeyLink.  That

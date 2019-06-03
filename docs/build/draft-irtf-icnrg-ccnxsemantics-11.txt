@@ -5,10 +5,10 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
 Intended status: Experimental                                   I. Solis
-Expires: November 10, 2019                                      LinkedIn
+Expires: December 5, 2019                                       LinkedIn
                                                                  C. Wood
                                          University of California Irvine
-                                                             May 9, 2019
+                                                            June 3, 2019
 
 
                              CCNx Semantics
@@ -46,16 +46,16 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 10, 2019.
+   This Internet-Draft will expire on December 5, 2019.
 
 
 
 
 
 
-Mosko, et al.           Expires November 10, 2019               [Page 1]
+Mosko, et al.           Expires December 5, 2019                [Page 1]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
 Copyright Notice
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Mosko, et al.           Expires November 10, 2019               [Page 2]
+Mosko, et al.           Expires December 5, 2019                [Page 2]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
        10.3.4.  No Resources . . . . . . . . . . . . . . . . . . . .  28
@@ -165,9 +165,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019               [Page 3]
+Mosko, et al.           Expires December 5, 2019                [Page 3]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    path and deliver the response to the requester.  In CCNx 0.x, the
@@ -221,9 +221,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019               [Page 4]
+Mosko, et al.           Expires December 5, 2019                [Page 4]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    application, a local cache or content store, or to a remote system.
@@ -277,9 +277,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019               [Page 5]
+Mosko, et al.           Expires December 5, 2019                [Page 5]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    any path segment be human readable or UTF-8.  The first few segments
@@ -333,9 +333,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019               [Page 6]
+Mosko, et al.           Expires December 5, 2019                [Page 6]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    In addition to digital signatures (e.g.  RSA), CCNx also supports
@@ -389,9 +389,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019               [Page 7]
+Mosko, et al.           Expires December 5, 2019                [Page 7]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    a method to store state that facilitates the return of a Content
@@ -445,9 +445,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019               [Page 8]
+Mosko, et al.           Expires December 5, 2019                [Page 8]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    in the Content Object name, as in the CCNx Chunking [chunking]
@@ -501,9 +501,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019               [Page 9]
+Mosko, et al.           Expires December 5, 2019                [Page 9]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    o  ExpiryTime: An absolute time after which the content object should
@@ -557,9 +557,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 10]
+Mosko, et al.           Expires December 5, 2019               [Page 10]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    o  Payload: The message's data, as defined by PayloadType.
@@ -613,9 +613,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 11]
+Mosko, et al.           Expires December 5, 2019               [Page 11]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    ConObjField   := ExpiryTime / PayloadType
@@ -669,9 +669,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 12]
+Mosko, et al.           Expires December 5, 2019               [Page 12]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    The consumer SHOULD specify an InterestLifetime, which is the length
@@ -725,9 +725,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 13]
+Mosko, et al.           Expires December 5, 2019               [Page 13]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
       traditional PKI methods, a trusted key resolution service, or
@@ -781,9 +781,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 14]
+Mosko, et al.           Expires December 5, 2019               [Page 14]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    notional Content Store table.  This document does not specify the
@@ -837,9 +837,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 15]
+Mosko, et al.           Expires December 5, 2019               [Page 15]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
       *  If received HopLimit is 0, optionally send InterestReturn
@@ -893,9 +893,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 16]
+Mosko, et al.           Expires December 5, 2019               [Page 16]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    o  An Interest record (PIT entry) is considered invalid if its
@@ -949,9 +949,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 17]
+Mosko, et al.           Expires December 5, 2019               [Page 17]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
        Content Store MAY verify the digital signature of a Content
@@ -1005,9 +1005,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 18]
+Mosko, et al.           Expires December 5, 2019               [Page 18]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    3.  A forwarder SHOULD NOT send more then one copy of the received
@@ -1061,9 +1061,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 19]
+Mosko, et al.           Expires December 5, 2019               [Page 19]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    +-------------+-----------------------------------------------------+
@@ -1117,9 +1117,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 20]
+Mosko, et al.           Expires December 5, 2019               [Page 20]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    +--------------------------+----------------------------------------+
@@ -1173,9 +1173,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 21]
+Mosko, et al.           Expires December 5, 2019               [Page 21]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    before the RCT time too; there is no contractual obligation to
@@ -1229,9 +1229,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 22]
+Mosko, et al.           Expires December 5, 2019               [Page 22]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    In this document, we suggest certain hashes (e.g., SHA-256), but a
@@ -1285,9 +1285,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 23]
+Mosko, et al.           Expires December 5, 2019               [Page 23]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
 9.  Interest to Content Object matching
@@ -1341,9 +1341,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 24]
+Mosko, et al.           Expires December 5, 2019               [Page 24]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
 10.  Interest Return
@@ -1397,9 +1397,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 25]
+Mosko, et al.           Expires December 5, 2019               [Page 25]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
 10.2.  ReturnCode Types
@@ -1453,9 +1453,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 26]
+Mosko, et al.           Expires December 5, 2019               [Page 26]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    any of the codes, but if it does, it MUST conform to this
@@ -1509,9 +1509,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 27]
+Mosko, et al.           Expires December 5, 2019               [Page 27]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    The dynamic routing protocol that installed the route should correct
@@ -1565,9 +1565,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 28]
+Mosko, et al.           Expires December 5, 2019               [Page 28]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
 10.3.7.  Congestion
@@ -1621,9 +1621,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 29]
+Mosko, et al.           Expires December 5, 2019               [Page 29]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    As a layer 3 protocol, this document does not describe how one
@@ -1677,9 +1677,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 30]
+Mosko, et al.           Expires December 5, 2019               [Page 30]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    Interest payload as an Interest.  It should also verify that it sent
@@ -1733,9 +1733,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 31]
+Mosko, et al.           Expires December 5, 2019               [Page 31]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    that human-entered CCNx names will likely have case or non-ASCII
@@ -1789,9 +1789,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 32]
+Mosko, et al.           Expires December 5, 2019               [Page 32]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    [chunking]
@@ -1845,9 +1845,9 @@ Internet-Draft               CCNx Semantics                     May 2019
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 33]
+Mosko, et al.           Expires December 5, 2019               [Page 33]
 
-Internet-Draft               CCNx Semantics                     May 2019
+Internet-Draft               CCNx Semantics                    June 2019
 
 
    [RFC7945]  Pentikousis, K., Ohlman, B., Davies, E., Spirou, S., and
@@ -1901,4 +1901,4 @@ Authors' Addresses
 
 
 
-Mosko, et al.           Expires November 10, 2019              [Page 34]
+Mosko, et al.           Expires December 5, 2019               [Page 34]

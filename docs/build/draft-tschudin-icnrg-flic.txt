@@ -5,8 +5,8 @@
 ICNRG Working Group                                          C. Tschudin
 Internet-Draft                                       University of Basel
 Intended status: Experimental                                    C. Wood
-Expires: November 10, 2019               University of California Irvine
-                                                            May 09, 2019
+Expires: December 5, 2019                University of California Irvine
+                                                           June 03, 2019
 
 
                     File-Like ICN Collection (FLIC)
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 10, 2019.
+   This Internet-Draft will expire on December 5, 2019.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Tschudin & Wood         Expires November 10, 2019               [Page 1]
+Tschudin & Wood         Expires December 5, 2019                [Page 1]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
    to this document.  Code Components extracted from this document must
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Tschudin & Wood         Expires November 10, 2019               [Page 2]
+Tschudin & Wood         Expires December 5, 2019                [Page 2]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
                             root manifest
@@ -165,9 +165,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019               [Page 3]
+Tschudin & Wood         Expires December 5, 2019                [Page 3]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
       *  Enhance the manifest such that it can serve as a "database
@@ -221,9 +221,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019               [Page 4]
+Tschudin & Wood         Expires December 5, 2019                [Page 4]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
    o  None of the ICN objects used in FLIC are allowed to be chunked,
@@ -277,9 +277,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019               [Page 5]
+Tschudin & Wood         Expires December 5, 2019                [Page 5]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
    data1   <-- h1  -  -  -  -  -  -  -  -  root mfst
@@ -333,9 +333,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019               [Page 6]
+Tschudin & Wood         Expires December 5, 2019                [Page 6]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
    root manifest=     DDDDDMM
@@ -389,9 +389,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019               [Page 7]
+Tschudin & Wood         Expires December 5, 2019                [Page 7]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
    Input:
@@ -445,9 +445,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019               [Page 8]
+Tschudin & Wood         Expires December 5, 2019                [Page 8]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
   * Locator - provides a new routing hint (name prefix) where the
@@ -501,9 +501,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019               [Page 9]
+Tschudin & Wood         Expires December 5, 2019                [Page 9]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
    Objects:
@@ -557,9 +557,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019              [Page 10]
+Tschudin & Wood         Expires December 5, 2019               [Page 10]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
    In a BlockHashGroup with k pointers, the size of P_k is equal to:
@@ -613,9 +613,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019              [Page 11]
+Tschudin & Wood         Expires December 5, 2019               [Page 11]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
    old data < -  -  -  mfst_old <-- h_old -  - mfst_new
@@ -669,9 +669,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019              [Page 12]
+Tschudin & Wood         Expires December 5, 2019               [Page 12]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
 4.  Encoding
@@ -725,9 +725,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019              [Page 13]
+Tschudin & Wood         Expires December 5, 2019               [Page 13]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
    (Data/0x6
@@ -781,9 +781,9 @@ Internet-Draft                  ICN-FLIC                        May 2019
 
 
 
-Tschudin & Wood         Expires November 10, 2019              [Page 14]
+Tschudin & Wood         Expires December 5, 2019               [Page 14]
 
-Internet-Draft                  ICN-FLIC                        May 2019
+Internet-Draft                  ICN-FLIC                       June 2019
 
 
 Authors' Addresses
@@ -837,4 +837,4 @@ Authors' Addresses
 
 
 
-Tschudin & Wood         Expires November 10, 2019              [Page 15]
+Tschudin & Wood         Expires December 5, 2019               [Page 15]

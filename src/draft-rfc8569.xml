@@ -594,6 +594,13 @@ The CCNx message ABNF [RFC5234] grammar is shown in Figure 1
           and Return Code fields exist outside of the validation
           envelope and may be modified.
         </t>
+        
+        <t>HashType, PayloadType, and PEN need to correspond to IANA values registered in the
+            "CCNx Hash Function Types" and "CCNx Payload Types" registries
+            <xref target="ccnx-registry"/>
+                and the "IANA Private Enterprise Numbers (PEN)" registry
+                <xref target="eprise-numbers"/>, respectively.
+        </t>
 
         <t>The various fields, in alphabetical order, are defined as:
           <list style="hanging">
@@ -634,6 +641,9 @@ The CCNx message ABNF [RFC5234] grammar is shown in Figure 1
             followed by the hash value.  This form is to allow hash
             agility.  Some fields may mandate a specific HashType.
             </t>
+            <t hangText="HashType:">The algorithm used to calculate a hash, which must
+                correspond to one of the IANA "CCNx Hash Function Types" <xref target="ccnx-registry"/>.
+                </t>
             <t hangText="HopLimit:">Interest messages may loop if there are loops
             in the forwarding plane.  To eventually terminate loops,
             each Interest carries a HopLimit that is decremented after
@@ -742,7 +752,7 @@ ConObjHash    = Hash
 ExpiryTime    = AbsTime
 Field         = InterestField / ConObjField / Vendor
 Hash          = HashType 1*OCTET
-HashType      = 2OCTET ; IANA CCNx Hash Function Types
+HashType      = 2OCTET ; IANA "CCNx Hash Function Types"
 HopLimit      = OCTET
 InterestField = KeyIdRestr / ContentObjectHashRestr
 KeyId         = Hash
@@ -752,14 +762,14 @@ Lifetime      = RelTime
 Link          = Name [KeyIdRestr] [ContentObjectHashRestr]
 ContentObjectHashRestr  = Hash
 Payload       = *OCTET
-PayloadType   = OCTET ; IANA CCNx Payload Types
+PayloadType   = OCTET ; IANA "CCNx Payload Types"
 PublicKey     = *OCTET ; DER-encoded public key
 Cert          = *OCTET ; DER-encoded X.509 Certificate
 RelTime       = 1*OCTET ; msec
 ReturnCode    = OCTET ; see Section 10.2
 SigTime       = AbsTime
 Vendor        = PEN 0*OCTET
-PEN           = 1*OCTET ; IANA Private Enterprise Number
+PEN           = 1*OCTET ; IANA "Private Enterprise Number"
 </artwork>
       </figure>
 
@@ -1989,14 +1999,14 @@ Perhaps:
 		security implications.  <xref target="ccn-messages"/>
 		uses a type-length-value (TLV) encoding.  We chose to
 		compromise between extensibility and unambiguous
-		encodings of types and lengths.  Some TLVs use
+		encodings of types and lengths.  Some TLV encodings use
 		variable length "T" and variable length "L" fields to
 		accommodate a wide gamut of values while trying to be
 		byte-efficient.  Our TLV encoding uses a fixed-length
 		2-byte "T" and 2-byte "L".  Using a fixed-length "T" and "L"
 		field solves two problems.  The first is aliases.  If
-		one is able to encode the same value, such as 0x2 and
-		0x02, in different byte lengths, then one must decide
+		one is able to encode the same value, such as %x02 and
+		%x0002, in different byte lengths, then one must decide
 		if they mean the same thing, if they are different, or
 		if one is illegal.  If they are different, then one
 		must always compare on the buffers, not the integer
@@ -2023,7 +2033,7 @@ Perhaps:
       <t>Caching nodes must take caution when processing Content
       Objects.  It is essential that the Content Store obey the rules
       outlined in <xref target="contentstore"/> to avoid certain types
-      of attacks.  Unlike NDN, CCNx 1.0 has no mechanism to work
+      of attacks.  CCNx 1.0 has no mechanism to work
       around an undesired result from the network (there are no
       "excludes"), so if a cache becomes poisoned with bad content, it
       might cause problems retrieving content.  There are three types
@@ -2034,7 +2044,7 @@ Perhaps:
       restricted case, the requester is very specific about what they
       want and the Content Store (and every forward hop) can easily
       verify that the content matches the request.  In the signature
-      verified case (often used for initial manifest discovery), the
+      restricted case (often used for initial manifest discovery), the
       requester only knows the KeyId that signed the content.  It is
       this case that requires the closest attention in the Content
       Store to avoid amplifying bad data.  The Content Store must only

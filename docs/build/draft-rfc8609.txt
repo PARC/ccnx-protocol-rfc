@@ -2,17 +2,18 @@
 
 
 
-ICNRG                                                           M. Mosko
-Internet-Draft                                                PARC, Inc.
-Intended status: Experimental                                   I. Solis
-Expires: December 5, 2019                                       LinkedIn
+
+
+Internet Research Task Force (IRTF)                             M. Mosko
+Request for Comments: 8609                                    PARC, Inc.
+Category: Experimental                                          I. Solis
+ISSN: 2070-1721                                                 LinkedIn
                                                                  C. Wood
-                                         University of California Irvine
-                                                            June 3, 2019
+                                        University of California, Irvine
+                                                                May 2019
 
 
-                      CCNx Messages in TLV Format
-                  draft-irtf-icnrg-ccnxmessages-latest
+        Content-Centric Networking (CCNx) Messages in TLV Format
 
 Abstract
 
@@ -26,36 +27,37 @@ Abstract
 
    This document is a product of the Information Centric Networking
    research group (ICNRG).  The document received wide review among
-   ICNRG participants, and has two full implementations currently in
-   active use, which has informed the technical maturity of the protocol
-   specification.
+   ICNRG participants and has two full implementations currently in
+   active use, which have informed the technical maturity of the
+   protocol specification.
 
 Status of This Memo
 
-   This Internet-Draft is submitted in full conformance with the
-   provisions of BCP 78 and BCP 79.
+   This document is not an Internet Standards Track specification; it is
+   published for examination, experimental implementation, and
+   evaluation.
 
-   Internet-Drafts are working documents of the Internet Engineering
-   Task Force (IETF).  Note that other groups may also distribute
-   working documents as Internet-Drafts.  The list of current Internet-
-   Drafts is at https://datatracker.ietf.org/drafts/current/.
+   This document defines an Experimental Protocol for the Internet
+   community.  This document is a product of the Internet Research Task
+   Force (IRTF).  The IRTF publishes the results of Internet-related
+   research and development activities.  These results might not be
+   suitable for deployment.  This RFC represents the consensus of the
+   Information-Centric Networking Research Group of the Internet
+   Research Task Force (IRTF).  Documents approved for publication by
+   the IRSG are not candidates for any level of Internet Standard; see
+   Section 2 of RFC 7841.
 
-   Internet-Drafts are draft documents valid for a maximum of six months
-   and may be updated, replaced, or obsoleted by other documents at any
-   time.  It is inappropriate to use Internet-Drafts as reference
-   material or to cite them other than as "work in progress."
-
-   This Internet-Draft will expire on December 5, 2019.
-
-
-
-
-
+   Information about the current status of this document, any errata,
+   and how to provide feedback on it may be obtained at
+   https://www.rfc-editor.org/info/rfc8609.
 
 
-Mosko, et al.           Expires December 5, 2019                [Page 1]
+
+
+
+Mosko, et al.                 Experimental                      [Page 1]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
 Copyright Notice
@@ -68,10 +70,7 @@ Copyright Notice
    (https://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
-   to this document.  Code Components extracted from this document must
-   include Simplified BSD License text as described in Section 4.e of
-   the Trust Legal Provisions and are provided without warranty as
-   described in the Simplified BSD License.
+   to this document.
 
 Table of Contents
 
@@ -79,8 +78,8 @@ Table of Contents
      1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   5
    2.  Definitions . . . . . . . . . . . . . . . . . . . . . . . . .   5
    3.  Type-Length-Value (TLV) Packets . . . . . . . . . . . . . . .   5
-     3.1.  Overall packet format . . . . . . . . . . . . . . . . . .   6
-     3.2.  Fixed Headers . . . . . . . . . . . . . . . . . . . . . .   7
+     3.1.  Overall Packet Format . . . . . . . . . . . . . . . . . .   6
+     3.2.  Fixed Headers . . . . . . . . . . . . . . . . . . . . . .   8
        3.2.1.  Interest Fixed Header . . . . . . . . . . . . . . . .   8
          3.2.1.1.  Interest HopLimit . . . . . . . . . . . . . . . .   9
        3.2.2.  Content Object Fixed Header . . . . . . . . . . . . .   9
@@ -90,13 +89,13 @@ Table of Contents
          3.2.3.3.  Return Code . . . . . . . . . . . . . . . . . . .  10
      3.3.  Global Formats  . . . . . . . . . . . . . . . . . . . . .  11
        3.3.1.  Pad . . . . . . . . . . . . . . . . . . . . . . . . .  11
-       3.3.2.  Organization Specific TLVs  . . . . . . . . . . . . .  12
+       3.3.2.  Organization-Specific TLVs  . . . . . . . . . . . . .  12
        3.3.3.  Hash Format . . . . . . . . . . . . . . . . . . . . .  12
        3.3.4.  Link  . . . . . . . . . . . . . . . . . . . . . . . .  13
-     3.4.  Hop-by-hop TLV headers  . . . . . . . . . . . . . . . . .  14
+     3.4.  Hop-by-Hop TLV Headers  . . . . . . . . . . . . . . . . .  14
        3.4.1.  Interest Lifetime . . . . . . . . . . . . . . . . . .  14
        3.4.2.  Recommended Cache Time  . . . . . . . . . . . . . . .  15
-       3.4.3.  Message Hash  . . . . . . . . . . . . . . . . . . . .  15
+       3.4.3.  Message Hash  . . . . . . . . . . . . . . . . . . . .  16
      3.5.  Top-Level Types . . . . . . . . . . . . . . . . . . . . .  16
      3.6.  CCNx Message  . . . . . . . . . . . . . . . . . . . . . .  17
        3.6.1.  Name  . . . . . . . . . . . . . . . . . . . . . . . .  18
@@ -106,33 +105,33 @@ Table of Contents
          3.6.2.1.  Interest Message TLVs . . . . . . . . . . . . . .  21
          3.6.2.2.  Content Object Message TLVs . . . . . . . . . . .  22
        3.6.3.  Payload . . . . . . . . . . . . . . . . . . . . . . .  24
+       3.6.4.  Validation  . . . . . . . . . . . . . . . . . . . . .  25
+         3.6.4.1.  Validation Algorithm  . . . . . . . . . . . . . .  25
+         3.6.4.2.  Validation Payload  . . . . . . . . . . . . . . .  31
 
 
 
-Mosko, et al.           Expires December 5, 2019                [Page 2]
+Mosko, et al.                 Experimental                      [Page 2]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
-       3.6.4.  Validation  . . . . . . . . . . . . . . . . . . . . .  24
-         3.6.4.1.  Validation Algorithm  . . . . . . . . . . . . . .  24
-         3.6.4.2.  Validation Payload  . . . . . . . . . . . . . . .  30
-   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  30
-     4.1.  Packet Type Registry  . . . . . . . . . . . . . . . . . .  31
-     4.2.  Interest Return Code Registry . . . . . . . . . . . . . .  31
-     4.3.  Hop-by-Hop Type Registry  . . . . . . . . . . . . . . . .  33
-     4.4.  Top-Level Type Registry . . . . . . . . . . . . . . . . .  33
-     4.5.  Name Segment Type Registry  . . . . . . . . . . . . . . .  34
-     4.6.  Message Type Registry . . . . . . . . . . . . . . . . . .  35
-     4.7.  Payload Type Registry . . . . . . . . . . . . . . . . . .  36
-     4.8.  Validation Algorithm Type Registry  . . . . . . . . . . .  37
-     4.9.  Validation Dependent Data Type Registry . . . . . . . . .  38
-     4.10. Hash Function Type Registry . . . . . . . . . . . . . . .  39
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  40
-   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  43
-     6.1.  Normative References  . . . . . . . . . . . . . . . . . .  43
-     6.2.  Informative References  . . . . . . . . . . . . . . . . .  43
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  45
+   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  31
+     4.1.  Packet Type Registry  . . . . . . . . . . . . . . . . . .  32
+     4.2.  Interest Return Code Registry . . . . . . . . . . . . . .  32
+     4.3.  Hop-by-Hop Type Registry  . . . . . . . . . . . . . . . .  34
+     4.4.  Top-Level Type Registry . . . . . . . . . . . . . . . . .  35
+     4.5.  Name Segment Type Registry  . . . . . . . . . . . . . . .  35
+     4.6.  Message Type Registry . . . . . . . . . . . . . . . . . .  36
+     4.7.  Payload Type Registry . . . . . . . . . . . . . . . . . .  38
+     4.8.  Validation Algorithm Type Registry  . . . . . . . . . . .  38
+     4.9.  Validation-Dependent Data Type Registry . . . . . . . . .  40
+     4.10. Hash Function Type Registry . . . . . . . . . . . . . . .  41
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  42
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  45
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .  45
+     6.2.  Informative References  . . . . . . . . . . . . . . . . .  45
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  47
 
 1.  Introduction
 
@@ -140,67 +139,64 @@ Internet-Draft                  CCNx TLV                       June 2019
    the TLV type and value encodings for CCNx messages.  A full
    description of the CCNx network protocol, providing an encoding-free
    description of CCNx messages and message elements, may be found in
-   [CCNSemantics].  CCNx is a network protocol that uses a hierarchical
-   name to forward requests and to match responses to requests.  It does
-   not use endpoint addresses; whereas the Internet Protocol does.
-   Restrictions in a request can limit the response by the public key of
-   the response's signer or the cryptographic hash of the response.
-   Every CCNx forwarder along the path does the name matching and
-   restriction checking.  The CCNx protocol fits within the broader
-   framework of Information Centric Networking (ICN) protocols
-   [RFC7927].
+   [RFC8569].  CCNx is a network protocol that uses a hierarchical name
+   to forward requests and to match responses to requests.  It does not
+   use endpoint addresses; the Internet Protocol does.  Restrictions in
+   a request can limit the response by the public key of the response's
+   signer or the cryptographic hash of the response.  Every CCNx
+   forwarder along the path does the name matching and restriction
+   checking.  The CCNx protocol fits within the broader framework of
+   Information-Centric Networking (ICN) protocols [RFC7927].
 
    This document describes a TLV scheme using a fixed 2-byte T and a
    fixed 2-byte L field.  The rational for this choice is described in
    Section 5.  Briefly, this choice avoids multiple encodings of the
    same value (aliases) and reduces the work of a validator to ensure
-   compliance.  Unlike some uses of TLV in networking, the each network
-   hop must evaluate the encoding, so even small validation latencies at
+   compliance.  Unlike some uses of TLV in networking, each network hop
+   must evaluate the encoding, so even small validation latencies at
    each hop could add up to a large overall forwarding delay.  For very
-   small packets or low throughput links, where the extra bytes may
-   become a concern, one may use a TLV compression protocol, for example
-   [compress] and [CCNxz].
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019                [Page 3]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
+   small packets or low-throughput links, where the extra bytes may
+   become a concern, one may use a TLV compression protocol, for
+   example, [compress] and [CCNxz].
 
    This document uses the terms CCNx Packet, CCNx Message, and CCNx
-   Message TLV.  A CCNx Packet is defined in Section 3.1 as the entire
-   Layer 3 datagram.  A CCNx Message is defined in the CCNx Semantics
-   document [CCNSemantics].  A CCNx Message TLV is defined in
-   Section 3.6 as the encoding of a CCNx Messages.
+   Message TLV.  A CCNx Packet refers to the entire Layer 3 datagram as
+   specified in Section 3.1.  A CCNx Message is defined in the CCNx
+   Semantics document [RFC8569].  A CCNx Message TLV refers to the
+   encoding of a CCNx Message as specified in Section 3.6.
+
+
+
+Mosko, et al.                 Experimental                      [Page 3]
+
+RFC 8609                        CCNx TLV                        May 2019
+
 
    This document specifies:
 
-   o  The TLV packet format.
+   o  the TLV packet format,
 
-   o  The overall packet format for CCNx messages.
+   o  the overall packet format for CCNx messages,
 
-   o  The TLV types used by CCNx messages.
+   o  the TLV types used by CCNx messages,
 
-   o  The encoding of values for each type.
+   o  the encoding of values for each type,
 
-   o  Top level types that exist at the outermost containment.
+   o  top-level types that exist at the outermost containment,
 
-   o  Interest TLVs that exist within Interest containment.
+   o  Interest TLVs that exist within Interest containment, and
 
    o  Content Object TLVs that exist within Content Object containment.
 
-   This document is supplemented by this document:
+   This document is supplemented by these documents:
 
-   o  Message semantics: see [CCNSemantics] for the protocol operation
-      regarding Interest and Content Object, including the Interest
-      Return protocol.
+   o  [RFC8569], which covers message semantics and the protocol
+      operation regarding Interest and Content Object, including the
+      Interest Return protocol.
 
-   o  URI notation: see [CCNxURI] for the CCNx URI notation.
+   o  [CCNxURI], which covers the CCNx URI notation.
 
-   The type values in Section 4 conform to the IANA assigned numbers for
+   The type values in Section 4 conform to the IANA-assigned numbers for
    the CCNx protocol.  This document uses the symbolic names defined in
    that section.  All TLV type values are relative to their parent
    containers.  For example, each level of a nested TLV structure might
@@ -217,34 +213,36 @@ Internet-Draft                  CCNx TLV                       June 2019
    The document represents the consensus of the ICN RG.  It is the first
    ICN protocol from the RG, created from the early CCNx protocol [nnc]
    with significant revision and input from the ICN community and RG
-   members.  The draft has received critical reading by several members
-
-
-
-Mosko, et al.           Expires December 5, 2019                [Page 4]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
-   of the ICN community and the RG.  The authors and RG chairs approve
-   of the contents.  The document is sponsored under the IRTF and is not
-   issued by the IETF and is not an IETF standard.  This is an
-   experimental protocol and may not be suitable for any specific
+   members.  The document has received critical reading by several
+   members of the ICN community and the RG.  The authors and RG chairs
+   approve of the contents.  The document is sponsored under the IRTF
+   and is not issued by the IETF and is not an IETF standard.  This is
+   an experimental protocol and may not be suitable for any specific
    application and the specification may change in the future.
+
+
+
+
+Mosko, et al.                 Experimental                      [Page 4]
+
+RFC 8609                        CCNx TLV                        May 2019
+
 
 1.1.  Requirements Language
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in RFC 2119 [RFC2119].
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
 
 2.  Definitions
 
-   o  Name: A hierarchically structured variable length identifier.  It
-      is an ordered list of path segments, which are variable length
+   o  Name: A hierarchically structured variable-length identifier.  It
+      is an ordered list of path segments, which are variable-length
       octet strings.  In human-readable form, it is represented in URI
-      format as ccnx:/path/part.  There is no host or query string.  See
-      [CCNxURI] for complete details.
+      format as "ccnx:/path/part".  There is no host or query string.
+      See [CCNxURI] for complete details.
 
    o  Interest: A message requesting a Content Object with a matching
       Name and other optional selectors to choose from multiple objects
@@ -258,28 +256,32 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 3.  Type-Length-Value (TLV) Packets
 
-   We use 16-bit Type and 16-bit Length fields to encode TLV based
-   packets.  This provides 64K different possible types and value field
-   lengths of up to 64KiB.  With 64K possible types at each level of TLV
-   encoding, there should be sufficient space for basic protocol types,
-   while also allowing ample room for experimentation, application use,
-   vendor extensions, and growth.  This encoding does not allow for
-   jumbo packets beyond 64 KiB total length.  If used on a media that
-   allows for jumbo frames, we suggest defining a media adapation
-   envelope that allows for multiple smaller frames.
-
-   There are several global TLV definitions that we reserve at all
-   hierarchical contexts.  The TLV types in the range 0x1000 - 0x1FFF
-   are reserved for experimental use.  The TLV type T_ORG is also
-   reserved for vendor extensions ( see Section 3.3.2).  The TLV type
-   T_PAD is used to optionally pad a field out to some desired
-   alignment.
+   We use 16-bit Type and 16-bit Length fields to encode TLV-based
+   packets.  This provides 65,536 different possible types and value
+   field lengths of up to 64 KiB.  With 65,536 possible types at each
+   level of TLV encoding, there should be sufficient space for basic
+   protocol types, while also allowing ample room for experimentation,
+   application use, vendor extensions, and growth.  This encoding does
+   not allow for jumbo packets beyond 64 KiB total length.  If used on a
+   media that allows for jumbo frames, we suggest defining a media
+   adaptation envelope that allows for multiple smaller frames.
 
 
 
-Mosko, et al.           Expires December 5, 2019                [Page 5]
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                      [Page 5]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
    +--------+------------------+---------------------------------------+
@@ -296,53 +298,75 @@ Internet-Draft                  CCNx TLV                       June 2019
 
                         Table 1: Reserved TLV Types
 
-                        1                   2
+   There are several global TLV definitions that we reserve at all
+   hierarchical contexts.  The TLV types in the range 0x1000 - 0x1FFF
+   are Reserved for Experimental Use.  The TLV type T_ORG is also
+   Reserved for Vendor Extensions (see Section 3.3.2).  The TLV type
+   T_PAD is used to optionally pad a field out to some desired
+   alignment.
+
+                        1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+---------------+---------------+
    |              Type             |            Length             |
    +---------------+---------------+---------------+---------------+
 
+                    Figure 1: Type and Length encoding
+
    The Length field contains the length of the Value field in octets.
    It does not include the length of the Type and Length fields.  The
-   length MAY be zero.
+   Length MAY be zero.
 
    TLV structures are nestable, allowing the Value field of one TLV
    structure to contain additional TLV structures.  The enclosing TLV
    structure is called the container of the enclosed TLV.
 
-   Type values are context-dependent.  Within a TLV container, one may
-   re-use previous type values for new context-dependent purposes.
+   Type values are context dependent.  Within a TLV container, one may
+   reuse previous type values for new context-dependent purposes.
 
-3.1.  Overall packet format
+3.1.  Overall Packet Format
 
-   Each packet includes the 8 byte fixed header, described below,
+   Each packet includes the 8-byte fixed header, described below,
    followed by a set of TLV fields.  These fields are optional hop-by-
    hop headers and the Packet Payload.
 
+
+
+
+
+
+Mosko, et al.                 Experimental                      [Page 6]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
                        1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+---------------+---------------+
    |    Version    |  PacketType   |         PacketLength          |
    +---------------+---------------+---------------+---------------+
-   |           PacketType specific fields          | HeaderLength  |
+   |           PacketType-specific fields          | HeaderLength  |
    +---------------+---------------+---------------+---------------+
-   / Optional Hop-by-hop header TLVs                               /
+   / Optional hop-by-hop header TLVs                               /
    +---------------+---------------+---------------+---------------+
    / PacketPayload TLVs                                            /
    +---------------+---------------+---------------+---------------+
 
+                      Figure 2: Overall Packet Format
 
+   The PacketPayload of a CCNx packet is the protocol message itself.
+   The Content Object Hash is computed over the PacketPayload only,
+   excluding the fixed and hop-by-hop headers, as those might change
+   from hop to hop.  Signed information or similarity hashes should not
+   include any of the fixed or hop-by-hop headers.  The PacketPayload
+   should be self-sufficient in the event that the fixed and hop-by-hop
+   headers are removed.
 
-Mosko, et al.           Expires December 5, 2019                [Page 6]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
-   The packet payload is a TLV encoding of the CCNx message, followed by
-   optional Validation TLVs.
+   Following the CCNx Message, the PacketPayload may include optional
+   Validation TLVs.
 
                        1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+---------------+---------------+
    | CCNx Message TLV                                              /
    +---------------+---------------+---------------+---------------+
@@ -351,73 +375,48 @@ Internet-Draft                  CCNx TLV                       June 2019
    / Optional CCNx ValidationPayload TLV (ValidationAlg required)  /
    +---------------+---------------+---------------+---------------+
 
-   This document describes the Version "1" TLV encoding.
+                       Figure 3: PacketPayload TLVs
 
-   After discarding the fixed and hop-by-hop headers the remaining
+   After discarding the fixed and hop-by-hop headers, the remaining
    PacketPayload should be a valid protocol message.  Therefore, the
    PacketPayload always begins with 4 bytes of type-length that
    specifies the protocol message (whether it is an Interest, Content
    Object, or other message type) and its total length.  The embedding
    of a self-sufficient protocol data unit inside the fixed and hop-by-
    hop headers allows a network stack to discard the headers and operate
-   only on the embedded message.  It also de-couples the PacketType
-   field -- which specifies how to forward the packet -- from the
+   only on the embedded message.  It also decouples the PacketType field
+   -- which specifies how to forward the packet -- from the
    PacketPayload.
 
-   The range of bytes protected by the Validation includes the CCNx
-   Message and the ValidationAlgorithm.
 
-   The ContentObjectHash begins with the CCNx Message and ends at the
-   tail of the packet.
+
+
+Mosko, et al.                 Experimental                      [Page 7]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
+   The range of bytes protected by the Validation includes the CCNx
+   Message TLV and the ValidationAlgorithm TLV.
+
+   The ContentObjectHash begins with the CCNx Message TLV and ends at
+   the tail of the packet.
 
 3.2.  Fixed Headers
 
-   CCNx messages begin with an 8 byte fixed header (non-TLV format).
-   The HeaderLength field represents the combined length of the Fixed
-   and Hop-by-hop headers.  The PacketLength field represents the entire
-   Packet length from the first byte of Version to the last byte of the
-   packet.
+   In Figure 2, the fixed header fields are:
 
-   A specific PacketType may assign meaning to the "PacketType specific
-   fields," which are otherwise reserved.  For the three defined
-   PacketTypes (Interest, ContentObject, and InterestReturn), we define
-   those values in this document.
-
-   The PacketPayload of a CCNx packet is the protocol message itself.
-   The Content Object Hash is computed over the PacketPayload only,
-   excluding the fixed and hop-by-hop headers as those might change from
-
-
-
-Mosko, et al.           Expires December 5, 2019                [Page 7]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
-   hop to hop.  Signed information or Similarity Hashes should not
-   include any of the fixed or hop-by-hop headers.  The PacketPayload
-   should be self-sufficient in the event that the fixed and hop-by-hop
-   headers are removed.
-
-                        1                   2                   3
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-   +---------------+---------------+---------------+---------------+
-   |    Version    |  PacketType   |         PacketLength          |
-   +---------------+---------------+---------------+---------------+
-   |           PacketType specific fields          | HeaderLength  |
-   +---------------+---------------+---------------+---------------+
-
-   o  Version: defines the version of the packet.
+   o  Version: defines the version of the packet, which MUST be 1.
 
    o  HeaderLength: The length of the fixed header (8 bytes) and hop-by-
-      hop headers.  The minimum value MUST be "8".
+      hop headers.  The minimum value MUST be 8.
 
    o  PacketType: describes forwarder actions to take on the packet.
 
    o  PacketLength: Total octets of packet including all headers (fixed
       header plus hop-by-hop headers) and protocol message.
 
-   o  PacketType Specific Fields: specific PacketTypes define the use of
+   o  PacketType-specific Fields: specific PacketTypes define the use of
       these bits.
 
    The PacketType field indicates how the forwarder should process the
@@ -431,27 +430,27 @@ Internet-Draft                  CCNx TLV                       June 2019
    packet.  Both lengths have a minimum value of 8 (the fixed header
    itself).
 
-   The PacketType specific fields are reserved bits whose use depends on
+   The PacketType-specific fields are reserved bits whose use depends on
    the PacketType.  They are used for network-level signaling.
 
 3.2.1.  Interest Fixed Header
 
-   If the PacketType is PT_INTEREST, it indicates that the PacketPayload
-   should be processed as an Interest message.  For this type of packet,
-   the Fixed Header includes a field for a HopLimit as well as Reserved
-   and Flags fields.  The Reserved field MUST be set to 0 in an Interest
-   - this field will be set to a return code in the case of an Interest
+   If the PacketType is PT_INTEREST, it indicates that the packet should
+   be forwarded following the Interest pipeline in Section 2.4.4 of
+   [RFC8569].  For this type of packet, the Fixed Header includes a
+   field for a HopLimit as well as Reserved and Flags fields.  The
+   Reserved field MUST be set to 0 in an Interest.  There are currently
+   no flags defined, so the Flags field MUST be set to 0.
 
 
 
 
-Mosko, et al.           Expires December 5, 2019                [Page 8]
+
+
+Mosko, et al.                 Experimental                      [Page 8]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
-
-   Return.  There are currently no Flags defined, so this field MUST be
-   set to 0.
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -461,25 +460,27 @@ Internet-Draft                  CCNx TLV                       June 2019
    |   HopLimit    |   Reserved    |     Flags     | HeaderLength  |
    +---------------+---------------+---------------+---------------+
 
+                         Figure 4: Interest Header
+
 3.2.1.1.  Interest HopLimit
 
    For an Interest message, the HopLimit is a counter that is
    decremented with each hop.  It limits the distance an Interest may
    travel on the network.  The node originating the Interest MAY put in
-   any value - up to the maximum of 255.  Each node that receives an
+   any value up to the maximum of 255.  Each node that receives an
    Interest with a HopLimit decrements the value upon reception.  If the
    value is 0 after the decrement, the Interest MUST NOT be forwarded
    off the node.
 
-   It is an error to receive an Interest with a 0 hop-limit from a
-   remote node.
+   It is an error to receive an Interest from a remote node with the
+   HopLimit field set to 0.
 
 3.2.2.  Content Object Fixed Header
 
-   If the PacketType is PT_CONTENT, it indicates that the PacketPayload
-   should be processed as a Content Object message.  A Content Object
-   defines a Flags field, however there are currently no flags defined,
-   so the Flags field must be set to 0.
+   If the PacketType is PT_CONTENT, it indicates that the packet should
+   be forwarded following the Content Object pipeline in Section 2.4.4
+   of [RFC8569].  A Content Object defines a Flags field; however, there
+   are currently no flags defined, so the Flags field must be set to 0.
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -489,25 +490,26 @@ Internet-Draft                  CCNx TLV                       June 2019
    |            Reserved           |     Flags     | HeaderLength  |
    +---------------+---------------+---------------+---------------+
 
+                      Figure 5: Content Object Header
+
 3.2.3.  InterestReturn Fixed Header
 
-   If the PacketType is PT_RETURN, it indicates that the PacketPayload
-   should be processed as a returned Interest message.  The only
-   difference between this InterestReturn message and the original
-   Interest is that the PacketType is changed to PT_RETURN and a
-   ReturnCode is is put into the ReturnCode field.  All other fields are
-   unchanged from the Interest packet.  The purpose of this encoding is
-   to prevent packet length changes so no additional bytes are needed to
+   If the PacketType is PT_RETURN, it indicates that the packet should
+   be processed following the Interest Return rules in Section 10 of
+   [RFC8569].  The only difference between this InterestReturn message
+   and the original Interest is that the PacketType is changed to
+   PT_RETURN and a ReturnCode is put into the ReturnCode field.  All
+   other fields are unchanged from the Interest packet.  The purpose of
 
 
 
-Mosko, et al.           Expires December 5, 2019                [Page 9]
+Mosko, et al.                 Experimental                      [Page 9]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
-   return an Interest to the previous hop.  See [CCNSemantics] for a
-   protocol description of this packet type.
+   this encoding is to prevent packet length changes so no additional
+   bytes are needed to return an Interest to the previous hop.
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -517,11 +519,12 @@ Internet-Draft                  CCNx TLV                       June 2019
    |   HopLimit    |  ReturnCode   |     Flags     | HeaderLength  |
    +---------------+---------------+---------------+---------------+
 
+                     Figure 6: Interest Return Header
+
 3.2.3.1.  InterestReturn HopLimit
 
-   This is the original Interest's HopLimit, as received.  It is the
-   value before being decremented at the current node (i.e. the received
-   value).
+   This is the original Interest's HopLimit, as received before
+   decrement at the node senidng the Interest Return.
 
 3.2.3.2.  InterestReturn Flags
 
@@ -529,8 +532,9 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 3.2.3.3.  Return Code
 
-   The numeric value assigned to the return types is defined below.
-   This value is set by the node creating the Interest Return.
+   The return types are listed below; the numeric values assigned to the
+   return types are listed in Section 4.2.  This value is set by the
+   node creating the Interest Return.
 
    A return code of "0" MUST NOT be used, as it indicates that the
    returning system did not modify the Return Code field.
@@ -555,11 +559,9 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 
 
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 10]
+Mosko, et al.                 Experimental                     [Page 10]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
    +-------------------------------------+-----------------------------+
@@ -594,15 +596,15 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 3.3.1.  Pad
 
-   The pad type may be used by protocols that prefer word-aligned data.
-   The size of the word may be defined by the protocol.  Padding 4-byte
-   words, for example, would use a 1-byte, 2-byte, and 3-byte Length.
-   Padding 8-byte words would use a (0, 1, 2, 3, 5, 6, 7)-byte Length.
+   The pad type may be used by sources that prefer word-aligned data.
+   Padding 4-byte words, for example, would use a 1-byte, 2-byte, and
+   3-byte Length.  Padding 8-byte words would use a (0, 1, 2, 3, 5, 6,
+   7)-byte Length.
 
    One MUST NOT pad inside a Name.  Apart from that, a pad MAY be
-   inserted after any other TLV in the CCNx Message or in the Validation
-   Dependent Data In the remainder of this document, we will not show
-   optional pad TLVs.
+   inserted after any other TLV in the CCNx Message or in the
+   Validation-Dependent Data In the remainder of this document, we will
+   not show optional Pad TLVs.
 
 
 
@@ -613,40 +615,44 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 
 
-Mosko, et al.           Expires December 5, 2019               [Page 11]
+Mosko, et al.                 Experimental                     [Page 11]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
-                       1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+---------------+---------------+
    |             T_PAD             |             Length            |
    +---------------+---------------+---------------+---------------+
-   /                 variable length pad MUST be zeros             /
+   /                 variable-length pad MUST be zeros             /
    +---------------+---------------+---------------+---------------+
 
-3.3.2.  Organization Specific TLVs
+                          Figure 7: Pad Encoding
 
-   Organization specific TLVs (also known as Vendor TLVs) MUST use the
-   T_ORG type.  The Length field is the length of the organization
+3.3.2.  Organization-Specific TLVs
+
+   Organization-specific TLVs (also known as Vendor TLVs) MUST use the
+   T_ORG type.  The Length field is the length of the organization-
    specific information plus 3.  The Value begins with the 3 byte
-   organization number derived from the last three digits of the IANA
-   Private Enterprise Numbers [EpriseNumbers], followed by the
-   organization specific information.
+   organization number derived from the network byte order encoding of
+   the IANA "Private Enterprise Numbers" registry [IANA-PEN], followed
+   by the organization-specific information.
 
-   A T_ORG MAY be used as a path segment in a Name, in which case it is
-   a regular path segment and is part of the regular name matching.
+   A T_ORG MAY be used as a path segment in a Name.  It is treated like
+   any other path segment.
 
-                       1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+---------------+---------------+
    |             T_ORG             |     Length (3+value length)   |
    +---------------+---------------+---------------+---------------+
    |   PEN[0]      |    PEN[1]     |     PEN[2]    |               /
    +---------------+---------------+---------------+               +
-   /                  Vendor Specific Value                        /
+   /                  Vendor-Specific Value                        /
    +---------------+---------------+---------------+---------------+
+
+                   Figure 8: Organization-Specific TLVs
 
 3.3.3.  Hash Format
 
@@ -661,19 +667,20 @@ Internet-Draft                  CCNx TLV                       June 2019
    is taken as the left LENGTH bytes of the hash function output.  Only
    specified truncations are allowed, not arbitrary truncations.
 
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 12]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
    This nested format is used because it allows binary comparison of
    hash values for certain fields without a router needing to understand
    a new hash function.  For example, the KeyIdRestriction is bit-wise
    compared between an Interest's KeyIdRestriction field and a
    ContentObject's KeyId field.  This format means the outer field
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 12]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
    values do not change with differing hash functions so a router can
    still identify those fields and do a binary comparison of the hash
    TLV without need to understand the specific hash used.  An
@@ -696,8 +703,8 @@ Internet-Draft                  CCNx TLV                       June 2019
 
                        Table 3: CCNx Hash Functions
 
-                       1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+---------------+---------------+
    |             T_FOO             |              36               |
    +---------------+---------------+---------------+---------------+
@@ -706,63 +713,60 @@ Internet-Draft                  CCNx TLV                       June 2019
    /                        32-byte hash value                     /
    +---------------+---------------+---------------+---------------+
 
-                     Example nesting inside type T_FOO
+                Figure 9: Example nesting inside type T_FOO
 
 3.3.4.  Link
 
    A Link is the tuple: {Name, [KeyIdRestr], [ContentObjectHashRestr]}.
    It is a general encoding that is used in both the payload of a
-   Content Object with PayloadType = "Link" and in the KeyLink field in
-   a KeyLocator.  A Link is essentially the body of an Interest.
+   Content Object with PayloadType = "Link" and in a Content Object's
+   KeyLink field.  A Link is essentially the body of an Interest.
 
 
 
 
 
 
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 13]
+Mosko, et al.                 Experimental                     [Page 13]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
-                       1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-   +---------------+---------------+-------------------------------+
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +---------------+---------------+---------------+---------------+
    / Mandatory CCNx Name                                           /
-   +---------------+---------------+-------------------------------+
+   +---------------+---------------+---------------+---------------+
    / Optional KeyIdRestriction                                     /
-   +---------------------------------------------------------------+
+   +---------------+---------------+---------------+---------------+
    / Optional ContentObjectHashRestriction                         /
-   +---------------------------------------------------------------+
+   +---------------+---------------+---------------+---------------+
 
-3.4.  Hop-by-hop TLV headers
+                         Figure 10: Link Encoding
+
+3.4.  Hop-by-Hop TLV Headers
 
    Hop-by-hop TLV headers are unordered and meaning MUST NOT be attached
    to their ordering.  Three hop-by-hop headers are described in this
    document:
 
-   +-------------+-------------------+---------------------------------+
-   |    Abbrev   |        Name       | Description                     |
-   +-------------+-------------------+---------------------------------+
-   |  T_INTLIFE  | Interest Lifetime | The time an Interest should     |
-   |             |  (Section 3.4.1)  | stay pending at an intermediate |
-   |             |                   | node.                           |
-   |             |                   |                                 |
-   | T_CACHETIME | Recommended Cache | The Recommended Cache Time for  |
-   |             |   Time (Section   | Content Objects.                |
-   |             |       3.4.2)      |                                 |
-   |             |                   |                                 |
-   |  T_MSGHASH  |    Message Hash   | The hash of the CCNx Message to |
-   |             |  (Section 3.4.3)  | end of packet using Section     |
-   |             |                   | 3.3.3 format.                   |
-   +-------------+-------------------+---------------------------------+
+   +-------------+-----------------+-----------------------------------+
+   |    Abbrev   |       Name      | Description                       |
+   +-------------+-----------------+-----------------------------------+
+   |  T_INTLIFE  |     Interest    | The time an Interest should stay  |
+   |             |     Lifetime    | pending at an intermediate node.  |
+   |             | (Section 3.4.1) |                                   |
+   |             |                 |                                   |
+   | T_CACHETIME |   Recommended   | The Recommended Cache Time for    |
+   |             |    Cache Time   | Content Objects.                  |
+   |             | (Section 3.4.2) |                                   |
+   |             |                 |                                   |
+   |  T_MSGHASH  |   Message Hash  | The hash of the CCNx Message to   |
+   |             | (Section 3.4.3) | end of packet using the format    |
+   |             |                 | specified in Section 3.3.3.       |
+   +-------------+-----------------+-----------------------------------+
 
-                     Table 4: Hop-by-hop Header Types
+                     Table 4: Hop-by-Hop Header Types
 
    Additional hop-by-hop headers are defined in higher level
    specifications such as the fragmentation specification.
@@ -771,7 +775,7 @@ Internet-Draft                  CCNx TLV                       June 2019
 
    The Interest Lifetime is the time that an Interest should stay
    pending at an intermediate node.  It is expressed in milliseconds as
-   an unsigned, network byte order integer.
+   an unsigned integer in network byte order.
 
    A value of 0 (encoded as 1 byte %x00) indicates the Interest does not
    elicit a Content Object response.  It should still be forwarded, but
@@ -779,11 +783,9 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 
 
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 14]
+Mosko, et al.                 Experimental                     [Page 14]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
                         1                   2                   3
@@ -795,6 +797,8 @@ Internet-Draft                  CCNx TLV                       June 2019
    /                      Lifetime (length octets)                 /
    /                                                               /
    +---------------+---------------+---------------+---------------+
+
+                   Figure 11: Interest Lifetime Encoding
 
 3.4.2.  Recommended Cache Time
 
@@ -812,9 +816,10 @@ Internet-Draft                  CCNx TLV                       June 2019
    needing to re-sign the message.  There is little ill effect from an
    attacker changing the RCT as the RCT serves as a guideline only.
 
-   The Recommended Cache Time (a millisecond timestamp) is a network
-   byte ordered unsigned integer of the number of milliseconds since the
-   epoch in UTC of when the payload expires.  It is a 64-bit field.
+   The Recommended Cache Time (a millisecond timestamp) is an unsigned
+   integer in network byte order that indicates the time when the
+   payload expires (as the number of milliseconds since the epoch in
+   UTC).  It is a 64-bit field.
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -826,6 +831,19 @@ Internet-Draft                  CCNx TLV                       June 2019
    /                                                               /
    +---------------+---------------+---------------+---------------+
 
+                Figure 12: Recommended Cache Time Encoding
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 15]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
 3.4.3.  Message Hash
 
    Within a trusted domain, an operator may calculate the message hash
@@ -834,13 +852,6 @@ Internet-Draft                  CCNx TLV                       June 2019
    permits intermediate devices within that trusted domain to match
    against a ContentObjectHashRestriction without calculating it at
    every hop.
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 15]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
 
    The message hash is a cryptographic hash from the start of the CCNx
    Message to the end of the packet.  It is used to match against the
@@ -861,12 +872,12 @@ Internet-Draft                  CCNx TLV                       June 2019
    +---------------+---------------+---------------+---------------+
    |          T_MSGHASH            |         (length + 4)          |
    +---------------+---------------+---------------+---------------+
-   |         (hash type)           |            length             |
+   |          hash type            |            length             |
    +---------------+---------------+---------------+---------------+
    /                           hash value                          /
    +---------------+---------------+---------------+---------------+
 
-                            Message Hash Header
+                      Figure 13: Message Hash Header
 
 3.5.  Top-Level Types
 
@@ -884,18 +895,9 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 
 
-
-
-
-
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 16]
+Mosko, et al.                 Experimental                     [Page 16]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
    +----------------------+------------+-------------------------------+
@@ -911,10 +913,10 @@ Internet-Draft                  CCNx TLV                       June 2019
    |                      |    3.6)    |                               |
    |                      |            |                               |
    |   T_VALIDATION_ALG   | Validation | The method of message         |
-   |                      | Algorithm  | verification such as Message  |
-   |                      |  (Section  | Integrity Check (MIC), a      |
-   |                      |  3.6.4.1)  | Message Authentication Code   |
-   |                      |            | (MAC), or a cryptographic     |
+   |                      | Algorithm  | verification such as a        |
+   |                      |  (Section  | Message Integrity Check       |
+   |                      |  3.6.4.1)  | (MIC), Message Authentication |
+   |                      |            | Code (MAC), or cryptographic  |
    |                      |            | signature.                    |
    |                      |            |                               |
    | T_VALIDATION_PAYLOAD | Validation | The validation output, such   |
@@ -935,8 +937,8 @@ Internet-Draft                  CCNx TLV                       June 2019
    Payload.  The same general format is used for both Interest and
    Content Object messages which are differentiated by the MessageType
    field.  The first enclosed TLV of a CCNx Message is always the Name
-   TLV.  This is followed by an optional Message TLVs and an optional
-   Payload TLV.
+   TLV, if present.  This is followed by an optional Message TLVs and an
+   optional Payload TLV.
 
 
 
@@ -949,9 +951,9 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 
 
-Mosko, et al.           Expires December 5, 2019               [Page 17]
+Mosko, et al.                 Experimental                     [Page 17]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
                         1                   2                   3
@@ -959,13 +961,15 @@ Internet-Draft                  CCNx TLV                       June 2019
    +---------------+---------------+---------------+---------------+
    |         MessageType           |         MessageLength         |
    +---------------+---------------+---------------+---------------+
-   | Name TLV       (Type = T_NAME)                                |
+   / Name TLV       (Type = T_NAME)                                /
    +---------------+---------------+---------------+---------------+
    / Optional Message TLVs   (Various Types)                       /
    +---------------+---------------+---------------+---------------+
    / Optional Payload TLV  (Type = T_PAYLOAD)                      /
    +---------------+---------------+---------------+---------------+
 
+
+                     Figure 14: CCNx Message Encoding
 
    +-----------+---------------+---------------------------------------+
    |   Abbrev  |      Name     | Description                           |
@@ -985,14 +989,28 @@ Internet-Draft                  CCNx TLV                       June 2019
 
    A Name is a TLV encoded sequence of segments.  The table below lists
    the type values appropriate for these Name segments.  A Name MUST NOT
-   include PAD TLVs.
+   include Pad TLVs.
 
-   As described in CCNx Semantics [CCNSemantics], using the CCNx URI
-   [CCNxURI] notation, a T_NAME with 0 length corresponds to ccnx:/ (the
-   default route) and is distinct from a name with one zero length
-   segment, such as ccnx:/NAME=.  In the TLV encoding, ccnx:/
-   corresponds to T_NAME with 0 length, while ccnx:/NAME= corresponds to
-   T_NAME with 4 length and T_NAMESEGMENT with 0 length.
+   As described in CCNx Semantics [RFC8569], using the CCNx URI
+   [CCNxURI] notation, a T_NAME with zero length corresponds to "ccnx:/"
+   (the default route).  The message grammar does not allow the first
+   name segment to have zero length in a protocol message.  In the TLV
+   encoding, "ccnx:/" corresponds to T_NAME with zero length.
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 18]
+
+RFC 8609                        CCNx TLV                        May 2019
+
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1002,13 +1020,7 @@ Internet-Draft                  CCNx TLV                       June 2019
    / Name segment TLVs                                             /
    +---------------+---------------+---------------+---------------+
 
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 18]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
+                         Figure 15: Name Encoding
 
    +---------------+-------------+-------------------------------------+
    | Symbolic Name |     Name    | Description                         |
@@ -1026,7 +1038,7 @@ Internet-Draft                  CCNx TLV                       June 2019
    |               |             | between Interests based on their    |
    |               |             | payloads without having to parse    |
    |               |             | all the bytes of the payload        |
-   |               |             | itself; instead using only this     |
+   |               |             | itself, and instead using only this |
    |               |             | Payload ID Name segment.            |
    |               |             |                                     |
    |   T_APP:00 -  | Application | Application-specific payload in a   |
@@ -1051,19 +1063,9 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 
 
-
-
-
-
-
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 19]
+Mosko, et al.                 Experimental                     [Page 19]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
                         1                   2                   3
@@ -1082,6 +1084,8 @@ Internet-Draft                  CCNx TLV                       June 2019
    |           %x02 (2)            |       h       |       i       |
    +---------------+---------------+---------------+---------------+
 
+                     Figure 16: Name Encoding Example
+
 3.6.1.2.  Interest Payload ID
 
    The InterestPayloadID is a name segment created by the origin of an
@@ -1090,16 +1094,17 @@ Internet-Draft                  CCNx TLV                       June 2019
    payloads.  A common representation is to use a hash of the Interest
    Payload as the InterestPayloadID.
 
-   As part of the TLV 'value', the InterestPayloadID contains a one
-   identifier of method used to create the InterestPayloadID followed by
-   a variable length octet string.  An implementation is not required to
-   implement any of the methods to receive an Interest; the
-   InterestPayloadID may be treated only as an opaque octet string for
-   purposes of multiplexing Interests with different payloads.  Only a
-   device creating an InterestPayloadID name segment or a device
-   verifying such a segment need to implement the algorithms.
+   As part of the Value of the TLV, the InterestPayloadID contains a
+   one-octet identifier of the method used to create the
+   InterestPayloadID followed by a variable-length octet string.  An
+   implementation is not required to implement any of the methods to
+   receive an Interest; the InterestPayloadID may be treated only as an
+   opaque octet string for the purposes of multiplexing Interests with
+   different payloads.  Only a device creating an InterestPayloadID name
+   segment or a device verifying such a segment needs to implement the
+   algorithms.
 
-   It uses the Section 3.3.3 encoding of hash values.
+   It uses the encoding of hash values specified in Section 3.3.3.
 
    In normal operations, we recommend displaying the InterestPayloadID
    as an opaque octet string in a CCNx URI, as this is the common
@@ -1114,12 +1119,9 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 
 
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 20]
+Mosko, et al.                 Experimental                     [Page 20]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
 3.6.2.  Message TLVs
@@ -1147,16 +1149,20 @@ Internet-Draft                  CCNx TLV                       June 2019
    / Optional ContentObjectHashRestriction TLV                     /
    +---------------------------------------------------------------+
 
+                     Figure 17: Interest Message TLVs
+
    +----------------+------------------------------+-------------------+
    |     Abbrev     |             Name             | Description       |
    +----------------+------------------------------+-------------------+
-   |  T_KEYIDRESTR  |  KeyIdRestriction (Section   | A Section 3.3.3   |
-   |                |          3.6.2.1.1)          | representation of |
-   |                |                              | the KeyId         |
+   |  T_KEYIDRESTR  |  KeyIdRestriction (Section   | A representation  |
+   |                |          3.6.2.1.1)          | (as per Section   |
+   |                |                              | 3.3.3) of the     |
+   |                |                              | KeyId             |
    |                |                              |                   |
-   | T_OBJHASHRESTR | ContentObjectHashRestriction | A Section 3.3.3   |
-   |                |     (Section 3.6.2.1.2)      | representation of |
-   |                |                              | the hash of the   |
+   | T_OBJHASHRESTR | ContentObjectHashRestriction | A representation  |
+   |                |     (Section 3.6.2.1.2)      | (as per Section   |
+   |                |                              | 3.3.3) of the     |
+   |                |                              | hash of the       |
    |                |                              | specific Content  |
    |                |                              | Object that would |
    |                |                              | satisfy the       |
@@ -1165,23 +1171,25 @@ Internet-Draft                  CCNx TLV                       June 2019
 
                  Table 8: CCNx Interest Message TLV Types
 
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 21]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
 3.6.2.1.1.  KeyIdRestriction
 
    An Interest MAY include a KeyIdRestriction selector.  This ensures
    that only Content Objects with matching KeyIds will satisfy the
    Interest.  See Section 3.6.4.1.4.1 for the format of a KeyId.
 
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 21]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
 3.6.2.1.2.  ContentObjectHashRestriction
 
    An Interest MAY contain a ContentObjectHashRestriction selector.
-   This is the hash of the Content Object - the self-certifying name
+   This is the hash of the Content Object -- the self-certifying name
    restriction that must be verified in the network, if an Interest
    carried this restriction.  It is calculated from the beginning of the
    CCNx Message to the end of the packet.  The LENGTH MUST be from one
@@ -1193,17 +1201,40 @@ Internet-Draft                  CCNx TLV                       June 2019
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+---------------+---------------+
-   |        T_OBJHASHRESTR         |            LENGTH+4           |
+   |        T_OBJHASHRESTR         |           (LENGTH+4)          |
    +---------------+---------------+---------------+---------------+
-   |          <hash type>          |             LENGTH            |
+   |           hash type           |             LENGTH            |
    +---------------+---------------+---------------+---------------+
    /                     LENGTH octets of hash                     /
    +---------------+---------------+---------------+---------------+
+
+             Figure 18: ContentObjectHashRestriction Encoding
 
 3.6.2.2.  Content Object Message TLVs
 
    The following message TLVs are currently defined for Content Objects:
    PayloadType (optional) and ExpiryTime (optional).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 22]
+
+RFC 8609                        CCNx TLV                        May 2019
+
 
                          1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1218,21 +1249,7 @@ Internet-Draft                  CCNx TLV                       June 2019
    +---------------------------------------------------------------+
 
 
-
-
-
-
-
-
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 22]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
+                  Figure 19: Content Object Message TLVs
 
    +-------------+-------------+---------------------------------------+
    |    Abbrev   |     Name    | Description                           |
@@ -1252,8 +1269,8 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 3.6.2.2.1.  PayloadType
 
-   The PayloadType is a network byte order integer representing the
-   general type of the Payload TLV.
+   The PayloadType is an octet representing the general type of the
+   Payload TLV.
 
    o  T_PAYLOADTYPE_DATA: Data (possibly encrypted)
 
@@ -1261,19 +1278,29 @@ Internet-Draft                  CCNx TLV                       June 2019
 
    o  T_PAYLOADTYPE_LINK: Link
 
-   The Data type indicate that the Payload of the ContentObject is
+   The Data type indicates that the Payload of the ContentObject is
    opaque application bytes.  The Key type indicates that the Payload is
-   a DER encoded public key.  The Link type indicates that the Payload
-   is one or more Link (Section 3.3.4).  If this field is missing, a
-   "Data" type is assumed.
+   a DER-encoded public key.  The Link type indicates that the Payload
+   is one or more Links (Section 3.3.4).  If this field is missing, a
+   Data type is assumed.
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 23]
+
+RFC 8609                        CCNx TLV                        May 2019
+
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+---------------+---------------+
-   |            T_PAYLDTYPE        |            Length             |
+   |            T_PAYLDTYPE        |               1               |
    +---------------+---------------+---------------+---------------+
-   |  PayloadType  /
+   |  PayloadType  |
    +---------------+
+
+                      Figure 20: PayloadType Encoding
 
 3.6.2.2.2.  ExpiryTime
 
@@ -1282,16 +1309,8 @@ Internet-Draft                  CCNx TLV                       June 2019
    in UTC.  It is a network byte order unsigned integer in a 64-bit
    field.  A cache or end system should not respond with a Content
    Object past its ExpiryTime.  Routers forwarding a Content Object do
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 23]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
    not need to check the ExpiryTime.  If the ExpiryTime field is
-   missing, the Content Object has no expressed expiration and a cache
+   missing, the Content Object has no expressed expiration, and a cache
    or end system may use the Content Object for as long as desired.
 
                         1                   2                   3
@@ -1303,11 +1322,13 @@ Internet-Draft                  CCNx TLV                       June 2019
    /                                                               /
    +---------------+---------------+---------------+---------------+
 
+                      Figure 21: ExpiryTime encoding
+
 3.6.3.  Payload
 
    The Payload TLV contains the content of the packet.  It MAY be of
-   zero length.  If a packet does not have any payload, this field MAY
-   be omitted, rather than carrying a zero length.
+   zero length.  If a packet does not have any payload, this field
+   SHOULD be omitted, rather than being of zero length.
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1316,6 +1337,16 @@ Internet-Draft                  CCNx TLV                       June 2019
    +---------------+---------------+---------------+---------------+
    /                        Payload Contents                       /
    +---------------+---------------+---------------+---------------+
+
+                        Figure 22: Payload Encoding
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 24]
+
+RFC 8609                        CCNx TLV                        May 2019
+
 
 3.6.4.  Validation
 
@@ -1329,8 +1360,8 @@ Internet-Draft                  CCNx TLV                       June 2019
    ValidationPayload TLV contains the validation output, such as the
    CRC32C code or the RSA signature.
 
-   An Interest would most likely only use a MIC type of validation - a
-   crc, checksum, or digest.
+   An Interest would most likely only use a MIC type of validation -- a
+   CRC, checksum, or digest.
 
 3.6.4.1.  Validation Algorithm
 
@@ -1338,20 +1369,12 @@ Internet-Draft                  CCNx TLV                       June 2019
    information needed to verify the message.  The outermost container
    has type = T_VALIDATION_ALG.  The first nested TLV defines the
    specific type of validation to be performed on the message.  The type
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 24]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
    is identified with the "ValidationType" as shown in the figure below
    and elaborated in the table below.  Nested within that container are
-   the TLVs for any ValidationType dependent data, for example a Key Id,
-   Key Locator etc.
+   the TLVs for any ValidationType-dependent data -- for example, a Key
+   Id, Key Locator, etc.
 
-   Complete examples of several types may be found in Section 3.6.4.1.5
+   Complete examples of several types may be found in Section 3.6.4.1.5.
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1360,21 +1383,39 @@ Internet-Draft                  CCNx TLV                       June 2019
    +---------------+---------------+---------------+---------------+
    |        ValidationType         |            Length             |
    +---------------+---------------+---------------+---------------+
-   / ValidationType dependent data                                 /
+   / ValidationType-dependent data                                 /
    +---------------+---------------+---------------+---------------+
+
+                 Figure 23: Validation Algorithm Encoding
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 25]
+
+RFC 8609                        CCNx TLV                        May 2019
+
 
    +---------------+----------------+----------------------------------+
    |     Abbrev    |      Name      | Description                      |
    +---------------+----------------+----------------------------------+
    |    T_CRC32C   |     CRC32C     | Castagnoli CRC32 (iSCSI, ext4,   |
-   |               |    (Section    | etc.), with normal form          |
+   |               |    (Section    | etc.) with normal form           |
    |               |   3.6.4.1.1)   | polynomial 0x1EDC6F41.           |
    |               |                |                                  |
    | T_HMAC-SHA256 |  HMAC-SHA256   | HMAC (RFC 2104) using SHA256     |
    |               |    (Section    | hash.                            |
    |               |   3.6.4.1.2)   |                                  |
    |               |                |                                  |
-   |  T_RSA-SHA256 |   RSA-SHA256   | RSA public key signature using   |
+   |  T_RSA-SHA256 |   RSA-SHA256   | RSA public-key signature using   |
    |               |    (Section    | SHA256 digest.                   |
    |               |   3.6.4.1.3)   |                                  |
    |               |                |                                  |
@@ -1392,71 +1433,46 @@ Internet-Draft                  CCNx TLV                       June 2019
 3.6.4.1.1.  Message Integrity Checks
 
    MICs do not require additional data in order to perform the
-   verification.  An example is CRC32C that has a "0" length value.
+   verification.  An example is CRC32C that has a zero-length value.
 
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 25]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
-3.6.4.1.2.  Message Authentication Checks
+3.6.4.1.2.  Message Authentication Codes
 
    MACs are useful for communication between two trusting parties who
    have already shared secret keys.  An example is the HMAC algorithm.
    A MAC uses the KeyId field to identify which shared secret is in use.
-   The meaning of the KeyId is specific to the two parties involved, and
-   could be a simple integer to enumerate keys.  If a new MAC requires
+   The meaning of the KeyId is specific to the two parties involved and
+   could be simply an integer to enumerate keys.  If a new MAC requires
    an additional field, such as an Initialization Vector, that field
    would need to be defined as part of the updated specification.
 
 3.6.4.1.3.  Signature
 
    Signature type Validators specify a digest mechanism and a signing
-   algorithm to verify the message.  Examples include RSA signature og a
-   SHA256 digest, an Elliptic Curve signature with SECP-256K1
+   algorithm to verify the message.  Examples include an RSA signature
+   on a SHA256 digest, an Elliptic Curve signature with SECP-256K1
    parameters, etc.  These Validators require a KeyId and a mechanism
-   for locating the publishers public key (a KeyLocator) - optionally a
-   PublicKey or Certificate or KeyLink.
 
-3.6.4.1.4.  Validation Dependent Data
+
+
+
+Mosko, et al.                 Experimental                     [Page 26]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
+   for locating the publisher's public key (a KeyLocator) -- and
+   optionally a PublicKey or Certificate or KeyLink.
+
+3.6.4.1.4.  Validation-Dependent Data
 
    Different Validation Algorithms require access to different pieces of
    data contained in the ValidationAlgorithm TLV.  As described above,
-   Key Ids, Key Locators, Public Keys, Certificates, Links and Key Names
-   all play a role in different Validation Algorithms.  Any number of
-   Validation Dependent Data containers can be present in a Validation
-   Algorithm TLV.
+   Key Ids, Key Locators, Public Keys, Certificates, Links, and Key
+   Names all play a role in different Validation Algorithms.  Any number
+   of Validation-Dependent Data containers can be present in a
+   Validation Algorithm TLV.
 
-   Following is a table of CCNx ValidationType dependent data types:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 26]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
+   Below is a table of CCNx ValidationType-dependent data types:
 
    +-------------+-----------------+-----------------------------------+
    |    Abbrev   |       Name      | Description                       |
@@ -1465,11 +1481,11 @@ Internet-Draft                  CCNx TLV                       June 2019
    |             |     (Section    | secret or public key associated   |
    |             |   3.6.4.1.4.1)  | with a MAC or Signature.          |
    |             |                 |                                   |
-   | T_PUBLICKEY |    Public Key   | DER encoded public key.           |
+   | T_PUBLICKEY |    Public Key   | DER-encoded public key.           |
    |             |     (Section    |                                   |
    |             |   3.6.4.1.4.2)  |                                   |
    |             |                 |                                   |
-   |    T_CERT   |   Certificate   | DER encoded X509 certificate.     |
+   |    T_CERT   |   Certificate   | DER-encoded X.509 certificate.    |
    |             |     (Section    |                                   |
    |             |   3.6.4.1.4.3)  |                                   |
    |             |                 |                                   |
@@ -1477,23 +1493,32 @@ Internet-Draft                  CCNx TLV                       June 2019
    |             |     (Section    |                                   |
    |             |   3.6.4.1.4.4)  |                                   |
    |             |                 |                                   |
-   |  T_SIGTIME  |  SignatureTime  | A millsecond timestamp indicating |
-   |             |     (Section    | the time when the signature was   |
-   |             |   3.6.4.1.4.5)  | created.                          |
+   |  T_SIGTIME  |  SignatureTime  | A millisecond timestamp           |
+   |             |     (Section    | indicating the time when the      |
+   |             |   3.6.4.1.4.5)  | signature was created.            |
    +-------------+-----------------+-----------------------------------+
 
-              Table 11: CCNx Validation Dependent Data Types
+              Table 11: CCNx Validation-Dependent Data Types
 
 3.6.4.1.4.1.  KeyId
 
-   The KeyId is the publisher key identifier.  It is similar to a
-   Subject Key Identifier from X509 [RFC 5280, Section 4.2.1.2].  It
-   should be derived from the key used to sign, such as from the SHA-256
-   hash of the key.  It applies to both public/private key systems and
-   to symmetric key systems.
+   The KeyId for a signature is the publisher key identifier.  It is
+   similar to a Subject Key Identifier from X.509 (see Section 4.2.1.2
+   of [RFC5280]).  It should be derived from the key used to sign, such
+   as from the SHA-256 hash of the key.  It applies to both public and
+   private key systems and to symmetric key systems.
 
-   The KeyId is represented using the Section 3.3.3.  If a protocol uses
-   a non-hash identifier, it should use one of the reserved values.
+
+
+
+Mosko, et al.                 Experimental                     [Page 27]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
+   The KeyId is represented using the hash format in Section 3.3.3.  If
+   a protocol uses a non-hash identifier, it should use one of the
+   reserved values.
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1506,30 +1531,26 @@ Internet-Draft                  CCNx TLV                       June 2019
    +---------------+---------------+---------------+---------------+
 
 
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 27]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
+                         Figure 24: KeyId Encoding
 
 3.6.4.1.4.2.  Public Key
 
-   A Public Key is a DER encoded Subject Public Key Info block, as in an
-   X509 certificate.
+   A Public Key is a DER-encoded Subject Public Key Info block, as in an
+   X.509 certificate.
 
-                        1
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
+                        1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+---------------+---------------+
    |          T_PUBLICKEY          |            Length             |
    +---------------+---------------+---------------+---------------+
-   /                Public Key (DER encoded SPKI)                  /
+   /                Public Key (DER-encoded SPKI)                  /
    +---------------+---------------+---------------+---------------+
+
+                      Figure 25: Public Key Encoding
 
 3.6.4.1.4.3.  Certificate
 
-   A Certificate is a DER encoded X509 certificate.  The KeyId
+   A Certificate is a DER-encoded X.509 certificate.  The KeyId
    (Section 3.6.4.1.4.1) is derived from this encoding.
 
                         1                   2                   3
@@ -1537,8 +1558,19 @@ Internet-Draft                  CCNx TLV                       June 2019
    +---------------+---------------+---------------+---------------+
    |            T_CERT             |            Length             |
    +---------------+---------------+---------------+---------------+
-   /                 Certificate (DER encoded X509)                /
+   /                 Certificate (DER-encoded X.509)               /
    +---------------+---------------+---------------+---------------+
+
+                      Figure 26: Certificate Encoding
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 28]
+
+RFC 8609                        CCNx TLV                        May 2019
+
 
 3.6.4.1.4.4.  KeyLink
 
@@ -1552,34 +1584,28 @@ Internet-Draft                  CCNx TLV                       June 2019
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+-------------------------------+
-   |          T_KEYKINK            |            Length             |
+   |          T_KEYLINK            |            Length             |
    +---------------+---------------+-------------------------------+
    / Link                                                          /
    +---------------------------------------------------------------+
+
+                        Figure 27: KeyLink Encoding
 
 3.6.4.1.4.5.  SignatureTime
 
    The SignatureTime is a millisecond timestamp indicating the time at
    which a signature was created.  The signer sets this field to the
    current time when creating a signature.  A verifier may use this time
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 28]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
    to determine whether or not the signature was created during the
    validity period of a key, or if it occurred in a reasonable sequence
    with other associated signatures.  The SignatureTime is unrelated to
    any time associated with the actual CCNx Message, which could have
    been created long before the signature.  The default behavior is to
    always include a SignatureTime when creating an authenticated message
-   (e.g.  HMAC or RSA).
+   (e.g., HMAC or RSA).
 
-   SignatureTime is a network byte ordered unsigned integer of the
-   number of milliseconds since the epoch in UTC of when the signature
+   SignatureTime is an unsigned integer in network byte order that is
+   the number of milliseconds since the epoch in UTC when the signature
    was created.  It is a fixed 64-bit field.
 
                         1                   2                   3
@@ -1590,9 +1616,21 @@ Internet-Draft                  CCNx TLV                       June 2019
    /                         SignatureTime                         /
    +---------------------------------------------------------------+
 
+                     Figure 28: SignatureTime Encoding
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 29]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
 3.6.4.1.5.  Validation Examples
 
-   As an example of a MIC type validation, the encoding for CRC32C
+   As an example of a MIC-type validation, the encoding for CRC32C
    validation would be:
 
                         1                   2                   3
@@ -1603,7 +1641,9 @@ Internet-Draft                  CCNx TLV                       June 2019
    |            T_CRC32C           |               0               |
    +---------------+---------------+---------------+---------------+
 
-   As an example of a MAC type validation, the encoding for an HMAC
+                    Figure 29: CRC32C Encoding Example
+
+   As an example of a MAC-type validation, the encoding for an HMAC
    using a SHA256 hash would be:
 
                         1                   2                   3
@@ -1618,32 +1658,49 @@ Internet-Draft                  CCNx TLV                       June 2019
    /                            KeyId                              /
    /---------------+---------------+-------------------------------+
 
+                  Figure 30: HMAC-SHA256 Encoding Example
+
+   As an example of a Signature-type validation, the encoding for an RSA
+   public-key signature using a SHA256 digest and Public Key would be:
 
 
 
-Mosko, et al.           Expires December 5, 2019               [Page 29]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 30]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
-
-   As an example of a Signature type validation, the encoding for an RSA
-   public key signing using a SHA256 digest and Public Key would be:
 
                         1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +---------------+---------------+---------------+---------------+
-   |       T_VALIDATION_ALG        |      44 + Variable Length     |
+   |       T_VALIDATION_ALG        |   44 octets + Variable Length |
    +---------------+---------------+---------------+---------------+
-   |          T_RSA-SHA256         |      40 + Variable Length     |
+   |          T_RSA-SHA256         |   40 octets + Variable Length |
    +---------------+---------------+---------------+---------------+
    |             T_KEYID           |               32              |
    +---------------+---------------+---------------+---------------+
    /                            KeyId                              /
    /---------------+---------------+-------------------------------+
-   |          T_PUBLICKEY          |   Variable Length (~ 160)     |
+   |          T_PUBLICKEY          |  Variable Length (~160 octets)|
    +---------------+---------------+---------------+---------------+
-   /                Public Key (DER encoded SPKI)                  /
+   /                Public Key (DER-encoded SPKI)                  /
    +---------------+---------------+---------------+---------------+
+
+                  Figure 31: RSA-SHA256 Encoding Example
 
 3.6.4.2.  Validation Payload
 
@@ -1655,6 +1712,8 @@ Internet-Draft                  CCNx TLV                       June 2019
    / Type-dependent data                                           /
    +---------------+---------------+---------------+---------------+
 
+                  Figure 32: Validation Payload Encoding
+
    The ValidationPayload contains the validation output, such as the
    CRC32C code or the RSA signature.
 
@@ -1663,8 +1722,9 @@ Internet-Draft                  CCNx TLV                       June 2019
    This section details each kind of protocol value that can be
    registered.  Each type registry can be updated by incrementally
    expanding the type space, i.e., by allocating and reserving new
-   types.  As per [RFC5226] this section details the creation of the
-   "CCNx Registry" and several sub-registries.
+   types.  As per [RFC8126], this section details the creation of the
+   "Content-Centric Networking (CCNx)" registry and several
+   subregistries.
 
 
 
@@ -1675,156 +1735,158 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 
 
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 30]
+Mosko, et al.                 Experimental                     [Page 31]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
-                       +----------+---------------+
-                       | Property | Value         |
-                       +----------+---------------+
-                       | Name     | CCNx Registry |
-                       |          |               |
-                       | Abbrev   | CCNx          |
-                       +----------+---------------+
+             +----------+-----------------------------------+
+             | Property | Value                             |
+             +----------+-----------------------------------+
+             | Name     | Content-Centric Networking (CCNx) |
+             |          |                                   |
+             | Abbrev   | CCNx                              |
+             +----------+-----------------------------------+
 
                              Registry Creation
 
 4.1.  Packet Type Registry
 
-   The following packet types should be allocated.  A PacketType MUST be
-   1 byte.  New packet types are allocated via "RFC Required" action.
+   IANA has created the "CCNx Packet Types" registry and allocated the
+   packet types described below.
 
-                 +----------------+----------------------+
-                 | Property       | Value                |
-                 +----------------+----------------------+
-                 | Name           | Packet Type Registry |
-                 |                |                      |
-                 | Parent         | CCNx Registry        |
-                 |                |                      |
-                 | Review process | RFC Required         |
-                 |                |                      |
-                 | Syntax         | 1 octet (decimal)    |
-                 +----------------+----------------------+
+          +----------------+-----------------------------------+
+          | Property       | Value                             |
+          +----------------+-----------------------------------+
+          | Name           | CCNx Packet Types                 |
+          |                |                                   |
+          | Parent         | Content-Centric Networking (CCNx) |
+          |                |                                   |
+          | Review process | RFC Required                      |
+          |                |                                   |
+          | Syntax         | 1 octet                           |
+          +----------------+-----------------------------------+
 
                              Registry Creation
 
          +------+-------------+----------------------------------+
          | Type |     Name    |            Reference             |
          +------+-------------+----------------------------------+
-         |  0   | PT_INTEREST | Fixed Header Types (Section 3.2) |
+         | %x00 | PT_INTEREST | Fixed Header Types (Section 3.2) |
          |      |             |                                  |
-         |  1   |  PT_CONTENT | Fixed Header Types (Section 3.2) |
+         | %x01 |  PT_CONTENT | Fixed Header Types (Section 3.2) |
          |      |             |                                  |
-         |  2   |  PT_RETURN  | Fixed Header Types (Section 3.2) |
+         | %x02 |  PT_RETURN  | Fixed Header Types (Section 3.2) |
          +------+-------------+----------------------------------+
 
-                           Packet Type Namespace
+                               Packet Types
 
 4.2.  Interest Return Code Registry
 
-   The following InterestReturn code types should be allocated.
+   IANA has created the "CCNx InterestReturn Code Types" registry and
+   allocated the InterestReturn code types described below.
 
 
 
 
 
 
-
-Mosko, et al.           Expires December 5, 2019               [Page 31]
+Mosko, et al.                 Experimental                     [Page 32]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
-   +--------------+----------------------------------------------------+
-   | Property     | Value                                              |
-   +--------------+----------------------------------------------------+
-   | Name         | Interest Return Code                               |
-   |              |                                                    |
-   | Parent       | CCNx Registry                                      |
-   |              |                                                    |
-   | Review       | Expert Review, should include public standard      |
-   | process      | leading to RFC.                                    |
-   |              |                                                    |
-   | Syntax       | 1 octet (decimal)                                  |
-   +--------------+----------------------------------------------------+
+          +----------------+-----------------------------------+
+          | Property       | Value                             |
+          +----------------+-----------------------------------+
+          | Name           | CCNx InterestReturn Code Types    |
+          |                |                                   |
+          | Parent         | Content-Centric Networking (CCNx) |
+          |                |                                   |
+          | Review process | Specification Required            |
+          |                |                                   |
+          | Syntax         | 1 octet                           |
+          +----------------+-----------------------------------+
 
                              Registry Creation
 
    +------+---------------------------------------+--------------------+
    | Type |                  Name                 |     Reference      |
    +------+---------------------------------------+--------------------+
-   |  1   |           T_RETURN_NO_ROUTE           | Fixed Header Types |
+   | %x00 |                Reserved               |                    |
+   |      |                                       |                    |
+   | %x01 |           T_RETURN_NO_ROUTE           | Fixed Header Types |
    |      |                                       | (Section 3.2.3.3)  |
    |      |                                       |                    |
-   |  2   |        T_RETURN_LIMIT_EXCEEDED        | Fixed Header Types |
+   | %x02 |        T_RETURN_LIMIT_EXCEEDED        | Fixed Header Types |
    |      |                                       | (Section 3.2.3.3)  |
    |      |                                       |                    |
-   |  3   |         T_RETURN_NO_RESOURCES         | Fixed Header Types |
+   | %x03 |         T_RETURN_NO_RESOURCES         | Fixed Header Types |
    |      |                                       | (Section 3.2.3.3)  |
    |      |                                       |                    |
-   |  4   |          T_RETURN_PATH_ERROR          | Fixed Header Types |
+   | %x04 |          T_RETURN_PATH_ERROR          | Fixed Header Types |
    |      |                                       | (Section 3.2.3.3)  |
    |      |                                       |                    |
-   |  5   |          T_RETURN_PROHIBITED          | Fixed Header Types |
+   | %x05 |          T_RETURN_PROHIBITED          | Fixed Header Types |
    |      |                                       | (Section 3.2.3.3)  |
    |      |                                       |                    |
-   |  6   |           T_RETURN_CONGESTED          | Fixed Header Types |
+   | %x06 |           T_RETURN_CONGESTED          | Fixed Header Types |
    |      |                                       | (Section 3.2.3.3)  |
    |      |                                       |                    |
-   |  7   |         T_RETURN_MTU_TOO_LARGE        | Fixed Header Types |
+   | %x07 |         T_RETURN_MTU_TOO_LARGE        | Fixed Header Types |
    |      |                                       | (Section 3.2.3.3)  |
    |      |                                       |                    |
-   |  8   | T_RETURN_UNSUPPORTED_HASH_RESTRICTION | Fixed Header Types |
+   | %x08 | T_RETURN_UNSUPPORTED_HASH_RESTRICTION | Fixed Header Types |
    |      |                                       | (Section 3.2.3.3)  |
    |      |                                       |                    |
-   |  9   |      T_RETURN_MALFORMED_INTEREST      | Fixed Header Types |
+   | %x09 |      T_RETURN_MALFORMED_INTEREST      | Fixed Header Types |
    |      |                                       | (Section 3.2.3.3)  |
    +------+---------------------------------------+--------------------+
 
-                      Interest Return Type Namespace
+                        CCNx Interest Return Types
 
 
 
-
-Mosko, et al.           Expires December 5, 2019               [Page 32]
+Mosko, et al.                 Experimental                     [Page 33]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
 4.3.  Hop-by-Hop Type Registry
 
-   The following hop-by-hop types should be allocated.
+   IANA has created the "CCNx Hop-by-Hop Types" registry and allocated
+   the hop-by-hop types described below.
 
-              +----------------+----------------------------+
-              | Property       | Value                      |
-              +----------------+----------------------------+
-              | Name           | Hop-by-Hop Type Registry   |
-              |                |                            |
-              | Parent         | CCNx Registry              |
-              |                |                            |
-              | Review process | RFC Required               |
-              |                |                            |
-              | Syntax         | 2 octet TLV type (decimal) |
-              +----------------+----------------------------+
+          +----------------+-----------------------------------+
+          | Property       | Value                             |
+          +----------------+-----------------------------------+
+          | Name           | CCNx Hop-by-Hop Types             |
+          |                |                                   |
+          | Parent         | Content-Centric Networking (CCNx) |
+          |                |                                   |
+          | Review process | RFC Required                      |
+          |                |                                   |
+          | Syntax         | 2-octet TLV type                  |
+          +----------------+-----------------------------------+
 
                              Registry Creation
 
    +---------------+-------------+-------------------------------------+
    |      Type     |     Name    |              Reference              |
    +---------------+-------------+-------------------------------------+
-   |       1       |  T_INTLIFE  |   Hop-by-hop TLV headers (Section   |
+   |     %x0000    |   Reserved  |                                     |
+   |               |             |                                     |
+   |     %x0001    |  T_INTLIFE  |   Hop-by-hop TLV headers (Section   |
    |               |             |                 3.4)                |
    |               |             |                                     |
-   |       2       | T_CACHETIME |   Hop-by-hop TLV headers (Section   |
+   |     %x0002    | T_CACHETIME |   Hop-by-hop TLV headers (Section   |
    |               |             |                 3.4)                |
    |               |             |                                     |
-   |       3       |  T_MSGHASH  |   Hop-by-hop TLV headers (Section   |
+   |     %x0003    |  T_MSGHASH  |   Hop-by-hop TLV headers (Section   |
    |               |             |                 3.4)                |
    |               |             |                                     |
-   |     4 - 7     |   Reserved  |                                     |
+   |    %x0004 -   |   Reserved  |                                     |
+   |     %x0007    |             |                                     |
    |               |             |                                     |
    |     %x0FFE    |    T_PAD    |         Pad (Section 3.3.1)         |
    |               |             |                                     |
@@ -1834,86 +1896,99 @@ Internet-Draft                  CCNx TLV                       June 2019
    | %x1000-%x1FFF |   Reserved  |     Experimental Use (Section 3)    |
    +---------------+-------------+-------------------------------------+
 
-                         Hop-by-Hop Type Namespace
+                           CCNx Hop-by-Hop Types
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 34]
+
+RFC 8609                        CCNx TLV                        May 2019
+
 
 4.4.  Top-Level Type Registry
 
-   The following top-level types should be allocated.
+   IANA has created the "CCNx Top-Level Types" registry and allocated
+   the top-level types described below.
 
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 33]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
-              +----------------+----------------------------+
-              | Property       | Value                      |
-              +----------------+----------------------------+
-              | Name           | Top-Level Type Registry    |
-              |                |                            |
-              | Parent         | CCNx Registry              |
-              |                |                            |
-              | Review process | RFC Required               |
-              |                |                            |
-              | Syntax         | 2 octet TLV type (decimal) |
-              +----------------+----------------------------+
+          +----------------+-----------------------------------+
+          | Property       | Value                             |
+          +----------------+-----------------------------------+
+          | Name           | CCNx Top-Level Types              |
+          |                |                                   |
+          | Parent         | Content-Centric Networking (CCNx) |
+          |                |                                   |
+          | Review process | RFC Required                      |
+          |                |                                   |
+          | Syntax         | 2-octet TLV type                  |
+          +----------------+-----------------------------------+
 
                              Registry Creation
 
-      +------+----------------------+-------------------------------+
-      | Type |         Name         |           Reference           |
-      +------+----------------------+-------------------------------+
-      |  1   |      T_INTEREST      | Top-Level Types (Section 3.5) |
-      |      |                      |                               |
-      |  2   |       T_OBJECT       | Top-Level Types (Section 3.5) |
-      |      |                      |                               |
-      |  3   |   T_VALIDATION_ALG   | Top-Level Types (Section 3.5) |
-      |      |                      |                               |
-      |  4   | T_VALIDATION_PAYLOAD | Top-Level Types (Section 3.5) |
-      +------+----------------------+-------------------------------+
+     +--------+----------------------+-------------------------------+
+     |  Type  |         Name         |           Reference           |
+     +--------+----------------------+-------------------------------+
+     | %x0000 |       Reserved       |                               |
+     |        |                      |                               |
+     | %x0001 |      T_INTEREST      | Top-Level Types (Section 3.5) |
+     |        |                      |                               |
+     | %x0002 |       T_OBJECT       | Top-Level Types (Section 3.5) |
+     |        |                      |                               |
+     | %x0003 |   T_VALIDATION_ALG   | Top-Level Types (Section 3.5) |
+     |        |                      |                               |
+     | %x0004 | T_VALIDATION_PAYLOAD | Top-Level Types (Section 3.5) |
+     +--------+----------------------+-------------------------------+
 
-                         Top-Level Type Namespace
+                           CCNx Top-Level Types
 
 4.5.  Name Segment Type Registry
 
-   The following name segment types should be allocated.
+   IANA has created the "CCNx Name Segment Types" registry and allocated
+   the name segment types described below.
 
-       +----------------+-----------------------------------------+
-       | Property       | Value                                   |
-       +----------------+-----------------------------------------+
-       | Name           | Name Segment Type Registry              |
-       |                |                                         |
-       | Parent         | CCNx Registry                           |
-       |                |                                         |
-       | Review process | Expert Review with public specification |
-       |                |                                         |
-       | Syntax         | 2 octet TLV type (decimal)              |
-       +----------------+-----------------------------------------+
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 35]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
+          +----------------+-----------------------------------+
+          | Property       | Value                             |
+          +----------------+-----------------------------------+
+          | Name           | CCNx Name Segment Types           |
+          |                |                                   |
+          | Parent         | Content-Centric Networking (CCNx) |
+          |                |                                   |
+          | Review process | Specification Required            |
+          |                |                                   |
+          | Syntax         | 2-octet TLV type                  |
+          +----------------+-----------------------------------+
 
                              Registry Creation
-
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 34]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
 
    +--------------+------------------+---------------------------------+
    |     Type     |       Name       |            Reference            |
    +--------------+------------------+---------------------------------+
-   |      1       |  T_NAMESEGMENT   |       Name (Section 3.6.1)      |
+   |    %x0000    |     Reserved     |                                 |
    |              |                  |                                 |
-   |      2       |      T_IPID      |       Name (Section 3.6.1)      |
+   |    %x0001    |  T_NAMESEGMENT   |       Name (Section 3.6.1)      |
    |              |                  |                                 |
-   |   16 - 19    |     Reserved     |       Used in other drafts      |
+   |    %x0002    |      T_IPID      |       Name (Section 3.6.1)      |
+   |              |                  |                                 |
+   |   %x0010 -   |     Reserved     |     Used in other documents     |
+   |    %x0013    |                  |                                 |
    |              |                  |                                 |
    |    %x0FFF    |      T_ORG       |    Organization-Specific TLVs   |
    |              |                  |         (Section 3.3.2)         |
@@ -1922,64 +1997,62 @@ Internet-Draft                  CCNx TLV                       June 2019
    |    %x1FFF    |    T_APP:4096    |              3.6.1)             |
    +--------------+------------------+---------------------------------+
 
-                        Name Segment Type Namespace
+                          CCNx Name Segment Types
 
 4.6.  Message Type Registry
 
-   The following CCNx message segment types should be allocated.
+   IANA has creaed the "CCNx Message Types" registry and registered the
+   message segment types described below.
 
-              +----------------+----------------------------+
-              | Property       | Value                      |
-              +----------------+----------------------------+
-              | Name           | Message Type Registry      |
-              |                |                            |
-              | Parent         | CCNx Registry              |
-              |                |                            |
-              | Review process | RFC Required               |
-              |                |                            |
-              | Syntax         | 2 octet TLV type (decimal) |
-              +----------------+----------------------------+
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 36]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
+          +----------------+-----------------------------------+
+          | Property       | Value                             |
+          +----------------+-----------------------------------+
+          | Name           | CCNx Message Types                |
+          |                |                                   |
+          | Parent         | Content-Centric Networking (CCNx) |
+          |                |                                   |
+          | Review process | RFC Required                      |
+          |                |                                   |
+          | Syntax         | 2-octet TLV type                  |
+          +----------------+-----------------------------------+
 
                              Registry Creation
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 35]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
 
    +---------------+----------------+----------------------------------+
    |      Type     |      Name      |            Reference             |
    +---------------+----------------+----------------------------------+
-   |       0       |     T_NAME     |   Message Types (Section 3.6)    |
+   |     %x0000    |     T_NAME     |   Message Types (Section 3.6)    |
    |               |                |                                  |
-   |       1       |   T_PAYLOAD    |   Message Types (Section 3.6)    |
+   |     %x0001    |   T_PAYLOAD    |   Message Types (Section 3.6)    |
    |               |                |                                  |
-   |       2       |  T_KEYIDRESTR  |   Message Types (Section 3.6)    |
+   |     %x0002    |  T_KEYIDRESTR  |   Message Types (Section 3.6)    |
    |               |                |                                  |
-   |       3       | T_OBJHASHRESTR |   Message Types (Section 3.6)    |
+   |     %x0003    | T_OBJHASHRESTR |   Message Types (Section 3.6)    |
    |               |                |                                  |
-   |       5       |  T_PAYLDTYPE   |   Content Object Message Types   |
+   |     %x0005    |  T_PAYLDTYPE   |   Content Object Message Types   |
    |               |                |        (Section 3.6.2.2)         |
    |               |                |                                  |
-   |       6       |    T_EXPIRY    |   Content Object Message Types   |
+   |     %x0006    |    T_EXPIRY    |   Content Object Message Types   |
    |               |                |        (Section 3.6.2.2)         |
    |               |                |                                  |
-   |     7 - 12    |    Reserved    |     Used in other RFC drafts     |
+   |    %x0007 -   |    Reserved    |     Used in other documents      |
+   |     %x000C    |                |                                  |
    |               |                |                                  |
    |     %x0FFE    |     T_PAD      |       Pad (Section 3.3.1)        |
    |               |                |                                  |
@@ -1989,63 +2062,148 @@ Internet-Draft                  CCNx TLV                       June 2019
    | %x1000-%x1FFF |    Reserved    |   Experimental Use (Section 3)   |
    +---------------+----------------+----------------------------------+
 
-                        CCNx Message Type Namespace
+                            CCNx Message Types
+
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 37]
+
+RFC 8609                        CCNx TLV                        May 2019
+
 
 4.7.  Payload Type Registry
 
-   The following payload types should be allocated.
+   IANA has created the "CCNx Payload Types" registry and allocated the
+   payload types described below.
 
-      +----------------+--------------------------------------------+
-      | Property       | Value                                      |
-      +----------------+--------------------------------------------+
-      | Name           | PayloadType Registry                       |
-      |                |                                            |
-      | Parent         | CCNx Registry                              |
-      |                |                                            |
-      | Review process | Expert Review with public specification    |
-      |                |                                            |
-      | Syntax         | Variable length unsigned integer (decimal) |
-      +----------------+--------------------------------------------+
+          +----------------+-----------------------------------+
+          | Property       | Value                             |
+          +----------------+-----------------------------------+
+          | Name           | CCNx Payload Types                |
+          |                |                                   |
+          | Parent         | Content-Centric Networking (CCNx) |
+          |                |                                   |
+          | Review process | Specification Required            |
+          |                |                                   |
+          | Syntax         | Variable-length unsigned integer  |
+          +----------------+-----------------------------------+
 
                              Registry Creation
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 36]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
 
      +------+--------------------+-----------------------------------+
      | Type |        Name        |             Reference             |
      +------+--------------------+-----------------------------------+
-     |  0   | T_PAYLOADTYPE_DATA | Payload Types (Section 3.6.2.2.1) |
+     | %x00 | T_PAYLOADTYPE_DATA | Payload Types (Section 3.6.2.2.1) |
      |      |                    |                                   |
-     |  1   | T_PAYLOADTYPE_KEY  | Payload Types (Section 3.6.2.2.1) |
+     | %x01 | T_PAYLOADTYPE_KEY  | Payload Types (Section 3.6.2.2.1) |
      |      |                    |                                   |
-     |  2   | T_PAYLOADTYPE_LINK | Payload Types (Section 3.6.2.2.1) |
+     | %x02 | T_PAYLOADTYPE_LINK | Payload Types (Section 3.6.2.2.1) |
      +------+--------------------+-----------------------------------+
 
-                          Payload Type Namespace
+                            CCNx Payload Types
 
 4.8.  Validation Algorithm Type Registry
 
-   The following validation algorithm types should be allocated.
+   IANA has created the "CCNx Validation Algorithm Types" registry and
+   allocated the validation algorithm types described below.
 
-   +---------------+---------------------------------------------------+
-   | Property      | Value                                             |
-   +---------------+---------------------------------------------------+
-   | Name          | Validation Algorithm Type Registry                |
-   |               |                                                   |
-   | Parent        | CCNx Registry                                     |
-   |               |                                                   |
-   | Review        | Expert Review with public specification of the    |
-   | process       | algorithm                                         |
-   |               |                                                   |
-   | Syntax        | 2 octet TLV type (decimal)                        |
-   +---------------+---------------------------------------------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 38]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
+          +----------------+-----------------------------------+
+          | Property       | Value                             |
+          +----------------+-----------------------------------+
+          | Name           | CCNx Validation Algorithm Types   |
+          |                |                                   |
+          | Parent         | Content-Centric Networking (CCNx) |
+          |                |                                   |
+          | Review process | Specification Required            |
+          |                |                                   |
+          | Syntax         | 2-octet TLV type                  |
+          +----------------+-----------------------------------+
+
+                             Registry Creation
+
+   +---------------+-----------------+---------------------------------+
+   |      Type     |       Name      |            Reference            |
+   +---------------+-----------------+---------------------------------+
+   |     %x0000    |     Reserved    |                                 |
+   |               |                 |                                 |
+   |     %x0002    |     T_CRC32C    |  Validation Algorithm (Section  |
+   |               |                 |             3.6.4.1)            |
+   |               |                 |                                 |
+   |     %x0004    |  T_HMAC-SHA256  |  Validation Algorithm (Section  |
+   |               |                 |             3.6.4.1)            |
+   |               |                 |                                 |
+   |     %x0005    |   T_RSA-SHA256  |  Validation Algorithm (Section  |
+   |               |                 |             3.6.4.1)            |
+   |               |                 |                                 |
+   |     %x0006    | T_EC-SECP-256K1 |  Validation Algorithm (Section  |
+   |               |                 |             3.6.4.1)            |
+   |               |                 |                                 |
+   |     %x0007    | T_EC-SECP-384R1 |  Validation Algorithm (Section  |
+   |               |                 |             3.6.4.1)            |
+   |               |                 |                                 |
+   |     %x0FFE    |      T_PAD      |       Pad (Section 3.3.1)       |
+   |               |                 |                                 |
+   |     %x0FFF    |      T_ORG      |    Organization-Specific TLVs   |
+   |               |                 |         (Section 3.3.2)         |
+   |               |                 |                                 |
+   | %x1000-%x1FFF |     Reserved    |   Experimental Use (Section 3)  |
+   +---------------+-----------------+---------------------------------+
+
+                      CCNx Validation Algorithm Types
+
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 39]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
+4.9.  Validation-Dependent Data Type Registry
+
+   IANA has created the "CCNx Validation-Dependent Data Types" registry
+   and allocated the validation-dependent data types described below.
+
+         +----------------+--------------------------------------+
+         | Property       | Value                                |
+         +----------------+--------------------------------------+
+         | Name           | CCNx Validation-Dependent Data Types |
+         |                |                                      |
+         | Parent         | Content-Centric Networking (CCNx)    |
+         |                |                                      |
+         | Review process | RFC Required                         |
+         |                |                                      |
+         | Syntax         | 2-octet TLV type                     |
+         +----------------+--------------------------------------+
 
                              Registry Creation
 
@@ -2069,89 +2227,47 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 
 
-Mosko, et al.           Expires December 5, 2019               [Page 37]
+
+
+
+
+
+
+
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 40]
 
-Internet-Draft                  CCNx TLV                       June 2019
-
-
-   +---------------+---------------+-----------------------------------+
-   |      Type     |      Name     |             Reference             |
-   +---------------+---------------+-----------------------------------+
-   |       2       |    T_CRC32C   |   Validation Algorithm (Section   |
-   |               |               |              3.6.4.1)             |
-   |               |               |                                   |
-   |       4       | T_HMAC-SHA256 |   Validation Algorithm (Section   |
-   |               |               |              3.6.4.1)             |
-   |               |               |                                   |
-   |       5       |  T_RSA-SHA256 |   Validation Algorithm (Section   |
-   |               |               |              3.6.4.1)             |
-   |               |               |                                   |
-   |       6       | EC-SECP-256K1 |   Validation Algorithm (Section   |
-   |               |               |              3.6.4.1)             |
-   |               |               |                                   |
-   |       7       | EC-SECP-384R1 |   Validation Algorithm (Section   |
-   |               |               |              3.6.4.1)             |
-   |               |               |                                   |
-   |     %x0FFE    |     T_PAD     |        Pad (Section 3.3.1)        |
-   |               |               |                                   |
-   |     %x0FFF    |     T_ORG     |     Organization-Specific TLVs    |
-   |               |               |          (Section 3.3.2)          |
-   |               |               |                                   |
-   | %x1000-%x1FFF |    Reserved   |    Experimental Use (Section 3)   |
-   +---------------+---------------+-----------------------------------+
-
-                    Validation Algorithm Type Namespace
-
-4.9.  Validation Dependent Data Type Registry
-
-   The following validation dependent data types should be allocated.
-
-       +----------------+-----------------------------------------+
-       | Property       | Value                                   |
-       +----------------+-----------------------------------------+
-       | Name           | Validation Dependent Data Type Registry |
-       |                |                                         |
-       | Parent         | CCNx Registry                           |
-       |                |                                         |
-       | Review process | RFC Required                            |
-       |                |                                         |
-       | Syntax         | 2 octet TLV type (decimal)              |
-       +----------------+-----------------------------------------+
-
-                             Registry Creation
-
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 38]
-
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
    +---------------+----------------+----------------------------------+
    |      Type     |      Name      |            Reference             |
    +---------------+----------------+----------------------------------+
-   |       9       |    T_KEYID     |    Validation Dependent Data     |
+   |     %x0000    |    Reserved    |                                  |
+   |               |                |                                  |
+   |     %x0009    |    T_KEYID     |    Validation-Dependent Data     |
    |               |                |       (Section 3.6.4.1.4)        |
    |               |                |                                  |
-   |       10      | T_PUBLICKEYLOC |    Validation Dependent Data     |
+   |     %x000A    | T_PUBLICKEYLOC |    Validation-Dependent Data     |
    |               |                |       (Section 3.6.4.1.4)        |
    |               |                |                                  |
-   |       11      |  T_PUBLICKEY   |    Validation Dependent Data     |
+   |     %x000B    |  T_PUBLICKEY   |    Validation-Dependent Data     |
    |               |                |       (Section 3.6.4.1.4)        |
    |               |                |                                  |
-   |       12      |     T_CERT     |    Validation Dependent Data     |
+   |     %x000C    |     T_CERT     |    Validation-Dependent Data     |
    |               |                |       (Section 3.6.4.1.4)        |
    |               |                |                                  |
-   |       13      |     T_LINK     |    Validation Dependent Data     |
+   |     %x000D    |     T_LINK     |    Validation-Dependent Data     |
    |               |                |       (Section 3.6.4.1.4)        |
    |               |                |                                  |
-   |       14      |   T_KEYLINK    |    Validation Dependent Data     |
+   |     %x000E    |   T_KEYLINK    |    Validation-Dependent Data     |
    |               |                |       (Section 3.6.4.1.4)        |
    |               |                |                                  |
-   |       15      |   T_SIGTIME    |    Validation Dependent Data     |
+   |     %x000F    |   T_SIGTIME    |    Validation-Dependent Data     |
    |               |                |       (Section 3.6.4.1.4)        |
    |               |                |                                  |
    |     %x0FFF    |     T_ORG      |    Organization-Specific TLVs    |
@@ -2160,11 +2276,12 @@ Internet-Draft                  CCNx TLV                       June 2019
    | %x1000-%x1FFF |    Reserved    |   Experimental Use (Section 3)   |
    +---------------+----------------+----------------------------------+
 
-                 Validation Dependent Data Type Namespace
+                   CCNx Validation-Dependent Data Types
 
 4.10.  Hash Function Type Registry
 
-   The following CCNx hash function types should be allocated.
+   IANA has created the "CCNx Hash Function Types" registry and
+   allocated the hash function types described below.
 
 
 
@@ -2178,35 +2295,33 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 
 
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 39]
+Mosko, et al.                 Experimental                     [Page 41]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
-   +--------------+----------------------------------------------------+
-   | Property     | Value                                              |
-   +--------------+----------------------------------------------------+
-   | Name         | Hash Function Type Registry                        |
-   |              |                                                    |
-   | Parent       | CCNx Registry                                      |
-   |              |                                                    |
-   | Review       | Expert Review with public specification of the     |
-   | process      | hash function                                      |
-   |              |                                                    |
-   | Syntax       | 2 octet TLV type (decimal)                         |
-   +--------------+----------------------------------------------------+
+          +----------------+-----------------------------------+
+          | Property       | Value                             |
+          +----------------+-----------------------------------+
+          | Name           | CCNx Hash Function Types          |
+          |                |                                   |
+          | Parent         | Content-Centric Networking (CCNx) |
+          |                |                                   |
+          | Review process | Specification Required            |
+          |                |                                   |
+          | Syntax         | 2-octet TLV type                  |
+          +----------------+-----------------------------------+
 
                              Registry Creation
 
    +---------------+-----------+---------------------------------------+
    |      Type     |    Name   |               Reference               |
    +---------------+-----------+---------------------------------------+
-   |       1       | T_SHA-256 |      Hash Format (Section 3.3.3)      |
+   |     %x0000    |  Reserved |                                       |
    |               |           |                                       |
-   |       2       | T_SHA-512 |      Hash Format (Section 3.3.3)      |
+   |     %x0001    | T_SHA-256 |      Hash Format (Section 3.3.3)      |
+   |               |           |                                       |
+   |     %x0002    | T_SHA-512 |      Hash Format (Section 3.3.3)      |
    |               |           |                                       |
    |     %x0FFF    |   T_ORG   |  Organization-Specific TLVs (Section  |
    |               |           |                 3.3.2)                |
@@ -2214,34 +2329,34 @@ Internet-Draft                  CCNx TLV                       June 2019
    | %x1000-%x1FFF |  Reserved |      Experimental Use (Section 3)     |
    +---------------+-----------+---------------------------------------+
 
-                     CCNx Hash Function Type Namespace
+                         CCNx Hash Function Types
 
 5.  Security Considerations
 
-   The CCNx protocol is a layer 3 network protocol, which may also
-   operate as an overlay using other transports, such as UDP or other
+   The CCNx protocol is a Layer 3 network protocol, which may also
+   operate as an overlay using other transports such as UDP or other
    tunnels.  It includes intrinsic support for message authentication
-   via a signature (e.g.  RSA or elliptic curve) or message
-   authentication code (e.g.  HMAC).  In lieu of an authenticator, it
-   may instead use a message integrity check (e.g.  SHA or CRC).  CCNx
-   does not specify an encryption envelope, that function is left to a
-   high-layer protocol (e.g. [esic]).
+   via a signature (e.g., RSA or elliptic curve) or Message
+   Authentication Code (e.g., HMAC).  In lieu of an authenticator, it
+   may instead use a Message Integrity Check (e.g., SHA or CRC).  CCNx
+   does not specify an encryption envelope; that function is left to a
+   high-layer protocol (e.g., Encrypted Sessions in CCNx [esic]).
 
-   The CCNx message format includes the ability to attach MICs (e.g.
-   SHA-256 or CRC), MACs (e.g.  HMAC), and Signatures (e.g.  RSA or
+   The CCNx message format includes the ability to attach MICs (e.g.,
+   SHA-256 or CRC), MACs (e.g., HMAC), and Signatures (e.g., RSA or
    ECDSA) to all packet types.  Because Interest packets can be sent at
    will, an application should carefully select when to use a given
    ValidationAlgorithm in an Interest to avoid DoS attacks.  MICs, for
    example, are inexpensive and could be used as desired, whereas MACs
-   and Signatures are more expensive and their inappropriate use could
 
 
 
-Mosko, et al.           Expires December 5, 2019               [Page 40]
+Mosko, et al.                 Experimental                     [Page 42]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
+   and Signatures are more expensive and their inappropriate use could
    open a computational DoS attack surface.  Applications should use an
    explicit protocol to guide their use of packet signatures.  As a
    general guideline, an application might use a MIC on an Interest to
@@ -2249,62 +2364,63 @@ Internet-Draft                  CCNx TLV                       June 2019
    Interest, one should consider using an encrypted wrapper and a
    protocol that prevents replay attacks, especially if the Interest is
    being used as an actuator.  Simply using an authentication code or
-   signature does not make an Interests secure.  There are several
+   signature does not make an Interest secure.  There are several
    examples in the literature on how to secure ICN-style messaging
    [mobile] [ace].
 
-   As a layer 3 protocol, this document does not describe how one
+   As a Layer 3 protocol, this document does not describe how one
    arrives at keys or how one trusts keys.  The CCNx content object may
    include a public key embedded in the object or may use the
-   PublicKeyLocator field to point to a public key (or public key
+   PublicKeyLocator field to point to a public key (or public-key
    certificate) that authenticates the message.  One key exchange
    specification is CCNxKE [ccnxke] [mobile], which is similar to the
-   TLS 1.3 key exchange except it is over the CCNx layer 3 messages.
-   Trust is beyond the scope of a layer-3 protocol protocol and left to
+   TLS 1.3 key exchange except it is over the CCNx Layer 3 messages.
+   Trust is beyond the scope of a Layer 3 protocol and is left to
    applications or application frameworks.
 
-   The combination of an ephemeral key exchange (e.g.  CCNxKE [ccnxke])
-   and an encapsulating encryption (e.g. [esic]) provides the equivalent
-   of a TLS tunnel.  Intermediate nodes may forward the Interests and
-   Content Objects, but have no visibility inside.  It also completely
-   hides the internal names in those used by the encryption layer.  This
-   type of tunneling encryption is useful for content that has little or
-   no cache-ability as it can only be used by someone with the ephemeral
-   key.  Short term caching may help with lossy links or mobility, but
-   long term caching is usually not of interest.
+   The combination of an ephemeral key exchange (e.g., CCNxKE [ccnxke])
+   and an encapsulating encryption (e.g., [esic]) provides the
+   equivalent of a TLS tunnel.  Intermediate nodes may forward the
+   Interests and Content Objects but have no visibility inside.  It also
+   completely hides the internal names in those used by the encryption
+   layer.  This type of tunneling encryption is useful for content that
+   has little or no cacheability, as it can only be used by someone with
+   the ephemeral key.  Short-term caching may help with lossy links or
+   mobility, but long-term caching is usually not of interest.
 
    Broadcast encryption or proxy re-encryption may be useful for content
    with multiple uses over time or many consumers.  There is currently
    no recommendation for this form of encryption.
 
    The specific encoding of messages will have security implications.
-   This document uses a type-length-value (TLV) encoding.  We chose to
+   This document uses a Type-Length-Value (TLV) encoding.  We chose to
    compromise between extensibility and unambiguous encodings of types
-   and lengths.  Some TLVs use variable length T and variable length L
-   fields to accomodate a wide gamut of values while trying to be byte-
-   efficient.  Our TLV encoding uses a fixed length 2-byte T and 2-byte
-   L.  Using a fixed-length T and L field solves two problems.  The
-   first is aliases.  If one is able to encode the same value, such as
-   0x2 and 0x02, in different byte lengths then one must decide if they
-   mean the same thing, if they are different, or if one is illegal.  If
-   they are different, then one must always compare on the buffers not
-   the integer equivalents.  If one is illegal, then one must validate
-   the TLV encoding -- every field of every packet at every hop.  If
+   and lengths.  Some TLV encodings use variable-length T and variable-
+   length L fields to accommodate a wide gamut of values while trying to
+   be byte efficient.  Our TLV encoding uses a fixed length 2-byte T and
+   2-byte L.  Using fixed-length T and L fields solves two problems.
+   The first is aliases.  If one is able to encode the same value, such
+   as %x02 and %x0002, in different byte lengths, then one must decide
+   if they mean the same thing, if they are different, or if one is
+   illegal.  If they are different, then one must always compare on the
+   buffers not the integer equivalents.  If one is illegal, then one
 
 
 
-Mosko, et al.           Expires December 5, 2019               [Page 41]
+Mosko, et al.                 Experimental                     [Page 43]
 
-Internet-Draft                  CCNx TLV                       June 2019
+RFC 8609                        CCNx TLV                        May 2019
 
 
-   they are the same, then one has the second problem: how to specify
-   packet filters.  For example, if a name has 6 name components, then
-   there are 7 T's and 7 L's, each of which might have up to 4
-   representations of the same value.  That would be 14 fields with 4
-   encodings each, or 1001 combinations.  It also means that one cannot
-   compare, for example, a name via a memory function as one needs to
-   consider that any embedded T or L might have a different format.
+   must validate the TLV encoding -- every field of every packet at
+   every hop.  If they are the same, then one has the second problem:
+   how to specify packet filters.  For example, if a name has 6 name
+   components, then there are 7 T fields and 7 L fields, each of which
+   might have up to 4 representations of the same value.  That would be
+   14 fields with 4 encodings each, or 1001 combinations.  It also means
+   that one cannot compare, for example, a name via a memory function,
+   as one needs to consider that any embedded T or L might have a
+   different format.
 
    The Interest Return message has no authenticator from the previous
    hop.  Therefore, the payload of the Interest Return should only be
@@ -2315,65 +2431,66 @@ Internet-Draft                  CCNx TLV                       June 2019
 
    Caching nodes must take caution when processing content objects.  It
    is essential that the Content Store obey the rules outlined in
-   [CCNSemantics] to avoid certain types of attacks.  Unlike NDN, CCNx
-   1.0 has no mechanism to work around an undesired result from the
-   network (there are no "excludes"), so if a cache becomes poisoned
-   with bad content it might cause problems retrieving content.  There
-   are three types of access to content from a content store:
-   unrestricted, signature restricted, and hash restricted.  If an
-   Interest has no restrictions, then the requester is not particular
-   about what they get back, so any matching cached object is OK.  In
-   the hash restricted case, the requester is very specific about what
-   they want and the content store (and every forward hop) can easily
-   verify that the content matches the request.  In the signature
-   verified case (often used for initial manifest discovery), the
-   requester only knows the KeyId that signed the content.  It is this
-   case that requires the closest attention in the content store to
-   avoid amplifying bad data.  The content store must only respond with
-   a content object if it can verify the signature -- this means either
-   the content object carries the public key inside it or the Interest
-   carries the public key in addition to the KeyId.  If that is not the
-   case, then the content store should treat the Interest as a cache
-   miss and let an endpoint respond.
+   [RFC8569] to avoid certain types of attacks.  CCNx 1.0 has no
+   mechanism to work around an undesired result from the network (there
+   are no "excludes"), so if a cache becomes poisoned with bad content
+   it might cause problems retrieving content.  There are three types of
+   access to content from a Content Store: unrestricted, signature
+   restricted, and hash restricted.  If an Interest has no restrictions,
+   then the requester is not particular about what they get back, so any
+   matching cached object is OK.  In the hash restricted case, the
+   requester is very specific about what they want, and the Content
+   Store (and every forward hop) can easily verify that the content
+   matches the request.  In the case of signature restricted (which is
+   often used for initial manifest discovery), the requester only knows
+   the KeyId that signed the content.  This case requires the closest
+   attention in the Content Store to avoid amplifying bad data.  The
+   Content Store must only respond with a content object if it can
+   verify the signature -- this means either the content object carries
+   the public key inside it or the Interest carries the public key in
+   addition to the KeyId.  If that is not the case, then the Content
+   Store should treat the Interest as a cache miss and let an endpoint
+   respond.
 
    A user-level cache could perform full signature verification by
-   fetching a public key according to the PublicKeyLocator.  That is
-   not, however, a burden we wish to impose on the forwarder.  A user-
+   fetching a public key according to the PublicKeyLocator.  However,
+   that is not a burden we wish to impose on the forwarder.  A user-
    level cache could also rely on out-of-band attestation, such as the
    cache operator only inserting content that it knows has the correct
    signature.
 
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 44]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
    The CCNx grammar allows for hash algorithm agility via the HashType.
    It specifies a short list of acceptable hash algorithms that should
    be implemented at each forwarder.  Some hash values only apply to end
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 42]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
    systems, so updating the hash algorithm does not affect forwarders --
    they would simply match the buffer that includes the type-length-hash
    buffer.  Some fields, such as the ConObjHash, must be verified at
    each hop, so a forwarder (or related system) must know the hash
-   algorithm and it could cause backward compatibility problems if the
+   algorithm, and it could cause backward compatibility problems if the
    hash type is updated.
 
-   A CCNx name uses binary matching whereas a URI uses a case
-   insensitive hostname.  Some systems may also use case insensitive
+   A CCNx name uses binary matching, whereas a URI uses a case-
+   insensitive hostname.  Some systems may also use case-insensitive
    matching of the URI path to a resource.  An implication of this is
    that human-entered CCNx names will likely have case or non-ASCII
-   symbol mismatches unless one uses a consistent URI normalization to
-   the CCNx name.  It also means that an entity that registers a CCNx
-   routable prefix, say ccnx:/example.com, would need separate
-   registrations for simple variations like ccnx:/Example.com.  Unless
+   symbol mismatches unless one uses a consistent URI normalization for
+   the CCNx name.  It also means that an entity that registers a CCNx-
+   routable prefix -- say, "ccnx:/example.com" -- would need separate
+   registrations for simple variations like "ccnx:/Example.com".  Unless
    this is addressed in URI normalization and routing protocol
    conventions, there could be phishing attacks.
 
    For a more general introduction to ICN-related security concerns and
-   approaches, see [RFC7927] and [RFC7945]
+   approaches, see [RFC7927] and [RFC7945].
 
 6.  References
 
@@ -2384,57 +2501,57 @@ Internet-Draft                  CCNx TLV                       June 2019
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
 6.2.  Informative References
 
    [ace]      Shang, W., Yu, Y., Liang, T., Zhang, B., and L. Zhang,
               "NDN-ACE: Access control for constrained environments over
               named data networking", NDN Technical Report NDN-0036,
-              2015, <http://new.named-data.net/wp-
-              content/uploads/2015/12/ndn-0036-1-ndn-ace.pdf>.
+              2015, <http://new.named-
+              data.net/wp-content/uploads/2015/12/
+              ndn-0036-1-ndn-ace.pdf>.
 
-   [CCNSemantics]
-              Mosko, M., Solis, I., and C. Wood, "CCNx Semantics
-              (Internet draft)", 2018, <https://www.ietf.org/id/
-              draft-irtf-icnrg-ccnxsemantics-09.txt>.
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 45]
+
+RFC 8609                        CCNx TLV                        May 2019
+
 
    [ccnxke]   Mosko, M., Uzun, E., and C. Wood, "CCNx Key Exchange
-              Protocol Version 1.0", 2017,
-              <https://www.ietf.org/archive/id/
-              draft-wood-icnrg-ccnxkeyexchange-02.txt>.
+              Protocol Version 1.0", Work in Progress, draft-wood-icnrg-
+              ccnxkeyexchange-02, March 2017.
 
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 43]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
-   [CCNxURI]  Mosko, M. and C. Wood, "The CCNx URI Scheme (Internet
-              draft)", 2017,
-              <http://tools.ietf.org/html/draft-mosko-icnrg-ccnxuri-02>.
+   [CCNxURI]  Mosko, M. and C. Wood, "The CCNx URI Scheme", Work in
+              Progress, draft-mosko-icnrg-ccnxurischeme-01, April 2016.
 
    [CCNxz]    Mosko, M., "CCNxz TLV Header Compression Experimental
-              Code", 2016-2018, <https://github.com/PARC/CCNxz>.
+              Code", commit f1093a2, March 2018,
+              <https://github.com/PARC/CCNxz>.
 
    [compress]
               Mosko, M., "Header Compression for TLV-based Packets",
-              2016, <https://datatracker.ietf.org/meeting/
-              interim-2016-icnrg-02/materials/
-              slides-interim-2016-icnrg-2-7>.
+              ICNRG Interim Meeting, 2016,
+              <https://datatracker.ietf.org/meeting/interim-2016-icnrg-
+              02/materials/slides-interim-2016-icnrg-2-7>.
 
    [ECC]      Certicom Research, "SEC 2: Recommended Elliptic Curve
               Domain Parameters", 2010,
               <http://www.secg.org/sec2-v2.pdf>.
 
-   [EpriseNumbers]
-              IANA, "IANA Private Enterprise Numbers", 2015,
-              <http://www.iana.org/assignments/enterprise-numbers/
-              enterprise-numbers>.
-
    [esic]     Mosko, M. and C. Wood, "Encrypted Sessions In CCNx
-              (ESIC)", 2017,
-              <https://www.ietf.org/id/draft-wood-icnrg-esic-01.txt>.
+              (ESIC)", Work in Progress, draft-wood-icnrg-esic-01,
+              September 2017.
+
+   [IANA-PEN]
+              IANA, "Private Enterprise Numbers",
+              <http://www.iana.org/assignments/enterprise-numbers>.
 
    [mobile]   Mosko, M., Uzun, E., and C. Wood, "Mobile Sessions in
               Content-Centric Networks", IFIP Networking, 2017,
@@ -2443,40 +2560,54 @@ Internet-Draft                  CCNx TLV                       June 2019
 
    [nnc]      Jacobson, V., Smetters, D., Thornton, J., Plass, M.,
               Briggs, N., and R. Braynard, "Networking Named Content",
-              2009, <http://dx.doi.org/10.1145/1658939.1658941>.
+              Proceedings of the 5th international conference on
+              Emerging networking experiments and technologies (CoNEXT
+              '09), 2009, <http://dx.doi.org/10.1145/1658939.1658941>.
 
-   [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
-              IANA Considerations Section in RFCs", RFC 5226,
-              DOI 10.17487/RFC5226, May 2008,
-              <https://www.rfc-editor.org/info/rfc5226>.
+   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
+              Housley, R., and W. Polk, "Internet X.509 Public Key
+              Infrastructure Certificate and Certificate Revocation List
+              (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
+              <https://www.rfc-editor.org/info/rfc5280>.
 
-   [RFC7927]  Kutscher, D., Eum, S., Pentikousis, K., Psaras, I.,
+
+
+
+
+
+Mosko, et al.                 Experimental                     [Page 46]
+
+RFC 8609                        CCNx TLV                        May 2019
+
+
+   [RFC7927]  Kutscher, D., Ed., Eum, S., Pentikousis, K., Psaras, I.,
               Corujo, D., Saucez, D., Schmidt, T., and M. Waehlisch,
               "Information-Centric Networking (ICN) Research
-              Challenges", 2016,
-              <https://trac.tools.ietf.org/html/rfc7927>.
+              Challenges", RFC 7927, DOI 10.17487/RFC7927, July 2016,
+              <https://www.rfc-editor.org/info/rfc7927>.
 
+   [RFC7945]  Pentikousis, K., Ed., Ohlman, B., Davies, E., Spirou, S.,
+              and G. Boggia, "Information-Centric Networking: Evaluation
+              and Security Considerations", RFC 7945,
+              DOI 10.17487/RFC7945, September 2016,
+              <https://www.rfc-editor.org/info/rfc7945>.
 
+   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
+              Writing an IANA Considerations Section in RFCs", BCP 26,
+              RFC 8126, DOI 10.17487/RFC8126, June 2017,
+              <https://www.rfc-editor.org/info/rfc8126>.
 
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 44]
-
-Internet-Draft                  CCNx TLV                       June 2019
-
-
-   [RFC7945]  Pentikousis, K., Ohlman, B., Davies, E., Spirou, S., and
-              G. Boggia, "Information-Centric Networking: Evaluation and
-              Security Considerations", 2016,
-              <https://trac.tools.ietf.org/html/rfc7945>.
+   [RFC8569]  Mosko, M., Solis, I., and C. Wood, "Content-Centric
+              Networking (CCNx) Semantics", RFC 8569,
+              DOI 10.17487/RFC8569, May 2019,
+              <https://www.rfc-editor.org/info/rfc8569>.
 
 Authors' Addresses
 
    Marc Mosko
    PARC, Inc.
    Palo Alto, California  94304
-   USA
+   United States of America
 
    Phone: +01 650-812-4405
    Email: marc.mosko@parc.com
@@ -2485,36 +2616,19 @@ Authors' Addresses
    Ignacio Solis
    LinkedIn
    Mountain View, California  94043
-   USA
+   United States of America
 
    Email: nsolis@linkedin.com
 
 
    Christopher A. Wood
-   University of California Irvine
+   University of California, Irvine
    Irvine, California  92697
-   USA
+   United States of America
 
    Phone: +01 315-806-5939
    Email: woodc1@uci.edu
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mosko, et al.           Expires December 5, 2019               [Page 45]
+Mosko, et al.                 Experimental                     [Page 47]
