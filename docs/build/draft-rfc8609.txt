@@ -524,7 +524,7 @@ RFC 8609                        CCNx TLV                        May 2019
 3.2.3.1.  InterestReturn HopLimit
 
    This is the original Interest's HopLimit, as received before
-   decrement at the node senidng the Interest Return.
+   decrement at the node sending the Interest Return.
 
 3.2.3.2.  InterestReturn Flags
 
@@ -658,7 +658,7 @@ RFC 8609                        CCNx TLV                        May 2019
 
    Hash values are used in several fields throughout a packet.  This TLV
    encoding is commonly embedded inside those fields to specify the
-   specific hash function used and it's value.  Note that the reserved
+   specific hash function used and its value.  Note that the reserved
    TLV types are also reserved here for user-defined experimental
    functions.
 
@@ -685,7 +685,7 @@ RFC 8609                        CCNx TLV                        May 2019
    still identify those fields and do a binary comparison of the hash
    TLV without need to understand the specific hash used.  An
    alternative approach, such as using T_KEYID_SHA512-256, would require
-   each router keep an up-to-date parser and supporting user-defined
+   each router keeps an up-to-date parser and supporting user-defined
    hash functions here would explode the parsing state-space.
 
    A CCNx entity MUST support the hash type T_SHA-256.  An entity MAY
@@ -2001,7 +2001,7 @@ RFC 8609                        CCNx TLV                        May 2019
 
 4.6.  Message Type Registry
 
-   IANA has creaed the "CCNx Message Types" registry and registered the
+   IANA has created the "CCNx Message Types" registry and registered the
    message segment types described below.
 
 

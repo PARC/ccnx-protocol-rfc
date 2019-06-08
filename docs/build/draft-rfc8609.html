@@ -706,7 +706,7 @@ address {
 <h1 id="rfc.section.3.2.3.1">
 <a href="#rfc.section.3.2.3.1">3.2.3.1.</a> <a href="#InterestReturnHopLimit" id="InterestReturnHopLimit">InterestReturn HopLimit</a>
 </h1>
-<p id="rfc.section.3.2.3.1.p.1">This is the original Interest's HopLimit, as received before decrement at the node senidng the Interest Return.</p>
+<p id="rfc.section.3.2.3.1.p.1">This is the original Interest's HopLimit, as received before decrement at the node sending the Interest Return.</p>
 <h1 id="rfc.section.3.2.3.2">
 <a href="#rfc.section.3.2.3.2">3.2.3.2.</a> <a href="#InterestReturnFlags" id="InterestReturnFlags">InterestReturn Flags</a>
 </h1>
@@ -806,9 +806,9 @@ address {
 <h1 id="rfc.section.3.3.3">
 <a href="#rfc.section.3.3.3">3.3.3.</a> <a href="#hash_format" id="hash_format">Hash Format</a>
 </h1>
-<p id="rfc.section.3.3.3.p.1">Hash values are used in several fields throughout a packet.  This TLV encoding is commonly embedded inside those fields to specify the specific hash function used and it's value.  Note that the reserved TLV types are also reserved here for user-defined experimental functions.</p>
+<p id="rfc.section.3.3.3.p.1">Hash values are used in several fields throughout a packet.  This TLV encoding is commonly embedded inside those fields to specify the specific hash function used and its value.  Note that the reserved TLV types are also reserved here for user-defined experimental functions.</p>
 <p id="rfc.section.3.3.3.p.2">The LENGTH field of the hash value MUST be less than or equal to the hash function length.  If the LENGTH is less than the full length, it is taken as the left LENGTH bytes of the hash function output.  Only specified truncations are allowed, not arbitrary truncations.</p>
-<p id="rfc.section.3.3.3.p.3">This nested format is used because it allows binary comparison of hash values for certain fields without a router needing to understand a new hash function.  For example, the KeyIdRestriction is bit-wise compared between an Interest's KeyIdRestriction field and a ContentObject's KeyId field.  This format means the outer field values do not change with differing hash functions so a router can still identify those fields and do a binary comparison of the hash TLV without need to understand the specific hash used.  An alternative approach, such as using T_KEYID_SHA512-256, would require each router keep an up-to-date parser and supporting user-defined hash functions here would explode the parsing state-space.</p>
+<p id="rfc.section.3.3.3.p.3">This nested format is used because it allows binary comparison of hash values for certain fields without a router needing to understand a new hash function.  For example, the KeyIdRestriction is bit-wise compared between an Interest's KeyIdRestriction field and a ContentObject's KeyId field.  This format means the outer field values do not change with differing hash functions so a router can still identify those fields and do a binary comparison of the hash TLV without need to understand the specific hash used.  An alternative approach, such as using T_KEYID_SHA512-256, would require each router keeps an up-to-date parser and supporting user-defined hash functions here would explode the parsing state-space.</p>
 <p id="rfc.section.3.3.3.p.4">A CCNx entity MUST support the hash type T_SHA-256. An entity MAY support the remaining hash types.</p>
 <div id="rfc.table.3"></div>
 <div id="hash_types"></div>
@@ -1932,7 +1932,7 @@ address {
 <h1 id="rfc.section.4.6">
 <a href="#rfc.section.4.6">4.6.</a> <a href="#IANA_MessageTypes" id="IANA_MessageTypes">Message Type Registry</a>
 </h1>
-<p id="rfc.section.4.6.p.1">IANA has creaed the "CCNx Message Types" registry and registered the message segment types described below.</p>
+<p id="rfc.section.4.6.p.1">IANA has created the "CCNx Message Types" registry and registered the message segment types described below.</p>
 <table cellpadding="3" cellspacing="0" class="tt full center">
 <caption>Registry Creation</caption>
 <thead><tr>

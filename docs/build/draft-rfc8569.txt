@@ -370,8 +370,8 @@ RFC 8569                     CCNx Semantics                   March 2019
    equal to the restriction.  The second is the Content-Object Hash
    restriction, which limits the response to one where the cryptographic
    hash of the entire named payload is equal to the restriction.
-   Section Section 9 fully explains how these restrictions limit
-   matching of a Content Object to an Interest.
+   Section 9 fully explains how these restrictions limit matching of a
+   Content Object to an Interest.
 
    The hierarchy of a CCNx name is used for routing via the longest
    matching prefix in a Forwarder.  The longest matching prefix is
@@ -793,7 +793,7 @@ RFC 8569                     CCNx Semantics                   March 2019
 
    When a publisher receives an Interest, it SHOULD:
 
-   o  Verify that the Interest is part of the publishers namespace(s).
+   o  Verify that the Interest is part of the publisher's namespace(s).
 
    o  If the Interest has a Validation section, verify it as per
       Section 8.  Usually an Interest will only have a CRC32C, unless
@@ -914,7 +914,7 @@ RFC 8569                     CCNx Semantics                   March 2019
    round-trip time.  Some previous aggregation rules assumed the
    lifetime was a round-trip time, but this leads to problems of
    expiring an Interest before a response comes if the RTT is estimated
-   too short or interfering with an Automatic Repeat ReQuest (ARQ)
+   too short or interfering with an Automatic Repeat reQuest (ARQ)
    scheme that wants to retransmit an Interest but a prior Interest
    overestimated the RTT.
 
@@ -1096,11 +1096,11 @@ RFC 8569                     CCNx Semantics                   March 2019
    It is not sensitive to the name-segment types.
 
    The name segment labels specified in this document are given in
-   Table Table 1.  Name Segment is a general name segment, typically
-   occurring in the routable prefix and user-specified content name.
-   Interest Payload ID is a name segment to identify the Interest's
-   payload.  Application Components are a set of name segment types
-   reserved for application use.
+   Table 1.  Name Segment is a general name segment, typically occurring
+   in the routable prefix and user-specified content name.  Interest
+   Payload ID is a name segment to identify the Interest's payload.
+   Application Components are a set of name segment types reserved for
+   application use.
 
 
 
@@ -1307,7 +1307,7 @@ RFC 8569                     CCNx Semantics                   March 2019
    section defines the type of algorithm to use and includes any
    necessary additional information.  The validation is calculated from
    the beginning of the CCNx Message through the end of the
-   ValidationAlgorithm section (i.e. upto but not including the
+   ValidationAlgorithm section (i.e. up to but not including the
    Validation Payload).  We refer to this as the validation region.  The
    ValidationPayload is the integrity value bytes, such as a MAC or
    signature.
@@ -1322,7 +1322,7 @@ RFC 8569                     CCNx Semantics                   March 2019
    The grammar allows multiple Vendor extension to the validation
    algorithm.  It is up to the vendor to describe the validation region
    for each extension.  A vendor may, for example, use a regular
-   signature in the validation algortihm then append a proprietary MIC
+   signature in the validation algorithm then append a proprietary MIC
    to allow for in-network error checking without using expensive
    signature verification.  As part of this standard, we do not allow
    for multiple Validation Algorithm blocks apart from these vendor
@@ -1369,7 +1369,7 @@ RFC 8569                     CCNx Semantics                   March 2019
 
    The KeyLink field in a MAC indicates how to negotiate keys and should
    point towards the key exchange endpoint.  The use of a key
-   negotiation algorthm is beyond the scope of this standard, and a key
+   negotiation algorithm is beyond the scope of this standard, and a key
    negotiation algorithm is not required to use this field.
 
 8.4.  Signature
@@ -1405,7 +1405,7 @@ RFC 8569                     CCNx Semantics                   March 2019
 
 
    KeyId to be a cryptographic hash of the public key in DER form.  All
-   implementaitons MUST support the SHA-256 digest as the KeyId hash.
+   implementations MUST support the SHA-256 digest as the KeyId hash.
 
    The use of other algorithms for the KeyId is allowed and it will not
    cause problems at a forwarder because the forwarder only matches the
@@ -1438,8 +1438,8 @@ RFC 8569                     CCNx Semantics                   March 2019
    Content Object's KeyId MUST equal the first object's KeyId.  The
    second object's PublicKey field MUST be the public key corresponding
    to the KeyId.  That key must validate both the first and second
-   object's signature.  A DER-encoded X.509 certificate may included in
-   the second object's payload and it's embedded public key MUST match
+   object's signature.  A DER-encoded X.509 certificate may be included
+   in the second object's payload and its embedded public key MUST match
    the PublicKey.  It must be issued by a trusted authority, preferably
    specifying the valid namespace of the key in the distinguished name.
    The second object MUST NOT have a KeyLink: we do not allow for

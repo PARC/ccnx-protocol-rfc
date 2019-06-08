@@ -4,8 +4,8 @@
 
 ICNRG                                                           M. Mosko
 Internet-Draft                                                      PARC
-Intended status: Experimental                               June 3, 2019
-Expires: December 5, 2019
+Intended status: Experimental                               June 7, 2019
+Expires: December 9, 2019
 
 
                     CCNx Publisher Serial Versioning
@@ -33,7 +33,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 5, 2019.
+   This Internet-Draft will expire on December 9, 2019.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Mosko                   Expires December 5, 2019                [Page 1]
+Mosko                   Expires December 9, 2019                [Page 1]
 
 Internet-Draft                  CCNx TLV                       June 2019
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Mosko                   Expires December 5, 2019                [Page 2]
+Mosko                   Expires December 9, 2019                [Page 2]
 
 Internet-Draft                  CCNx TLV                       June 2019
 
@@ -165,7 +165,7 @@ Internet-Draft                  CCNx TLV                       June 2019
 
 
 
-Mosko                   Expires December 5, 2019                [Page 3]
+Mosko                   Expires December 9, 2019                [Page 3]
 
 Internet-Draft                  CCNx TLV                       June 2019
 
@@ -221,4 +221,4 @@ Author's Address
 
 
 
-Mosko                   Expires December 5, 2019                [Page 4]
+Mosko                   Expires December 9, 2019                [Page 4]

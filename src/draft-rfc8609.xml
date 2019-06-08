@@ -490,7 +490,7 @@ directly in the file.
 
           <section anchor="InterestReturnHopLimit" title="InterestReturn HopLimit">
             <t>This is the original Interest's HopLimit, as received before decrement at the node
-                senidng the Interest Return.</t>
+                sending the Interest Return.</t>
           </section>
 
           <section anchor="InterestReturnFlags" title="InterestReturn Flags">
@@ -602,7 +602,7 @@ Perhaps:
 
     <section anchor="hash_format" title="Hash Format">
         <t>Hash values are used in several fields throughout a packet.  This TLV encoding is commonly embedded inside
-            those fields to specify the specific hash function used and it's value.  Note that the
+            those fields to specify the specific hash function used and its value.  Note that the
             reserved TLV types are also reserved here for user-defined experimental functions.</t>
 
         <t>The LENGTH field of the hash value MUST be less than or equal to the hash function length.  If the
@@ -614,7 +614,7 @@ Perhaps:
             means the outer field values do not change with differing hash functions so a router can still identify
             those fields and do a binary comparison of the hash TLV without need to understand the specific
             hash used.  An alternative approach, such as using T_KEYID_SHA512-256, would require each router
-            keep an up-to-date parser and supporting user-defined hash functions here would explode the
+            keeps an up-to-date parser and supporting user-defined hash functions here would explode the
             parsing state-space.</t>
 
         <t>A CCNx entity MUST support the hash type T_SHA-256. An entity MAY support
@@ -1892,7 +1892,7 @@ message".
     </section>
 
     <section anchor="IANA_MessageTypes" title="Message Type Registry">
-        <t>IANA has creaed the "CCNx Message Types" registry and registered
+        <t>IANA has created the "CCNx Message Types" registry and registered
 	the message segment types described below.</t>
 
       <texttable title="Registry Creation">
