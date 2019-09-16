@@ -754,13 +754,15 @@ reverse:  7 6 3 5 4 2 1
             </figure>
             
             <t>The Python-like pseudocode build_tree(data, n, k, m) algorithm creates a tree of n data objects.
+                The data[] array is an array of Content Objects that hold application payload; the application data
+                has already been packetized into n Content Object packets.
                 An interior manifest node has k direct pointers and m indirect pointers.
             </t>
             
             <figure>
                 <artwork align="left"><![CDATA[
 build_tree(data[0..n-1], n, k, m)
-    # data is the application data
+    # data is an array of Content Objects (Data in NDN) with application payload.
     # n is the number of data items
     # k is the number of direct pointers per internal node
     # m is the number of indirect pointers per internal node

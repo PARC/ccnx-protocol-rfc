@@ -5,10 +5,10 @@
 ICNRG                                                        C. Tschudin
 Internet-Draft                                       University of Basel
 Intended status: Experimental                                    C. Wood
-Expires: March 18, 2020                  University of California Irvine
+Expires: March 19, 2020                  University of California Irvine
                                                                 M. Mosko
                                                               PARC, Inc.
-                                                      September 15, 2019
+                                                      September 16, 2019
 
 
                     File-Like ICN Collections (FLIC)
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 18, 2020.
+   This Internet-Draft will expire on March 19, 2020.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Tschudin, et al.         Expires March 18, 2020                 [Page 1]
+Tschudin, et al.         Expires March 19, 2020                 [Page 1]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Tschudin, et al.         Expires March 18, 2020                 [Page 2]
+Tschudin, et al.         Expires March 19, 2020                 [Page 2]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -165,7 +165,7 @@ Internet-Draft                    FLIC                    September 2019
 
 
 
-Tschudin, et al.         Expires March 18, 2020                 [Page 3]
+Tschudin, et al.         Expires March 19, 2020                 [Page 3]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -221,7 +221,7 @@ Internet-Draft                    FLIC                    September 2019
 
 
 
-Tschudin, et al.         Expires March 18, 2020                 [Page 4]
+Tschudin, et al.         Expires March 19, 2020                 [Page 4]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -277,7 +277,7 @@ Internet-Draft                    FLIC                    September 2019
 
 
 
-Tschudin, et al.         Expires March 18, 2020                 [Page 5]
+Tschudin, et al.         Expires March 19, 2020                 [Page 5]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -333,7 +333,7 @@ Internet-Draft                    FLIC                    September 2019
 
 
 
-Tschudin, et al.         Expires March 18, 2020                 [Page 6]
+Tschudin, et al.         Expires March 19, 2020                 [Page 6]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -389,7 +389,7 @@ SegmentedPrefixSchema = TYPE LENGTH Name
 
 
 
-Tschudin, et al.         Expires March 18, 2020                 [Page 7]
+Tschudin, et al.         Expires March 19, 2020                 [Page 7]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -445,7 +445,7 @@ LocatorPrefix = TYPE LENGTH Link
 
 
 
-Tschudin, et al.         Expires March 18, 2020                 [Page 8]
+Tschudin, et al.         Expires March 19, 2020                 [Page 8]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -501,7 +501,7 @@ Internet-Draft                    FLIC                    September 2019
 
 
 
-Tschudin, et al.         Expires March 18, 2020                 [Page 9]
+Tschudin, et al.         Expires March 19, 2020                 [Page 9]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -557,7 +557,7 @@ Internet-Draft                    FLIC                    September 2019
 
 
 
-Tschudin, et al.         Expires March 18, 2020                [Page 10]
+Tschudin, et al.         Expires March 19, 2020                [Page 10]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -613,7 +613,7 @@ FailFlag: Indicates authenticated decryption failure (true or false)
 
 
 
-Tschudin, et al.         Expires March 18, 2020                [Page 11]
+Tschudin, et al.         Expires March 19, 2020                [Page 11]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -669,7 +669,7 @@ Internet-Draft                    FLIC                    September 2019
 
 
 
-Tschudin, et al.         Expires March 18, 2020                [Page 12]
+Tschudin, et al.         Expires March 19, 2020                [Page 12]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -725,7 +725,7 @@ Internet-Draft                    FLIC                    September 2019
 
 
 
-Tschudin, et al.         Expires March 18, 2020                [Page 13]
+Tschudin, et al.         Expires March 19, 2020                [Page 13]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -781,7 +781,7 @@ Payload : TYPE LENGTH *OCTET ; the serialized Manifest object
 
 
 
-Tschudin, et al.         Expires March 18, 2020                [Page 14]
+Tschudin, et al.         Expires March 19, 2020                [Page 14]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -837,7 +837,7 @@ Internet-Draft                    FLIC                    September 2019
 
 
 
-Tschudin, et al.         Expires March 18, 2020                [Page 15]
+Tschudin, et al.         Expires March 19, 2020                [Page 15]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -874,8 +874,10 @@ Internet-Draft                    FLIC                    September 2019
    reverse:  7 6 3 5 4 2 1
 
    The Python-like pseudocode build_tree(data, n, k, m) algorithm
-   creates a tree of n data objects.  An interior manifest node has k
-   direct pointers and m indirect pointers.
+   creates a tree of n data objects.  The data[] array is an array of
+   Content Objects that hold application payload; the application data
+   has already been packetized into n Content Object packets.  An
+   interior manifest node has k direct pointers and m indirect pointers.
 
 
 
@@ -891,15 +893,13 @@ Internet-Draft                    FLIC                    September 2019
 
 
 
-
-
-Tschudin, et al.         Expires March 18, 2020                [Page 16]
+Tschudin, et al.         Expires March 19, 2020                [Page 16]
 
 Internet-Draft                    FLIC                    September 2019
 
 
 build_tree(data[0..n-1], n, k, m)
-    # data is the application data
+    # data is an array of Content Objects (Data in NDN) with application payload.
     # n is the number of data items
     # k is the number of direct pointers per internal node
     # m is the number of indirect pointers per internal node
@@ -949,7 +949,7 @@ bottom_up_preorder(data, segment, level, k, m, right_most_child=None)
 
 
 
-Tschudin, et al.         Expires March 18, 2020                [Page 17]
+Tschudin, et al.         Expires March 19, 2020                [Page 17]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -1005,7 +1005,7 @@ interior_indirect(data, segment, level, k, m, children)
 
 
 
-Tschudin, et al.         Expires March 18, 2020                [Page 18]
+Tschudin, et al.         Expires March 19, 2020                [Page 18]
 
 Internet-Draft                    FLIC                    September 2019
 
@@ -1061,4 +1061,4 @@ Authors' Addresses
 
 
 
-Tschudin, et al.         Expires March 18, 2020                [Page 19]
+Tschudin, et al.         Expires March 19, 2020                [Page 19]
