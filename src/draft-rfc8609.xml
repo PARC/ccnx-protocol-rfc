@@ -45,7 +45,7 @@
 
        <phone>+01 650-812-4405</phone>
 
-       <email>marc.mosko@parc.com</email>
+       <email>mmosko@parc.com</email>
 
        <!-- uri and facsimile elements may also be added -->
      </address>
@@ -82,7 +82,7 @@
      </address>
     </author>
 
-    <date month="May" year="2019"/>
+    <date month="June" year="2019"/>
 
     <area>General</area>
 
@@ -143,15 +143,16 @@
  TLV.
        A CCNx Packet refers to the entire
        Layer 3 datagram as specified in <xref target="packet_format"/>.
-       A CCNx Message is defined in the <xref target="RFC8569">CCNx
+       A CCNx Message is the ABNF token defined in the <xref target="RFC8569">CCNx
        Semantics document</xref>.
        A CCNx Message TLV refers to the
-       encoding of a CCNx Message as specified in <xref target="CCNMessage"/>.</t>
+       encoding of a CCNx Message as specified in <xref target="CCNMessage"/>.
+    </t>
 
 
       <t>This document specifies: <list style="symbols">
-        <t>the TLV packet format,</t>
-        <t>the overall packet format for CCNx messages,</t>
+        <t>the CCNx Packet format,</t>
+        <t>the CCNx Message TLV format,</t>
         <t>the TLV types used by CCNx messages,</t>
         <t>the encoding of values for each type,</t>
         <t>top-level types that exist at the outermost containment,</t>
@@ -288,7 +289,7 @@
       </t>
 
         <section anchor="packet_format" title="Overall Packet Format">
-          <t>Each packet includes the 8-byte fixed header, described below, followed by a set of TLV fields. These fields are
+          <t>Each CCNx Packet includes the 8-byte fixed header, described below, followed by a set of TLV fields. These fields are
             optional hop-by-hop headers and the Packet Payload.
              </t>
 
@@ -308,15 +309,16 @@
 ]]></artwork>
       </figure>
 
-      <t>The PacketPayload of a CCNx packet is the protocol message itself. The
+      <t>The PacketPayload of a CCNx Packet is the protocol message itself. The
           Content Object Hash is computed over the PacketPayload only, excluding
           the fixed and hop-by-hop headers, as those might change from hop to hop.
           Signed information or similarity hashes should not include any
           of the fixed or hop-by-hop headers.
           The PacketPayload should be self-sufficient
           in the event that the fixed and hop-by-hop headers are removed.
+          See <xref target="MH">Message Hash</xref>.
       </t>
-       <t>Following the CCNx Message, the PacketPayload may include optional
+       <t>Following the CCNx Message TLV, the PacketPayload may include optional
        Validation TLVs.</t>
           <figure anchor="packet-payload-tlvs" title="PacketPayload TLVs">
             <artwork align="left"><![CDATA[
@@ -349,7 +351,13 @@
 <!-- [rfced] As previously discussed, please review the occurrences of "CCNx
 Message" and "CCNx message" and updated as needed.  In additon, please review
 the use of this term in RFC-to-be 8569 <draft-irtf-icnrg-ccnxsemantics> as
-well. 
+well.
+ 
+ MM: I went through all the "CCNx [Mm]essage" and "packet" and "protocol" usages
+ and believe they are all good now.  In some places, there are still unadorned "message"
+ or "messages" instances, which should be clear form the context what they refer to.  These
+ usually occur later in the same paragraph where "CCNx Message" or "CCNx Message TLV"
+ was used.
 
 From our earlier exchange: 
 > [MM] In some cases, the term "CCNx messages" (lower case plural) is not
@@ -382,9 +390,10 @@ From our earlier exchange:
 have the edited XML source file and be able to make any further updates
 directly in the file. 
 
+ MM: Done
 -->
 
-      <t>The ContentObjectHash begins with the CCNx Message TLV and ends at the tail of the packet.</t>
+      <t>The ContentObjectHash begins with the CCNx Message TLV and ends at the tail of the CCNx Packet.</t>
         </section>
 
          <section anchor="header" title="Fixed Headers">
@@ -402,11 +411,11 @@ directly in the file.
             </t>
 
           <t>The PacketType field indicates how the forwarder should process the packet.
-          A Request Packet (Interest) has PacketType PT_INTEREST, a Response (Content Object) has PacketType PT_CONTENT, and an InterestReturn has PacketType PT_RETURN.
+          A Request Packet (Interest) has PacketType PT_INTEREST, a Response (Content Object) has PacketType PT_CONTENT, and an Interest Return has PacketType PT_RETURN.
         </t>
 
         <t>HeaderLength is the number of octets from the
-          start of the packet (Version) to the end of the hop-by-hop headers. PacketLength is
+          start of the CCNx Packet (Version) to the end of the hop-by-hop headers. PacketLength is
           the number of octets from the start of the packet to the end of the packet.
          Both lengths have a minimum value of 8 (the fixed header itself).</t>
 
@@ -466,10 +475,10 @@ directly in the file.
 
         </section>
 
-        <section title="InterestReturn Fixed Header">
+        <section title="Interest Return Fixed Header">
             <t>If the PacketType is PT_RETURN, it indicates that the packet should be processed following
                 the Interest Return rules in Section 10 of <xref target="RFC8569"/>.
-            The only difference between this InterestReturn message and the original Interest is that the PacketType is changed
+            The only difference between this Interest Return message and the original Interest is that the PacketType is changed
             to PT_RETURN and a ReturnCode is put into the ReturnCode field.  All other
           fields are unchanged from the Interest packet.  The purpose of this encoding is to prevent packet
           length changes so no additional bytes are needed to return an Interest to
@@ -488,19 +497,20 @@ directly in the file.
           </figure>
 
 
-          <section anchor="InterestReturnHopLimit" title="InterestReturn HopLimit">
+          <section anchor="InterestReturnHopLimit" title="Interest Return HopLimit">
             <t>This is the original Interest's HopLimit, as received before decrement at the node
                 sending the Interest Return.</t>
           </section>
 
-          <section anchor="InterestReturnFlags" title="InterestReturn Flags">
+          <section anchor="InterestReturnFlags" title="Interest Return Flags">
             <t>These are the original Flags as set in the Interest.</t>
           </section>
 
           <section anchor="ReturnCode" title="Return Code">
-            <t>The return types are listed below; the numeric values assigned to the return types are
-	    listed in <xref target="IANA_InterestReturnCodes"/>.
-            This value is set by the node creating the Interest Return.</t>
+            <t>This section maps the Return Code name <xref target="RFC8569"/> to the
+                TLV symbolic name.  <xref target="IANA_InterestReturnCodes"/> maps the symbolic names
+                to numeric values.
+                This field is set by the node creating the Interest Return.</t>
 
             <t>A return code of "0" MUST NOT be used, as it indicates that the returning system
             did not modify the Return Code field.</t>
@@ -526,11 +536,30 @@ Perhaps:
 
    Type: T_RETURN_MALFORMED_INTEREST
    Return Type: Malformed Interest
+ 
+ MM: I tried it as a hanging table.  This solves the line break issue, but I think the
+ texttable looks better, especially in HTML.  I'm OK with the hanging list if the editors
+ prefer that style.
 -->
 
+<!--
+            <t>
+            <list style="hanging">
+                <t hangText="T_RETURN_NO_ROUTE:">No Route</t>
+                <t hangText="T_RETURN_LIMIT_EXCEEDED:">Hop Limit Exceeded</t>
+                <t hangText="T_RETURN_NO_RESOURCES:">No Resources</t>
+                <t hangText="T_RETURN_PATH_ERROR:">Path Error</t>
+                <t hangText="T_RETURN_PROHIBITED:">Prohibited</t>
+                <t hangText="T_RETURN_CONGESTED:">Congested</t>
+                <t hangText="T_RETURN_MTU_TOO_LARGE:">MTU too large</t>
+                <t hangText="T_RETURN_UNSUPPORTED_HASH_RESTRICTION:">Unsupported ContentObjectHashRestriction</t>
+                <t hangText="T_RETURN_MALFORMED_INTEREST:">Malformed Interest</t>
+            </list>
+            </t>
+-->
             <texttable anchor="ReturnCodeTable" title="Return Codes">
-              <ttcol align="center">Type</ttcol>
-              <ttcol align="left">Return Type</ttcol>
+              <ttcol align="center">Return Type</ttcol>
+              <ttcol align="left">RFC8569 Name</ttcol>
 
               <c>T_RETURN_NO_ROUTE</c> <c>No Route</c>
               <c>T_RETURN_LIMIT_EXCEEDED</c> <c>Hop Limit Exceeded</c>
@@ -542,10 +571,10 @@ Perhaps:
               <c>T_RETURN_UNSUPPORTED_HASH_RESTRICTION</c> <c>Unsupported ContentObjectHashRestriction</c>
               <c>T_RETURN_MALFORMED_INTEREST</c> <c>Malformed Interest</c>
             </texttable>
+
           </section>
         </section>
-
-         </section>
+</section>
 
 <section anchor="formats" title="Global Formats">
     <t>This section defines global formats that may be nested within other TLVs.</t>
@@ -559,7 +588,7 @@ Perhaps:
         </t>
 
         <t>One MUST NOT pad inside a Name.  Apart from that, a pad MAY be inserted after any other
-            TLV in the CCNx Message or in the Validation-Dependent Data
+            TLV in the CCNx Message TLV or in the ValidationAlgorithm TLV.
           In the remainder of this document, we will not show optional Pad TLVs.</t>
 
         <figure anchor="pad-encoding" title="Pad Encoding">
@@ -690,8 +719,7 @@ Perhaps:
 
             <c>T_MSGHASH</c>
             <c><xref target="MH">Message Hash</xref></c>
-            <c>The hash of the CCNx Message to end of packet using the format
-	    specified in <xref target="hash_format"></xref>.</c>
+            <c>A <xref target="hash_format">cryptographic hash</xref>.</c>
 
           </texttable>
         <t>
@@ -705,7 +733,7 @@ Perhaps:
               It is expressed in milliseconds as an unsigned
               integer in network byte order.</t>
 
-            <t>A value of 0 (encoded as 1 byte %x00) indicates the
+            <t>A value of 0 (encoded as 1 byte 0x00) indicates the
               Interest does not elicit a Content Object response.  It should still be
               forwarded, but no reply is expected and a forwarder could skip creating
               a PIT entry.</t>
@@ -766,6 +794,8 @@ Perhaps:
    SignatureTime is an unsigned integer in network byte order that indicates 
    when the signature was created (as the number of milliseconds since the
    epoch in UTC).
+ 
+ MM: We went with the suggested edits.
 -->
 
             <t>The Recommended Cache Time (a millisecond timestamp) is an unsigned 
@@ -795,7 +825,7 @@ a 64-bit field.
                 should remove the value.  This permits intermediate devices within that trusted domain
                 to match against a ContentObjectHashRestriction without calculating it at every hop.</t>
 
-            <t>The message hash is a cryptographic hash from the start of the CCNx Message to the end of
+            <t>The message hash is a cryptographic hash from the start of the CCNx Message TLV to the end of
                 the packet.  It is used to match against the <xref target="COH">ContentObjectHashRestriction</xref>.
                 The Message Hash may be of longer length than an Interest's restriction, in which case the
                 device should use the left bytes of the Message Hash to check against the Interest's value.</t>
@@ -824,7 +854,7 @@ a 64-bit field.
 
       <section anchor="top_level" title="Top-Level Types">
 
-        <t>The top-level TLV types listed below exist at the outermost level of a CCNx protocol message.</t>
+        <t>The top-level TLV types listed below exist at the outermost level of a CCNx Message TLV.</t>
 
         <texttable anchor="top_types" title="CCNx Top Level Types">
           <ttcol align="center">Abbrev</ttcol>
@@ -853,17 +883,17 @@ a 64-bit field.
 
 
 
-        <section anchor="CCNMessage" title="CCNx Message">
-          <t>This is the format for the CCNx protocol message itself. The CCNx message is the portion of the packet
+        <section anchor="CCNMessage" title="CCNx Message TLV">
+          <t>This is the format for the CCNx Message itself. The CCNx Message TLV is the portion of the CCNx Packet
             between the hop-by-hop headers and the Validation TLVs. The figure below is an expansion
             of the "CCNx Message TLV" depicted in the beginning of <xref target="TLV" />.
-            The CCNx message begins with MessageType and runs through the optional Payload.
+            The CCNx Message TLV begins with MessageType and runs through the optional Payload.
             The same general format is used for both Interest and
             Content Object messages which are differentiated by
-            the MessageType field. The first enclosed TLV of a CCNx Message is always the
+            the MessageType field. The first enclosed TLV of a CCNx Message TLV is always the
             Name TLV, if present.  This is followed by an optional Message TLVs and an optional Payload TLV.</t>
 
-          <figure anchor="ccnx-message-encoding" title="CCNx Message Encoding">
+          <figure anchor="ccnx-message-encoding" title="CCNx Message TLV Encoding">
             <artwork align="left"><![CDATA[
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -881,7 +911,7 @@ a 64-bit field.
           </figure>
 
 
-          <texttable anchor="CCNx_types" title="CCNx Message Types">
+          <texttable anchor="CCNx_types" title="CCNx Message TLV Types">
             <ttcol align="center">Abbrev</ttcol>
             <ttcol align="center">Name</ttcol>
             <ttcol align="left">Description</ttcol>
@@ -902,7 +932,7 @@ a 64-bit field.
 
               <t>As described in <xref target="RFC8569">CCNx Semantics</xref>, using the <xref target="CCNxURI">CCNx URI</xref>
                 notation, a T_NAME with zero length corresponds to "ccnx:/" (the default route).
-                The message grammar does not allow the first name segment to have zero length in a protocol message.
+                The message grammar does not allow the first name segment to have zero length in a CCNx Message TLV Name.
                 In the TLV encoding, "ccnx:/" corresponds to T_NAME with zero length.</t>
 
               <figure anchor="name-encoding" title="Name Encoding">
@@ -952,17 +982,17 @@ a 64-bit field.
                      1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+---------------+---------------+
-|            (T_NAME)           |           %x14 (20)           |
+|            (T_NAME)           |           0x14 (20)           |
 +---------------+---------------+---------------+---------------+
-|        (T_NAME_SEGMENT)       |           %x03 (3)            |
+|        (T_NAME_SEGMENT)       |           0x03 (3)            |
 +---------------+---------------+---------------+---------------+
 |       f                o               o      |(T_NAME_SEGMENT)
 +---------------+---------------+---------------+---------------+
-|               |            %x03 (3)           |       b       |
+|               |            0x03 (3)           |       b       |
 +---------------+---------------+---------------+---------------+
 |      a                r       |           (T_NAME_SEGMENT)    |
 +---------------+---------------+---------------+---------------+
-|           %x02 (2)            |       h       |       i       |
+|           0x02 (2)            |       h       |       i       |
 +---------------+---------------+---------------+---------------+
 ]]></artwork>
                   </figure>
@@ -1061,8 +1091,8 @@ As part of the Value of the TLV, the InterestPayloadID contains a one-octet
             <section anchor="COH" title="ContentObjectHashRestriction">
               <t>An Interest MAY contain a ContentObjectHashRestriction selector. This is
                 the hash of the Content Object -- the self-certifying name restriction that
-                must be verified in the network, if an Interest carried this restriction.
-                It is calculated from the beginning of the CCNx Message to the end of the packet.
+                must be verified in the network, if an Interest carried this restriction
+                (see <xref target="MH">Message Hash</xref>).
                 The LENGTH MUST be from one of the allowed values for that hash
                 (see <xref target="hash_format"></xref>).</t>
 
@@ -1199,10 +1229,10 @@ As part of the Value of the TLV, the InterestPayloadID contains a one-octet
         <section anchor="Validation" title="Validation">
 
           <t>Both Interests and Content Objects have the option to include information about how to
-            validate the CCNx message.
+            validate the CCNx Message.
             This information is contained in two TLVs: the
           ValidationAlgorithm TLV and the ValidationPayload TLV.
-          The ValidationAlgorithm TLV specifies the mechanism to be used to verify the CCNx message. Examples include verification with a
+          The ValidationAlgorithm TLV specifies the mechanism to be used to verify the CCNx Message. Examples include verification with a
           Message Integrity Check (MIC), a Message Authentication Code (MAC), or a cryptographic signature.
           The ValidationPayload TLV contains the validation output, such as the CRC32C code or the RSA signature.
           </t>
@@ -1271,14 +1301,15 @@ Further, consider whether any updates are needed to Table 10
    |               |    (Section    | SECP-384R1 parameters (see       |
    |               |   3.6.4.1.3)   | [ECC]).                          |
 
+ MM: Fixed
 -->
 
-              <c>EC-SECP-256K1</c>
+              <c>T_EC-SECP-256K1</c>
               <c><xref target="signature_val">SECP-256K1</xref></c>
               <c>Elliptic Curve signature with SECP-256K1 parameters
                 (see <xref target="ECC"></xref>).</c>
 
-              <c>EC-SECP-384R1</c>
+              <c>T_EC-SECP-384R1</c>
               <c><xref target="signature_val">SECP-384R1</xref></c>
               <c>Elliptic Curve signature with SECP-384R1 parameters
                 (see <xref target="ECC"></xref>).</c>
@@ -1352,8 +1383,8 @@ Further, consider whether any updates are needed to Table 10
                 It should be derived from the key used to sign, such as from the SHA-256 hash of the key.  It
                 applies to both public and private key systems and to symmetric key systems.</t>
 
-              <t>The KeyId is represented using the hash format in <xref target="hash_format"></xref>.  If a protocol uses a non-hash
-                identifier, it should use one of the reserved values.</t>
+              <t>The KeyId is represented using the hash format in <xref target="hash_format"></xref>.  If a application
+                  protocol uses a non-hash identifier, it should use one of the reserved values.</t>
 
               <figure anchor="keyid-encoding" title="KeyId Encoding">
                 <artwork align="left"><![CDATA[
@@ -1434,9 +1465,10 @@ The <xref target="KeyId">KeyId</xref> is derived from this encoding.</t>
                 with other associated signatures. The SignatureTime is unrelated to any time associated with the actual CCNx Message,
                 which could have been created long before the signature. The default behavior is to always include a SignatureTime when creating
                 an authenticated message (e.g., HMAC or RSA).</t>
-                <t>SignatureTime is an unsigned integer in network
-		byte order that is the number of milliseconds since the epoch
-                in UTC when the signature was created.  It is a fixed 64-bit field.</t>
+                
+                <t>SignatureTime is an unsigned integer in network byte order that indicates
+                    when the signature was created (as the number of milliseconds since the
+                    epoch in UTC).  It is a fixed 64-bit field.</t>
                 <figure anchor="sigtime-encoding" title="SignatureTime Encoding">
                   <artwork align="left"><![CDATA[
                      1                   2                   3
@@ -1540,7 +1572,7 @@ The <xref target="KeyId">KeyId</xref> is derived from this encoding.</t>
     <!-- Possibly a 'Contributors' section ... -->
 
     <section anchor="IANA" title="IANA Considerations">
-        <t>This section details each kind of protocol value that can be
+        <t>This section details each kind of CCNx protocol value that can be
             registered. Each type registry can be updated by incrementally
             expanding the type space, i.e., by allocating and reserving new types.
             As per <xref target="RFC8126"/>, this section details the creation of
@@ -1577,41 +1609,25 @@ Note: We suggest removing the following because each subsection lists the
 registration procedures:
    Each type registry can be updated
    by incrementally expanding the type space, i.e., by allocating and
-   reserving new types.  
+   reserving new types.
+ 
+ MM: I removed all the registry creation tables.  I added the introductory text that says
+ the IANA registry specifies the registration procedures and expert review level.  I added
+  a sentence to each table that spcifies the word size of the Type.
 -->
 
-      <texttable title="Registry Creation">
-        <ttcol align="left">Property</ttcol>
-        <ttcol align="left">Value</ttcol>
-
-        <c>Name</c>
-        <c>Content-Centric Networking (CCNx)</c>
-        <c>Abbrev</c>
-        <c>CCNx</c>
-
-      </texttable>
+    <t>
+    This document creates the "Content-Centric Networking (CCNx)" registry and
+    several subregistries per the guidelines set in <xref target="RFC8126"/>.
+    The IANA registries specify the registration procedures and level of expert review.
+    </t>
 
     <section anchor="IANA_PacketLevel" title="Packet Type Registry">
         <t> IANA has created the "CCNx Packet Types" registry and allocated
-	the packet types described below.  <!--A PacketType MUST be 1 byte.
+	the packet types described below.  The Type value is 1 octet.
+    <!--A PacketType MUST be 1 byte.
         New packet types are allocated via "RFC Required" action. --></t>
 
-      <texttable title="Registry Creation">
-        <ttcol align="left">Property</ttcol>
-        <ttcol align="left">Value</ttcol>
-
-        <c>Name</c>
-        <c>CCNx Packet Types</c>
-
-        <c>Parent</c>
-        <c>Content-Centric Networking (CCNx)</c>
-
-        <c>Review process</c>
-        <c>RFC Required</c>
-
-        <c>Syntax</c>
-        <c>1 octet</c>
-      </texttable>
 
 <!-- [rfced] Throughout, should the percent sign be replaced with "0" to match
 what appears in the IANA registries?
@@ -1621,6 +1637,8 @@ For example:
 
 IANA: 
    0x00 PT_INTEREST [RFC-irtf-icnrg-ccnxmessages-09, Section 3.2]
+ 
+ MM: All hex values (in this section and in the main text) are now 0x prefix.
 -->
 
         <texttable title="Packet Types">
@@ -1628,15 +1646,15 @@ IANA:
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x00</c>
+          <c>0x00</c>
           <c>PT_INTEREST</c>
           <c><xref target="header">Fixed Header Types</xref></c>
 
-          <c>%x01</c>
+          <c>0x01</c>
           <c>PT_CONTENT</c>
           <c><xref target="header">Fixed Header Types</xref></c>
 
-          <c>%x02</c>
+          <c>0x02</c>
           <c>PT_RETURN</c>
           <c><xref target="header">Fixed Header Types</xref></c>
       </texttable>
@@ -1644,7 +1662,7 @@ IANA:
 
     <section anchor="IANA_InterestReturnCodes" title="Interest Return Code Registry">
         <t>IANA has created the "CCNx InterestReturn Code Types" registry and
-	allocated the InterestReturn code types described below.</t>
+	allocated the Interest Return code types described below.  The Type value is 1 octet.</t>
 <!-- [rfced] Should the name of the registry be "CCNx InterestReturn Code
 Types" or "CCNx Interest Return Code Types" (i.e., should there be a space
 between Interest and Return)?  
@@ -1665,66 +1683,52 @@ Please consider whether updates are needed throughout the text, as we see
 instances of both, for example, "InterestReturn message" and "Interest Return
 message".  
 
+ MM: Interest Return should follow the same conventions as Content Object: two words.
+ I updated this throughout the document.  The IANA table (https://www.iana.org/assignments/ccnx/ccnx.xhtml#ccnx-interestreturn-code-types)
+ should be updated to match.
 -->
-      <texttable title="Registry Creation">
-        <ttcol align="left">Property</ttcol>
-        <ttcol align="left">Value</ttcol>
-
-        <c>Name</c>
-        <c>CCNx InterestReturn Code Types</c>
-
-        <c>Parent</c>
-        <c>Content-Centric Networking (CCNx)</c>
-
-        <c>Review process</c>
-        <c>Specification Required</c>
-
-        <c>Syntax</c>
-        <c>1 octet</c>
-      </texttable>
-
         <texttable title="CCNx Interest Return Types">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x00</c>
+          <c>0x00</c>
           <c>Reserved</c>
           <c></c>
 
-          <c>%x01</c>
+          <c>0x01</c>
           <c>T_RETURN_NO_ROUTE</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x02</c>
+          <c>0x02</c>
           <c>T_RETURN_LIMIT_EXCEEDED</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x03</c>
+          <c>0x03</c>
           <c>T_RETURN_NO_RESOURCES</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x04</c>
+          <c>0x04</c>
           <c>T_RETURN_PATH_ERROR</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x05</c>
+          <c>0x05</c>
           <c>T_RETURN_PROHIBITED</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x06</c>
+          <c>0x06</c>
           <c>T_RETURN_CONGESTED</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x07</c>
+          <c>0x07</c>
           <c>T_RETURN_MTU_TOO_LARGE</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x08</c>
+          <c>0x08</c>
           <c>T_RETURN_UNSUPPORTED_HASH_RESTRICTION</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
 
-          <c>%x09</c>
+          <c>0x09</c>
           <c>T_RETURN_MALFORMED_INTEREST</c>
           <c><xref target="ReturnCode">Fixed Header Types</xref></c>
       </texttable>
@@ -1732,59 +1736,42 @@ message".
 
     <section anchor="IANA_HopByHop" title="Hop-by-Hop Type Registry">
         <t>IANA has created the "CCNx Hop-by-Hop Types" registry and allocated
-	the hop-by-hop types described below.</t>
-
-      <texttable title="Registry Creation">
-        <ttcol align="left">Property</ttcol>
-        <ttcol align="left">Value</ttcol>
-
-        <c>Name</c>
-        <c>CCNx Hop-by-Hop Types</c>
-
-        <c>Parent</c>
-        <c>Content-Centric Networking (CCNx)</c>
-
-        <c>Review process</c>
-        <c>RFC Required</c>
-
-        <c>Syntax</c>
-        <c>2-octet TLV type</c>
-      </texttable>
+	the hop-by-hop types described below.  The Type value is 2 octets.</t>
 
         <texttable title="CCNx Hop-by-Hop Types">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0000</c>
+          <c>0x0000</c>
           <c>Reserved</c>
           <c></c>
           
-          <c>%x0001</c>
+          <c>0x0001</c>
           <c>T_INTLIFE</c>
           <c><xref target="per-hop">Hop-by-hop TLV headers</xref></c>
 
-          <c>%x0002</c>
+          <c>0x0002</c>
           <c>T_CACHETIME</c>
           <c><xref target="per-hop">Hop-by-hop TLV headers</xref></c>
 
-          <c>%x0003</c>
+          <c>0x0003</c>
           <c>T_MSGHASH</c>
           <c><xref target="per-hop">Hop-by-hop TLV headers</xref></c>
 
-          <c>%x0004 - %x0007</c>
+          <c>0x0004 - 0x0007</c>
           <c>Reserved</c>
           <c></c>
 
-          <c>%x0FFE</c>
+          <c>0x0FFE</c>
           <c>T_PAD</c>
           <c><xref target="pad">Pad</xref></c>
 
-          <c>%x0FFF</c>
+          <c>0x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
 
-          <c>%x1000-%x1FFF</c>
+          <c>0x1000-0x1FFF</c>
           <c>Reserved</c>
           <c><xref target="TLV">Experimental Use</xref></c>
       </texttable>
@@ -1792,48 +1779,30 @@ message".
 
       <section anchor="IANA_TopLevel" title="Top-Level Type Registry">
         <t>IANA has created the "CCNx Top-Level Types" registry and allocated
-	the top-level types described below.</t> 
-
-        <texttable title="Registry Creation">
-          <ttcol align="left">Property</ttcol>
-          <ttcol align="left">Value</ttcol>
-
-          <c>Name</c>
-          <c>CCNx Top-Level Types</c>
-
-          <c>Parent</c>
-          <c>Content-Centric Networking (CCNx)</c>
-
-          <c>Review process</c>
-          <c>RFC Required</c>
-
-          <c>Syntax</c>
-          <c>2-octet TLV type</c>
-        </texttable>
-
+	the top-level types described below.  The Type value is 2 octets.</t>
 
         <texttable title="CCNx Top-Level Types">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0000</c>
+          <c>0x0000</c>
           <c>Reserved</c>
           <c></c>
           
-          <c>%x0001</c>
+          <c>0x0001</c>
           <c>T_INTEREST</c>
           <c><xref target="top_level">Top-Level Types</xref></c>
 
-          <c>%x0002</c>
+          <c>0x0002</c>
           <c>T_OBJECT</c>
           <c><xref target="top_level">Top-Level Types</xref></c>
 
-          <c>%x0003</c>
+          <c>0x0003</c>
           <c>T_VALIDATION_ALG</c>
           <c><xref target="top_level">Top-Level Types</xref></c>
 
-          <c>%x0004</c>
+          <c>0x0004</c>
           <c>T_VALIDATION_PAYLOAD</c>
           <c><xref target="top_level">Top-Level Types</xref></c>
         </texttable>
@@ -1841,51 +1810,34 @@ message".
 
       <section anchor="IANA_NameSegment" title="Name Segment Type Registry">
         <t>IANA has created the "CCNx Name Segment Types" registry and allocated
-	the name segment types described below.</t>
-
-        <texttable title="Registry Creation">
-          <ttcol align="left">Property</ttcol>
-          <ttcol align="left">Value</ttcol>
-
-          <c>Name</c>
-          <c>CCNx Name Segment Types</c>
-
-          <c>Parent</c>
-          <c>Content-Centric Networking (CCNx)</c>
-
-          <c>Review process</c>
-          <c>Specification Required</c>
-
-          <c>Syntax</c>
-          <c>2-octet TLV type</c>
-        </texttable>
+	the name segment types described below.  The Type value is 2 octets.</t>
 
         <texttable title="CCNx Name Segment Types">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0000</c>
+          <c>0x0000</c>
           <c>Reserved</c>
           <c></c>
           
-          <c>%x0001</c>
+          <c>0x0001</c>
           <c>T_NAMESEGMENT</c>
           <c><xref target="names">Name</xref></c>
 
-          <c>%x0002</c>
+          <c>0x0002</c>
           <c>T_IPID</c>
           <c><xref target="names">Name</xref></c>
 
-          <c>%x0010 - %x0013</c>
+          <c>0x0010 - 0x0013</c>
           <c>Reserved</c>
-          <c>Used in other documents</c>
+          <c>RFC 8609</c>
 
-          <c>%x0FFF</c>
+          <c>0x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
 
-          <c>%x1000 - %x1FFF</c>
+          <c>0x1000 - 0x1FFF</c>
           <c>T_APP:00 - T_APP:4096</c>
           <c><xref target="names">Application Components</xref></c>
       </texttable>
@@ -1893,66 +1845,49 @@ message".
 
     <section anchor="IANA_MessageTypes" title="Message Type Registry">
         <t>IANA has created the "CCNx Message Types" registry and registered
-	the message segment types described below.</t>
-
-      <texttable title="Registry Creation">
-        <ttcol align="left">Property</ttcol>
-        <ttcol align="left">Value</ttcol>
-
-        <c>Name</c>
-        <c>CCNx Message Types</c>
-
-        <c>Parent</c>
-        <c>Content-Centric Networking (CCNx)</c>
-
-        <c>Review process</c>
-        <c>RFC Required</c>
-
-        <c>Syntax</c>
-        <c>2-octet TLV type</c>
-      </texttable>
+	the message segment types described below.  The Type value is 2 octets.</t>
 
         <texttable title="CCNx Message Types">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0000</c>
+          <c>0x0000</c>
           <c>T_NAME</c>
           <c><xref target="CCNMessage">Message Types</xref></c>
 
-          <c>%x0001</c>
+          <c>0x0001</c>
           <c>T_PAYLOAD</c>
           <c><xref target="CCNMessage">Message Types</xref></c>
 
-          <c>%x0002</c>
+          <c>0x0002</c>
           <c>T_KEYIDRESTR</c>
           <c><xref target="CCNMessage">Message Types</xref></c>
 
-          <c>%x0003</c>
+          <c>0x0003</c>
           <c>T_OBJHASHRESTR</c>
           <c><xref target="CCNMessage">Message Types</xref></c>
 
-          <c>%x0005</c>
+          <c>0x0005</c>
           <c>T_PAYLDTYPE</c>
           <c><xref target="COmetadata">Content Object Message Types</xref></c>
 
-          <c>%x0006</c>
+          <c>0x0006</c>
           <c>T_EXPIRY</c>
           <c><xref target="COmetadata">Content Object Message Types</xref></c>
-          <c>%x0007 - %x000C</c>
+          <c>0x0007 - 0x000C</c>
           <c>Reserved</c>
-          <c>Used in other documents</c>
+          <c>RFC 8609</c>
 
-          <c>%x0FFE</c>
+          <c>0x0FFE</c>
           <c>T_PAD</c>
           <c><xref target="pad">Pad</xref></c>
 
-          <c>%x0FFF</c>
+          <c>0x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
 
-          <c>%x1000-%x1FFF</c>
+          <c>0x1000-0x1FFF</c>
           <c>Reserved</c>
           <c><xref target="TLV">Experimental Use</xref></c>
       </texttable>
@@ -1960,40 +1895,22 @@ message".
 
     <section anchor="IANA_PayloadType" title="Payload Type Registry">
         <t>IANA has created the "CCNx Payload Types" registry and allocated
-	the payload types described below.</t> 
-
-      <texttable title="Registry Creation">
-        <ttcol align="left">Property</ttcol>
-        <ttcol align="left">Value</ttcol>
-
-        <c>Name</c>
-        <c>CCNx Payload Types</c>
-
-        <c>Parent</c>
-        <c>Content-Centric Networking (CCNx)</c>
-
-        <c>Review process</c>
-        <c>Specification Required</c>
-
-        <c>Syntax</c>
-        <c>Variable-length unsigned integer</c>
-      </texttable>
-
+	the payload types described below.   The Type value is 1 octet.</t>
 
         <texttable title="CCNx Payload Types">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x00</c>
+          <c>0x00</c>
           <c>T_PAYLOADTYPE_DATA</c>
           <c><xref target="payload_type">Payload Types</xref></c>
 
-          <c>%x01</c>
+          <c>0x01</c>
           <c>T_PAYLOADTYPE_KEY</c>
           <c><xref target="payload_type">Payload Types</xref></c>
 
-          <c>%x02</c>
+          <c>0x02</c>
           <c>T_PAYLOADTYPE_LINK</c>
           <c><xref target="payload_type">Payload Types</xref></c>
       </texttable>
@@ -2001,33 +1918,16 @@ message".
 
     <section anchor="IANA_ValidationAlgorithm" title="Validation Algorithm Type Registry">
         <t>IANA has created the "CCNx Validation Algorithm Types" registry and
-	allocated the validation algorithm types described below. 
+	allocated the validation algorithm types described below.   The Type value is 2 octets.
 <!--   Note: registration requires public specification of the algorithm. -->
 </t>
-
-      <texttable title="Registry Creation">
-        <ttcol align="left">Property</ttcol>
-        <ttcol align="left">Value</ttcol>
-
-        <c>Name</c>
-        <c>CCNx Validation Algorithm Types</c>
-
-        <c>Parent</c>
-        <c>Content-Centric Networking (CCNx)</c>
-
-        <c>Review process</c>
-        <c>Specification Required</c>
-
-        <c>Syntax</c>
-        <c>2-octet TLV type</c>
-      </texttable>
 
         <texttable title="CCNx Validation Algorithm Types">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0000</c>
+          <c>0x0000</c>
           <c>Reserved</c>
           <c></c>
 
@@ -2035,45 +1935,46 @@ message".
 values in the registration tables because they were not listed consistently
 for all of the tables and they seem unnecesary (i.e., the table will be out of
 date once a value is assigned).  Please let us know any concerns and/or
-corrections.  
+corrections.
+ MM: This is OK
 -->
-<!--          <c>%x0001</c>
+<!--          <c>0x0001</c>
           <c>Unassigned</c>
           <c></c> -->
 
-          <c>%x0002</c>
+          <c>0x0002</c>
           <c>T_CRC32C</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
-<!--      <c>%x0003</c>
+<!--      <c>0x0003</c>
           <c>Unassigned</c> 
           <c></c>-->
           
-          <c>%x0004</c>
+          <c>0x0004</c>
           <c>T_HMAC-SHA256</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
-          <c>%x0005</c>
+          <c>0x0005</c>
           <c>T_RSA-SHA256</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
-          <c>%x0006</c>
+          <c>0x0006</c>
           <c>T_EC-SECP-256K1</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
-          <c>%x0007</c>
+          <c>0x0007</c>
           <c>T_EC-SECP-384R1</c>
           <c><xref target="ValAlg">Validation Algorithm</xref></c>
 
-          <c>%x0FFE</c>
+          <c>0x0FFE</c>
           <c>T_PAD</c>
           <c><xref target="pad">Pad</xref></c>
 
-          <c>%x0FFF</c>
+          <c>0x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
 
-          <c>%x1000-%x1FFF</c>
+          <c>0x1000-0x1FFF</c>
           <c>Reserved</c>
           <c><xref target="TLV">Experimental Use</xref></c>
       </texttable>
@@ -2081,71 +1982,55 @@ corrections.
 
     <section anchor="IANA_ValidationDD" title="Validation-Dependent Data Type Registry">
         <t>IANA has created the "CCNx Validation-Dependent Data Types"
-	registry and allocated the validation-dependent data types described below.</t>
-
-      <texttable title="Registry Creation">
-        <ttcol align="left">Property</ttcol>
-        <ttcol align="left">Value</ttcol>
-
-        <c>Name</c>
-        <c>CCNx Validation-Dependent Data Types</c>
-
-        <c>Parent</c>
-        <c>Content-Centric Networking (CCNx)</c>
-
-        <c>Review process</c>
-        <c>RFC Required</c>
-
-        <c>Syntax</c>
-        <c>2-octet TLV type</c>
-      </texttable>
+	registry and allocated the validation-dependent data types described below.
+          The Type value is 2 octets.</t>
 
         <texttable title="CCNx Validation-Dependent Data Types">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0000</c>
+          <c>0x0000</c>
           <c>Reserved</c>
           <c></c>
           
-<!--           <c>%x0001 - %x0008</c>
+<!--           <c>0x0001 - 0x0008</c>
           <c>Unassigned</c>
           <c></c>-->
           
-          <c>%x0009</c>
+          <c>0x0009</c>
           <c>T_KEYID</c>
           <c><xref target="vdd">Validation-Dependent Data</xref></c>
 
-          <c>%x000A</c>
+          <c>0x000A</c>
           <c>T_PUBLICKEYLOC</c>
           <c><xref target="vdd">Validation-Dependent Data</xref></c>
 
-          <c>%x000B</c>
+          <c>0x000B</c>
           <c>T_PUBLICKEY</c>
           <c><xref target="vdd">Validation-Dependent Data</xref></c>
 
-          <c>%x000C</c>
+          <c>0x000C</c>
           <c>T_CERT</c>
           <c><xref target="vdd">Validation-Dependent Data</xref></c>
 
-          <c>%x000D</c>
+          <c>0x000D</c>
           <c>T_LINK</c>
           <c><xref target="vdd">Validation-Dependent Data</xref></c>
 
-          <c>%x000E</c>
+          <c>0x000E</c>
           <c>T_KEYLINK</c>
           <c><xref target="vdd">Validation-Dependent Data</xref></c>
 
-          <c>%x000F</c>
+          <c>0x000F</c>
           <c>T_SIGTIME</c>
           <c><xref target="vdd">Validation-Dependent Data</xref></c>
 
-          <c>%x0FFF</c>
+          <c>0x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
 
-          <c>%x1000-%x1FFF</c>
+          <c>0x1000-0x1FFF</c>
           <c>Reserved</c>
           <c><xref target="TLV">Experimental Use</xref></c>
       </texttable>
@@ -2153,51 +2038,33 @@ corrections.
 
     <section anchor="IANA_HashFunctions" title="Hash Function Type Registry">
         <t>IANA has created the "CCNx Hash Function Types" registry and
-	allocated the hash function types described below. 
+	allocated the hash function types described below.  The Type value is 2 octets.
 <!--        Note: registration requires public specification of the
 algorithm. -->
 </t>
-
-
-      <texttable title="Registry Creation">
-        <ttcol align="left">Property</ttcol>
-        <ttcol align="left">Value</ttcol>
-
-        <c>Name</c>
-        <c>CCNx Hash Function Types</c>
-
-        <c>Parent</c>
-        <c>Content-Centric Networking (CCNx)</c>
-
-        <c>Review process</c>
-        <c>Specification Required</c>
-
-        <c>Syntax</c>
-        <c>2-octet TLV type</c>
-      </texttable>
 
         <texttable title="CCNx Hash Function Types">
           <ttcol align="center">Type</ttcol>
           <ttcol align="center">Name</ttcol>
           <ttcol align="center">Reference</ttcol>
 
-          <c>%x0000</c>
+          <c>0x0000</c>
           <c>Reserved</c>
           <c></c>
           
-          <c>%x0001</c>
+          <c>0x0001</c>
           <c>T_SHA-256</c>
           <c><xref target="hash_format">Hash Format</xref></c>
 
-          <c>%x0002</c>
+          <c>0x0002</c>
           <c>T_SHA-512</c>
           <c><xref target="hash_format">Hash Format</xref></c>
 
-          <c>%x0FFF</c>
+          <c>0x0FFF</c>
           <c>T_ORG</c>
           <c><xref target="vendor">Organization-Specific TLVs</xref></c>
 
-          <c>%x1000-%x1FFF</c>
+          <c>0x1000-0x1FFF</c>
           <c>Reserved</c>
           <c><xref target="TLV">Experimental Use</xref></c>
       </texttable>
@@ -2214,7 +2081,7 @@ algorithm. -->
 		high-layer protocol (e.g., Encrypted Sessions in CCNx <xref target="esic"/>).</t>
 		
 		<t>
-        The CCNx message format includes the ability to attach MICs (e.g., SHA-256 or CRC), MACs (e.g., HMAC), 
+        The CCNx Packet format includes the ability to attach MICs (e.g., SHA-256 or CRC), MACs (e.g., HMAC),
         and Signatures (e.g., RSA or ECDSA) to
         all packet types.  
 
@@ -2265,7 +2132,7 @@ algorithm. -->
 		encodings of types and lengths.  Some TLV encodings use variable-length T and variable-length L fields to accommodate
 		a wide gamut of values while trying to be byte efficient.  Our TLV encoding uses a fixed length 2-byte T and
 		2-byte L.  Using fixed-length T and L fields solves two problems.  The first is aliases.  If one is able
-		to encode the same value, such as %x02 and %x0002, in different byte lengths, then one must decide if they
+		to encode the same value, such as 0x02 and 0x0002, in different byte lengths, then one must decide if they
 		mean the same thing, if they are different, or if one is illegal.  If they are different, then one must
 		always compare on the buffers not the integer equivalents.  If one is illegal, then one must validate the
 		TLV encoding -- every field of every packet at every hop.  If they are the same, then one has the
@@ -2295,7 +2162,9 @@ Original:
    are three types of access to content from a content store:
    unrestricted, signature restricted, and hash restricted.  If an
    Interest has no restrictions, ...  In the hash restricted case, ... In the
-   signature verified case (often used for initial manifest discovery), ... 
+   signature verified case (often used for initial manifest discovery), ...
+ 
+ MM: I think the text is OK as it is here
 -->
 
         There are three types of access
@@ -2303,7 +2172,8 @@ Original:
       	If an Interest has no restrictions, then the requester is not particular about what they get
       	back, so any matching cached object is OK.  In the hash restricted case, the requester
       	is very specific about what they want, and the Content Store (and every forward hop) can
-      	easily verify that the content matches the request. In the case of signature restricted
+      	easily verify that the content matches the request. In the signature
+	restricted case
       	(which is often used for initial manifest discovery), the requester only knows the KeyId that signed
       	the content.  This case requires the closest attention in the Content Store to avoid
       	amplifying bad data.  The Content Store must only respond with a content object if it can
@@ -2392,7 +2262,7 @@ Original:
             <organization>University of California, Irvine</organization>
           </author>
 
-          <date month="May" year="2019"/>
+          <date month="June" year="2019"/>
         </front>
 	<seriesInfo name="RFC" value="8569"/>
         <seriesInfo name="DOI" value="10.17487/RFC8569"/>

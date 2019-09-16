@@ -1,0 +1,404 @@
+[1mdiff --git a/src/draft-rfc8569.xml b/src/draft-rfc8569.xml[m
+[1mindex 89416eb..f1fd907 100644[m
+[1m--- a/src/draft-rfc8569.xml[m
+[1m+++ b/src/draft-rfc8569.xml[m
+[36m@@ -6,6 +6,7 @@[m
+   <!ENTITY RFC3986 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml">[m
+   <!ENTITY RFC5226 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5226.xml">[m
+   <!ENTITY RFC5234 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml">[m
+[32m+[m[32m  <!ENTITY RFC5280 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5280.xml">[m
+   ]>[m
+ <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>[m
+ <?rfc strict="yes" ?>[m
+[36m@@ -391,7 +392,7 @@[m [mOriginal:[m
+            In addition to digital signatures (e.g., RSA), CCNx also[m
+            supports message authentication codes (e.g., Hashed Message[m
+            Authentication Code (HMAC)) and message integrity codes[m
+[31m-           (e.g., SHA-256 or Cyclic Redundancy Checks (CRC)).  To[m
+[32m+[m[32m           (e.g., Cyclic Redundancy Checks (CRC)).  To[m
+            maintain the cryptographic binding, there should be at[m
+            least one object with a signature or authentication code,[m
+            but not all objects require it.  For example, a first[m
+[36m@@ -604,6 +605,11 @@[m [mThe CCNx message ABNF [RFC5234] grammar is shown in Figure 1[m
+             This is a recommendation to caches (see <xref[m
+             target="cachecontrol"/>).[m
+             </t>[m
+[32m+[m[32m            <t hangText="Cert:">Some applications may wish to embed an X.509 certificate[m
+[32m+[m[32m                to both validate the signature and provide a trust anchor.[m
+[32m+[m[32m                The Cert is a DER encoded X.509 certificate.[m
+[32m+[m[32m            </t>[m
+[32m+[m
+             <t hangText="ConObjField:">These are optional fields that may appear[m
+             in a Content Object.[m
+             </t>[m
+[36m@@ -638,10 +644,8 @@[m [mThe CCNx message ABNF [RFC5234] grammar is shown in Figure 1[m
+             appear in an Interest message.[m
+             </t>[m
+ 	    <t hangText="KeyId:">An identifier for the key used in the[m
+[31m-            ValidationAlg.  For public key systems, this should be the[m
+[31m-            SHA-256 hash of the public key.  For symmetric key[m
+[31m-            systems, it should be an identifier agreed upon by the[m
+[31m-            parties.[m
+[32m+[m[32m            ValidationAlg.  See <xref target="signature">Validation</xref>[m
+[32m+[m[32m            for a description of how it is used for MACs and signatures.[m
+             </t>[m
+             <t hangText="KeyIdRestr:">The KeyId Restriction.  A Content Object[m
+             must have a KeyId with the same value as the restriction.[m
+[36m@@ -649,8 +653,7 @@[m [mThe CCNx message ABNF [RFC5234] grammar is shown in Figure 1[m
+          [m
+             <t hangText="KeyLink:">A Link (see <xref target="link"/>) that names[m
+             how to retrieve the key used to verify the[m
+[31m-            ValidationPayload.  A message SHOULD NOT have both a[m
+[31m-            KeyLink and a PublicKey.[m
+[32m+[m[32m            ValidationPayload (see <xref target="signature"/>).[m
+             </t>[m
+             <t hangText="Lifetime:">The approximate time during which a requester[m
+             is willing to wait for a response, usually measured in[m
+[36m@@ -683,8 +686,7 @@[m [mThe CCNx message ABNF [RFC5234] grammar is shown in Figure 1[m
+             </t>[m
+             <t hangText="PublicKey:">Some applications may wish to embed the[m
+             public key used to verify the signature within the message[m
+[31m-            itself.  The PublickKey is DER encoded.  A message SHOULD[m
+[31m-            NOT have both a KeyLink and a PublicKey.[m
+[32m+[m[32m            itself.  The PublickKey is DER encoded.[m
+             </t>[m
+             <t hangText="RelTime:">A relative time, measured in milliseconds.[m
+             </t>[m
+[36m@@ -693,7 +695,8 @@[m [mThe CCNx message ABNF [RFC5234] grammar is shown in Figure 1[m
+             target="TypeDefinitions"/>).[m
+             </t>[m
+             <t hangText="SigTime:">The absolute time (UTC milliseconds) when the[m
+[31m-            signature was generated.[m
+[32m+[m[32m                signature was generated. The signature time only applies to the validation[m
+[32m+[m[32m                algorithm, it does not necessarily represent when the validated message was created.[m
+             </t>[m
+             <t hangText="Vendor:">Vendor-specific opaque data.  The Vendor data[m
+             includes the <xref target="eprise-numbers">IANA Private[m
+[36m@@ -722,9 +725,12 @@[m [mName          = FirstSegment *Segment[m
+ FirstSegment  = 1*OCTET / Vendor[m
+ Segment       = 0*OCTET / Vendor[m
+ [m
+[31m-ValidationAlg = (RSA-SHA256 / HMAC-SHA256 / CRC32C) *Vendor[m
+[32m+[m[32mValidationAlg = (RSA-SHA256 / EC-SECP-256K1 / EC-SECP-384R1 / HMAC-SHA256 / CRC32C) *Vendor[m
+ ValidatonPayload = 1*OCTET[m
+[31m-RSA-SHA256    = KeyId [SigTime] [KeyLink] [PublicKey] [Cert][m
+[32m+[m[32mPublicAlg     = KeyId [SigTime] [KeyLink] [PublicKey] [Cert][m
+[32m+[m[32mRSA-SHA256    = PublicAlg[m
+[32m+[m[32mEC-SECP-256K1 = PublicAlg[m
+[32m+[m[32mEC-SECP-384R1 = PublicAlg[m
+ HMAC-SHA256   = KeyId [SigTime] [KeyLink][m
+ CRC32C        = [SigTime][m
+ [m
+[36m@@ -738,8 +744,8 @@[m [mHash          = HashType 1*OCTET[m
+ HashType      = 2OCTET ; IANA CCNx Hash Function Types[m
+ HopLimit      = OCTET[m
+ InterestField = KeyIdRestr / ContentObjectHashRestr[m
+[31m-KeyId         = 1*OCTET[m
+[31m-KeyIdRestr    = 1*OCTET[m
+[32m+[m[32mKeyId         = Hash[m
+[32m+[m[32mKeyIdRestr    = Hash[m
+ KeyLink       = Link[m
+ Lifetime      = RelTime[m
+ Link          = Name [KeyIdRestr] [ContentObjectHashRestr][m
+[36m@@ -879,7 +885,8 @@[m [mOriginal:[m
+                 as per <xref target="matching"/>.[m
+             </t>[m
+             <t>If the Content Object is signed, the consumer SHOULD cryptographically[m
+[31m-                verify the signature.  If it does not have the corresponding key,[m
+[32m+[m[32m                verify the signature as per <xref target="signature"/>.[m
+[32m+[m[32m                If it does not have the corresponding key,[m
+                 it SHOULD fetch the key, such as from a key resolution service or[m
+                 via the KeyLink.[m
+             </t>[m
+[36m@@ -920,8 +927,9 @@[m [mOriginal:[m
+           <list style="symbols">[m
+             <t>Verify that the Interest is part of the publishers namespace(s).[m
+             </t>[m
+[31m-            <t>If the Interest has a Validation section, verify the[m
+[31m-            ValidationPayload.  Usually an Interest will only have a[m
+[32m+[m[32m            <t>If the Interest has a Validation section, verify it[m
+[32m+[m[32m                as per <xref target="signature"/>.[m
+[32m+[m[32m                Usually an Interest will only have a[m
+             CRC32C, unless the publisher application specifically[m
+             accommodates other validations.  The publisher MAY choose[m
+             to drop Interests that carry a Validation section if the[m
+[36m@@ -1144,8 +1152,9 @@[m [mOriginal:[m
+                 it MAY do so as follows.  If the public key is[m
+                 provided in the Content Object itself (i.e., in the[m
+                 PublicKey field) or in the Interest, the Content Store[m
+[31m-                MUST verify that the public key's SHA-256 hash is[m
+[31m-                equal to the KeyId and that it verifies the signature.[m
+[32m+[m[32m                MUST verify that the public key's hash is[m
+[32m+[m[32m                equal to the KeyId and that it verifies the signature[m
+[32m+[m[32m                (see <xref target="sigs"/>).[m
+                 A Content Store MAY verify the digital signature of a[m
+                 Content Object before it is cached, but it is not[m
+                 required to do so.  A Content Store SHOULD NOT fetch[m
+[36m@@ -1172,6 +1181,15 @@[m [mOriginal:[m
+               <t>Perform the HopLimit check (see <xref[m
+               target="hoplimit"/>).[m
+               </t>[m
+[32m+[m[32m              <t>If the Interest carries a validation, such as a MIC[m
+[32m+[m[32m                  or a signature with[m
+[32m+[m[32m                  embedded public key or certificate, a forwarder MAY[m
+[32m+[m[32m                  validate the Interest as per <xref target="signature"/>.[m
+[32m+[m[32m                  A forwarder SHOULD NOT fetch keys via a KeyLink.[m
+[32m+[m[32m                  If the forwarder drops an Interest due to failed validation,[m
+[32m+[m[32m                  it MAY send an Interest Return (<xref target="MalformedInterest"/>).[m
+[32m+[m[32m                  </t>[m
+[32m+[m[41m              [m
+               <t>Determine if the Interest can be aggregated as per[m
+               <xref target="aggregation"/>.  If it can be, aggregate[m
+               and do not forward the Interest.[m
+[36m@@ -1446,105 +1464,130 @@[m [mPerhaps:[m
+         specifies how to verify the message and a ValidationPayload[m
+         containing the validation output, e.g., the digital signature[m
+         or MAC.[m
+[31m-	The ValidationAlgorithm section defines the type of[m
+[32m+[m[32m        The ValidationAlgorithm section defines the type of[m
+         algorithm to use and includes any necessary additional[m
+         information.  The validation is calculated from the beginning[m
+         of the CCNx Message through the end of the ValidationAlgorithm[m
+[31m-        section.  The ValidationPayload is the integrity value bytes,[m
+[32m+[m[32m        section (i.e. upto but not including the Validation Payload). We[m
+[32m+[m[32m        refer to this as the validation region.[m
+[32m+[m[32m        The ValidationPayload is the integrity value bytes,[m
+         such as a MAC or signature.</t>[m
+[31m-        <t>[m
+[31m-          Some Validators contain a KeyId, identifying the publisher[m
+[31m-          authenticating the Content Object. If an Interest carries a[m
+[31m-          KeyID restriction, then it MUST exactly match the[m
+[31m-          Content Object's KeyId.</t>[m
+         [m
+[31m-<!-- [rfced] This document expands MIC into both "Message Integrity[m
+[31m-Code" and "Message Integrity Check". Is there a preferred[m
+[31m-expansion to use throughout or are both correct in their[m
+[31m-respective contexts?[m
+[31m-[m
+[31m-Original:[m
+[31m-   Validators using Message Integrity Code (MIC) algorithms[m
+[31m-   do not need to provide any additional information[m
+[31m-   ...[m
+[31m-   Chunks may also carry weaker Message Integrity Checks (MICs) or no[m
+[31m-   integrity protection mechanism at all.[m
+[31m- MM: Done[m
+[31m--->[m
+[31m-[m
+[31m-<!-- [rfced] Please verify that the expansion for "RSA" is the common[m
+[31m-term "Rivest, Shamir and Adleman", the expansion for "DSA" is the[m
+[31m-common term "Digital Signature Algorithm", and that ECDSA should[m
+[31m-be expanded as "Elliptic Curve Digital Signature Algorithm".[m
+[31m-[m
+[31m-Original:[m
+[31m-   Signature validators use public key cryptographic algorithms such as RSA,[m
+[31m-   DSA, ECDSA.[m
+[31m-[m
+[31m-Perhaps:[m
+[31m-   Signature validators use public key cryptographic algorithms such as RSA,[m
+[31m-   DSA, and the Elliptic Curve Digital Signature Algorithm (ECDSA).[m
+[31m- MM: Done[m
+[31m--->[m
+[31m-[m
+[31m-<!-- [rfced] Can a signature bundle a Key, a Certificate,[m
+[31m-and a Keylink, or should any of those terms be considered a combined entity?[m
+[31m-[m
+[31m-Original:[m
+[31m-   A signature may optionally include a KeyLocator, as described above, to[m
+[31m-   bundle a Key or Certificate or KeyLink.[m
+[31m-[m
+[31m-Perhaps: [m
+[31m-   A signature may optionally include a KeyLocator, as described above, to[m
+[31m-   bundle a Key, Certificate, or KeyLink.[m
+[31m- MM: Done[m
+[31m--->[m
+[31m-[m
+[31m-<!-- [rfced] This document appears to use both "signature" and[m
+[31m-"Signature" throughout as used as a technical noun. Is there a[m
+[31m-differentiation between uses or should they all follow the same[m
+[31m-capitalization?[m
+[31m-[m
+[31m-Original:[m
+[31m-   Validation Algorithms fall into three categories: MICs, MACs, and[m
+[31m-   Signatures.[m
+[31m-   ...[m
+[31m-   The KeyId field in the ValidationAlgorithm identifies the public key used[m
+[31m-   to verify the signature.[m
+[31m- MM: Done[m
+[31m--->[m
+[31m-<t>[m
+[31m-          Validation Algorithms fall into three categories: MICs,[m
+[31m-          MACs, and signatures.  Validators using Message Integrity[m
+[31m-          Code (MIC) algorithms do not need to provide any additional[m
+[31m-          information; they may be computed and verified based only on[m
+[31m-          the algorithm (e.g., CRC32C). MAC validators require the use[m
+[31m-          of a KeyId identifying the secret key used by the[m
+[31m-          authenticator. Because MACs are usually used between two[m
+[31m-          parties that have already exchanged secret keys via a key[m
+[31m-          exchange protocol, the KeyId may be any agreed-upon value to[m
+[31m-          identify which key is used.[m
+[31m-          Signature validators use public key cryptographic algorithms such as RSA,[m
+[31m-          DSA, and the Elliptic Curve Digital Signature Algorithm (ECDSA).[m
+[31m-          The KeyId field in the ValidationAlgorithm identifies the public[m
+[31m-          key used to verify the signature.[m
+[31m-          A signature may optionally include any of: the corresponding public key,[m
+[31m-          the corresponding certificate, or a KeyLink to the public key or a certificate.[m
+[31m-          If it includes multiple options, the consumer should ensure they are consistent.[m
+[31m-          MAC and signature validators may[m
+[31m-          also include a SignatureTime, as described above.[m
+[31m-        </t>[m
+[31m-        <t>A KeyLink may point to a Content Object with a DER-encoded X.509[m
+[31m-            certificate in the payload.  In this case, the target[m
+[31m-            KeyId must equal the first object's KeyId.  The target PublicKey[m
+[31m-            must include the public key corresponding to the KeyId.  That key[m
+[31m-            must validate the target signature.  The payload is an X.509[m
+[31m-            certificate whose public key must match the target's PublicKey.[m
+[31m-            It must be issued by a trusted authority, preferably specifying the[m
+[31m-            valid namespace of the key in the distinguished name.[m
+[32m+[m[32m        <t>The CCNx Message Grammar (<xref target="grammar"/>) shows the[m
+[32m+[m[32m            allowed validation algorithms and their structure.[m
+[32m+[m[32m            In the case of a Vendor algorithm, the vendor may use any[m
+[32m+[m[32m            desired structure.  A Validator can only be applied to an Interest[m
+[32m+[m[32m            or a Content Object, not an Interest Return.  An Interest inside[m
+[32m+[m[32m            an Interest Return would still have the original validator, if any.[m
+         </t>[m
+[32m+[m[41m        [m
+[32m+[m[32m        <t>The grammar allows multiple Vendor extension to the validation algorithm.[m
+[32m+[m[32m            It is up to the vendor to describe the validation region for each extension.[m
+[32m+[m[32m            A vendor may, for example, use a regular signature in the validation algortihm[m
+[32m+[m[32m            then append a proprietary MIC to allow for in-network error checking without[m
+[32m+[m[32m            using expensive signature verification.  As part of this standard, we do[m
+[32m+[m[32m            not allow for multiple Validation Algorithm blocks apart from these vendor[m
+[32m+[m[32m            methods.</t>[m
+[32m+[m[41m        [m
+       </section>[m
+[32m+[m[41m      [m
+[32m+[m[32m      <section anchor="mics" title="Message Integrity Codes">[m
+[32m+[m[32m          <t>If the validation algorithm is CRC32C, then the validation payload is the output[m
+[32m+[m[32m              of the CRC over the validation region.  This validation algorithm allows for an optional[m
+[32m+[m[32m              signature time (SigTime) to timestamp when the message as validated (calling it a[m
+[32m+[m[32m              "signature" time is a slight misnomer, but we re-use the same field for this purpose[m
+[32m+[m[32m              between MICs, MACs, and signatures).[m
+[32m+[m[32m          </t>[m
+[32m+[m[32m          <t>MICs are usually used with an Interest to avoid accidental in-network corruption.[m
+[32m+[m[32m              They are usually not used on Content Objects because the objects[m
+[32m+[m[32m              are either signed or linked to by hash chains, so the CRC32C is redundant.[m
+[32m+[m[32m          </t>[m
+[32m+[m[32m      </section>[m
+[32m+[m
+[32m+[m[32m        <section anchor="macs" title="Message Authentication Codes">[m
+[32m+[m[32m            <t>If the validation algorithm is HMAC-SHA256, then the validation payload is the output[m
+[32m+[m[32m                of the HMAC over the validation region.  The validation algorithm requires a KeyId[m
+[32m+[m[32m                and allows for a signature time (SigTime) and KeyLink.[m
+[32m+[m[32m            </t>[m
+[32m+[m[32m            <t>The KeyId field identifies the shared secret used between two parties to authenticate[m
+[32m+[m[32m                messages.  These secrets SHOULD be derived from a key exchange protocol, such as <xref target="ccnx-ke"/>.[m
+[32m+[m[32m                The KeyId, for a shared secret, SHOULD be an opaque identifier not derived from the actual key:[m
+[32m+[m[32m                an integer counter, for example, is a good choice.[m
+[32m+[m[32m            </t>[m
+[32m+[m[32m            <t>The signature time is the timestamp when the authentication code was computed and added[m
+[32m+[m[32m                to the messages.</t>[m
+[32m+[m[41m            [m
+[32m+[m[32m            <t>The KeyLink field in a MAC indicates how to negotiate keys and should point towards the[m
+[32m+[m[32m                key exchange endpoint.  The use of a key negotiation algorthm is beyond the scope[m
+[32m+[m[32m                of this standard, and a key negotiation algorithm is not required to use this field.</t>[m
+[32m+[m[32m        </section>[m
+[32m+[m
+[32m+[m[32m        <section anchor="sigs" title="Signature">[m
+[32m+[m[32m            <t>[m
+[32m+[m[32m                Signature validation algorithms use public key cryptographic algorithms such as RSA,[m
+[32m+[m[32m                and the Elliptic Curve Digital Signature Algorithm (ECDSA).[m
+[32m+[m[32m                This standard and the corresponding <xref target="ccn-messages">wire encoding</xref>[m
+[32m+[m[32m                only support three specific signature algorithms: RSA-SHA256, EC-SECP-256K1,[m
+[32m+[m[32m                and EC-SECP-384R1.  Other algorithms may be added in through other drafts or[m
+[32m+[m[32m                by using experimental or vendor validation algorithm types.</t>[m
+[32m+[m[41m            [m
+[32m+[m[32m            <t>A public key based signature requires a KeyId field and may optionally[m
+[32m+[m[32m                carry a signature time, an embedded public key, an embedded certificate,[m
+[32m+[m[32m                and a KeyLink.  The signature time behaves as normal to timestamp when[m
+[32m+[m[32m                the signature was created.  We describe the use and relationship of the[m
+[32m+[m[32m                other fields here.</t>[m
+[32m+[m[41m            [m
+[32m+[m[32m            <t>It is not common to use embedded certificates, as they can be very large[m
+[32m+[m[32m                and may have validity periods different than the validated data.  The[m
+[32m+[m[32m                preferred method is to use a KeyLink to the validating certificate.</t>[m
+[32m+[m[41m            [m
+[32m+[m[32m            <t>The KeyId field in the ValidationAlgorithm identifies the public[m
+[32m+[m[32m                key used to verify the signature.  It is similar to a Subject Key Identifier[m
+[32m+[m[32m                from X.509 (Section 4.2.1.2 of <xref target="RFC5280"/>).[m
+[32m+[m[32m                We define the KeyId to be a cryptographic hash of the public key in DER form.[m
+[32m+[m[32m                All implementaitons MUST support the SHA-256 digest as the KeyId hash.[m
+[32m+[m[32m                </t>[m
+[32m+[m[32m            <t>The use of other algorithms for the KeyId is allowed and it will not cause problems at[m
+[32m+[m[32m                a forwarder because the forwarder only matches the digest algorithm and digest[m
+[32m+[m[32m                output and does not compute the digest (see <xref target="matching"/>).[m
+[32m+[m[32m                It may cause issues with a content store, which needs to verify the KeyId and[m
+[32m+[m[32m                PublicKey match (see <xref target="contentstore"/>); though in this case it only[m
+[32m+[m[32m                causes a cache miss and the Interest would still be forwarded to the publisher.[m
+[32m+[m[32m                As long as the publisher and consumers support the hash, data will validate.[m
+[32m+[m[32m            </t>[m
+[32m+[m[41m            [m
+[32m+[m[32m            <t>As per <xref target="matching"/>, a forwarder only matches the KeyId to a KeyId restriction.[m
+[32m+[m[32m                It does not need to look at the other fields, such as the public key, certificate,[m
+[32m+[m[32m                or KeyLink.</t>[m
+[32m+[m[41m            [m
+[32m+[m[32m            <t>If a message carries multiple of the KeyId, public key, certificate,[m
+[32m+[m[32m                or KeyLink, an endpoint (consumer or cache or content store)[m
+[32m+[m[32m                MUST ensure that any fields it uses are consistent.  The KeyId MUST be[m
+[32m+[m[32m                the corresponding hash of the embedded public key or certificate public key.[m
+[32m+[m[32m                The hash function to use is the KeyId's HashType.[m
+[32m+[m[32m                If there is both an embedded pubic key and certificate, the public keys[m
+[32m+[m[32m                MUST be the same.</t>[m
+[32m+[m
+[32m+[m[32m            <t>A message SHOULD NOT have both a PublicKey and a KeyLink to a public key, as that[m
+[32m+[m[32m            is redundant.  It MAY have a PublicKey and a KeyLink to a certificate.</t>[m
+[32m+[m[41m            [m
+[32m+[m[32m            <t>A KeyLink in a first Content Object may point to a second Content Object with a[m
+[32m+[m[32m                DER-encoded public key in the PublicKey field and an optional DER-encoded X.509 certificate[m
+[32m+[m[32m                in the payload.[m
+[32m+[m[32m                The second Content Object's KeyId MUST equal the first object's KeyId.[m
+[32m+[m[32m                The second object's PublicKey field MUST be the public key corresponding to the KeyId.[m
+[32m+[m[32m                That key must validate both the first and second object's signature.[m
+[32m+[m[32m                A DER-encoded X.509 certificate may included in the second object's payload[m
+[32m+[m[32m                and it's embedded public key MUST match the PublicKey.[m
+[32m+[m[32m                It must be issued by a trusted authority, preferably specifying the[m
+[32m+[m[32m                valid namespace of the key in the distinguished name.[m
+[32m+[m[32m                The second object MUST NOT have a KeyLink: we do not allow for recursive key lookup.[m
+[32m+[m[32m            </t>[m
+[32m+[m[41m        [m
+[32m+[m[32m        </section>[m
+[32m+[m[41m        [m
+     </section>[m
+[32m+[m[41m    [m
+     <section anchor="matching" title="Interest to Content-Object Matching">[m
+       <t>A Content Object satisfies an Interest if and only if (a) the[m
+       Content-Object name, if present, exactly matches the Interest[m
+[36m@@ -1552,6 +1595,12 @@[m [mOriginal:[m
+       exactly equals the Interest KeyID restriction, if present, and (c) the[m
+       computed Content-Object Hash exactly equals the Interest[m
+       Content-Object Hash restriction, if present.</t>[m
+[32m+[m[41m      [m
+[32m+[m[32m      <t>The KeyId and KeyIdRestr use the Hash format (see <xref target="grammar"/>).[m
+[32m+[m[32m          The Hash format has an embedded HashType followed by the hash value.[m
+[32m+[m[32m          When comparing a KeyId and KeyIdRestr, one compares both the HashType and[m
+[32m+[m[32m          the value.</t>[m
+[32m+[m[41m      [m
+       <t>The matching rules[m
+       are given by this predicate, which if it evaluates true means[m
+       the Content Object matches the Interest.  Ni = Name in the[m
+[36m@@ -1867,7 +1916,7 @@[m [mPerhaps:[m
+ 		[m
+ 		<t>[m
+         The CCNx message format includes the ability to attach MICs[m
+[31m-        (e.g., SHA-256 or CRC), MACs (e.g., HMAC), and signatures[m
+[32m+[m[32m        (e.g., CRC32C), MACs (e.g., HMAC), and signatures[m
+         (e.g., RSA or ECDSA) to all packet types.  This does not mean[m
+         that it is a good idea to use an arbitrary[m
+         ValidationAlgorithm, nor to include computationally expensive[m
+[36m@@ -2057,6 +2106,7 @@[m [mPerhaps:[m
+     <references title="Informative References">[m
+ [m
+       &RFC5234;[m
+[32m+[m[32m      &RFC5280;[m
+ [m
+       <reference anchor="dart" target="https://arxiv.org/pdf/1603.06044.pdf">[m
+           <front>[m

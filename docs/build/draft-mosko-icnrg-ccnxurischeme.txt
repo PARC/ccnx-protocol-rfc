@@ -5,8 +5,8 @@
 ICNRG                                                           M. Mosko
 Internet-Draft                                                PARC, Inc.
 Intended status: Experimental                                    C. Wood
-Expires: December 9, 2019                University of California Irvine
-                                                            June 7, 2019
+Expires: March 18, 2020                  University of California Irvine
+                                                      September 15, 2019
 
 
                           The CCNx URI Scheme
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 9, 2019.
+   This Internet-Draft will expire on March 18, 2020.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Mosko & Wood            Expires December 9, 2019                [Page 1]
+Mosko & Wood             Expires March 18, 2020                 [Page 1]
 
-Internet-Draft                CCNxURIScheme                    June 2019
+Internet-Draft                CCNxURIScheme               September 2019
 
 
    carefully, as they describe your rights and restrictions with respect
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Mosko & Wood            Expires December 9, 2019                [Page 2]
+Mosko & Wood             Expires March 18, 2020                 [Page 2]
 
-Internet-Draft                CCNxURIScheme                    June 2019
+Internet-Draft                CCNxURIScheme               September 2019
 
 
    document version, there is an ambiguity because base64(0xbdea) is the
@@ -165,9 +165,9 @@ Internet-Draft                CCNxURIScheme                    June 2019
 
 
 
-Mosko & Wood            Expires December 9, 2019                [Page 3]
+Mosko & Wood             Expires March 18, 2020                 [Page 3]
 
-Internet-Draft                CCNxURIScheme                    June 2019
+Internet-Draft                CCNxURIScheme               September 2019
 
 
 2.  URI path segment grammar for label=value pairs
@@ -221,9 +221,9 @@ Internet-Draft                CCNxURIScheme                    June 2019
 
 
 
-Mosko & Wood            Expires December 9, 2019                [Page 4]
+Mosko & Wood             Expires March 18, 2020                 [Page 4]
 
-Internet-Draft                CCNxURIScheme                    June 2019
+Internet-Draft                CCNxURIScheme               September 2019
 
 
    LS-URI           = scheme ":" ls-hier-part ["?" ls-query]
@@ -277,9 +277,9 @@ Internet-Draft                CCNxURIScheme                    June 2019
 
 
 
-Mosko & Wood            Expires December 9, 2019                [Page 5]
+Mosko & Wood             Expires March 18, 2020                 [Page 5]
 
-Internet-Draft                CCNxURIScheme                    June 2019
+Internet-Draft                CCNxURIScheme               September 2019
 
 
    processed, and MAY disallow them.  A v-segment is an implied type.
@@ -333,9 +333,9 @@ Internet-Draft                CCNxURIScheme                    June 2019
 
 
 
-Mosko & Wood            Expires December 9, 2019                [Page 6]
+Mosko & Wood             Expires March 18, 2020                 [Page 6]
 
-Internet-Draft                CCNxURIScheme                    June 2019
+Internet-Draft                CCNxURIScheme               September 2019
 
 
 2.2.  URI comparison
@@ -389,9 +389,9 @@ Internet-Draft                CCNxURIScheme                    June 2019
 
 
 
-Mosko & Wood            Expires December 9, 2019                [Page 7]
+Mosko & Wood             Expires March 18, 2020                 [Page 7]
 
-Internet-Draft                CCNxURIScheme                    June 2019
+Internet-Draft                CCNxURIScheme               September 2019
 
 
    It is common for an information centric networking protocol, such as
@@ -445,9 +445,9 @@ Internet-Draft                CCNxURIScheme                    June 2019
 
 
 
-Mosko & Wood            Expires December 9, 2019                [Page 8]
+Mosko & Wood             Expires March 18, 2020                 [Page 8]
 
-Internet-Draft                CCNxURIScheme                    June 2019
+Internet-Draft                CCNxURIScheme               September 2019
 
 
 3.2.1.  Examples
@@ -501,9 +501,9 @@ Internet-Draft                CCNxURIScheme                    June 2019
 
 
 
-Mosko & Wood            Expires December 9, 2019                [Page 9]
+Mosko & Wood             Expires March 18, 2020                 [Page 9]
 
-Internet-Draft                CCNxURIScheme                    June 2019
+Internet-Draft                CCNxURIScheme               September 2019
 
 
    o  Scheme-based normalization: The authority should be removed and
@@ -557,9 +557,9 @@ Internet-Draft                CCNxURIScheme                    June 2019
 
 
 
-Mosko & Wood            Expires December 9, 2019               [Page 10]
+Mosko & Wood             Expires March 18, 2020                [Page 10]
 
-Internet-Draft                CCNxURIScheme                    June 2019
+Internet-Draft                CCNxURIScheme               September 2019
 
 
    case (as above).  If there are no requirements for IANA, the section
@@ -613,9 +613,9 @@ Authors' Addresses
 
 
 
-Mosko & Wood            Expires December 9, 2019               [Page 11]
+Mosko & Wood             Expires March 18, 2020                [Page 11]
 
-Internet-Draft                CCNxURIScheme                    June 2019
+Internet-Draft                CCNxURIScheme               September 2019
 
 
    Marc Mosko
@@ -669,4 +669,4 @@ Internet-Draft                CCNxURIScheme                    June 2019
 
 
 
-Mosko & Wood            Expires December 9, 2019               [Page 12]
+Mosko & Wood             Expires March 18, 2020                [Page 12]

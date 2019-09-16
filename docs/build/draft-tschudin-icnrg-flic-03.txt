@@ -12,7 +12,7 @@ Expires: March 18, 2020                  University of California Irvine
 
 
                     File-Like ICN Collections (FLIC)
-                    draft-tschudin-icnrg-flic-latest
+                    draft-tschudin-icnrg-flic-03
 
 Abstract
 
